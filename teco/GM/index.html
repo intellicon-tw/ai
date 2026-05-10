@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>東元 GM POC Agent 測試指南</title>
+<style>
+  :root {
+    --primary: #8A7AD2;
+    --secondary: #5D4894;
+    --dark: #3D2F66;
+    --light: #D5C8EE;
+    --vlight: #E9DEF6;
+    --bg: #F4EFFA;
+    --gold: #D4A95C;
+    --text: #2A2740;
+    --muted: #6B6580;
+    --white: #FFFFFF;
+    --border: #DCD5EB;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--bg); color: var(--text);
+    line-height: 1.7; font-size: 15px;
+  }
+  a { color: var(--secondary); text-decoration: none; }
+  a:hover { color: var(--primary); text-decoration: underline; }
+
+  /* ===== Hero ===== */
+  .hero {
+    background: linear-gradient(135deg, var(--primary), var(--dark));
+    color: var(--white); padding: 60px 24px 80px; text-align: center;
+  }
+  .hero .tag {
+    display: inline-block; padding: 4px 14px; border: 1px solid var(--gold);
+    color: var(--gold); border-radius: 999px; font-size: 12px;
+    letter-spacing: 2px; margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: 38px; font-weight: 800; margin-bottom: 12px; letter-spacing: 1px;
+  }
+  .hero .subtitle {
+    font-size: 18px; color: var(--light); margin-bottom: 8px;
+  }
+  .hero .meta { font-size: 13px; color: var(--light); opacity: 0.85; margin-top: 20px; }
+
+  .cta-wrap {
+    margin-top: 36px; display: flex; flex-direction: column;
+    align-items: center; gap: 12px;
+  }
+  .cta-btn {
+    display: inline-block; background: var(--gold); color: var(--dark);
+    padding: 16px 36px; border-radius: 6px; font-size: 17px; font-weight: 700;
+    text-decoration: none; transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(212, 169, 92, 0.35);
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(212, 169, 92, 0.45); text-decoration: none; }
+  .cta-hint { font-size: 13px; color: var(--light); }
+
+  /* ===== Layout ===== */
+  .container {
+    max-width: 1100px; margin: 0 auto; padding: 48px 24px;
+  }
+  section {
+    background: var(--white); border-radius: 10px; padding: 40px;
+    margin-bottom: 28px; box-shadow: 0 2px 12px rgba(138, 122, 210, 0.10);
+  }
+  h2 {
+    color: var(--primary); font-size: 26px; font-weight: 700;
+    margin-bottom: 6px; padding-bottom: 12px;
+    border-bottom: 2px solid var(--vlight);
+  }
+  h2 .num {
+    display: inline-block; background: var(--primary); color: var(--white);
+    width: 36px; height: 36px; border-radius: 50%; text-align: center;
+    line-height: 36px; font-size: 16px; margin-right: 12px;
+    vertical-align: middle;
+  }
+  h2 .label {
+    display: inline-block; vertical-align: middle;
+  }
+  .section-sub {
+    color: var(--muted); font-size: 14px; margin-bottom: 24px; margin-top: 8px;
+  }
+  h3 {
+    color: var(--dark); font-size: 18px; font-weight: 700;
+    margin-top: 28px; margin-bottom: 12px;
+  }
+  p { margin-bottom: 14px; }
+  ul, ol { padding-left: 22px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; }
+
+  /* ===== Stat row ===== */
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 14px; margin-top: 24px;
+  }
+  .stat {
+    background: var(--vlight); border-radius: 8px; padding: 18px;
+    text-align: center; border: 1px solid var(--light);
+  }
+  .stat .num-big { font-size: 32px; font-weight: 800; color: var(--primary); display: block; }
+  .stat .lbl { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* ===== Two col ===== */
+  .two-col {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  }
+  .infobox {
+    background: var(--vlight); border-left: 4px solid var(--primary);
+    padding: 18px; border-radius: 4px;
+  }
+  .infobox.gold { border-left-color: var(--gold); background: #FAF3E0; }
+  .infobox.dark { border-left-color: var(--dark); background: #DCD5EB; }
+  .infobox h4 { color: var(--primary); font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .infobox.gold h4 { color: var(--gold); }
+  .infobox.dark h4 { color: var(--dark); }
+  .infobox p { font-size: 13.5px; margin-bottom: 0; color: var(--text); }
+
+  /* ===== Tabs ===== */
+  .tabs {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px;
+    border-bottom: 2px solid var(--vlight);
+  }
+  .tab {
+    padding: 12px 20px; cursor: pointer;
+    background: var(--bg); border: none; border-radius: 6px 6px 0 0;
+    font-size: 14px; font-weight: 600; color: var(--muted);
+    border-bottom: 3px solid transparent; margin-bottom: -2px;
+    transition: all 0.15s; font-family: inherit;
+  }
+  .tab:hover { color: var(--primary); background: var(--vlight); }
+  .tab.active {
+    color: var(--primary); background: var(--white);
+    border-bottom-color: var(--primary);
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ===== Agent header ===== */
+  .agent-head {
+    display: flex; gap: 20px; align-items: flex-start;
+    background: linear-gradient(to right, var(--vlight), transparent);
+    padding: 20px 24px; border-radius: 8px; margin-bottom: 20px;
+    border-left: 5px solid var(--primary);
+  }
+  .agent-head .id {
+    font-size: 28px; font-weight: 800; color: var(--primary);
+    line-height: 1; min-width: 60px;
+  }
+  .agent-head h3 {
+    margin: 0 0 4px 0; font-size: 22px; color: var(--dark);
+  }
+  .agent-head .role {
+    font-size: 14px; color: var(--muted); margin-bottom: 10px;
+  }
+  .meta-table {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 16px;
+    font-size: 12.5px;
+  }
+  .meta-table dt { color: var(--muted); font-weight: 600; }
+  .meta-table dd { color: var(--text); }
+
+  /* ===== Test card ===== */
+  .test-card {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px; margin-bottom: 16px;
+  }
+  .test-card .test-num {
+    display: inline-block; background: var(--secondary); color: var(--white);
+    padding: 3px 10px; border-radius: 4px; font-size: 11px;
+    font-weight: 700; margin-right: 8px; vertical-align: middle;
+  }
+  .test-card .test-num.gate { background: var(--gold); color: var(--dark); }
+  .test-card .test-num.edge { background: var(--dark); }
+  .test-card .test-title {
+    font-weight: 700; color: var(--dark); display: inline-block;
+    vertical-align: middle; font-size: 14px;
+  }
+  .test-card .test-body {
+    background: var(--white); border: 1px dashed var(--border);
+    border-radius: 4px; padding: 14px; margin-top: 10px;
+    font-family: "Menlo", "Consolas", monospace; font-size: 12.5px;
+    line-height: 1.6; white-space: pre-wrap; color: var(--text);
+    max-height: 240px; overflow-y: auto;
+  }
+  .test-actions {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 10px; gap: 12px;
+  }
+  .copy-btn {
+    background: var(--primary); color: var(--white); border: none;
+    padding: 8px 16px; border-radius: 4px; cursor: pointer;
+    font-size: 12.5px; font-weight: 600; font-family: inherit;
+    transition: all 0.15s;
+  }
+  .copy-btn:hover { background: var(--dark); }
+  .copy-btn.copied { background: var(--gold); color: var(--dark); }
+
+  .obs {
+    background: var(--vlight); border-radius: 4px; padding: 10px 14px;
+    font-size: 12.5px; color: var(--text); margin-top: 12px;
+    border-left: 3px solid var(--secondary);
+  }
+  .obs strong { color: var(--primary); }
+
+  /* ===== Chain ===== */
+  .chain {
+    display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px;
+    align-items: stretch; margin: 20px 0;
+  }
+  .chain-box {
+    background: var(--white); border: 2px solid var(--primary);
+    border-radius: 8px; padding: 16px;
+  }
+  .chain-box.assist { border-color: var(--secondary); }
+  .chain-box h4 { color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+  .chain-box.assist h4 { color: var(--secondary); }
+  .chain-box p { font-size: 13px; margin-bottom: 0; color: var(--muted); }
+  .chain-arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--primary); font-size: 28px; font-weight: 700;
+  }
+
+  /* ===== Observation list ===== */
+  .obs-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    margin-top: 20px;
+  }
+  .obs-card {
+    background: var(--vlight); padding: 20px; border-radius: 8px;
+    border-top: 3px solid var(--primary);
+  }
+  .obs-card.gold { border-top-color: var(--gold); }
+  .obs-card h4 { color: var(--dark); font-size: 15px; margin-bottom: 10px; }
+  .obs-card p { font-size: 13px; color: var(--text); margin-bottom: 0; }
+
+  /* ===== Footer ===== */
+  footer {
+    background: var(--dark); color: var(--light); padding: 30px 24px;
+    text-align: center; font-size: 13px;
+  }
+  footer .brand { color: var(--white); font-weight: 700; margin-bottom: 4px; }
+  footer a { color: var(--gold); }
+
+  /* ===== Print ===== */
+  @media print {
+    .hero { background: var(--primary) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .copy-btn { display: none; }
+    .tab-panel { display: block !important; page-break-before: always; }
+    .tabs { display: none; }
+    section { box-shadow: none; }
+  }
+
+  @media (max-width: 768px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .two-col, .obs-grid { grid-template-columns: 1fr; }
+    .chain { grid-template-columns: 1fr; }
+    .chain-arrow { transform: rotate(90deg); padding: 8px 0; }
+    .hero h1 { font-size: 28px; }
+    section { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="tag">EGENTHUB POC AGENT 測試</div>
+  <h1>東元 GM 業務智慧助理</h1>
+  <p class="subtitle">商機分析師 × 報價策略決策</p>
+  <p class="subtitle" style="font-size:15px;">4 個 Agent 雙層協作，30 分鐘上手測試</p>
+
+  <div class="cta-wrap">
+    <a class="cta-btn" href="https://intellicon.app/ap/c/94ee1b67-3379-469b-b391-f79460ccb11c/w/b5b39987-bbfd-4517-b511-8bc2aba99831" target="_blank" rel="noopener">點此進入 EgentHub 測試工作室</a>
+    <p class="cta-hint">建議使用 Chrome 或 Edge 瀏覽器，登入後即可看到 4 個 Agent</p>
+  </div>
+
+  <p class="meta">智慧方案股份有限公司 ｜ EgentHub 企業 AI Agent 平台 ｜ 2026 年 5 月</p>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="container">
+
+  <!-- Section 1 -->
+  <section>
+    <h2><span class="num">1</span><span class="label">開始之前</span></h2>
+    <p class="section-sub">先理解這次測試的範圍、設計理念、以及您要觀察的關鍵點。</p>
+
+    <h3>本次 POC 涵蓋什麼</h3>
+    <p>本次 POC 聚焦在 GM 業務最關鍵的兩個命題 — 「主動挖掘商機」與「報價策略決策」。每個命題拆成「輔助型 + 核心型」兩個 Agent，共 4 個 Agent 在同一個 EgentHub 工作室內。</p>
+
+    <div class="stats">
+      <div class="stat"><span class="num-big">4</span><span class="lbl">個 AI Agent</span></div>
+      <div class="stat"><span class="num-big">2</span><span class="lbl">個業務題目</span></div>
+      <div class="stat"><span class="num-big">5</span><span class="lbl">個知識庫表</span></div>
+      <div class="stat"><span class="num-big">12</span><span class="lbl">組測試資料</span></div>
+    </div>
+
+    <h3>四項設計原則 — 您觀察 Agent 行為時的依據</h3>
+    <div class="two-col">
+      <div class="infobox">
+        <h4>原則一：流程優先於模型</h4>
+        <p>先定義 GM 業務該怎麼判斷，AI 才介入輔助。提示詞與工具都是流程的延伸，不是流程的核心。</p>
+      </div>
+      <div class="infobox gold">
+        <h4>原則二：資料確認是硬閘門</h4>
+        <p>關鍵資料未確認前，AI 不分析、不推估、不下結論。寧可主動回頭要求補資料，也不容許「看似完整但根據不足」的輸出污染決策。</p>
+      </div>
+      <div class="infobox dark">
+        <h4>原則三：判斷邏輯與事實資料分離</h4>
+        <p>判斷規則內建於 Agent 行為規範；客戶與產業資料存於知識庫。讓兩者各自演化，避免知識庫變動時必須改提示詞。</p>
+      </div>
+      <div class="infobox">
+        <h4>原則四：人機協作，不是全自動</h4>
+        <p>AI 的責任是加速、結構化、指出不確定性。最終商機判斷與報價決策仍由業務或業務主管執行。AI 是夥伴，不是取代。</p>
+      </div>
+    </div>
+
+    <h3>建議測試流程（約 30-45 分鐘）</h3>
+    <ol>
+      <li>點擊頁首的「進入 EgentHub 測試工作室」按鈕，登入帳號</li>
+      <li>依序測試 1.1 → 1.2 → 1.3 → 1.4 四個 Agent，每個 Agent 至少跑 2 組測試資料</li>
+      <li>第二輪嘗試「Agent 鏈協作」：把 1.1 的輸出貼入 1.2、把 1.3 的輸出貼入 1.4</li>
+      <li>觀察「資料閘門啟動」的測試案例，確認 Agent 是否真的會婉拒並列出補資料清單</li>
+      <li>在本指南最末填寫您的觀察與回饋</li>
+    </ol>
+  </section>
+
+  <!-- Section 2 — POC Agent 設計理念 -->
+  <section>
+    <h2><span class="num">2</span><span class="label">POC Agent 設計理念</span></h2>
+    <p class="section-sub">理解這四個 Agent 為什麼這樣拆分、為什麼要有資料閘門、為什麼不做成一個「萬能 Agent」 — 這些設計決策背後都有刻意的考量。</p>
+
+    <h3>為什麼是 4 個 Agent，而不是 1 個「萬能 Agent」</h3>
+    <p>把工作拆成 4 個專責 Agent，是刻意的設計決策。每個 Agent 都有單一職責、可獨立開發與測試、可獨立優化。這樣做的具體好處有四個：</p>
+    <ul>
+      <li><strong>失敗範圍可控</strong> — 某個 Agent 表現不好不會影響其他 Agent，回歸驗測也只需針對特定 Agent</li>
+      <li><strong>業務有彈性的進入點</strong> — 從研究素材進來就用 1.1，從詢價單進來就用 1.3，業務不必硬走完整流程</li>
+      <li><strong>輔助型 + 核心型分工</strong> — 輔助型 Agent（1.1、1.3）處理「結構化、解析、標準化」這類雜事，核心型 Agent（1.2、1.4）專心做最關鍵的判斷與決策</li>
+      <li><strong>培訓與交接更容易</strong> — 種子團隊可以一個一個 Agent 學會，不必一次掌握整個複雜流程</li>
+    </ul>
+
+    <h3>為什麼有「資料閘門」設計</h3>
+    <p>傳統的 LLM Agent 在資料不完整時，會「強行給看似專業實則根據不足的答案」。對閒聊也許還好，但對商機判斷與報價決策，這種輸出是有害的 — 它會讓業務拿著錯誤的依據去做承諾。</p>
+    <p>資料閘門設計把「業務判斷的最後一道防線」內建到 Agent 行為中：</p>
+    <ul>
+      <li>每次跑 SOP 時，<strong>先評估「資訊充分度」（0-100 分）</strong></li>
+      <li>分數低於 60 時，<strong>Agent 不給結論，只列出資料缺口清單</strong></li>
+      <li>業務知道要補什麼資料才能繼續，而不是收到一份漂亮但不可信的報告</li>
+      <li>副作用：稽核 AI 是否「不亂推論」變得可量化（資料閘門退回率）</li>
+    </ul>
+    <p>這個設計直接對應原則二「資料確認是硬閘門」 — 寧可主動回頭要求補資料，也不容許「看似完整但根據不足」的輸出污染決策。</p>
+
+    <h3>為什麼採用 Phase 1-7 結構化 SOP</h3>
+    <p>把資深業務的判斷邏輯轉成 7 個明確的 Phase 步驟，是為了：</p>
+    <ul>
+      <li><strong>讓判斷邏輯被組織保存</strong> — 不再藏在資深業務腦中，可被新人繼承、可被 AI 放大</li>
+      <li><strong>每個 Phase 都有明確輸入輸出</strong>，方便驗測（例如：Phase 4 的輸出是否引用了 KB 案例編號）</li>
+      <li><strong>新人也能產出水準一致的初稿</strong>，再由資深業務做最後校對</li>
+      <li><strong>商機分析師（1.2）與報價策略分析師（1.4）的 Phase 結構刻意對稱</strong>（都是 Phase 1 需求定義 → Phase 2 資料閘門 → Phase 3 結構化 → Phase 4-6 核心戰場 → Phase 7 輸出），讓組織學習成本降到最低</li>
+    </ul>
+
+    <h3>為什麼採用「鬆耦合」串接（Markdown 中介產物）</h3>
+    <p>1.1 → 1.2、1.3 → 1.4 的串接，刻意採用 Markdown 文字作為中介產物，而不是 API 直連。這樣做的好處：</p>
+    <ul>
+      <li><strong>業務直接複製貼上即可串接</strong>，不需特殊框架支援</li>
+      <li><strong>可中斷可重啟</strong> — 業務跑完 1.1 後可以隔天再用 1.2，輸出文字保留即可</li>
+      <li><strong>未來可替換訊號層工具</strong> — 例如從 Autonomous Agent 換成其他工具，只要產出格式類似的研究摘要，1.2 商機分析師完全不用改</li>
+      <li><strong>可審計</strong> — 每個 Agent 的輸入輸出都是純文字，方便 Code Review 與稽核追蹤</li>
+    </ul>
+
+    <h3>為什麼用「條件式兩階段」而非「全部兩階段」</h3>
+    <p>EgentHub 的雙階段隔離設計是為了避免「同時讀圖與調用工具」造成的判斷品質下降。但對 1.1 與 1.3 這類「有時讀 PDF、有時純文字」的 Agent，全部都走兩階段反而拖慢純文字輸入時的回應速度。所以採用條件式設計：</p>
+    <ul>
+      <li><strong>上傳 PDF 或圖片時</strong>：先進步驟一（純讀圖、不調 KB），再進步驟二（呼叫 KB、產出結果）</li>
+      <li><strong>純文字輸入時</strong>：直接走步驟二，省掉不必要的階段切換</li>
+    </ul>
+  </section>
+
+  <!-- Section 3 -->
+  <section>
+    <h2><span class="num">3</span><span class="label">四個 Agent 詳解與測試</span></h2>
+    <p class="section-sub">點選下方頁籤切換不同 Agent。每個 Agent 提供 3 組測試資料（正常案、閘門啟動案、邊界案），可直接複製貼到 EgentHub 對話框。</p>
+
+    <div class="tabs">
+      <button class="tab active" onclick="showTab(1)">1.1 客戶研究助理</button>
+      <button class="tab" onclick="showTab(2)">1.2 商機分析師</button>
+      <button class="tab" onclick="showTab(3)">1.3 詢價解析助理</button>
+      <button class="tab" onclick="showTab(4)">1.4 報價策略分析師</button>
+    </div>
+
+    <!-- Agent 1.1 -->
+    <div class="tab-panel active" id="panel-1">
+      <div class="agent-head">
+        <div class="id">1.1</div>
+        <div style="flex:1">
+          <h3>客戶研究助理</h3>
+          <p class="role">輔助型 Agent ｜ 解析外部研究素材，產出結構化客戶摘要供下游使用</p>
+          <dl class="meta-table">
+            <dt>知識庫</dt><dd>全文查找（客戶研究素材）</dd>
+            <dt>兩階段</dt><dd>條件式（上傳 PDF 時啟用）</dd>
+            <dt>使用時機</dt><dd>業務拿到一份客戶素材，要先消化整理</dd>
+            <dt>下游 Agent</dt><dd>商機分析師（1.2）</dd>
+          </dl>
+        </div>
+      </div>
+
+      <h3>觀察重點</h3>
+      <ul>
+        <li>當您「上傳 PDF」時，Agent 是否先進入「步驟一：素材結構化」，且該階段不調用知識庫</li>
+        <li>切入產品線是否只列「候選」，沒有過早做最終判斷（這是輔助 Agent 的設計分際）</li>
+        <li>結尾是否引導您「將摘要交給商機分析師繼續分析」</li>
+      </ul>
+
+      <h3>知識庫</h3>
+      <p>本 Agent 採用 <strong>全文查找知識庫</strong>，並非結構化的 CSV。預期使用方式是業務上傳的客戶研究素材（Autonomous Agent 產出的 xlsx、客戶年報 PDF、新聞網頁列印 PDF），Agent 直接逐項閱讀後做結構化整理。POC 期間沒有預先載入任何素材，您需要在對話中上傳檔案或貼上文字，Agent 才會開始解析。</p>
+      <div class="infobox" style="margin-top:8px;">
+        <h4>POC 期間使用範例</h4>
+        <p>下方測試 #1 假設您已上傳「CTCI 得標案研究報告 2026-02-19.xlsx」。實際 POC 環境中，您可以上傳真實的客戶研究素材，或暫時用文字描述假裝已上傳，Agent 都能處理。</p>
+      </div>
+
+      <h3>測試資料 — 點按鈕複製後貼入 EgentHub 對話框</h3>
+
+      <div class="test-card">
+        <span class="test-num">測試 1</span>
+        <span class="test-title">中鼎工程 CTCI 完整素材（上傳 xlsx）</span>
+        <div class="test-body">客戶名稱：中鼎工程 CTCI（股票代號 9933）
+分析期間：2021-2025
+上傳素材：CTCI_得標案研究報告_2026-02-19.xlsx
+（請假裝已上傳，內含：得標案彙總表、標案特徵一覽、競爭格局分析、競標聯盟地圖、關鍵經營數字）
+分析重點：優先看 LNG 接收站與燃氣電廠相關案件；中鼎在這兩塊市占率高。</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：完整素材輸入，期望啟動條件式兩階段</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>步驟一先結構化 xlsx → 步驟二比對東元能力清單 → 列出標案彙總表、競爭格局、可能切入候選、待補資料清單。</div>
+      </div>
+
+      <div class="test-card">
+        <span class="test-num">測試 2</span>
+        <span class="test-title">純文字輸入（半導體新建廠初步研究）</span>
+        <div class="test-body">客戶名稱：日月光高雄半導體封測廠擴建
+分析期間：2024-2025
+我手上有的資訊：
+1. 日月光 2024 年法說會提到要在高雄擴建第 K28 廠，預計 2026 年投產。
+2. 廠房面積約 5 萬坪，預計新增 200 條打線、封裝、測試產線。
+3. 目前不確定機電設備的採購清單與決策時程。
+請協助整理可切入的東元產品線候選。</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：純文字，預期單階段執行</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>不啟動兩階段，直接走步驟二；待補資料清單應包含「採購清單」「決策時程」「具體規格」等項目。</div>
+      </div>
+
+      <div class="test-card">
+        <span class="test-num gate">閘門測試 3</span>
+        <span class="test-title">資料嚴重不足（口頭傳聞）</span>
+        <div class="test-body">客戶名稱：某傳產老闆昨天在飯局提到他朋友「老王」要蓋新廠，可能要買馬達。
+請協助分析。</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：模擬資料嚴重不足，期望 Agent 婉拒</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>Agent 應委婉告知資料不足、列出至少需補哪些資料，<strong>不應幻覺出客戶名稱或標案內容</strong>。這是驗證原則二「資料閘門」的關鍵案例。</div>
+      </div>
+    </div>
+
+    <!-- Agent 1.2 -->
+    <div class="tab-panel" id="panel-2">
+      <div class="agent-head">
+        <div class="id">1.2</div>
+        <div style="flex:1">
+          <h3>商機分析師</h3>
+          <p class="role">核心型 Agent ｜ 跑 Phase 1-7 SOP，產出可執行的商機雷達卡</p>
+          <dl class="meta-table">
+            <dt>知識庫</dt><dd>東元GM能力對照表 + 歷史商機案例（兩個表格）</dd>
+            <dt>兩階段</dt><dd>否（純文字 + KB 查詢）</dd>
+            <dt>使用時機</dt><dd>已有客戶研究摘要，要產出商機雷達</dd>
+            <dt>上游 Agent</dt><dd>客戶研究助理（1.1）</dd>
+          </dl>
+        </div>
+      </div>
+
+      <h3>觀察重點</h3>
+      <ul>
+        <li>「資訊充分度評分」是否會標示出來？低於 60 分時 Agent 是否確實停止後續分析？</li>
+        <li>商機卡是否援引「歷史商機案例.csv」中的具體案例編號（OP-XXXX-XXX）？</li>
+        <li>金額是否以「區間」呈現並標可信度？無相似案例時是否誠實說「無法估算」？</li>
+      </ul>
+
+      <h3>知識庫</h3>
+      <p>本 Agent 連結兩個表格查詢知識庫，理解它們的內容能幫您預期 Agent 應該查到什麼。</p>
+
+      <div class="test-card" style="background:var(--white); border-color:var(--primary);">
+        <p style="margin-bottom:6px;"><strong style="color:var(--primary);">東元 GM 能力對照表</strong>　<span style="color:var(--muted); font-size:12px;">（12 行）</span></p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>用途</strong>：根據客戶產業，找出東元 GM 可切入的產品線。</p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>欄位</strong>：產品線、子類別、適用產業、適用工藝/應用、馬力範圍、代表性東元案例、主要競品、切入優勢</p>
+        <p style="font-size:13px; margin-bottom:0;"><strong>內容範圍</strong>：三相感應馬達（IE3 / IE5 / 防爆）、減速機、變頻器、伺服馬達、PLC、風機與壓縮機、低壓配電盤、風力發電機等 12 條產品線。</p>
+      </div>
+
+      <div class="test-card" style="background:var(--white); border-color:var(--primary);">
+        <p style="margin-bottom:6px;"><strong style="color:var(--primary);">歷史商機案例</strong>　<span style="color:var(--muted); font-size:12px;">（12 行）</span></p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>用途</strong>：援引相似商機案例、估算金額區間、判斷勝率。</p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>欄位</strong>：案例編號（OP-XXXX-XXX）、客戶名稱、產業、觸發訊號類型、發案年月、切入產品線、預估金額NTD、結果（得標/失單/中性/進行中）、備註</p>
+        <p style="font-size:13px; margin-bottom:0;"><strong>內容範圍</strong>：2023-2025 共 12 個歷史案例，客戶橫跨上銀、台積電、中油、統一、中鋼、永信、台達、華新麗華、新北汙水廠、台塑麥寮、鴻海高雄半導體、彰化離岸風場。結果分布：8 件得標、1 件失單（中鋼，被 Flender 用既有合約搶下）、1 件中性、2 件進行中。</p>
+      </div>
+
+      <div class="obs"><strong>測試重點預期：</strong>1.2 對 CTCI 案做分析時，應該援引 <strong>OP-2025-011</strong>（台塑麥寮 MCC 配電盤，9,200 萬 NTD）作為相似案例；對半導體新建廠應引用 <strong>OP-2023-007</strong>（台積電竹科 P3，IE5）作為相似案例。</div>
+
+      <h3>測試資料 — 點按鈕複製後貼入 EgentHub 對話框</h3>
+
+      <div class="test-card">
+        <span class="test-num">測試 1</span>
+        <span class="test-title">中鼎工程商機化分析（接續 1.1 已產出研究摘要）</span>
+        <div class="test-body">目標客戶：中鼎工程 CTCI
+分析期間：近五年
+分析重點：優先看 LNG 接收站與燃氣電廠相關案件
+
+客戶研究摘要（從客戶研究助理產出）：
+中鼎是台灣最大的國際級 EPC 統包公司，2021-2025 重大標案共 9 件 ≥100 億 NTD：
+1. 台中藍線 BM01 機電（2025, 607.9 億，台中市政府）— 含電聯車、號誌、AFC、供電
+2. 高雄洲際接收站 LNG 一期/二期（2025, 266+296 億，台灣中油）— 4 座 18 萬公秉低溫儲槽 + 電儀系統
+3. 台北南北環線機電（2021, 255.15 億，北捷）
+4. 新竹海淡廠（2024, 177 億，水利署）
+5. 台北萬大線二期機電（2020, 149 億，北捷）
+6. 台塑六接 LNG 儲槽（2025, 124.5 億，台塑石化）
+7. 卡達 RLPP 乙烯廠儲槽（2024, 130 億海外）
+8. 台電燃氣電廠多案（2024-2025，與三菱電力/GE/西門子合作）
+
+競爭格局：中鼎是「本土統包管理商」，外商 Alstom/ST Engineering/IHI/SUEZ/三菱/GE 必須與中鼎搭檔才能得台灣大標。
+可能切入候選（從客戶研究助理初判）：燃氣電廠的「電廠輔機馬達」、「MCC 配電盤」、LNG 接收站「防爆型馬達」。</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：標準輸入，預期完整跑完 Phase 1-7</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>資訊充分度 ≥80 分；至少 3 張商機卡（燃氣電廠輔機馬達、LNG 防爆馬達、MCC 配電盤）；引用 OP-2025-011（台塑麥寮 MCC 配電盤）作為相似案例；金額為區間並標可信度。</div>
+      </div>
+
+      <div class="test-card">
+        <span class="test-num gate">閘門測試 2</span>
+        <span class="test-title">資料閘門啟動 — 給很少資料看 Agent 是否拒絕產出</span>
+        <div class="test-body">目標客戶：中鋼
+分析期間：未知
+客戶研究摘要：（無）
+請給我中鋼的商機建議。</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：完全沒有研究摘要，期望 Agent 啟動硬閘門</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>資訊充分度 &lt;60 分；Agent 拒絕產出商機卡；列出資料缺口（標案彙總、競爭格局、切入產品線候選）；提示先用客戶研究助理整理。<strong>不應幻覺中鋼的標案資料。</strong></div>
+      </div>
+
+      <div class="test-card">
+        <span class="test-num edge">邊界測試 3</span>
+        <span class="test-title">產業層級分析（無特定客戶）</span>
+        <div class="test-body">目標產業：半導體新建廠（不指定特定客戶）
+分析期間：2025-2026
+客戶研究摘要：
+近期半導體業擴建熱潮，台積電竹科 P3、鴻海高雄半導體、日月光 K28 都進入新建期。新建廠典型機電需求：高效節能馬達、變頻器、空調用泵浦、潔淨室專用設備。ESG 法規驅動下，IE5 高效率馬達成為標配。
+請協助找出東元 GM 可切入的高優先商機。</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：產業層級而非特定客戶，測試泛化能力</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>產出「以產業為單位」的商機卡；引用 OP-2023-007（台積電竹科 P3 IE5）案例；說明預估金額為「依過往案例規模推估」。</div>
+      </div>
+    </div>
+
+    <!-- Agent 1.3 -->
+    <div class="tab-panel" id="panel-3">
+      <div class="agent-head">
+        <div class="id">1.3</div>
+        <div style="flex:1">
+          <h3>詢價解析助理</h3>
+          <p class="role">輔助型 Agent ｜ 解析詢價單原文，標準化規格與分類</p>
+          <dl class="meta-table">
+            <dt>知識庫</dt><dd>產品型號標準化表</dd>
+            <dt>兩階段</dt><dd>條件式（上傳 PDF 時啟用）</dd>
+            <dt>使用時機</dt><dd>業務剛收到客戶詢價單，要轉成標準格式</dd>
+            <dt>下游 Agent</dt><dd>報價策略分析師（1.4）</dd>
+          </dl>
+        </div>
+      </div>
+
+      <h3>觀察重點</h3>
+      <ul>
+        <li>標準型號是否正確比對（例如 IE3 / 20HP / 4P / 380V / IP55 → AESV2-IE3-020）</li>
+        <li>規格描述模糊時，Agent 是否誠實列出補資料清單而非強推型號</li>
+        <li>客製化需求（無對應標準型號）時，是否標示「需客製」並列出最相近型號做參考</li>
+      </ul>
+
+      <h3>知識庫</h3>
+      <p>本 Agent 連結一個表格查詢知識庫，把客戶詢價單的規格描述對應到東元的標準 SKU。</p>
+
+      <div class="test-card" style="background:var(--white); border-color:var(--primary);">
+        <p style="margin-bottom:6px;"><strong style="color:var(--primary);">產品型號標準化表</strong>　<span style="color:var(--muted); font-size:12px;">（16 行）</span></p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>用途</strong>：把客戶詢價單上的規格描述（馬力、極數、電壓、防護等級）對應到東元的標準型號編碼。</p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>欄位</strong>：標準型號、產品類別、規格描述、馬力、極數、額定電壓、防護等級、適用產業、庫存狀態（現貨/備料/客製）、標準交期(週)</p>
+        <p style="font-size:13px; margin-bottom:0;"><strong>內容範圍</strong>：</p>
+        <ul style="font-size:13px; margin-top:4px;">
+          <li>三相感應馬達 IE3 系列：5HP、10HP、20HP（皆為 4P/380V/IP55，現貨，2 週交期）</li>
+          <li>三相感應馬達 IE5 高效系列：10HP、50HP（備料，4-6 週交期）</li>
+          <li>防爆型馬達 EXd IIB：30HP、100HP（客製，8-10 週交期）</li>
+          <li>減速機（蝸桿 GR-W、斜齒輪 GR-H）</li>
+          <li>變頻器（通用型 INV-G、向量型 INV-V）</li>
+          <li>伺服馬達 SVR-A、離心鼓風機 BLW-CF、MCC 配電盤等</li>
+        </ul>
+      </div>
+
+      <div class="obs"><strong>測試重點預期：</strong>1.3 收到「IE3、20HP、4P、380V、IP55」這組規格時，應準確比對到 <strong>AESV2-IE3-020</strong>；客製化規格（80HP/660V）時應誠實標示「需客製」並列出最相近的 <strong>AEXD-IIB-100</strong> 做參考。</div>
+
+      <h3>測試資料 — 點按鈕複製後貼入 EgentHub 對話框</h3>
+
+      <div class="test-card">
+        <span class="test-num">測試 1</span>
+        <span class="test-title">標準詢價單原文（上銀科技）</span>
+        <div class="test-body">Albert 您好，
+上銀科技嘉義廠急需 IE3 等級三相感應馬達，規格如下：
+- 馬力：20 HP
+- 4 極
+- 電壓 380V
+- 防護等級 IP55
+- 數量 10 顆
+- 交期希望 4 週內到貨
+- 應用：工具機主軸驅動
+請協助報價。
+上銀採購 林小姐</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：完整規格，期望成功比對標準型號</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>標準型號 = AESV2-IE3-020；客戶等級 = KA；標準交期 2 週 vs 客戶 4 週需求 → 吻合；產出可直接給 1.4 的詢價卡。</div>
+      </div>
+
+      <div class="test-card">
+        <span class="test-num gate">閘門測試 2</span>
+        <span class="test-title">規格描述模糊（需要詢問補資料）</span>
+        <div class="test-body">我朋友的工廠想買幾台馬達，要 50 馬力左右的，價格便宜就好。
+幫我看一下要報多少。</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：規格嚴重不足，期望 Agent 婉拒並補資料</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>Agent 委婉告知規格不足；列出至少需補：產品類別、極數、電壓、防護等級、應用情境、客戶名稱；<strong>不應強推任何標準型號</strong>。</div>
+      </div>
+
+      <div class="test-card">
+        <span class="test-num edge">邊界測試 3</span>
+        <span class="test-title">客製化需求（無對應標準型號）</span>
+        <div class="test-body">客戶：中油大林廠
+需求：防爆型 EXd IIB T4，馬力 80 HP，4 極，電壓 660V，IP66，數量 4 顆，需要符合 IECEx 認證並提供 2 級防爆證書。
+交期：12 週內。
+備註：用於 LNG 站區壓縮機驅動，安裝環境溫度 -50°C 至 +60°C。</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：客製規格，無完美對應，測試誠實度</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>標示「需客製化」；列出最相近的 AEXD-IIB-100（雖然 100HP 不完全匹配 80HP）；提示需與工程部確認客製規格；<strong>不假裝有完美對應的型號</strong>。</div>
+      </div>
+    </div>
+
+    <!-- Agent 1.4 -->
+    <div class="tab-panel" id="panel-4">
+      <div class="agent-head">
+        <div class="id">1.4</div>
+        <div style="flex:1">
+          <h3>報價策略分析師</h3>
+          <p class="role">核心型 Agent ｜ 跑 Phase 1-7 SOP，產出三檔報價、勝率、風險提示</p>
+          <dl class="meta-table">
+            <dt>知識庫</dt><dd>歷史報價成交資料表 + BOM 標準成本表</dd>
+            <dt>兩階段</dt><dd>否（純文字 + KB 查詢）</dd>
+            <dt>使用時機</dt><dd>已有標準化詢價卡，要決定報價策略</dd>
+            <dt>上游 Agent</dt><dd>詢價解析助理（1.3）</dd>
+          </dl>
+        </div>
+      </div>
+
+      <h3>觀察重點</h3>
+      <ul>
+        <li>三檔報價（上限 / 最適 / 下限）是否落在合理區間？最適價是否參考歷史中位成交價？</li>
+        <li>是否援引具體歷史案例編號（RFQ-XXXX-XXXX）？相似案件的勝率是否被用來估算得標率？</li>
+        <li>客製化詢價時（BOM 表中無資料），Agent 是否誠實告知「無 BOM 基礎，建議先工程核算」而非推估？</li>
+      </ul>
+
+      <h3>知識庫</h3>
+      <p>本 Agent 連結兩個表格查詢知識庫，分別作為「相似案件援引」與「成本毛利底線」的依據。</p>
+
+      <div class="test-card" style="background:var(--white); border-color:var(--primary);">
+        <p style="margin-bottom:6px;"><strong style="color:var(--primary);">歷史報價成交資料表</strong>　<span style="color:var(--muted); font-size:12px;">（16 行，含 3 筆進行中）</span></p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>用途</strong>：找相似詢價案件、估算勝率、查歷史落差%。</p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>欄位</strong>：詢價單號（RFQ-XXXX-XXXX）、客戶名稱、客戶等級（KA/一般/政府）、產品型號、數量、報價金額NTD、落單金額NTD、勝負、成交價落差(%)、競爭對手、交期(週)、案件年月</p>
+        <p style="font-size:13px; margin-bottom:0;"><strong>內容範圍</strong>：2023-2025 共 16 筆歷史報價（10 勝、3 失、3 進行中）。客戶涵蓋上銀、台積電、中油、鴻海、統一、中鋼、永信、台達、南亞、華新麗華、新北汙水廠、台塑、鴻海高雄半導體、彰化離岸風場。競爭對手橫跨東芝、ABB、Siemens、WEG、Delta、SEW、Flender、Mitsubishi、Yaskawa、Howden、Schneider、Vestas。</p>
+      </div>
+
+      <div class="test-card" style="background:var(--white); border-color:var(--primary);">
+        <p style="margin-bottom:6px;"><strong style="color:var(--primary);">BOM 標準成本表</strong>　<span style="color:var(--muted); font-size:12px;">（15 行）</span></p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>用途</strong>：取得各標準型號的 BOM 拆解、標準成本、建議底價、標準毛利率，作為三檔報價的成本基礎。</p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>欄位</strong>：產品型號、銅(NTD)、矽鋼片(NTD)、其他材料(NTD)、加工費(NTD)、銷管攤銷(NTD)、標準成本(NTD)、建議底價(NTD)、標準毛利率</p>
+        <p style="font-size:13px; margin-bottom:0;"><strong>內容範圍</strong>：15 個標準型號的成本結構，含主要原料明細（銅料、矽鋼片、其他材料）。標準毛利率區間 12.5% 至 20.8%（馬達類偏低、變頻器與伺服類偏高）。</p>
+      </div>
+
+      <div class="obs"><strong>測試重點預期：</strong>1.4 拿到 AESV2-IE3-020 詢價時，應查到標準成本 <strong>36,000</strong>、建議底價 <strong>42,000</strong>、毛利率 <strong>14.3%</strong>；應引用 <strong>RFQ-2023-0356</strong>（上銀同型號 8 顆，落差 -3.4%、勝、對手 ABB）作為相似案件；三檔報價約落在上限 53,000、最適 51,000、下限 42,000。</div>
+
+      <h3>測試資料 — 點按鈕複製後貼入 EgentHub 對話框</h3>
+
+      <div class="test-card">
+        <span class="test-num">測試 1</span>
+        <span class="test-title">標準型號的報價（上銀科技 IE3 20HP × 10）</span>
+        <div class="test-body">詢價卡（從詢價解析助理產出）：
+
+客戶：上銀科技
+客戶等級：KA
+地區：嘉義
+標準型號：AESV2-IE3-020
+產品類別：三相感應馬達
+規格：鑄鐵殼 IE3、20 HP、4P、380V、IP55
+數量：10 顆
+庫存狀態：現貨
+標準交期：2 週
+客戶交期需求：4 週內
+
+特殊要求：對手 ABB 上週剛報過上銀同規格馬達單價約 7 萬 NTD。</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：標準型號 + 競爭情報，期望給三檔報價</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>BOM 標準成本 36,000、建議底價 42,000、毛利率 14.3%；引用 RFQ-2023-0356（上銀同型號 8 顆 -3.4% 落差勝）；三檔報價約：上限 53,000 / 最適 51,000 / 下限 42,000；勝率 60-70%；提及 ABB 競價威脅。</div>
+      </div>
+
+      <div class="test-card">
+        <span class="test-num gate">閘門測試 2</span>
+        <span class="test-title">資料閘門啟動 — 詢價卡缺關鍵欄位</span>
+        <div class="test-body">客戶：某客戶
+需求：要買幾顆變頻器
+請報價。</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：缺欄位，期望 Agent 啟動硬閘門</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>資訊充分度 &lt;60；列出資料缺口（標準型號、客戶等級、數量）；停止後續分析；<strong>不給任何數字建議</strong>。</div>
+      </div>
+
+      <div class="test-card">
+        <span class="test-num edge">邊界測試 3</span>
+        <span class="test-title">客製化詢價（無 BOM 對應）</span>
+        <div class="test-body">詢價卡：
+客戶：中油大林廠（KA）
+標準型號：客製化（無對應標準）
+產品類別：防爆型馬達 EXd IIB T4 + IECEx 認證
+規格：80 HP / 4P / 660V / IP66 / 環境溫度 -50°C 至 +60°C
+數量：4 顆
+客戶交期需求：12 週
+請報價。</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：客製化、BOM 表無此料號，測試誠實度</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>Agent 明確告知「無 BOM 基礎，建議由業務工程師先核算成本」；可援引相近的 AEXD-IIB-100 BOM 作為參考下限；<strong>不應推估客製化報價</strong>。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4 -->
+  <section>
+    <h2><span class="num">4</span><span class="label">Agent 鏈協作 — 進階測試</span></h2>
+    <p class="section-sub">真實業務場景中，輔助型 + 核心型 Agent 會串連使用。建議您完成單個 Agent 測試後，再嘗試串連流程。</p>
+
+    <h3>商機鏈：客戶研究助理 → 商機分析師</h3>
+    <div class="chain">
+      <div class="chain-box assist">
+        <h4>1.1 客戶研究助理</h4>
+        <p>業務上傳 Autonomous Agent xlsx 或新聞 PDF，Agent 整理出「客戶研究摘要」（含標案、競爭、可能切入候選）</p>
+      </div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-box">
+        <h4>1.2 商機分析師</h4>
+        <p>業務把上一步的研究摘要直接複製貼入，Agent 跑 Phase 1-7，產出「商機雷達卡」（含金額、勝率、行動）</p>
+      </div>
+    </div>
+    <div class="obs"><strong>串接技巧：</strong>1.1 輸出最後會引導您「將摘要交給商機分析師繼續分析」。您只需把 1.1 的整段 Markdown 複製，貼到 1.2 的對話框，前面加一行「目標客戶：XXX」即可。</div>
+
+    <h3 style="margin-top:32px">報價鏈：詢價解析助理 → 報價策略分析師</h3>
+    <div class="chain">
+      <div class="chain-box assist">
+        <h4>1.3 詢價解析助理</h4>
+        <p>業務貼上客戶 Email 詢價或上傳詢價單 PDF，Agent 抽取規格、比對標準型號，產出「標準化詢價卡」</p>
+      </div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-box">
+        <h4>1.4 報價策略分析師</h4>
+        <p>業務把上一步的詢價卡直接複製貼入，Agent 跑 Phase 1-7，產出「三檔報價建議單」</p>
+      </div>
+    </div>
+    <div class="obs"><strong>串接技巧：</strong>1.3 輸出的詢價卡可直接作為 1.4 的輸入。如果客戶提到競爭對手價格或特殊交期要求，記得在 1.4 的輸入裡額外加一段「特殊要求」說明。</div>
+  </section>
+
+  <!-- Section 5 -->
+  <section>
+    <h2><span class="num">5</span><span class="label">核心觀察點</span></h2>
+    <p class="section-sub">這三個觀察點是本次 POC 最想驗證的設計理念，請您在測試時特別留意。</p>
+
+    <div class="obs-grid">
+      <div class="obs-card gold">
+        <h4>資料閘門設計</h4>
+        <p>當您給 Agent「不完整的資料」（測試 #3 與閘門測試），Agent 是否確實啟動「資訊充分度評分」並婉拒產出？或是它仍然強行給出看似專業實則根據不足的內容？這個觀察點直接驗證原則二。</p>
+      </div>
+      <div class="obs-card">
+        <h4>歷史案例援引</h4>
+        <p>1.2 與 1.4 的輸出，是否能具體援引「歷史商機案例.csv」或「歷史報價成交資料表.csv」中的案例編號（OP-XXXX 或 RFQ-XXXX）？這代表 Agent 真的在查表而不是憑空想像。</p>
+      </div>
+      <div class="obs-card">
+        <h4>條件式兩階段</h4>
+        <p>1.1 與 1.3 在您「上傳 PDF」時是否進入步驟一→步驟二，而在「純文字輸入」時直接走步驟二？這個設計避免視覺處理污染知識庫查詢，是 EgentHub 的進階設計模式。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6 -->
+  <section>
+    <h2><span class="num">6</span><span class="label">測試完請給我們回饋</span></h2>
+    <p class="section-sub">您的回饋會直接影響後續正式 POC 的設計方向與顧問時數估算。</p>
+
+    <div class="two-col">
+      <div class="infobox">
+        <h4>請特別告訴我們</h4>
+        <p>1. 哪個 Agent 對您的工作最有用？</p>
+        <p>2. 哪個 Agent 的回應「不夠準」或「太籠統」？</p>
+        <p>3. 知識庫的欄位是否有缺漏（您的工作會需要哪些東元內部資料補進來）？</p>
+        <p>4. 「資料閘門」設計是否合理？或您覺得 Agent 應該更主動推估？</p>
+      </div>
+      <div class="infobox dark">
+        <h4>回饋管道</h4>
+        <p>聯絡 Intellicon 主任顧問：</p>
+        <p style="margin-top:8px"><strong>Albert Chen 陳慶蔚</strong></p>
+        <p>智慧方案股份有限公司 執行長</p>
+        <p>Email：<a href="mailto:albert@intelliconai.com">albert@intelliconai.com</a></p>
+        <p style="margin-top:8px">或於下次雙週進度會議直接提出，由 GM 種子團隊 PM 彙整給 Intellicon 顧問團隊。</p>
+      </div>
+    </div>
+
+    <h3>下一步</h3>
+    <p>感謝您協助驗證這版 POC Agent。我們會根據您的回饋於下一版迭代：</p>
+    <ul>
+      <li>調整知識庫欄位與內容</li>
+      <li>優化提示詞與 Phase 流程</li>
+      <li>新增或合併 Agent</li>
+      <li>串接 ERP / CRM 真實資料源（POC 階段使用模擬資料）</li>
+    </ul>
+  </section>
+
+</div>
+
+<footer>
+  <p class="brand">智慧方案股份有限公司 ｜ Intellicon Solutions</p>
+  <p>EgentHub 企業 AI Agent 平台 ｜ 2026 年 5 月</p>
+  <p style="margin-top:10px"><a href="https://intellicon.app/ap/c/94ee1b67-3379-469b-b391-f79460ccb11c/w/b5b39987-bbfd-4517-b511-8bc2aba99831" target="_blank" rel="noopener">回到 EgentHub 測試工作室</a></p>
+</footer>
+
+<script>
+  function showTab(n) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab')[n - 1].classList.add('active');
+    document.getElementById('panel-' + n).classList.add('active');
+  }
+
+  function copyText(btn) {
+    var card = btn.closest('.test-card');
+    var body = card.querySelector('.test-body');
+    var text = body.innerText;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(function() {
+        btn.classList.add('copied');
+        var original = btn.innerText;
+        btn.innerText = '已複製，可貼到 EgentHub';
+        setTimeout(function() {
+          btn.classList.remove('copied');
+          btn.innerText = original;
+        }, 2200);
+      });
+    } else {
+      // Fallback
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      btn.classList.add('copied');
+      var original2 = btn.innerText;
+      btn.innerText = '已複製';
+      setTimeout(function() {
+        btn.classList.remove('copied');
+        btn.innerText = original2;
+      }, 2200);
+    }
+  }
+</script>
+
+</body>
+</html>

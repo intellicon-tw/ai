@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>東元 HT POC Agent 測試指南</title>
+<style>
+  :root {
+    --primary: #8A7AD2;
+    --secondary: #5D4894;
+    --dark: #3D2F66;
+    --light: #D5C8EE;
+    --vlight: #E9DEF6;
+    --bg: #F4EFFA;
+    --gold: #D4A95C;
+    --text: #2A2740;
+    --muted: #6B6580;
+    --white: #FFFFFF;
+    --border: #DCD5EB;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--bg); color: var(--text);
+    line-height: 1.7; font-size: 15px;
+  }
+  a { color: var(--secondary); text-decoration: none; }
+  a:hover { color: var(--primary); text-decoration: underline; }
+
+  /* ===== Hero ===== */
+  .hero {
+    background: linear-gradient(135deg, var(--primary), var(--dark));
+    color: var(--white); padding: 60px 24px 80px; text-align: center;
+  }
+  .hero .tag {
+    display: inline-block; padding: 4px 14px; border: 1px solid var(--gold);
+    color: var(--gold); border-radius: 999px; font-size: 12px;
+    letter-spacing: 2px; margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: 38px; font-weight: 800; margin-bottom: 12px; letter-spacing: 1px;
+  }
+  .hero .subtitle {
+    font-size: 18px; color: var(--light); margin-bottom: 8px;
+  }
+  .hero .meta { font-size: 13px; color: var(--light); opacity: 0.85; margin-top: 20px; }
+
+  .cta-wrap {
+    margin-top: 36px; display: flex; flex-direction: column;
+    align-items: center; gap: 12px;
+  }
+  .cta-btn {
+    display: inline-block; background: var(--gold); color: var(--dark);
+    padding: 16px 36px; border-radius: 6px; font-size: 17px; font-weight: 700;
+    text-decoration: none; transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(212, 169, 92, 0.35);
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(212, 169, 92, 0.45); text-decoration: none; }
+  .cta-hint { font-size: 13px; color: var(--light); }
+
+  /* ===== Layout ===== */
+  .container {
+    max-width: 1100px; margin: 0 auto; padding: 48px 24px;
+  }
+  section {
+    background: var(--white); border-radius: 10px; padding: 40px;
+    margin-bottom: 28px; box-shadow: 0 2px 12px rgba(138, 122, 210, 0.10);
+  }
+  h2 {
+    color: var(--primary); font-size: 26px; font-weight: 700;
+    margin-bottom: 6px; padding-bottom: 12px;
+    border-bottom: 2px solid var(--vlight);
+  }
+  h2 .num {
+    display: inline-block; background: var(--primary); color: var(--white);
+    width: 36px; height: 36px; border-radius: 50%; text-align: center;
+    line-height: 36px; font-size: 16px; margin-right: 12px;
+    vertical-align: middle;
+  }
+  h2 .label {
+    display: inline-block; vertical-align: middle;
+  }
+  .section-sub {
+    color: var(--muted); font-size: 14px; margin-bottom: 24px; margin-top: 8px;
+  }
+  h3 {
+    color: var(--dark); font-size: 18px; font-weight: 700;
+    margin-top: 28px; margin-bottom: 12px;
+  }
+  p { margin-bottom: 14px; }
+  ul, ol { padding-left: 22px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; }
+
+  /* ===== Stat row ===== */
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 14px; margin-top: 24px;
+  }
+  .stat {
+    background: var(--vlight); border-radius: 8px; padding: 18px;
+    text-align: center; border: 1px solid var(--light);
+  }
+  .stat .num-big { font-size: 32px; font-weight: 800; color: var(--primary); display: block; }
+  .stat .lbl { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* ===== Two col ===== */
+  .two-col {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  }
+  .infobox {
+    background: var(--vlight); border-left: 4px solid var(--primary);
+    padding: 18px; border-radius: 4px;
+  }
+  .infobox.gold { border-left-color: var(--gold); background: #FAF3E0; }
+  .infobox.dark { border-left-color: var(--dark); background: #DCD5EB; }
+  .infobox h4 { color: var(--primary); font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .infobox.gold h4 { color: var(--gold); }
+  .infobox.dark h4 { color: var(--dark); }
+  .infobox p { font-size: 13.5px; margin-bottom: 0; color: var(--text); }
+
+  /* ===== Tabs ===== */
+  .tabs {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px;
+    border-bottom: 2px solid var(--vlight);
+  }
+  .tab {
+    padding: 12px 20px; cursor: pointer;
+    background: var(--bg); border: none; border-radius: 6px 6px 0 0;
+    font-size: 14px; font-weight: 600; color: var(--muted);
+    border-bottom: 3px solid transparent; margin-bottom: -2px;
+    transition: all 0.15s; font-family: inherit;
+  }
+  .tab:hover { color: var(--primary); background: var(--vlight); }
+  .tab.active {
+    color: var(--primary); background: var(--white);
+    border-bottom-color: var(--primary);
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ===== Agent header ===== */
+  .agent-head {
+    display: flex; gap: 20px; align-items: flex-start;
+    background: linear-gradient(to right, var(--vlight), transparent);
+    padding: 20px 24px; border-radius: 8px; margin-bottom: 20px;
+    border-left: 5px solid var(--primary);
+  }
+  .agent-head .id {
+    font-size: 28px; font-weight: 800; color: var(--primary);
+    line-height: 1; min-width: 60px;
+  }
+  .agent-head h3 {
+    margin: 0 0 4px 0; font-size: 22px; color: var(--dark);
+  }
+  .agent-head .role {
+    font-size: 14px; color: var(--muted); margin-bottom: 10px;
+  }
+  .meta-table {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 16px;
+    font-size: 12.5px;
+  }
+  .meta-table dt { color: var(--muted); font-weight: 600; }
+  .meta-table dd { color: var(--text); }
+
+  /* ===== Test card ===== */
+  .test-card {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px; margin-bottom: 16px;
+  }
+  .test-card .test-num {
+    display: inline-block; background: var(--secondary); color: var(--white);
+    padding: 3px 10px; border-radius: 4px; font-size: 11px;
+    font-weight: 700; margin-right: 8px; vertical-align: middle;
+  }
+  .test-card .test-num.gate { background: var(--gold); color: var(--dark); }
+  .test-card .test-num.edge { background: var(--dark); }
+  .test-card .test-title {
+    font-weight: 700; color: var(--dark); display: inline-block;
+    vertical-align: middle; font-size: 14px;
+  }
+  .test-card .test-body {
+    background: var(--white); border: 1px dashed var(--border);
+    border-radius: 4px; padding: 14px; margin-top: 10px;
+    font-family: "Menlo", "Consolas", monospace; font-size: 12.5px;
+    line-height: 1.6; white-space: pre-wrap; color: var(--text);
+    max-height: 240px; overflow-y: auto;
+  }
+  .test-actions {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 10px; gap: 12px;
+  }
+  .copy-btn {
+    background: var(--primary); color: var(--white); border: none;
+    padding: 8px 16px; border-radius: 4px; cursor: pointer;
+    font-size: 12.5px; font-weight: 600; font-family: inherit;
+    transition: all 0.15s;
+  }
+  .copy-btn:hover { background: var(--dark); }
+  .copy-btn.copied { background: var(--gold); color: var(--dark); }
+
+  .obs {
+    background: var(--vlight); border-radius: 4px; padding: 10px 14px;
+    font-size: 12.5px; color: var(--text); margin-top: 12px;
+    border-left: 3px solid var(--secondary);
+  }
+  .obs strong { color: var(--primary); }
+
+  /* ===== Chain ===== */
+  .chain {
+    display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px;
+    align-items: stretch; margin: 20px 0;
+  }
+  .chain-box {
+    background: var(--white); border: 2px solid var(--primary);
+    border-radius: 8px; padding: 16px;
+  }
+  .chain-box.assist { border-color: var(--secondary); }
+  .chain-box h4 { color: var(--primary); font-size: 15px; margin-bottom: 8px; }
+  .chain-box.assist h4 { color: var(--secondary); }
+  .chain-box p { font-size: 13px; margin-bottom: 0; color: var(--muted); }
+  .chain-arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--primary); font-size: 28px; font-weight: 700;
+  }
+
+  /* ===== Observation list ===== */
+  .obs-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+    margin-top: 20px;
+  }
+  .obs-card {
+    background: var(--vlight); padding: 20px; border-radius: 8px;
+    border-top: 3px solid var(--primary);
+  }
+  .obs-card.gold { border-top-color: var(--gold); }
+  .obs-card h4 { color: var(--dark); font-size: 15px; margin-bottom: 10px; }
+  .obs-card p { font-size: 13px; color: var(--text); margin-bottom: 0; }
+
+  /* ===== Footer ===== */
+  footer {
+    background: var(--dark); color: var(--light); padding: 30px 24px;
+    text-align: center; font-size: 13px;
+  }
+  footer .brand { color: var(--white); font-weight: 700; margin-bottom: 4px; }
+  footer a { color: var(--gold); }
+
+  /* ===== Print ===== */
+  @media print {
+    .hero { background: var(--primary) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .copy-btn { display: none; }
+    .tab-panel { display: block !important; page-break-before: always; }
+    .tabs { display: none; }
+    section { box-shadow: none; }
+  }
+
+  @media (max-width: 768px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .two-col, .obs-grid { grid-template-columns: 1fr; }
+    .chain { grid-template-columns: 1fr; }
+    .chain-arrow { transform: rotate(90deg); padding: 8px 0; }
+    .hero h1 { font-size: 28px; }
+    section { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="tag">EGENTHUB POC AGENT 測試</div>
+  <h1>東元 HT 通路智慧助理</h1>
+  <p class="subtitle">門市銷售預測 × 巡店與展店行動建議</p>
+  <p class="subtitle" style="font-size:15px;">2 個 Agent 從資料到行動，30 分鐘上手測試</p>
+
+  <div class="cta-wrap">
+    <a class="cta-btn" href="https://intellicon.app/ap/c/94ee1b67-3379-469b-b391-f79460ccb11c/w/013fbc44-b17d-4196-9aac-8c3a1470b3d9" target="_blank" rel="noopener">點此進入 EgentHub 測試工作室</a>
+    <p class="cta-hint">建議使用 Chrome 或 Edge 瀏覽器，登入後即可看到 4 個 Agent</p>
+  </div>
+
+  <p class="meta">智慧方案股份有限公司 ｜ EgentHub 企業 AI Agent 平台 ｜ 2026 年 5 月</p>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="container">
+
+  <!-- Section 1 -->
+  <section>
+    <h2><span class="num">1</span><span class="label">開始之前</span></h2>
+    <p class="section-sub">先理解這次測試的範圍、設計理念、以及您要觀察的關鍵點。</p>
+
+    <h3>本次 POC 涵蓋什麼</h3>
+    <p>本次 POC 聚焦在 HT 通路業務的單一關鍵命題 — 「門市銷售預測與巡店建議」。命題拆成兩個核心型 Agent（從資料到行動），共 2 個 Agent 在同一個 EgentHub 工作室內。</p>
+
+    <div class="stats">
+      <div class="stat"><span class="num-big">2</span><span class="lbl">個 AI Agent</span></div>
+      <div class="stat"><span class="num-big">1</span><span class="lbl">個業務題目</span></div>
+      <div class="stat"><span class="num-big">6</span><span class="lbl">個知識庫表</span></div>
+      <div class="stat"><span class="num-big">8</span><span class="lbl">組測試資料</span></div>
+    </div>
+
+    <h3>五項設計原則 — 您觀察 Agent 行為時的依據</h3>
+    <div class="two-col">
+      <div class="infobox">
+        <h4>原則一：流程優先於模型</h4>
+        <p>先定義 HT 區經理該如何看銷售資料、如何決定巡店優先級、如何評估展店，AI 才介入輔助每個步驟。</p>
+      </div>
+      <div class="infobox gold">
+        <h4>原則二：資料閘門 — POS 品質是硬條件</h4>
+        <p>品類分類不一致、日期跳日、銷售件數異常時，Agent 主動退回要求補資料；不對殘缺資料做預測。</p>
+      </div>
+      <div class="infobox dark">
+        <h4>原則三：判斷邏輯與資料分離</h4>
+        <p>預測模型、異常偵測規則、巡店優先級邏輯內建於 Agent；門市、商圈、銷售、巡店、展店資料則存於知識庫。</p>
+      </div>
+      <div class="infobox gold">
+        <h4>原則四：解釋優先於預測　<span style="color:var(--gold); font-size:11px;">HT 特有</span></h4>
+        <p>預測數字本身不重要，重要的是「為什麼會這樣」與「該怎麼做」。沒有解釋的預測不是有用的預測。</p>
+      </div>
+      <div class="infobox" style="grid-column: span 2;">
+        <h4>原則五：人機協作，不是全自動</h4>
+        <p>AI 的責任是加速、結構化、指出不確定性。最終巡店、展店、促銷決策仍由區經理、營業部主管、決策者做決策。</p>
+      </div>
+    </div>
+
+    <h3>建議測試流程（約 30-45 分鐘）</h3>
+    <ol>
+      <li>點擊頁首的「進入 EgentHub 測試工作室」按鈕，登入帳號</li>
+      <li>依序測試 1.1 銷售資料分析 → 1.2 巡店與展店行動，每個 Agent 至少跑 2 組測試資料</li>
+      <li>第二輪嘗試「Agent 鏈協作」：把 1.1 產出的儀表板報告貼入 1.2，產出本週巡店優先順序</li>
+      <li>觀察「資料品質閘門啟動」的測試案例（品類不一致、日期跳日），確認 Agent 是否真的會婉拒並列出補資料清單</li>
+      <li>對 1.1 銷售分析助手，請務必觀察「下滑主因解釋」是否援引巡店紀錄與商圈資訊；對 1.2，觀察展店評估是否援引歷史案例</li>
+      <li>在本指南最末填寫您的觀察與回饋</li>
+    </ol>
+  </section>
+
+  <!-- Section 2 — POC Agent 設計理念 -->
+  <section>
+    <h2><span class="num">2</span><span class="label">POC Agent 設計理念</span></h2>
+    <p class="section-sub">理解這兩個 Agent 為什麼這樣拆分、為什麼要強調「解釋」、為什麼有資料品質閘門 — 這些設計決策背後都有 HT 通路業務特性下的刻意考量。</p>
+
+    <h3>為什麼是 2 個 Agent，而不是 1 個「萬能 Agent」</h3>
+    <p>單一題目其實涵蓋兩個不同的工作面向 — 銷售資料分析（看資料）與行動建議產出（做決策）。把這兩個面向對應到兩個 Agent：</p>
+    <ul>
+      <li><strong>失敗範圍可控</strong> — 某個 Agent 表現不好不會影響另一個</li>
+      <li><strong>使用時機分離</strong> — 1.1 早上看儀表板用、1.2 週一規劃巡店或評估展店時用，業務節奏不同</li>
+      <li><strong>各自獨立可用</strong> — 不必每次都跑完整鏈路；1.1 的儀表板可單獨給營運高層看，1.2 的展店評估可不依賴 1.1 直接執行</li>
+      <li><strong>培訓與交接更容易</strong> — 種子團隊可以一個一個 Agent 學會，不必一次掌握整個複雜流程</li>
+    </ul>
+
+    <h3>為什麼有「資料品質閘門」（HT 案的核心安全防線）</h3>
+    <p>傳統的 LLM Agent 在資料不完整時會「強行給看似專業實則根據不足的答案」。對 HT 通路業務而言，這種輸出會誤導區經理採取錯誤對策 — 把員工問題誤判為商圈問題、用品類分類錯誤的資料做預測、把缺日的銷售資料當成「真的下滑」。所以本案採用「資料品質閘門」設計：</p>
+    <ul>
+      <li>每次跑 SOP 前，<strong>先評估「資料品質（0-100 分）」</strong></li>
+      <li>檢查：日期區間完整性、品類分類一致性、銷售件數合理性</li>
+      <li>分數低於 60 時，<strong>Agent 不做預測</strong>，只列出資料缺口清單</li>
+      <li>業務知道要重新匯出哪些資料才能繼續，而不是收到看似精準但實際根據不足的預測</li>
+    </ul>
+
+    <h3>為什麼強調「解釋優先於預測」（HT 特有）</h3>
+    <p>HT 案的核心設計理念是「解釋優先於預測」 — 一個沒有解釋的預測（「下週 S007 會下滑 15%」）對區經理沒有用，他不知道該怎麼處理。一個有解釋但解釋錯誤的預測（「下滑是因為員工流動」但其實是商圈問題）甚至比沒有預測更危險，會誘導區經理採取錯誤對策。所以本案的 Agent 在給出預測時，必須同時給出：</p>
+    <ul>
+      <li><strong>主因解釋</strong> — 從 5 種候選原因（員工流動／商圈變化／競品衝擊／促銷檔期／季節影響）中找出最可能組合</li>
+      <li><strong>援引來源</strong> — 引用 KB 中的具體紀錄（例如「巡店紀錄 2026-02-12 提到新店長報到 1 個月」）</li>
+      <li><strong>建議行動</strong> — 應該採取什麼具體行動</li>
+      <li><strong>歷史可比案例</strong> — 過去類似情況是怎麼處理的</li>
+    </ul>
+
+    <h3>為什麼採用 Phase 1-7 結構化 SOP</h3>
+    <p>把資深區經理的判斷邏輯轉成 7 個明確的 Phase 步驟，是為了：</p>
+    <ul>
+      <li><strong>讓判斷邏輯被組織保存</strong> — 不再藏在資深區經理腦中</li>
+      <li><strong>每個 Phase 都有明確輸入輸出</strong>，方便驗測（例如：Phase 4 的下滑主因是否引用了巡店紀錄）</li>
+      <li><strong>新進區經理也能產出水準一致的分析</strong>，再由資深區經理做最後校對</li>
+      <li><strong>1.1 與 1.2 的 Phase 結構刻意對稱</strong>（都是 Phase 1 需求定義 → Phase 2 閘門 → Phase 3 結構化 → Phase 4-6 核心戰場 → Phase 7 輸出），讓組織學習成本降到最低</li>
+    </ul>
+
+    <h3>為什麼採用「鬆耦合」串接（Markdown 中介產物）</h3>
+    <p>1.1 → 1.2 的串接，刻意採用 Markdown 文字作為中介產物，而不是 API 直連：</p>
+    <ul>
+      <li><strong>業務直接複製貼上即可串接</strong>，不需特殊框架支援</li>
+      <li><strong>可中斷可重啟</strong> — 早上跑 1.1 後，下午再用 1.2，輸出文字保留即可</li>
+      <li><strong>各自獨立可用</strong> — 1.1 儀表板可單獨給營運高層看，1.2 展店評估可不依賴 1.1</li>
+      <li><strong>可審計</strong> — Agent 的輸入輸出都是純文字，方便 Code Review 與稽核追蹤</li>
+    </ul>
+  </section>
+
+  <!-- Section 3 -->
+  <section>
+    <h2><span class="num">3</span><span class="label">兩個 Agent 詳解與測試</span></h2>
+    <p class="section-sub">點選下方頁籤切換不同 Agent。每個 Agent 提供 4 組測試資料（正常案、閘門啟動案、邊界案），可直接複製貼到 EgentHub 對話框。</p>
+
+    <div class="tabs">
+      <button class="tab active" onclick="showTab(1)">1.1 銷售資料分析助手</button>
+      <button class="tab" onclick="showTab(2)">1.2 巡店與展店行動助手</button>
+    </div>
+
+    <!-- Agent 1.1 -->
+    <div class="tab-panel active" id="panel-1">
+      <div class="agent-head">
+        <div class="id">1.1</div>
+        <div style="flex:1">
+          <h3>銷售資料分析助手</h3>
+          <p class="role">核心型 Agent ｜ 處理 POS 資料、預測、異常偵測，產出儀表板報告</p>
+          <dl class="meta-table">
+            <dt>知識庫</dt><dd>表格查詢（每日銷售 + 門市資料 + 商圈 + 季節 + 巡店紀錄）</dd>
+            <dt>兩階段</dt><dd>否（純文字 + KB 查詢）</dd>
+            <dt>使用時機</dt><dd>每日 POS 匯入後，5 分鐘內產出儀表板</dd>
+            <dt>下游 Agent</dt><dd>巡店與展店行動助手（1.2）</dd>
+          </dl>
+        </div>
+      </div>
+
+      <h3>觀察重點</h3>
+      <ul>
+        <li>「資料品質評分」是否會標示出來？低於 60 分時 Agent 是否確實停止後續分析？</li>
+        <li>下滑主因解釋是否援引「巡店紀錄」中的具體日期與議題？</li>
+        <li>每個預測是否附帶解釋（「為什麼是這個數字」），不只是給數字？</li>
+      </ul>
+
+      <h3>知識庫</h3>
+      <p>本 Agent 整合五個知識庫做完整的銷售分析、異常偵測、預測。</p>
+
+      <div class="test-card" style="background:var(--white); border-color:var(--primary);">
+        <p style="margin-bottom:6px;"><strong style="color:var(--primary);">每日銷售明細</strong>　<span style="color:var(--muted); font-size:12px;">（樣本 19 行）</span></p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>用途</strong>：來源於 POS 系統匯出，是所有分析的基礎資料源。</p>
+        <p style="font-size:13px; margin-bottom:0;"><strong>欄位</strong>：日期、店號、品類、銷售件數、銷售額NTD、毛利率</p>
+      </div>
+
+      <div class="test-card" style="background:var(--white); border-color:var(--primary);">
+        <p style="margin-bottom:6px;"><strong style="color:var(--primary);">門市基本資料</strong>　<span style="color:var(--muted); font-size:12px;">（15 行）</span></p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>欄位</strong>：店號、店名、區域、縣市、店型、開店年月、商圈類型、坪數、員工數、店長年資</p>
+        <p style="font-size:13px; margin-bottom:0;"><strong>內容範圍</strong>：北中南東 4 區共 15 家門市，含旗艦店、標準店、社區店三種店型。</p>
+      </div>
+
+      <div class="test-card" style="background:var(--white); border-color:var(--primary);">
+        <p style="margin-bottom:6px;"><strong style="color:var(--primary);">商圈與競品資訊</strong>　<span style="color:var(--muted); font-size:12px;">（15 行）</span></p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>欄位</strong>：商圈密度、競品店數(2km內)、平均日客流、月租金、主要客層、商圈成熟度、近一年商圈變化</p>
+        <p style="font-size:13px; margin-bottom:0;"><strong>內容範圍</strong>：每家門市的商圈特徵，含商圈成熟度（成熟／新興）與近一年變化（夜市人流下降、新建案入住等）。</p>
+      </div>
+
+      <div class="test-card" style="background:var(--white); border-color:var(--primary);">
+        <p style="margin-bottom:6px;"><strong style="color:var(--primary);">季節性與促銷檔</strong>　<span style="color:var(--muted); font-size:12px;">（16 行）</span></p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>欄位</strong>：月份、品類、季節指數（基準=1.00）、主要檔期、預期轉換率提升、備註</p>
+        <p style="font-size:13px; margin-bottom:0;"><strong>內容範圍</strong>：分離式冷氣、變頻窗型、多聯機、家用冰箱、冷凍櫃 5 個品類的全年季節指數。例如分離式冷氣 6 月 1.85、12 月 0.45。</p>
+      </div>
+
+      <div class="test-card" style="background:var(--white); border-color:var(--primary);">
+        <p style="margin-bottom:6px;"><strong style="color:var(--primary);">巡店紀錄與議題</strong>　<span style="color:var(--muted); font-size:12px;">（10 行）</span></p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>欄位</strong>：巡店日期、店號、巡店人員、議題類別、議題描述、處理狀況、後續成效、備註</p>
+        <p style="font-size:13px; margin-bottom:0;"><strong>內容範圍</strong>：2026 年 2-3 月區經理巡店紀錄 10 筆，含員工流動、競品衝擊、陳列問題、客流上升、VIP 流失等議題。</p>
+      </div>
+
+      <div class="obs"><strong>測試重點預期：</strong>1.1 對 S007 逢甲下滑分析時，應援引巡店紀錄 4 筆（2026-02-12 員工流動、02-15 競品、02-20 陳列、03-15 商圈變化），歸因為「商圈+員工+競品」三因素組合。</div>
+
+      <h3>測試資料 — 點按鈕複製後貼入 EgentHub 對話框</h3>
+
+      <div class="test-card">
+        <span class="test-num">測試 1</span>
+        <span class="test-title">每日儀表板 — 3/15 銷售資料</span>
+        <div class="test-body">分析模式：每日儀表板
+POS 資料（3 月 15 日）：
+S001 信義旗艦店 - 分離式冷氣 9 件 NT$315,000 22%
+S001 信義旗艦店 - 變頻窗型 11 件 NT$154,000 18%
+S004 桃園藝文門市 - 分離式冷氣 6 件 NT$210,000 22%
+S004 桃園藝文門市 - 變頻窗型 8 件 NT$112,000 18%
+S007 逢甲門市 - 分離式冷氣 2 件 NT$70,000 22% （前一週 6 件）
+S007 逢甲門市 - 變頻窗型 3 件 NT$42,000 18% （前一週 8 件）
+S012 夢時代旗艦店 - 分離式冷氣 11 件 NT$385,000 22%
+S012 夢時代旗艦店 - 多聯機 3 件 NT$480,000 28%</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：標準每日儀表板，預期識別 S007 異常</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>資料品質 ≥80；產出各店排名；識別 S007 異常下滑；主因歸因援引巡店紀錄；給未來 1-4 週預測（S007 預期續跌、S004 預期續升）；每個預測有解釋。</div>
+      </div>
+
+      <div class="test-card">
+        <span class="test-num">測試 2</span>
+        <span class="test-title">中區週報 — 主因深度分析</span>
+        <div class="test-body">分析模式：週報（7 日資料）
+聚焦範圍：中區整體
+POS 資料（2026-03-22 至 2026-03-28）：
+S006 七期門市 - 分離式冷氣 平均 8 件/日 環比 +5%
+S007 逢甲門市 - 分離式冷氣 平均 1 件/日 環比 -65% （持續下滑）
+S008 員林門市 - 分離式冷氣 平均 4 件/日 環比 +3%
+S009 草屯門市 - 分離式冷氣 平均 3 件/日 環比 0%
+請分析中區整體表現與下滑主因，並預測 4 月需求。</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：中區週報，多重歸因</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>識別 S007 為中區異常；援引巡店紀錄 4 次；歸因為「商圈+員工+競品」三因素組合；其他中區店給穩定/成長預測。</div>
+      </div>
+
+      <div class="test-card">
+        <span class="test-num gate">閘門測試 3</span>
+        <span class="test-title">資料品質閘門 — 品類分類不一致</span>
+        <div class="test-body">分析模式：每日儀表板
+POS 資料：
+S001 - 分離式冷氣 8 件
+S001 - 分離式 12 件 （注意：與上一筆品類分類不同）
+S001 - 冷氣分離式 5 件 （注意：又一個變體）
+S007 - 變頻窗型冷氣 6 件
+S007 - 變頻窗型 3 件
+請分析。</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：品類分類混亂，期望閘門啟動</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>資料品質評分 &lt; 60；指出品類分類不一致問題；建議統一分類後重新匯入；停止後續分析。<strong>不對混亂資料做預測。</strong></div>
+      </div>
+
+      <div class="test-card">
+        <span class="test-num gate">閘門測試 4</span>
+        <span class="test-title">資料品質閘門 — 日期跳日</span>
+        <div class="test-body">分析模式：週報
+POS 資料（範圍標示：2026-03-15 至 2026-03-21）：
+2026-03-15 S001 分離式冷氣 9 件
+2026-03-16 S001 分離式冷氣 8 件
+2026-03-19 S001 分離式冷氣 10 件 （注意：03-17、03-18 缺資料）
+2026-03-21 S001 分離式冷氣 11 件 （注意：03-20 缺資料）</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：日期跳日，期望閘門啟動</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>資料品質評分 &lt; 60；指出 3 個缺日；建議補齊或調整分析期間；停止後續預測。</div>
+      </div>
+    </div>
+
+    <!-- Agent 1.2 -->
+    <div class="tab-panel" id="panel-2">
+      <div class="agent-head">
+        <div class="id">1.2</div>
+        <div style="flex:1">
+          <h3>巡店與展店行動助手</h3>
+          <p class="role">核心型 Agent ｜ 基於 1.1 儀表板，產出可執行的行動建議</p>
+          <dl class="meta-table">
+            <dt>知識庫</dt><dd>表格查詢（門市資料 + 商圈 + 巡店紀錄 + 展店評估案例）</dd>
+            <dt>兩階段</dt><dd>否（純文字 + KB 查詢）</dd>
+            <dt>使用時機</dt><dd>週一早會前用於規劃本週巡店；評估展店候選地</dd>
+            <dt>上游 Agent</dt><dd>銷售資料分析助手（1.1）</dd>
+          </dl>
+        </div>
+      </div>
+
+      <h3>觀察重點</h3>
+      <ul>
+        <li>巡店優先級分數是否合理（議題嚴重度 × 時效 × 處理難度 × 歷史成效）？</li>
+        <li>每店重點關注事項是否援引「巡店紀錄」中的歷次處理狀況？</li>
+        <li>展店評估是否援引「展店評估參考案例」中的具體歷史案例編號（DSE-XXXX-XX）？</li>
+        <li>缺乏儀表板輸入時，Agent 是否拒絕產出巡店建議？</li>
+      </ul>
+
+      <h3>知識庫</h3>
+      <p>本 Agent 整合四個知識庫產出行動建議。</p>
+
+      <div class="test-card" style="background:var(--white); border-color:var(--primary);">
+        <p style="margin-bottom:6px;"><strong style="color:var(--primary);">門市基本資料 + 商圈與競品資訊</strong>　<span style="color:var(--muted); font-size:12px;">（共 30 行）</span></p>
+        <p style="font-size:13px; margin-bottom:0;"><strong>用途</strong>：每家門市的特徵與商圈條件，是巡店優先級評分與展店評估的基礎參考。</p>
+      </div>
+
+      <div class="test-card" style="background:var(--white); border-color:var(--primary);">
+        <p style="margin-bottom:6px;"><strong style="color:var(--primary);">巡店紀錄與議題</strong>　<span style="color:var(--muted); font-size:12px;">（10 行）</span></p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>用途</strong>：援引歷史巡店紀錄，給每店的重點關注事項與後續成效追蹤。</p>
+        <p style="font-size:13px; margin-bottom:0;"><strong>欄位</strong>：巡店日期、店號、巡店人員、議題類別、議題描述、處理狀況、後續成效、備註</p>
+      </div>
+
+      <div class="test-card" style="background:var(--white); border-color:var(--primary);">
+        <p style="margin-bottom:6px;"><strong style="color:var(--primary);">展店評估參考案例</strong>　<span style="color:var(--muted); font-size:12px;">（8 行）</span></p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>用途</strong>：援引歷史展店候選地評估結果與實際開店表現，建立可複用的展店方法論。</p>
+        <p style="font-size:13px; margin-bottom:8px;"><strong>欄位</strong>：案例編號（DSE-XXXX-XX）、候選地點、評估時間、評估結果、決策、實際開店表現、學習點</p>
+        <p style="font-size:13px; margin-bottom:0;"><strong>內容範圍</strong>：2021-2025 共 8 個案例，含成功（桃園藝文 DSE-2021-01）、失敗（逢甲 DSE-2022-01）、放棄（岡山 DSE-2022-08）、進行中（中壢中央 DSE-2025-02）等。</p>
+      </div>
+
+      <div class="obs"><strong>測試重點預期：</strong>1.2 對「中壢中央展店評估」應援引 DSE-2025-02（同一候選地的進行中案例）+ DSE-2022-01（逢甲學生客層警示）；對「岡山展店評估」應援引 DSE-2022-08（市場飽和已放棄）。</div>
+
+      <h3>測試資料 — 點按鈕複製後貼入 EgentHub 對話框</h3>
+
+      <div class="test-card">
+        <span class="test-num">測試 1</span>
+        <span class="test-title">巡店規劃 — 中區（接續 1.1 週報分析）</span>
+        <div class="test-body">行動模式：巡店規劃
+本週可巡店天數：3 天
+聚焦區域：中區
+
+銷售儀表板報告（從 Agent 1.1 產出）：
+中區異常店：
+- S007 逢甲門市：分離式冷氣環比下滑 65%，主因組合：商圈變化（夜市人流下降）+ 員工流動（新店長報到 1 個月）+ 競品衝擊（對面新開大同冷氣）
+- 其他中區店表現穩定或微幅成長
+
+未來 4 週預測：
+- S007 預估持續下滑，4 月分離式冷氣預期僅 30-50 件（去年同期 100 件）
+- 其他中區店因進入旺季前哨戰，預期 +10-15%</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：中區巡店規劃，S007 應排第 1</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>S007 排名第 1（分數 ≥85）；推薦巡店重點含「確認新店長表現、商圈搬遷評估」；可能觸發跨店對策（中區整體春季旺季促銷）。</div>
+      </div>
+
+      <div class="test-card">
+        <span class="test-num">測試 2</span>
+        <span class="test-title">展店評估 — 桃園中壢中央（推薦）</span>
+        <div class="test-body">行動模式：展店評估
+展店候選地名稱：桃園中壢中央商圈
+商圈描述：中壢車站徒步 5 分鐘、商圈密度中（30 間/平方公里）、競品 3 家
+預估租金：65 萬/月
+預估坪數：80 坪
+客層：上班族 + 學生（中央大學）
+請進行展店評估。</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：標準展店評估，期望推薦</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>評分 ★★★★（推薦）；援引 DSE-2025-02；風險提示：學生客層消費力參考逢甲 DSE-2022-01 警示；建議進入下一階段。</div>
+      </div>
+
+      <div class="test-card">
+        <span class="test-num edge">邊界測試 3</span>
+        <span class="test-title">展店評估 — 高雄岡山（不推薦）</span>
+        <div class="test-body">行動模式：展店評估
+展店候選地名稱：高雄岡山
+商圈描述：岡山火車站附近、商圈密度低（10 間/平方公里）、競品 4 家
+預估租金：35 萬/月
+預估坪數：50 坪
+客層：在地居民
+請進行展店評估。</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：競品已飽和，期望不推薦</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>評分 ★★（不推薦）；援引 DSE-2022-08（岡山已評估「市場飽和」）；建議放棄。</div>
+      </div>
+
+      <div class="test-card">
+        <span class="test-num gate">閘門測試 4</span>
+        <span class="test-title">資料閘門 — 缺銷售儀表板</span>
+        <div class="test-body">行動模式：巡店規劃
+本週可巡店天數：2 天
+請給我巡店建議。
+（注意：未提供銷售儀表板報告）</div>
+        <div class="test-actions">
+          <span style="font-size:12px; color:var(--muted)">情境：缺輸入，期望婉拒</span>
+          <button class="copy-btn" onclick="copyText(this)">複製測試資料</button>
+        </div>
+        <div class="obs"><strong>預期：</strong>Agent 明確告知「需要先用 Agent 1.1 產出銷售儀表板報告」；列出所需輸入；停止分析。<strong>不憑空產出巡店建議。</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4 -->
+  <section>
+    <h2><span class="num">4</span><span class="label">Agent 鏈協作 — 從資料到行動</span></h2>
+    <p class="section-sub">真實業務場景中，1.1 + 1.2 構成「從看資料到做決策」的完整鏈路。建議您完成單個 Agent 測試後，嘗試串連流程。</p>
+
+    <h3>銷售分析 → 巡店行動鏈：1.1 → 1.2</h3>
+    <div class="chain">
+      <div class="chain-box">
+        <h4>1.1 銷售資料分析助手</h4>
+        <p>每日 POS 匯入後產出「銷售儀表板報告」（各店排名、異常店清單、下滑主因解釋、未來 1-4 週預測）</p>
+      </div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-box">
+        <h4>1.2 巡店與展店行動助手</h4>
+        <p>業務把上一步的儀表板報告複製貼入，Agent 跑 Phase 1-7，產出「本週巡店優先順序 + 跨店對策 + 展店評估」</p>
+      </div>
+    </div>
+    <div class="obs"><strong>串接技巧：</strong>1.1 輸出最後會引導您「將儀表板交給巡店與展店行動助手繼續分析」。您只需把 1.1 的整段 Markdown 複製，貼到 1.2 的對話框，前面加一行「行動模式：巡店規劃」即可。</div>
+
+    <h3 style="margin-top:32px">獨立使用情境</h3>
+    <div class="two-col">
+      <div class="infobox">
+        <h4>1.1 單獨使用</h4>
+        <p>營運高層想看當日銷售儀表板：直接用 1.1，不需要進入 1.2。</p>
+      </div>
+      <div class="infobox dark">
+        <h4>1.2 單獨使用</h4>
+        <p>展店評估候選地：直接用 1.2，輸入候選地基本資料即可，不需要儀表板報告。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5 -->
+  <section>
+    <h2><span class="num">5</span><span class="label">核心觀察點</span></h2>
+    <p class="section-sub">這四個觀察點是本次 POC 最想驗證的設計理念，請您在測試時特別留意。</p>
+
+    <div class="obs-grid">
+      <div class="obs-card gold">
+        <h4>資料品質閘門啟動</h4>
+        <p>當您給 1.1「品類不一致」或「日期跳日」的資料（測試 #3、#4），Agent 是否確實啟動「資料品質評分」並婉拒預測？這是 HT 案的核心安全防線 — 不對殘缺資料做誤導性預測。</p>
+      </div>
+      <div class="obs-card gold">
+        <h4>解釋優先於預測</h4>
+        <p>對 1.1 的下滑主因解釋，請特別觀察：(1) 是否援引巡店紀錄具體日期（例如 2026-02-12 提到員工流動）；(2) 是否歸因為單一原因還是多重組合；(3) 解釋是否真的反映業務 reality。HT 案最重視的就是「解釋」的品質。</p>
+      </div>
+      <div class="obs-card">
+        <h4>巡店優先級的合理性</h4>
+        <p>對 1.2 的巡店優先順序，請以資深區經理視角判斷：排序是否合理？S007 異常店是否確實排第 1？每店推薦巡店重點是否援引歷史巡店紀錄與後續成效？</p>
+      </div>
+      <div class="obs-card">
+        <h4>展店歷史案例援引</h4>
+        <p>1.2 的展店評估，是否援引「展店評估參考案例」中的具體案例編號（DSE-XXXX-XX）？同一候選地有歷史評估時是否引用？學習點是否被應用於新候選地的判斷？</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6 -->
+  <section>
+    <h2><span class="num">6</span><span class="label">測試完請給我們回饋</span></h2>
+    <p class="section-sub">您的回饋會直接影響後續正式 POC 的設計方向與顧問時數估算。</p>
+
+    <div class="two-col">
+      <div class="infobox">
+        <h4>請特別告訴我們</h4>
+        <p>1. 哪個 Agent 對您的工作最有用？（業務 / PM / 法務 / 技術觀點都歡迎）</p>
+        <p>2. 哪個 Agent 的回應「不夠準」或「太籠統」？</p>
+        <p>3. 知識庫的欄位是否有缺漏（您工作會需要哪些 PE 內部資料補進來）？</p>
+        <p>4. 「資料閘門」與「文件完整性閘門」設計是否合理？或您覺得 Agent 應該更主動推估？</p>
+        <p>5. 「跨角色視角」對您的角色是否聚焦？或視角區分仍不清楚？</p>
+      </div>
+      <div class="infobox dark">
+        <h4>回饋管道</h4>
+        <p>聯絡 Intellicon 主任顧問：</p>
+        <p style="margin-top:8px"><strong>Albert Chen 陳慶蔚</strong></p>
+        <p>智慧方案股份有限公司 執行長</p>
+        <p>Email：<a href="mailto:albert@intelliconai.com">albert@intelliconai.com</a></p>
+        <p style="margin-top:8px">或於下次雙週進度會議直接提出，由 HT 種子團隊 PM 彙整給 Intellicon 顧問團隊。</p>
+      </div>
+    </div>
+
+    <h3>下一步</h3>
+    <p>感謝您協助驗證這版 POC Agent。我們會根據您的回饋於下一版迭代：</p>
+    <ul>
+      <li>調整知識庫欄位與內容（特別是條款庫、風險案例、估算項目）</li>
+      <li>優化提示詞與 Phase 流程</li>
+      <li>新增或合併 Agent</li>
+      <li>串接 PM / ERP 系統真實資料源（POC 階段使用模擬資料）</li>
+      <li>擴展案件類型（離岸風電、車用動力、海外合約）</li>
+    </ul>
+  </section>
+
+</div>
+
+<footer>
+  <p class="brand">智慧方案股份有限公司 ｜ Intellicon Solutions</p>
+  <p>EgentHub 企業 AI Agent 平台 ｜ 2026 年 5 月</p>
+  <p style="margin-top:10px"><a href="https://intellicon.app/ap/c/94ee1b67-3379-469b-b391-f79460ccb11c/w/013fbc44-b17d-4196-9aac-8c3a1470b3d9" target="_blank" rel="noopener">回到 EgentHub 測試工作室</a></p>
+</footer>
+
+<script>
+  function showTab(n) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab')[n - 1].classList.add('active');
+    document.getElementById('panel-' + n).classList.add('active');
+  }
+
+  function copyText(btn) {
+    var card = btn.closest('.test-card');
+    var body = card.querySelector('.test-body');
+    var text = body.innerText;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(function() {
+        btn.classList.add('copied');
+        var original = btn.innerText;
+        btn.innerText = '已複製，可貼到 EgentHub';
+        setTimeout(function() {
+          btn.classList.remove('copied');
+          btn.innerText = original;
+        }, 2200);
+      });
+    } else {
+      // Fallback
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      btn.classList.add('copied');
+      var original2 = btn.innerText;
+      btn.innerText = '已複製';
+      setTimeout(function() {
+        btn.classList.remove('copied');
+        btn.innerText = original2;
+      }, 2200);
+    }
+  }
+</script>
+
+</body>
+</html>
