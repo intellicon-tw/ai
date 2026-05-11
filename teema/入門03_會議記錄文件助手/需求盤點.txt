@@ -1,0 +1,80 @@
+# 需求盤點:會議記錄文件助手(入門練習)
+
+> 學員操作說明:請將以下「需求描述」段落整段複製,貼入 EgentHub Prompt Designer 的「需求描述」欄位,讓系統引導您完成提示詞建構。
+>
+> 本題與前 3 題不同 — 我們會用到 **MCP 工具串接**(讓 AI 真的能寫進 Google Docs、移檔案到指定資料夾)。學習重點:把需求轉化為提示詞、啟用 MCP 工具、設定 Google 模板與輸出資料夾、觀察 AI 如何呼叫工具實際操作 Google Workspace。
+>
+> 預計操作時間:40-60 分鐘。
+
+---
+
+## 一、Agent 基本資料
+- **Agent 名稱**:會議記錄文件助手
+- **所屬工作室**:行政 / 跨部門
+- **使用對象**:全公司員工(尤其常開會的部門主管、PM)
+- **預設模型建議**:Claude Sonnet 或 GPT-4o(MCP 工具呼叫穩定度高)
+
+---
+
+## 二、需求描述(請整段複製到 Prompt Designer)
+
+### 1. 應用場景
+員工開完會後,把會議逐字稿(可能是手打、錄音轉文字、或會議軟體匯出)貼給 AI,AI 自動整理為結構化會議記錄,**直接寫入 Google 文件**、**移動到指定 Drive 資料夾**,完成後回覆使用者文件連結與摘要。
+
+### 2. 希望 AI 處理的問題
+- 會後整理會議記錄耗時耗力
+- 與會者姓名、議題、待辦事項要逐一萃取
+- 寫完還要手動複製、上傳、移檔案,流程繁瑣
+- 記錄格式不一致,後續查找困難
+- 待辦事項缺乏標準結構,容易漏掉責任人或時程
+
+### 3. 預期輸出內容
+- **文件連結**:成功建立 Google 文件後,直接給可開啟的連結
+- **會議摘要**:會議名稱、日期、議題數量、待辦事項數量
+- **議題總覽**:每個議題「議題名稱 → 一句話結論」
+- **錯誤備援**:任一 MCP 工具失敗時改回純文字版會議記錄
+
+### 4. 任務步驟 & 邏輯
+1. 從逐字稿提取會議名稱、日期時間、與會人員、議題討論、決議、待辦事項。
+2. 透過 `GOOGLEDOCS_COPY_DOCUMENT` 複製既有模板。
+3. 透過 `GOOGLEDOCS_UPDATE_DOCUMENT_BATCH` 一次替換所有佔位符。
+4. 透過 `GOOGLEDRIVE_MOVE_FILE` 移動到指定資料夾。
+5. 找不到的資料填「待確認」(完成日)、「待指派」(負責人)、「發言者 A/B」(姓名),不可編造。
+6. 民國年份自動轉西元。
+7. 最後回覆文件連結與議題總覽。
+
+### 5. 知識庫/資料庫
+**無 KB**,但需啟用 3 個 Google MCP 工具:
+- `GOOGLEDOCS_COPY_DOCUMENT`:複製模板文件
+- `GOOGLEDOCS_UPDATE_DOCUMENT_BATCH`:批次替換佔位符
+- `GOOGLEDRIVE_MOVE_FILE`:移動文件到指定資料夾
+
+**模板與資料夾 ID**(請告訴 Prompt Designer):
+- 模板 Document ID:`1yIGU9pejgUPVR8hY98E9K0mKCToOlbjFmy4O8pDCQIs`
+- 輸出 Folder ID:`1eeZTX5Wcu3mI_lFXtF1w69DGyJ_K82ZB`
+- 模板已內含佔位符,例如 `{{會議名稱}}`、`{{議題一摘要}}`、`{{待辦1負責人}}`,共最多 4 個議題、8 項待辦事項。
+
+## 三、教學素材
+
+### 1. 會議記錄模板(Google Docs)
+- 連結:https://docs.google.com/document/d/1yIGU9pejgUPVR8hY98E9K0mKCToOlbjFmy4O8pDCQIs/
+- Document ID:`1yIGU9pejgUPVR8hY98E9K0mKCToOlbjFmy4O8pDCQIs`
+- 模板已預先放好佔位符(例如 `{{會議名稱}}`、`{{議題一摘要}}`)
+
+### 2. 測試輸出資料夾(Google Drive)
+- 連結:https://drive.google.com/drive/u/2/folders/1eeZTX5Wcu3mI_lFXtF1w69DGyJ_K82ZB
+- Folder ID:`1eeZTX5Wcu3mI_lFXtF1w69DGyJ_K82ZB`
+
+### 3. 測試逐字稿
+詳見本資料夾的「範例輸入_會議逐字稿.txt」。
+
+## 四、為什麼選這題作為入門練習
+1. 體驗 MCP 工具串接 — 不再只是「對話」,而是讓 AI 真的「動手」操作 Google Workspace。
+2. 學會任務拆解 — 從「整理逐字稿」到「寫文件」到「移檔案」三件事如何串接。
+3. 理解變數傳遞 — 複製模板回傳的 document_id 如何傳給下一步的工具呼叫。
+4. 拓展性高 — 同樣模式可套用到「合約範本」、「報價單範本」、「日週報範本」等。
+
+## 五、上線後的延伸應用
+- 整合 Google Calendar 自動建立行動項提醒。
+- 整合 Slack/Email,會議記錄完成後自動推送給與會者。
+- 延伸至合約撰寫、報價單、日週月報等填空式文件。
