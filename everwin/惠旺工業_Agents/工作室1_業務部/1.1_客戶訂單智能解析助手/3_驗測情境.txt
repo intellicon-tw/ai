@@ -1,0 +1,93 @@
+# 客戶訂單智能解析助手 - 驗測情境
+
+本檔案分為兩部分：
+- **Part A — 測試資料集**：3 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。
+- **Part B — 驗測情境**：3 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。
+
+---
+
+## Part A — 測試資料集
+
+### 測試 #1：Bostitch 標準成槍訂單 (Email 內文)
+
+```
+From: orders@bostitch-usa.com
+Subject: PO #BOS-26-04015 / Confirmed Order
+
+Dear Everwin,
+
+Please confirm the following order:
+
+Item 1: BO-T50-15 (T50 15GA Nailer) — 1500 PCS — Delivery by 2026-08-15
+Item 2: BO-COIL90 (Coil Nail 90mm) — 2500 BOX — Delivery by 2026-07-30
+
+Please reply with the official ack.
+Best, John from Bostitch
+```
+
+### 測試 #2：BeA Germany 零件 + 急件混合訂單
+
+```
+客戶：BeA Germany
+PO# BE-26-EXP-003 (含急件)
+
+1. BE-EW3000  Qty 600  Need by 2026-06-15  (Normal)
+2. BE-PT900   Qty 200  Need by 2026-05-22  (Urgent — flag as 急件)
+3. BE-PT900   Qty 200  Need by 2026-07-10  (Normal replenishment)
+
+```
+
+### 測試 #3：未知客戶品號 + 數量異常（驗測警示）
+
+```
+PO from MAX Japan
+Item: MX-NT65 — 350 PCS — Delivery 2026-07-15
+Item: MX-UNKNOWN-999 — 99999 PCS — Delivery 2026-04-01
+
+```
+
+---
+
+## Part B — 驗測情境
+
+### 情境 #1：標準 Email 訂單成功解析
+
+**輸入描述**
+
+> 業助貼上 Bostitch 標準成槍訂單 Email 內文（測試 #1）。
+
+**預期輸出**
+
+> 輸出含客戶代碼 C001、訂單類型「成槍訂單」、兩筆 ERP 格式列（T50-15GA 1500 PCS、COIL90 2500 BOX），單價已從報價表帶入，無待人工修正項目。
+
+**驗證重點**
+
+> 客戶品號 BO-T50-15 是否正確對應到 EW-T50-15GA，且交期、數量、PO 編號皆無錯漏。
+
+### 情境 #2：急件與一般單混合的訂單類型識別
+
+**輸入描述**
+
+> 業助貼上 BeA Germany 含急件標記的混合訂單（測試 #2）。
+
+**預期輸出**
+
+> 將急件項目（BE-PT900 200 PCS Need by 2026-05-22）獨立標示為「急件訂單」並使用「品號 + 急件編號」鍵值；其他兩項為一般訂單。
+
+**驗證重點**
+
+> 急件辨識是否準確、唯一鍵值規則是否依訂單類型切換、輸出表格是否清楚分區。
+
+### 情境 #3：異常防呆觸發警示
+
+**輸入描述**
+
+> 業助貼上含未知品號（MX-UNKNOWN-999）與數量異常（99999 PCS）的訂單（測試 #3）。
+
+**預期輸出**
+
+> 成功解析列：MX-NT65 1 筆；待人工修正清單：未知品號 1 筆（標記「查無品號」）+ 數量異常 1 筆（標記「數量異常」）。
+
+**驗證重點**
+
+> Agent 是否確實停下未知品號的自動拋轉、並在待修正清單明確說明異常原因。
