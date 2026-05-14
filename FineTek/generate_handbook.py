@@ -379,6 +379,9 @@ body{{font-family:-apple-system,"PingFang TC","Microsoft JhengHei",Arial,sans-se
 .kb-file-header{{display:flex;align-items:center;justify-content:space-between;
   margin-bottom:5px}}
 .kb-filename{{font-size:12px;font-weight:600;color:var(--primary);font-family:monospace}}
+.kb-btn-group{{display:flex;gap:6px}}
+.dl-btn{{background:#fff5ee;border-color:#e05c1a;color:#e05c1a}}
+.dl-btn:hover{{background:#e05c1a;color:#fff;border-color:#e05c1a}}
 .kb-content{{max-height:320px}}
 
 /* ── Callout ── */
@@ -451,6 +454,17 @@ function copyText(id){{
     btn.classList.add('copied');
     setTimeout(()=>{{btn.textContent=orig;btn.classList.remove('copied');}},2000);
   }});
+}}
+function downloadFile(id, filename, mime){{
+  const el=document.getElementById(id);
+  if(!el)return;
+  // CSV 需要 BOM 讓 Excel 正確辨識 UTF-8
+  const bom = mime==='text/csv' ? '﻿' : '';
+  const blob=new Blob([bom+el.textContent],{{type:mime+';charset=utf-8'}});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=filename; a.click();
+  URL.revokeObjectURL(url);
 }}
 // 篩選
 document.querySelectorAll('.filter-btn').forEach(btn=>{{
