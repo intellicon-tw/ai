@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>桓達科技 EgentHub AI Agent 導入提案 — 精誠資訊</title>
+<style>
+  :root {
+    --primary: #0b2c5e;
+    --primary-light: #1a4a8a;
+    --accent: #e05c1a;
+    --accent-light: #f4845f;
+    --bg: #f5f7fa;
+    --surface: #ffffff;
+    --border: #dde3ed;
+    --text: #1a2340;
+    --text-muted: #5a6680;
+    --tag-kb: #1a4a8a;
+    --tag-process: #1a6b3a;
+    --tag-data: #7b3ea8;
+    --two-stage: #c05000;
+    --shadow: 0 2px 12px rgba(11,44,94,0.10);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+  /* ── 頂部 Header ── */
+  .site-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: #fff; padding: 36px 48px 28px;
+    border-bottom: 4px solid var(--accent);
+  }
+  .header-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+  .header-left h1 { font-size: 26px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .header-left .subtitle { font-size: 14px; opacity: 0.8; margin-bottom: 12px; }
+  .header-badges { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 4px 14px; font-size: 13px; }
+  .badge.accent { background: var(--accent); border-color: var(--accent); font-weight: 600; }
+  .header-right { text-align: right; }
+  .proposal-by { font-size: 12px; opacity: 0.7; margin-bottom: 4px; }
+  .proposer { font-size: 18px; font-weight: 700; }
+  .proposer-sub { font-size: 12px; opacity: 0.65; }
+
+  /* ── 篩選列 ── */
+  .filter-bar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 48px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .filter-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .filter-label { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-right: 4px; }
+  .filter-btn { padding: 6px 16px; border-radius: 20px; border: 1.5px solid var(--border); background: #fff; cursor: pointer; font-size: 13px; font-family: inherit; color: var(--text-muted); transition: all 0.15s; }
+  .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .filter-btn.active { color: #fff; border-color: transparent; }
+  .filter-btn.active[data-filter="all"] { background: var(--primary); }
+  .filter-btn.active[data-filter="kb"] { background: var(--tag-kb); }
+  .filter-btn.active[data-filter="process"] { background: var(--tag-process); }
+  .filter-btn.active[data-filter="data"] { background: var(--tag-data); }
+  .filter-sep { width: 1px; height: 20px; background: var(--border); margin: 0 4px; }
+  .filter-btn[data-filter="two-stage"].active { background: var(--two-stage); }
+  .agent-count { margin-left: auto; font-size: 13px; color: var(--text-muted); }
+  .agent-count span { font-weight: 700; color: var(--primary); }
+
+  /* ── 主內容 ── */
+  .main { max-width: 1200px; margin: 0 auto; padding: 32px 24px 60px; }
+
+  /* ── 摘要卡片列 ── */
+  .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 36px; }
+  .summary-card { background: var(--surface); border-radius: 12px; padding: 20px 22px; box-shadow: var(--shadow); text-align: center; border-top: 3px solid var(--border); }
+  .summary-card.c-all { border-color: var(--primary); }
+  .summary-card.c-kb  { border-color: var(--tag-kb); }
+  .summary-card.c-process { border-color: var(--tag-process); }
+  .summary-card.c-data { border-color: var(--tag-data); }
+  .summary-card.c-ts { border-color: var(--two-stage); }
+  .summary-num { font-size: 32px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .c-all .summary-num { color: var(--primary); }
+  .c-kb  .summary-num { color: var(--tag-kb); }
+  .c-process .summary-num { color: var(--tag-process); }
+  .c-data .summary-num { color: var(--tag-data); }
+  .c-ts .summary-num { color: var(--two-stage); }
+  .summary-label { font-size: 12px; color: var(--text-muted); }
+
+  /* ── 工作室區塊 ── */
+  .workspace-section { margin-bottom: 40px; }
+  .workspace-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .ws-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; }
+  .ws-title { font-size: 18px; font-weight: 700; color: var(--primary); }
+  .ws-count { font-size: 13px; color: var(--text-muted); }
+
+  /* ── Agent 卡片網格 ── */
+  .agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  .agent-card {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border: 1.5px solid var(--border);
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+    cursor: default;
+  }
+  .agent-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(11,44,94,0.14); }
+  .agent-card.hidden { display: none; }
+  .agent-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .agent-num { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; }
+  .agent-name { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; margin-bottom: 12px; }
+  .tag { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; color: #fff; }
+  .tag-kb-bg { background: var(--tag-kb); }
+  .tag-process-bg { background: var(--tag-process); }
+  .tag-data-bg { background: var(--tag-data); }
+  .tag-ts { background: var(--two-stage); }
+  .tag-tool { background: #5a6680; }
+  .agent-desc { font-size: 13px; color: var(--text-muted); line-height: 1.55; margin-bottom: 12px; }
+  .agent-kb { font-size: 12px; color: var(--text-muted); padding: 8px 10px; background: #f0f4fa; border-radius: 6px; border-left: 3px solid var(--border); }
+  .agent-kb strong { color: var(--text); }
+
+  /* ── 分隔線 ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  /* ── 說明區 ── */
+  .legend-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 32px; padding: 16px 20px; background: #eef2f9; border-radius: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+  /* ── 頁尾 ── */
+  footer { text-align: center; padding: 28px; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border); }
+
+  @media (max-width: 768px) {
+    .site-header { padding: 24px 20px 20px; }
+    .filter-bar { padding: 12px 16px; }
+    .main { padding: 20px 12px 40px; }
+    .agent-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="subtitle">EgentHub AI Agent 導入提案</div>
+      <h1>桓達科技（FineTek）<br>AI 人機協作方案</h1>
+      <div class="header-badges">
+        <span class="badge">7 個工作室</span>
+        <span class="badge">19 個 AI 助理</span>
+        <span class="badge accent">POC 開發包已備妥</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="proposal-by">提案單位</div>
+      <div class="proposer">精誠資訊股份有限公司</div>
+      <div class="proposer-sub">Systex Corporation</div>
+      <div style="margin-top:8px; font-size:12px; opacity:0.65;">技術合作夥伴：智慧方案股份有限公司 Intellicon Solutions</div>
+    </div>
+  </div>
+</header>
+
+<!-- Filter Bar -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <span class="filter-label">篩選：</span>
+    <button class="filter-btn active" data-filter="all">全部 (19)</button>
+    <button class="filter-btn" data-filter="kb">知識庫型 (5)</button>
+    <button class="filter-btn" data-filter="process">流程優化型 (9)</button>
+    <button class="filter-btn" data-filter="data">數據分析型 (5)</button>
+    <div class="filter-sep"></div>
+    <button class="filter-btn" data-filter="two-stage">兩階段隔離 (2)</button>
+    <div class="agent-count">顯示 <span id="visible-count">19</span> 個</div>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- 說明列 -->
+  <div class="legend-row">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--tag-kb)"></div>知識庫型 — 需預備知識庫文件，上線後可持續學習</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--tag-process)"></div>流程優化型 — 文件上傳轉輸出，快速展現成效</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--tag-data)"></div>數據分析型 — 貼入數據即分析，零知識庫門檻</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--two-stage)"></div>兩階段隔離 — 圖片/PDF 辨識後接知識庫查詢，需特殊設定</div>
+  </div>
+
+  <!-- 摘要卡片 -->
+  <div class="summary-row">
+    <div class="summary-card c-all"><div class="summary-num">19</div><div class="summary-label">AI 助理總計</div></div>
+    <div class="summary-card c-all"><div class="summary-num">7</div><div class="summary-label">工作室</div></div>
+    <div class="summary-card c-kb"><div class="summary-num">5</div><div class="summary-label">知識庫型</div></div>
+    <div class="summary-card c-process"><div class="summary-num">9</div><div class="summary-label">流程優化型</div></div>
+    <div class="summary-card c-data"><div class="summary-num">5</div><div class="summary-label">數據分析型</div></div>
+    <div class="summary-card c-ts"><div class="summary-num">2</div><div class="summary-label">兩階段隔離</div></div>
+  </div>
+
+  <!-- 工作室 1 — 業務 -->
+  <div class="workspace-section">
+    <div class="workspace-header">
+      <div class="ws-icon">1</div>
+      <div>
+        <div class="ws-title">業務工作室</div>
+        <div class="ws-count">3 個 AI 助理</div>
+      </div>
+    </div>
+    <div class="agent-grid">
+
+      <div class="agent-card" data-type="kb">
+        <div class="agent-num">1.1</div>
+        <div class="agent-name">產品選型推薦助理</div>
+        <div class="tag-row">
+          <span class="tag tag-kb-bg">知識庫型</span>
+          <span class="tag tag-tool">表格查詢 KB</span>
+        </div>
+        <div class="agent-desc">客戶描述應用需求（介質、溫壓、認證、訊號），AI 從產品規格主檔中找出最符合的 1–3 款型號並說明選型理由，取代人工翻型錄。</div>
+        <div class="agent-kb"><strong>知識庫</strong>：桓達產品規格主檔（型號、量程、防爆、IP 等級、售價）</div>
+      </div>
+
+      <div class="agent-card" data-type="kb">
+        <div class="agent-num">1.2</div>
+        <div class="agent-name">業務話術與 FAQ 助理</div>
+        <div class="tag-row">
+          <span class="tag tag-kb-bg">知識庫型</span>
+          <span class="tag tag-tool">RAG 向量 KB</span>
+        </div>
+        <div class="agent-desc">業務遭遇客戶技術問題或競品比較質疑時，AI 即時提供可直接對客戶說的話術，涵蓋競品應對、認證說明、報價政策。</div>
+        <div class="agent-kb"><strong>知識庫</strong>：業務 FAQ 與話術手冊（競品應對、技術問答、報價說明）</div>
+      </div>
+
+      <div class="agent-card" data-type="process">
+        <div class="agent-num">1.3</div>
+        <div class="agent-name">客戶需求整理助理</div>
+        <div class="tag-row">
+          <span class="tag tag-process-bg">流程優化型</span>
+        </div>
+        <div class="agent-desc">貼入會議摘要、Email 或電話紀錄，AI 自動抽取客戶公司、應用場景、規格要求、交期、預算等，輸出結構化需求表，方便直接用於報價單填寫。</div>
+        <div class="agent-kb"><strong>輸入</strong>：任意格式的客戶對談記錄</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 工作室 2 — 研發技術 -->
+  <div class="workspace-section">
+    <div class="workspace-header">
+      <div class="ws-icon">2</div>
+      <div>
+        <div class="ws-title">研發技術工作室</div>
+        <div class="ws-count">4 個 AI 助理</div>
+      </div>
+    </div>
+    <div class="agent-grid">
+
+      <div class="agent-card" data-type="kb">
+        <div class="agent-num">2.1</div>
+        <div class="agent-name">認證法規查詢助理</div>
+        <div class="tag-row">
+          <span class="tag tag-kb-bg">知識庫型</span>
+          <span class="tag tag-tool">全文查找 KB</span>
+          <span class="tag tag-tool">Google Search</span>
+        </div>
+        <div class="agent-desc">快速查詢 IEC、ATEX、IECEx、ASME、CE 等認證要求與標準條文，結合最新網路資訊，協助研發與業務判斷產品進入特定市場需要哪些認證。</div>
+        <div class="agent-kb"><strong>知識庫</strong>：工業感測器認證法規文件庫（條文節錄、申請流程）</div>
+      </div>
+
+      <div class="agent-card" data-type="kb">
+        <div class="agent-num">2.2</div>
+        <div class="agent-name">BOM 料號查詢助理</div>
+        <div class="tag-row">
+          <span class="tag tag-kb-bg">知識庫型</span>
+          <span class="tag tag-tool">表格查詢 KB</span>
+        </div>
+        <div class="agent-desc">輸入產品型號或品名，自動列出完整 BOM 清單，並標示替代料號，避免研發與生管人員反覆查 ERP 系統。</div>
+        <div class="agent-kb"><strong>知識庫</strong>：BOM 主檔（母件、子件、用量、替代料號）</div>
+      </div>
+
+      <div class="agent-card" data-type="process">
+        <div class="agent-num">2.3</div>
+        <div class="agent-name">研發週報撰寫助理</div>
+        <div class="tag-row">
+          <span class="tag tag-process-bg">流程優化型</span>
+        </div>
+        <div class="agent-desc">工程師輸入口語化的本週進度，AI 自動整理為「完成事項 / 下週計畫 / 風險與待決」三區塊的標準週報格式，節省每週彙整時間。</div>
+        <div class="agent-kb"><strong>輸入</strong>：各專案的口語化進度摘要</div>
+      </div>
+
+      <div class="agent-card" data-type="data">
+        <div class="agent-num">2.4</div>
+        <div class="agent-name">專利查詢助理</div>
+        <div class="tag-row">
+          <span class="tag tag-data-bg">數據分析型</span>
+          <span class="tag tag-tool">Google Search</span>
+        </div>
+        <div class="agent-desc">輸入技術關鍵字或競品名稱，AI 即時搜尋 Google Patents，整理前 5–10 筆相關專利的申請人、核心技術與申請日，協助初步了解競品智財佈局。</div>
+        <div class="agent-kb"><strong>工具</strong>：Google Search → Google Patents / Espacenet 即時查詢</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 工作室 3 — 品質管理 -->
+  <div class="workspace-section">
+    <div class="workspace-header">
+      <div class="ws-icon">3</div>
+      <div>
+        <div class="ws-title">品質管理工作室</div>
+        <div class="ws-count">3 個 AI 助理</div>
+      </div>
+    </div>
+    <div class="agent-grid">
+
+      <div class="agent-card" data-type="process">
+        <div class="agent-num">3.1</div>
+        <div class="agent-name">異常報告撰寫助理（8D）</div>
+        <div class="tag-row">
+          <span class="tag tag-process-bg">流程優化型</span>
+        </div>
+        <div class="agent-desc">描述品質異常事件，AI 按 D0–D8 架構整理成不合格品報告草稿，D0–D3 依現有資訊填入，D4–D8 提供引導提示，大幅縮短品工填報時間。</div>
+        <div class="agent-kb"><strong>輸入</strong>：異常現象、批號、緊急措施描述</div>
+      </div>
+
+      <div class="agent-card" data-type="process" data-two-stage="true">
+        <div class="agent-num">3.2</div>
+        <div class="agent-name">檢測報告辨識助理</div>
+        <div class="tag-row">
+          <span class="tag tag-process-bg">流程優化型</span>
+          <span class="tag tag-ts">兩階段隔離</span>
+          <span class="tag tag-tool">表格查詢 KB</span>
+        </div>
+        <div class="agent-desc">上傳 PDF 或圖片格式的產品檢測報告，AI 先提取測試數值（步驟一），再與規格合格範圍比對並輸出合格/不合格判定（步驟二），取代人工逐項核對。</div>
+        <div class="agent-kb"><strong>知識庫</strong>：產品規格合格範圍（各型號各測試項目上下限）</div>
+      </div>
+
+      <div class="agent-card" data-type="data">
+        <div class="agent-num">3.3</div>
+        <div class="agent-name">品質異常趨勢分析助理</div>
+        <div class="tag-row">
+          <span class="tag tag-data-bg">數據分析型</span>
+        </div>
+        <div class="agent-desc">貼入一段時間的品質異常統計數據，AI 以帕雷托原則找出前三大異常類別、分析時間趨勢，並給出優先改善建議，取代手動製作柏拉圖。</div>
+        <div class="agent-kb"><strong>輸入</strong>：異常統計表（類別、件數、日期）直接貼入</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 工作室 4 — 採購 -->
+  <div class="workspace-section">
+    <div class="workspace-header">
+      <div class="ws-icon">4</div>
+      <div>
+        <div class="ws-title">採購工作室</div>
+        <div class="ws-count">2 個 AI 助理</div>
+      </div>
+    </div>
+    <div class="agent-grid">
+
+      <div class="agent-card" data-type="process" data-two-stage="true">
+        <div class="agent-num">4.1</div>
+        <div class="agent-name">報價單辨識比對助理</div>
+        <div class="tag-row">
+          <span class="tag tag-process-bg">流程優化型</span>
+          <span class="tag tag-ts">兩階段隔離</span>
+        </div>
+        <div class="agent-desc">上傳 1–5 份供應商報價單 PDF 或圖片，AI 自動辨識各家報價（步驟一），再對齊品項輸出跨供應商比對表並標出最低價（步驟二），取代 Excel 手工整理。</div>
+        <div class="agent-kb"><strong>輸入</strong>：供應商報價單 PDF/圖片，或直接貼入報價文字</div>
+      </div>
+
+      <div class="agent-card" data-type="data">
+        <div class="agent-num">4.2</div>
+        <div class="agent-name">供應商開發建議助理</div>
+        <div class="tag-row">
+          <span class="tag tag-data-bg">數據分析型</span>
+          <span class="tag tag-tool">Google Search</span>
+        </div>
+        <div class="agent-desc">描述需採購的品項、規格、目標地區，AI 透過網路搜尋找出 5–8 家潛在供應商（含公司名、地區、官網），作為採購人員聯絡的初步清單。</div>
+        <div class="agent-kb"><strong>工具</strong>：Google Search → B2B 平台、產業展會即時查詢</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 工作室 5 — 生產管理 -->
+  <div class="workspace-section">
+    <div class="workspace-header">
+      <div class="ws-icon">5</div>
+      <div>
+        <div class="ws-title">生產管理工作室</div>
+        <div class="ws-count">3 個 AI 助理</div>
+      </div>
+    </div>
+    <div class="agent-grid">
+
+      <div class="agent-card" data-type="kb">
+        <div class="agent-num">5.1</div>
+        <div class="agent-name">SOP 查詢助理</div>
+        <div class="tag-row">
+          <span class="tag tag-kb-bg">知識庫型</span>
+          <span class="tag tag-tool">全文查找 KB</span>
+        </div>
+        <div class="agent-desc">現場人員用自然語言問操作步驟（「音叉開關怎麼校正？」），AI 從 SOP 文件庫中找出正確的作業步驟並條列呈現，安全注意事項自動置頂。</div>
+        <div class="agent-kb"><strong>知識庫</strong>：製程 SOP 文件庫（校正、焊接、IQC 等作業指導書）</div>
+      </div>
+
+      <div class="agent-card" data-type="process">
+        <div class="agent-num">5.2</div>
+        <div class="agent-name">工單異常分析助理</div>
+        <div class="tag-row">
+          <span class="tag tag-process-bg">流程優化型</span>
+        </div>
+        <div class="agent-desc">描述工單延誤或異常狀況（缺料、設備故障等），AI 自動判定異常類型、影響程度（高/中/低）、建議措施與責任單位，並附上客戶溝通建議。</div>
+        <div class="agent-kb"><strong>輸入</strong>：工單號、進度、異常描述、受影響客戶訂單</div>
+      </div>
+
+      <div class="agent-card" data-type="data">
+        <div class="agent-num">5.3</div>
+        <div class="agent-name">產能利用率分析助理</div>
+        <div class="tag-row">
+          <span class="tag tag-data-bg">數據分析型</span>
+        </div>
+        <div class="agent-desc">貼入各產線設計產能與實際產出數字，AI 計算利用率、識別瓶頸站（>85%）與閒置站（<60%），輸出產能分析摘要供排程決策參考。</div>
+        <div class="agent-kb"><strong>輸入</strong>：各產線產能與產出數字直接貼入</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 工作室 6 — 管理部 -->
+  <div class="workspace-section">
+    <div class="workspace-header">
+      <div class="ws-icon">6</div>
+      <div>
+        <div class="ws-title">管理部工作室</div>
+        <div class="ws-count">2 個 AI 助理</div>
+      </div>
+    </div>
+    <div class="agent-grid">
+
+      <div class="agent-card" data-type="process">
+        <div class="agent-num">6.1</div>
+        <div class="agent-name">會議紀錄助理</div>
+        <div class="tag-row">
+          <span class="tag tag-process-bg">流程優化型</span>
+        </div>
+        <div class="agent-desc">貼入逐字稿或口語摘要，AI 整理為含議題討論、決議與行動項目（含負責人與期限）的標準格式會議紀錄，適用各部門週會、專案會議。</div>
+        <div class="agent-kb"><strong>輸入</strong>：任意格式的會議記錄或逐字稿</div>
+      </div>
+
+      <div class="agent-card" data-type="process">
+        <div class="agent-num">6.2</div>
+        <div class="agent-name">公文撰寫助理</div>
+        <div class="tag-row">
+          <span class="tag tag-process-bg">流程優化型</span>
+        </div>
+        <div class="agent-desc">說明公文類型（通知/感謝/邀請/聲明）、收件對象與內容要點，AI 生成符合台灣公文格式的草稿，涵蓋受文者、主旨、說明條列。</div>
+        <div class="agent-kb"><strong>輸入</strong>：公文類型、收件方、主要訴求</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 工作室 7 — 國際業務 -->
+  <div class="workspace-section">
+    <div class="workspace-header">
+      <div class="ws-icon">7</div>
+      <div>
+        <div class="ws-title">國際業務工作室</div>
+        <div class="ws-count">2 個 AI 助理</div>
+      </div>
+    </div>
+    <div class="agent-grid">
+
+      <div class="agent-card" data-type="process">
+        <div class="agent-num">7.1</div>
+        <div class="agent-name">英文商務信件撰寫助理</div>
+        <div class="tag-row">
+          <span class="tag tag-process-bg">流程優化型</span>
+        </div>
+        <div class="agent-desc">用中文描述信件目的與重點，AI 撰寫語氣得宜的專業工業英文商業信件，技術術語正確（level switch、guided wave radar 等），適用報價跟進、技術說明、客訴回覆。</div>
+        <div class="agent-kb"><strong>輸入</strong>：中文描述的信件目的、收件方、內容要點</div>
+      </div>
+
+      <div class="agent-card" data-type="data">
+        <div class="agent-num">7.2</div>
+        <div class="agent-name">海外市場情報助理</div>
+        <div class="tag-row">
+          <span class="tag tag-data-bg">數據分析型</span>
+          <span class="tag tag-tool">Google Search</span>
+        </div>
+        <div class="agent-desc">輸入目標國家與產業（如：印尼石化業），AI 即時搜尋市場規模、主要競品佈局、進口法規與認證要求，輸出結構化市場情報摘要。</div>
+        <div class="agent-kb"><strong>工具</strong>：Google Search → 市場報告、產業新聞、法規資料庫</div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 導入時程建議 -->
+  <div style="background:var(--surface); border-radius:12px; padding:28px 32px; box-shadow:var(--shadow); margin-bottom:40px;">
+    <h2 style="font-size:18px; color:var(--primary); margin-bottom:20px;">建議導入時程</h2>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px;">
+      <div style="border-left:4px solid var(--accent); padding-left:16px;">
+        <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">Phase 1（第 1–4 週）</div>
+        <div style="font-weight:700; margin-bottom:6px;">快速啟動 — 數據分析型</div>
+        <div style="font-size:13px; color:var(--text-muted);">5 個零知識庫門檻的 Agent 先行上線，讓員工立即感受 AI 協作效益，建立信心基礎。</div>
+      </div>
+      <div style="border-left:4px solid var(--tag-process); padding-left:16px;">
+        <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">Phase 2（第 5–8 週）</div>
+        <div style="font-weight:700; margin-bottom:6px;">流程植入 — 流程優化型</div>
+        <div style="font-size:13px; color:var(--text-muted);">9 個文件輸入轉輸出的 Agent 陸續上線，含 2 個需要兩階段隔離設定的視覺辨識 Agent。</div>
+      </div>
+      <div style="border-left:4px solid var(--tag-kb); padding-left:16px;">
+        <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">Phase 3（第 9–16 週）</div>
+        <div style="font-weight:700; margin-bottom:6px;">知識深化 — 知識庫型</div>
+        <div style="font-size:13px; color:var(--text-muted);">5 個需要知識庫建置的 Agent 上線，包含產品選型、BOM 查詢、SOP 查詢等核心知識系統。</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div>本提案由 <strong>精誠資訊股份有限公司</strong> 提供，技術合作夥伴：智慧方案股份有限公司 Intellicon Solutions</div>
+  <div style="margin-top:4px;">EgentHub 企業 AI Agent 管理平台 · 所有 Agent 均已備妥 POC 開發包（Prompt + 知識庫範例 + 驗測情境 + 上線指南）</div>
+</footer>
+
+<script>
+  const btns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.agent-card');
+  const counter = document.getElementById('visible-count');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      let count = 0;
+      cards.forEach(card => {
+        let show = false;
+        if (f === 'all') show = true;
+        else if (f === 'two-stage') show = card.dataset.twoStage === 'true';
+        else show = card.dataset.type === f;
+        card.classList.toggle('hidden', !show);
+        if (show) count++;
+      });
+      counter.textContent = count;
+    });
+  });
+</script>
+</body>
+</html>
