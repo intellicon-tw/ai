@@ -1,66 +1,764 @@
 <!DOCTYPE html>
-<html lang="zh-Hant"><head><meta charset="UTF-8"><title>斯創教育 AI Agent 開發教材 - 總索引</title>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>斯創教育 EgentHub Agent 完整開發教學手冊</title>
 <style>
-body{font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;background:#f7f8fa;color:#1a202c;margin:0;padding:48px}
-.container{max-width:1000px;margin:0 auto;background:#fff;padding:40px 56px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-h1{color:#1a3a5c;border-bottom:4px solid #c19a3a;padding-bottom:12px;margin:0 0 16px}
-h3{color:#2c5282;margin-top:32px}
-ul{list-style:none;padding-left:0} li{padding:8px 0;border-bottom:1px dashed #e2e8f0}
-a{color:#1a3a5c;text-decoration:none;font-weight:600} a:hover{color:#c19a3a}
-.meta{color:#4a5568;font-size:14px;margin-bottom:32px}
-.stats{display:flex;gap:16px;margin:24px 0;flex-wrap:wrap}
-.stat-card{flex:1;min-width:140px;background:linear-gradient(135deg,#1a3a5c,#2c5282);color:#fff;padding:20px;border-radius:8px;text-align:center}
-.stat-num{font-size:32px;font-weight:700}
-.stat-label{font-size:13px;opacity:.85}
-</style></head>
-<body><div class="container">
-<h1>斯創教育 AI Agent 開發教材</h1>
-<div class="meta">客戶：斯創教育有限公司 | 編製：智慧方案股份有限公司 | 平台：Intellicon EgentHub</div>
-<div class="stats">
-<div class="stat-card"><div class="stat-num">5</div><div class="stat-label">工作室</div></div>
-<div class="stat-card"><div class="stat-num">24</div><div class="stat-label">AI Agent</div></div>
-<div class="stat-card"><div class="stat-num">~40 hr</div><div class="stat-label">總自學時數</div></div>
-<div class="stat-card"><div class="stat-num">4-8 週</div><div class="stat-label">建議導入期程</div></div>
+:root {
+  --primary-deep: #5b21b6;
+  --primary: #7c3aed;
+  --primary-light: #a78bfa;
+  --primary-soft: #ede9fe;
+  --primary-bg: #f5f3ff;
+  --bg-page: #faf9fc;
+  --bg-card: #ffffff;
+  --text: #1a1a2e;
+  --text-secondary: #6b6b80;
+  --border: #e9e5f1;
+  --warn-bg: #fef3c7;
+  --warn-border: #d97706;
+  --info-bg: #dbeafe;
+  --info-border: #2563eb;
+  --ok-bg: #d1fae5;
+  --ok-border: #059669;
+  --code-bg: #1e1b2e;
+  --code-text: #e2dffb;
+  --chip-yellow: #fde68a;
+  --chip-yellow-text: #92400e;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", -apple-system, sans-serif;
+  margin: 0;
+  background: var(--bg-page);
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 15px;
+}
+.layout { display: flex; min-height: 100vh; }
+
+/* Hero 頂部 */
+.hero {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 96px;
+  background: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary) 50%, var(--primary-light) 100%);
+  color: #fff;
+  padding: 20px 40px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.hero h1 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: 1px; }
+.hero .meta {
+  margin-top: 6px;
+  font-size: 13px;
+  opacity: 0.92;
+}
+.hero .meta span { margin-right: 0; }
+.hero .meta .sep { margin: 0 12px; opacity: 0.5; }
+
+/* Sidebar */
+aside {
+  position: fixed;
+  top: 96px;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  background: #fff;
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 24px 0;
+  z-index: 50;
+}
+aside .home-link {
+  display: block;
+  padding: 12px 24px;
+  margin-bottom: 12px;
+  color: var(--primary-deep);
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+}
+aside .home-link:hover { background: var(--primary-bg); }
+aside .ws-group { margin-bottom: 16px; }
+aside .ws-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--primary-deep);
+}
+aside .ws-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+aside .ws-count { color: var(--text-secondary); font-weight: 400; font-size: 12px; }
+aside .agent-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 24px 7px 56px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 13px;
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+aside .agent-link:hover {
+  background: var(--primary-bg);
+  border-left-color: var(--primary-light);
+}
+aside .agent-link.active {
+  background: var(--primary-soft);
+  border-left-color: var(--primary);
+  color: var(--primary-deep);
+  font-weight: 600;
+}
+aside .agent-num {
+  color: var(--text-secondary);
+  font-size: 12px;
+  flex-shrink: 0;
+  min-width: 26px;
+}
+aside .agent-link.active .agent-num { color: var(--primary); }
+.chip-example {
+  background: var(--chip-yellow);
+  color: var(--chip-yellow-text);
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.chip-real {
+  background: var(--ok-bg);
+  color: var(--ok-border);
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* Main */
+main {
+  margin-top: 96px;
+  margin-left: 280px;
+  padding: 36px 56px 80px;
+  flex: 1;
+  max-width: calc(100% - 280px);
+}
+
+/* Agent header */
+.agent-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+.agent-num-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: var(--primary-soft);
+  color: var(--primary-deep);
+  font-size: 22px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.agent-title { font-size: 28px; font-weight: 700; margin: 0; color: var(--text); }
+.agent-meta {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+.agent-meta .meta-label { color: var(--text); font-weight: 600; }
+.agent-meta .sep { margin: 0 16px; opacity: 0.4; }
+
+/* Intro quote */
+.intro-quote {
+  background: var(--primary-bg);
+  border-radius: 10px;
+  padding: 18px 24px;
+  color: var(--primary-deep);
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 18px;
+}
+
+/* Callout */
+.callout {
+  background: var(--warn-bg);
+  border-left: 4px solid var(--warn-border);
+  padding: 14px 20px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 24px;
+}
+.callout-icon { display: inline-block; margin-right: 6px; }
+.callout strong { color: var(--warn-border); }
+.callout.info { background: var(--info-bg); border-left-color: var(--info-border); }
+.callout.info strong { color: var(--info-border); }
+.callout.ok { background: var(--ok-bg); border-left-color: var(--ok-border); }
+.callout.ok strong { color: var(--ok-border); }
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 28px;
+  margin-top: 16px;
+  overflow-x: auto;
+}
+.tab-btn {
+  padding: 12px 22px;
+  background: none;
+  border: none;
+  font-size: 15px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: var(--primary); }
+.tab-btn.active {
+  color: var(--primary-deep);
+  font-weight: 700;
+}
+.tab-btn.active:after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 12px; right: 12px;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 2px;
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Sections */
+section h3 {
+  font-size: 18px;
+  color: var(--primary-deep);
+  margin: 28px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+section h4 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+section p { margin: 12px 0; }
+
+/* Card */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin-bottom: 18px;
+}
+.card-title {
+  font-weight: 700;
+  color: var(--primary-deep);
+  margin-bottom: 12px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--primary-light);
+  color: #fff;
+}
+.badge.warn { background: var(--warn-border); }
+.badge.info { background: var(--info-border); }
+.badge.ok { background: var(--ok-border); }
+
+/* Code */
+code.inline {
+  background: var(--primary-soft);
+  color: var(--primary-deep);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: "SF Mono", Consolas, "Microsoft JhengHei", monospace;
+}
+pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.7;
+  font-family: "SF Mono", Consolas, monospace;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 600px;
+  overflow-y: auto;
+  margin: 0;
+}
+
+/* Prompt wrapper */
+.prompt-wrapper { margin-bottom: 20px; }
+.prompt-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #0f0a1f;
+  color: #cdc4f3;
+  padding: 12px 18px;
+  border-radius: 8px 8px 0 0;
+  font-size: 13px;
+}
+.prompt-toolbar .label { font-weight: 600; letter-spacing: 1px; }
+.copy-btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 7px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.copy-btn:hover { background: var(--primary-deep); }
+.copy-btn.copied { background: var(--ok-border); }
+.prompt-wrapper pre { border-radius: 0 0 8px 8px; }
+
+/* Download */
+.download-row { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1.5px solid var(--primary);
+  color: var(--primary);
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+.download-btn:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  background: #fff;
+  font-size: 13px;
+}
+th, td {
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  text-align: left;
+  vertical-align: top;
+}
+th { background: var(--primary-bg); color: var(--primary-deep); font-weight: 700; }
+tr:nth-child(even) td { background: #fafafa; }
+
+/* List */
+ul, ol { padding-left: 22px; margin: 12px 0; }
+li { margin: 5px 0; }
+
+/* Scenario */
+.scenario {
+  border-left: 4px solid var(--info-border);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: 0 8px 8px 0;
+  padding: 18px 22px;
+  margin-bottom: 16px;
+}
+.scenario.warn { border-left-color: var(--warn-border); }
+.scenario.ok { border-left-color: var(--ok-border); }
+.scenario h4 { margin-top: 0; color: var(--text); }
+
+/* Stage */
+.stage { margin-bottom: 24px; }
+.stage-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.stage-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.stage-title { font-size: 17px; font-weight: 700; color: var(--primary-deep); }
+
+/* Workspace link button */
+.workspace-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-deep) 100%);
+  color: #fff !important;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 12px 0;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+  transition: all 0.2s;
+}
+.workspace-link:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35); }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hero { padding: 14px 20px; height: auto; }
+  aside { position: static; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+  main { margin-left: 0; margin-top: 0; max-width: 100%; padding: 24px; }
+}
+
+.intro-section {
+  background: linear-gradient(135deg, var(--primary-soft) 0%, var(--primary-bg) 100%);
+  border-radius: 12px;
+  padding: 32px 36px;
+  margin-bottom: 32px;
+}
+.intro-section h2 { color: var(--primary-deep); margin: 0 0 12px; font-size: 22px; }
+.intro-section p { color: var(--text); margin: 0 0 10px; font-size: 15px; line-height: 1.85; }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 32px 0;
+}
+.stat-card {
+  background: linear-gradient(135deg, var(--primary-deep), var(--primary));
+  color: #fff;
+  padding: 22px 24px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(91, 33, 182, 0.18);
+}
+.stat-num { font-size: 30px; font-weight: 800; letter-spacing: 1px; }
+.stat-label { font-size: 13px; opacity: 0.92; margin-top: 4px; }
+.ws-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+.ws-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 22px;
+  background: var(--primary-bg);
+  border-bottom: 1px solid var(--border);
+}
+.ws-card-title { font-size: 17px; font-weight: 700; color: var(--primary-deep); }
+.ws-card-body {
+  padding: 8px 22px 18px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 8px;
+}
+.ws-card-agent {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.ws-card-agent:last-child { border-bottom: none; }
+.ws-card-agent-num { color: var(--text-secondary); font-size: 13px; font-weight: 600; min-width: 70px; }
+.ws-card-agent-name { color: var(--text); text-decoration: none; font-size: 14px; flex: 1; }
+.ws-card-agent-name:hover { color: var(--primary); }
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>斯創教育 EgentHub Agent 完整開發教學手冊</h1>
+  <div class="meta">5 個工作室 ｜ 24 隻 Agent 完整 POC 開發包 ｜ 智慧方案股份有限公司</div>
 </div>
-<p>歡迎使用斯創教育 AI Agent 開發教材。本套教材含 24 份單一 Agent 開發說明書，每份為單檔 HTML，學員可獨立閱讀並依「Prompt → 知識庫 → 清洗 → 驗測 → 上線」五步驟操作。</p>
-<h3>工作室1_業務開發與行銷</h3>
-<ul>
-<li><a href="工作室1_業務開發與行銷/1.1_活動報價提案助理_開發說明.html">1.1 活動報價提案助理</a></li>
-<li><a href="工作室1_業務開發與行銷/1.2_訂單狀況追蹤助理_開發說明.html">1.2 訂單狀況追蹤助理</a></li>
-<li><a href="工作室1_業務開發與行銷/1.3_行銷機會雷達_開發說明.html">1.3 行銷機會雷達</a></li>
-<li><a href="工作室1_業務開發與行銷/1.4_社群內容生成助理_開發說明.html">1.4 社群內容生成助理</a></li>
-</ul>
-<h3>工作室2_財務與行政</h3>
-<ul>
-<li><a href="工作室2_財務與行政/2.1_報帳發票辨識助理_開發說明.html">2.1 報帳發票辨識助理</a></li>
-<li><a href="工作室2_財務與行政/2.2_帳務核銷檢核助理_開發說明.html">2.2 帳務核銷檢核助理</a></li>
-<li><a href="工作室2_財務與行政/2.3_帳務對帳助理_開發說明.html">2.3 帳務對帳助理</a></li>
-<li><a href="工作室2_財務與行政/2.4_公文擬定助理_開發說明.html">2.4 公文擬定助理</a></li>
-<li><a href="工作室2_財務與行政/2.5_收文管理助理_開發說明.html">2.5 收文管理助理</a></li>
-<li><a href="工作室2_財務與行政/2.6_保險作業助理_開發說明.html">2.6 保險作業助理</a></li>
-</ul>
-<h3>工作室3_客戶與專案管理</h3>
-<ul>
-<li><a href="工作室3_客戶與專案管理/3.1_客戶聯絡清冊助理_開發說明.html">3.1 客戶聯絡清冊助理</a></li>
-<li><a href="工作室3_客戶與專案管理/3.2_專案進度掌控助理_開發說明.html">3.2 專案進度掌控助理</a></li>
-<li><a href="工作室3_客戶與專案管理/3.3_活動辦理分工助理_開發說明.html">3.3 活動辦理分工助理</a></li>
-<li><a href="工作室3_客戶與專案管理/3.4_活動紀錄建檔助理_開發說明.html">3.4 活動紀錄建檔助理</a></li>
-</ul>
-<h3>工作室4_知識整理與內容產出</h3>
-<ul>
-<li><a href="工作室4_知識整理與內容產出/4.1_公部門資料摘要分類助理_開發說明.html">4.1 公部門資料摘要分類助理</a></li>
-<li><a href="工作室4_知識整理與內容產出/4.2_LINE群組每日摘要助理_開發說明.html">4.2 LINE群組每日摘要助理</a></li>
-<li><a href="工作室4_知識整理與內容產出/4.3_簡報製作助理_開發說明.html">4.3 簡報製作助理</a></li>
-<li><a href="工作室4_知識整理與內容產出/4.4_照片整理與標籤助理_開發說明.html">4.4 照片整理與標籤助理</a></li>
-<li><a href="工作室4_知識整理與內容產出/4.5_資料整理鏈結助理_開發說明.html">4.5 資料整理鏈結助理</a></li>
-</ul>
-<h3>工作室5_滿月圓現場營運</h3>
-<ul>
-<li><a href="工作室5_滿月圓現場營運/5.1_滿月圓事件紀錄助理_開發說明.html">5.1 滿月圓事件紀錄助理</a></li>
-<li><a href="工作室5_滿月圓現場營運/5.2_問卷分析助理_開發說明.html">5.2 問卷分析助理</a></li>
-<li><a href="工作室5_滿月圓現場營運/5.3_滿月圓人數分析助理_開發說明.html">5.3 滿月圓人數分析助理</a></li>
-<li><a href="工作室5_滿月圓現場營運/5.4_生態出沒影像分析助理_開發說明.html">5.4 生態出沒影像分析助理</a></li>
-<li><a href="工作室5_滿月圓現場營運/5.5_商品販售分析助理_開發說明.html">5.5 商品販售分析助理</a></li>
-</ul>
-<p style="text-align:center;color:#4a5568;margin-top:48px;font-size:13px">Intellicon Solutions LLC | EgentHub Adoption Series</p>
-</div></body></html>
+<aside>
+<a class="home-link" href="index.html">← 回到全體概覽（24 個 Agent）</a>
+<div class="ws-group">
+<div class="ws-header"><span class="ws-num">1</span>業務開發與行銷 <span class="ws-count">（4）</span></div>
+<a class="agent-link" href="工作室1_業務開發與行銷/1.1_活動報價提案助理_開發說明.html"><span class="agent-num">1.1</span>活動報價提案助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室1_業務開發與行銷/1.2_訂單狀況追蹤助理_開發說明.html"><span class="agent-num">1.2</span>訂單狀況追蹤助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室1_業務開發與行銷/1.3_行銷機會雷達_開發說明.html"><span class="agent-num">1.3</span>行銷機會雷達 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室1_業務開發與行銷/1.4_社群內容生成助理_開發說明.html"><span class="agent-num">1.4</span>社群內容生成助理 <span class="chip-example">範例</span></a>
+</div>
+<div class="ws-group">
+<div class="ws-header"><span class="ws-num">2</span>財務與行政 <span class="ws-count">（6）</span></div>
+<a class="agent-link" href="工作室2_財務與行政/2.1_報帳發票辨識助理_開發說明.html"><span class="agent-num">2.1</span>報帳發票辨識助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室2_財務與行政/2.2_帳務核銷檢核助理_開發說明.html"><span class="agent-num">2.2</span>帳務核銷檢核助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室2_財務與行政/2.3_帳務對帳助理_開發說明.html"><span class="agent-num">2.3</span>帳務對帳助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室2_財務與行政/2.4_公文擬定助理_開發說明.html"><span class="agent-num">2.4</span>公文擬定助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室2_財務與行政/2.5_收文管理助理_開發說明.html"><span class="agent-num">2.5</span>收文管理助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室2_財務與行政/2.6_保險作業助理_開發說明.html"><span class="agent-num">2.6</span>保險作業助理 <span class="chip-example">範例</span></a>
+</div>
+<div class="ws-group">
+<div class="ws-header"><span class="ws-num">3</span>客戶與專案管理 <span class="ws-count">（4）</span></div>
+<a class="agent-link" href="工作室3_客戶與專案管理/3.1_客戶聯絡清冊助理_開發說明.html"><span class="agent-num">3.1</span>客戶聯絡清冊助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室3_客戶與專案管理/3.2_專案進度掌控助理_開發說明.html"><span class="agent-num">3.2</span>專案進度掌控助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室3_客戶與專案管理/3.3_活動辦理分工助理_開發說明.html"><span class="agent-num">3.3</span>活動辦理分工助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室3_客戶與專案管理/3.4_活動紀錄建檔助理_開發說明.html"><span class="agent-num">3.4</span>活動紀錄建檔助理 <span class="chip-example">範例</span></a>
+</div>
+<div class="ws-group">
+<div class="ws-header"><span class="ws-num">4</span>知識整理與內容產出 <span class="ws-count">（5）</span></div>
+<a class="agent-link" href="工作室4_知識整理與內容產出/4.1_公部門資料摘要分類助理_開發說明.html"><span class="agent-num">4.1</span>公部門資料摘要分類助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室4_知識整理與內容產出/4.2_LINE群組每日摘要助理_開發說明.html"><span class="agent-num">4.2</span>LINE群組每日摘要助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室4_知識整理與內容產出/4.3_簡報製作助理_開發說明.html"><span class="agent-num">4.3</span>簡報製作助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室4_知識整理與內容產出/4.4_照片整理與標籤助理_開發說明.html"><span class="agent-num">4.4</span>照片整理與標籤助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室4_知識整理與內容產出/4.5_資料整理鏈結助理_開發說明.html"><span class="agent-num">4.5</span>資料整理鏈結助理 <span class="chip-example">範例</span></a>
+</div>
+<div class="ws-group">
+<div class="ws-header"><span class="ws-num">5</span>滿月圓現場營運 <span class="ws-count">（5）</span></div>
+<a class="agent-link" href="工作室5_滿月圓現場營運/5.1_滿月圓事件紀錄助理_開發說明.html"><span class="agent-num">5.1</span>滿月圓事件紀錄助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室5_滿月圓現場營運/5.2_問卷分析助理_開發說明.html"><span class="agent-num">5.2</span>問卷分析助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室5_滿月圓現場營運/5.3_滿月圓人數分析助理_開發說明.html"><span class="agent-num">5.3</span>滿月圓人數分析助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室5_滿月圓現場營運/5.4_生態出沒影像分析助理_開發說明.html"><span class="agent-num">5.4</span>生態出沒影像分析助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="工作室5_滿月圓現場營運/5.5_商品販售分析助理_開發說明.html"><span class="agent-num">5.5</span>商品販售分析助理 <span class="chip-example">範例</span></a>
+</div>
+</aside>
+<main>
+  <div class="intro-section">
+    <h2>★ 全體概覽 — 5 個工作室、24 隻 Agent</h2>
+    <p>本 POC 套件涵蓋 5 個工作室、24 隻 Agent，從業務開發、財務行政、客戶與專案管理、知識整理，到滿月圓現場營運，為斯創教育提供企業級 AI 導入的完整藍圖。</p>
+    <p><strong>關於示範資料的重要說明：</strong>所有 Agent 的知識庫均含智慧方案顧問團隊預先生成的示範資料。這些示範資料是為了讓學員在工作坊上立即看到 Agent 運作效果而設計，<strong>必須在實際上線前由斯創對應部門替換為真實資料，AI Agent 才能真正用於業務決策</strong>。每隻 Agent 的「上線指南」中都有明確指引替換哪些檔案、如何替換。</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">工作室</div></div>
+    <div class="stat-card"><div class="stat-num">24</div><div class="stat-label">AI Agent</div></div>
+    <div class="stat-card"><div class="stat-num">~40hr</div><div class="stat-label">總自學時數</div></div>
+    <div class="stat-card"><div class="stat-num">4-8 週</div><div class="stat-label">建議導入期程</div></div>
+  </div>
+
+  
+        <div class="ws-card">
+          <div class="ws-card-header">
+            <span class="ws-num">1</span>
+            <span class="ws-card-title">業務開發與行銷（4）</span>
+          </div>
+          <div class="ws-card-body">
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">1.1<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室1_業務開發與行銷/1.1_活動報價提案助理_開發說明.html" class="ws-card-agent-name">活動報價提案助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">1.2<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室1_業務開發與行銷/1.2_訂單狀況追蹤助理_開發說明.html" class="ws-card-agent-name">訂單狀況追蹤助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">1.3<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室1_業務開發與行銷/1.3_行銷機會雷達_開發說明.html" class="ws-card-agent-name">行銷機會雷達</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">1.4<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室1_業務開發與行銷/1.4_社群內容生成助理_開發說明.html" class="ws-card-agent-name">社群內容生成助理</a>
+            </div>
+            
+          </div>
+        </div>
+        
+        <div class="ws-card">
+          <div class="ws-card-header">
+            <span class="ws-num">2</span>
+            <span class="ws-card-title">財務與行政（6）</span>
+          </div>
+          <div class="ws-card-body">
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">2.1<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室2_財務與行政/2.1_報帳發票辨識助理_開發說明.html" class="ws-card-agent-name">報帳發票辨識助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">2.2<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室2_財務與行政/2.2_帳務核銷檢核助理_開發說明.html" class="ws-card-agent-name">帳務核銷檢核助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">2.3<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室2_財務與行政/2.3_帳務對帳助理_開發說明.html" class="ws-card-agent-name">帳務對帳助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">2.4<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室2_財務與行政/2.4_公文擬定助理_開發說明.html" class="ws-card-agent-name">公文擬定助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">2.5<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室2_財務與行政/2.5_收文管理助理_開發說明.html" class="ws-card-agent-name">收文管理助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">2.6<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室2_財務與行政/2.6_保險作業助理_開發說明.html" class="ws-card-agent-name">保險作業助理</a>
+            </div>
+            
+          </div>
+        </div>
+        
+        <div class="ws-card">
+          <div class="ws-card-header">
+            <span class="ws-num">3</span>
+            <span class="ws-card-title">客戶與專案管理（4）</span>
+          </div>
+          <div class="ws-card-body">
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">3.1<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室3_客戶與專案管理/3.1_客戶聯絡清冊助理_開發說明.html" class="ws-card-agent-name">客戶聯絡清冊助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">3.2<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室3_客戶與專案管理/3.2_專案進度掌控助理_開發說明.html" class="ws-card-agent-name">專案進度掌控助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">3.3<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室3_客戶與專案管理/3.3_活動辦理分工助理_開發說明.html" class="ws-card-agent-name">活動辦理分工助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">3.4<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室3_客戶與專案管理/3.4_活動紀錄建檔助理_開發說明.html" class="ws-card-agent-name">活動紀錄建檔助理</a>
+            </div>
+            
+          </div>
+        </div>
+        
+        <div class="ws-card">
+          <div class="ws-card-header">
+            <span class="ws-num">4</span>
+            <span class="ws-card-title">知識整理與內容產出（5）</span>
+          </div>
+          <div class="ws-card-body">
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">4.1<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室4_知識整理與內容產出/4.1_公部門資料摘要分類助理_開發說明.html" class="ws-card-agent-name">公部門資料摘要分類助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">4.2<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室4_知識整理與內容產出/4.2_LINE群組每日摘要助理_開發說明.html" class="ws-card-agent-name">LINE群組每日摘要助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">4.3<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室4_知識整理與內容產出/4.3_簡報製作助理_開發說明.html" class="ws-card-agent-name">簡報製作助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">4.4<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室4_知識整理與內容產出/4.4_照片整理與標籤助理_開發說明.html" class="ws-card-agent-name">照片整理與標籤助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">4.5<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室4_知識整理與內容產出/4.5_資料整理鏈結助理_開發說明.html" class="ws-card-agent-name">資料整理鏈結助理</a>
+            </div>
+            
+          </div>
+        </div>
+        
+        <div class="ws-card">
+          <div class="ws-card-header">
+            <span class="ws-num">5</span>
+            <span class="ws-card-title">滿月圓現場營運（5）</span>
+          </div>
+          <div class="ws-card-body">
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">5.1<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室5_滿月圓現場營運/5.1_滿月圓事件紀錄助理_開發說明.html" class="ws-card-agent-name">滿月圓事件紀錄助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">5.2<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室5_滿月圓現場營運/5.2_問卷分析助理_開發說明.html" class="ws-card-agent-name">問卷分析助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">5.3<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室5_滿月圓現場營運/5.3_滿月圓人數分析助理_開發說明.html" class="ws-card-agent-name">滿月圓人數分析助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">5.4<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室5_滿月圓現場營運/5.4_生態出沒影像分析助理_開發說明.html" class="ws-card-agent-name">生態出沒影像分析助理</a>
+            </div>
+            
+            <div class="ws-card-agent">
+              <div class="ws-card-agent-num">5.5<span class="chip-example" style="margin-left:6px">範例</span></div>
+              <a href="工作室5_滿月圓現場營運/5.5_商品販售分析助理_開發說明.html" class="ws-card-agent-name">商品販售分析助理</a>
+            </div>
+            
+          </div>
+        </div>
+        
+
+  <div class="callout info" style="margin-top:32px">
+    <strong>使用方式</strong>
+    <ol>
+      <li>從左側 sidebar 或上方工作室卡片，點擊任一 Agent 進入開發說明</li>
+      <li>每個 Agent 頁有 5 個 Tab：概覽、完整 Prompt、知識庫設定、驗測情境、上線指南</li>
+      <li>依 Tab 順序操作，預計每隻 Agent 60-90 分鐘可完成部署</li>
+    </ol>
+  </div>
+
+  <p style="text-align:center; color:var(--text-secondary); margin-top:48px; font-size:13px;">
+    斯創教育 EgentHub Agent 完整開發教學手冊 ｜ 編製：智慧方案股份有限公司（Intellicon Solutions LLC）
+  </p>
+</main>
+</body>
+</html>
