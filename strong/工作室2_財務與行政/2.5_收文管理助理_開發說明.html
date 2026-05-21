@@ -459,10 +459,10 @@ li { margin: 5px 0; }
 <body>
 <div class="hero">
   <h1>斯創教育 EgentHub Agent 完整開發教學手冊</h1>
-  <div class="meta">5 個工作室 ｜ 24 隻 Agent 完整 POC 開發包 ｜ 智慧方案股份有限公司</div>
+  <div class="meta">5 個工作室 ｜ 25 隻 Agent 完整 POC 開發包 ｜ 智慧方案股份有限公司</div>
 </div>
 <aside>
-<a class="home-link" href="../index.html">← 回到全體概覽（24 個 Agent）</a>
+<a class="home-link" href="../index.html">← 回到全體概覽（25 個 Agent）</a>
 <div class="ws-group">
 <div class="ws-header"><span class="ws-num">1</span>業務開發與行銷 <span class="ws-count">（4）</span></div>
 <a class="agent-link" href="../工作室1_業務開發與行銷/1.1_活動報價提案助理_開發說明.html"><span class="agent-num">1.1</span>活動報價提案助理 <span class="chip-example">範例</span></a>
@@ -487,12 +487,13 @@ li { margin: 5px 0; }
 <a class="agent-link" href="../工作室3_客戶與專案管理/3.4_活動紀錄建檔助理_開發說明.html"><span class="agent-num">3.4</span>活動紀錄建檔助理 <span class="chip-example">範例</span></a>
 </div>
 <div class="ws-group">
-<div class="ws-header"><span class="ws-num">4</span>知識整理與內容產出 <span class="ws-count">（5）</span></div>
+<div class="ws-header"><span class="ws-num">4</span>知識整理與內容產出 <span class="ws-count">（6）</span></div>
 <a class="agent-link" href="../工作室4_知識整理與內容產出/4.1_公部門資料摘要分類助理_開發說明.html"><span class="agent-num">4.1</span>公部門資料摘要分類助理 <span class="chip-example">範例</span></a>
 <a class="agent-link" href="../工作室4_知識整理與內容產出/4.2_LINE群組每日摘要助理_開發說明.html"><span class="agent-num">4.2</span>LINE群組每日摘要助理 <span class="chip-example">範例</span></a>
 <a class="agent-link" href="../工作室4_知識整理與內容產出/4.3_簡報製作助理_開發說明.html"><span class="agent-num">4.3</span>簡報製作助理 <span class="chip-example">範例</span></a>
 <a class="agent-link" href="../工作室4_知識整理與內容產出/4.4_照片整理與標籤助理_開發說明.html"><span class="agent-num">4.4</span>照片整理與標籤助理 <span class="chip-example">範例</span></a>
 <a class="agent-link" href="../工作室4_知識整理與內容產出/4.5_資料整理鏈結助理_開發說明.html"><span class="agent-num">4.5</span>資料整理鏈結助理 <span class="chip-example">範例</span></a>
+<a class="agent-link" href="../工作室4_知識整理與內容產出/4.6_資料庫整理建檔助理_開發說明.html"><span class="agent-num">4.6</span>資料庫整理建檔助理 <span class="chip-example">範例</span></a>
 </div>
 <div class="ws-group">
 <div class="ws-header"><span class="ws-num">5</span>滿月圓現場營運 <span class="ws-count">（5）</span></div>
@@ -541,7 +542,7 @@ li { margin: 5px 0; }
         <tr><th>項目</th><th>規格</th><th>說明</th></tr>
         <tr><td>建議模型</td><td><strong>Claude 4.6 Sonnet</strong></td><td>視覺辨識任務需具備視覺能力的旗艦模型</td></tr>
         <tr><td>執行模式</td><td>兩階段隔離執行</td><td>需在 Agent 設定啟用「兩階段隔離」（步驟一純讀取、步驟二純工具調用）</td></tr>
-        <tr><td>知識庫類型</td><td>表格查詢知識庫</td><td>請依「知識庫設定」Tab 詳細配置</td></tr>
+        <tr><td>知識庫類型</td><td>表格查詢知識庫 + Agent 向量／全文查找知識庫</td><td>請依「知識庫設定」Tab 詳細配置</td></tr>
         <tr><td>需用工具</td><td>-</td><td>若為 Google Search 等，需在 Agent 設定中啟用</td></tr>
         <tr><td>輸出格式</td><td>Markdown 表格／結構化文字</td><td>使用者可於 EgentHub 介面下載為 xlsx</td></tr>
       </table>
@@ -567,15 +568,17 @@ li { margin: 5px 0; }
         <button class="copy-btn" id="copyPromptBtn" onclick="copyPrompt()"><span>複製到剪貼簿</span></button>
       </div>
       <pre id="promptContent"># 角色
-您是「斯創教育收文管理助理」，協助行政專員將收到的紙本公文掃描檔（PDF 或圖片）建檔分類，產出公文清冊並建議派工對象。
+您是「斯創教育收文管理助理」，協助行政專員將收到的紙本公文掃描檔（PDF 或圖片）建檔分類，產出公文清冊、建議派工對象，並依過往案例自動推薦常見處理流程供參考。
 
 # 任務
 當行政專員上傳收文掃描檔時，您需要：
 1. 步驟一：純讀取掃描檔，辨識公文關鍵欄位（發文單位、主旨、發文日期、發文字號）。
-2. 步驟二：依「派工對應表」判定該收文應派給哪位主管或部門，並產出清冊更新欄。
+2. 步驟二：依「派工對應表」判定該收文應派給哪位主管或部門；依「常見處理流程庫」推薦建議的處理步驟與時程。
 
 # 背景知識
-本 Agent 連結「派工對應表」表格查詢知識庫，欄位為主題關鍵字、建議派工對象、處理時效。
+本 Agent 連結兩份知識庫：
+- 「派工對應表」（表格查詢知識庫）：欄位為主題關鍵字、建議派工對象、處理時效
+- 「常見處理流程庫」（Agent 向量知識庫）：含過往各類公文（陳報函、補助申請、會議邀請、人事函）的標準處理步驟與經驗教訓
 
 # 輸入格式
 使用者上傳公文掃描 PDF 或圖片（最多 5 份）。
@@ -593,35 +596,48 @@ li { margin: 5px 0; }
 3. 以 Markdown 表格輸出。
 
 **步驟一限制：**
-- 嚴格禁止調用「派工對應表」或任何工具。
+- 嚴格禁止調用「派工對應表」「常見處理流程庫」或任何工具。
 - 嚴格禁止猜測派工對象。
 
 **結束提示：**
-「我已完成公文辨識，若您需要派工建議，請在下一步告訴我。」
+「我已完成公文辨識，若您需要派工建議與處理流程，請在下一步告訴我。」
 
 ---
 
-## 步驟二：派工建議
+## 步驟二：派工建議與處理流程
 
 **您的任務：**
 1. 接收使用者指示。
-2. 僅依據步驟一已產出的主旨內容，查詢「派工對應表」。
-3. 為每份公文補上「建議派工」、「處理時效」欄位。
-4. 輸出清冊。
+2. 僅依據步驟一已產出的主旨內容，查詢「派工對應表」推薦派工對象。
+3. 同時查詢「常見處理流程庫」，依公文性質推薦該類公文的標準處理步驟（含建議產出物、時程切點、過往經驗教訓）。
+4. 為每份公文補上「建議派工」「處理時效」「建議處理流程」欄位。
+5. 輸出清冊。
 
 **步驟二限制：**
 - 嚴格禁止要求使用者重新上傳檔案。
+- 推薦的處理流程必須來自「常見處理流程庫」，不可憑空生成；若庫中無此類公文，明確告知並建議手動處理。
 
 # 輸出格式
 ### 步驟一輸出格式
 | # | 發文單位 | 發文日期 | 字號 | 主旨 | 限辦日 |
 |---|---|---|---|---|---|
 
-結尾：「我已完成公文辨識，若您需要派工建議，請在下一步告訴我。」
+結尾：「我已完成公文辨識，若您需要派工建議與處理流程，請在下一步告訴我。」
 
 ### 步驟二輸出格式
+
+#### 公文清冊
 | # | 發文單位 | 主旨 | 限辦日 | 建議派工 | 處理時效 |
 |---|---|---|---|---|---|
+
+#### 建議處理流程（逐筆）
+**公文 #1：{主旨}**
+1. {步驟一}
+2. {步驟二}
+3. ...
+**注意事項：** （過往經驗教訓）
+
+**公文 #2：...**
 
 # 問答指引
 - 請使用**繁體中文**回覆，語氣應委婉、自然，符合台灣使用者的溝通風格。
@@ -661,8 +677,45 @@ li { margin: 5px 0; }
               </div>
             </div>
             
+<h3>文本知識庫（TXT / Agent 向量或全文查找知識庫）</h3>
+<p>下列 TXT 檔案請在 EgentHub「Agent 向量知識庫」或「全文查找知識庫」中上傳。</p>
+
+            <div class="card">
+              <div class="card-title">常見處理流程庫.txt <span class="badge">TXT</span> <span class="chip-example">範例</span></div>
+              <ul>
+                <li><strong>檔案路徑：</strong><code class="inline">2_知識庫範例資料/常見處理流程庫.txt</code></li>
+                <li><strong>知識庫類型：</strong>Agent 向量知識庫（RAG）／全文查找知識庫</li>
+                <li><strong>字數：</strong>約 1878 字</li>
+                <li><strong>編碼：</strong>UTF-8</li>
+                <li><strong>資料屬性：</strong><strong>本檔為示範資料</strong>，上線前須由各部門窗口替換為真實資料；保留檔名一致</li>
+              </ul>
+              <p><strong>內容預覽（前 18 行）：</strong></p>
+              <pre style="max-height:240px;font-size:12px"># 斯創教育公文常見處理流程庫
+
+本知識庫整理斯創過去 3 年處理各類公部門公文的標準流程與經驗教訓。每類公文均含建議步驟、時程節點、產出物、注意事項。
+
+## 一、林業及自然保育署委辦案陳報函
+
+### 標準處理流程
+1. **收文當日**：行政總監收件，判定屬期初／期中／期末／結案。
+2. **D+1**：執行專案負責人（教育總監或專案經理）審閱主旨與限辦日。
+3. **D+3**：召開內部準備會議，確認對應的工作項目與成果證明資料。
+4. **D+5-7**：依分署規範格式撰寫陳報報告（含執行情形、財務、附件）。
+5. **D+10**：執行長最終審閱。
+6. **D+12**：用印寄出（紙本掛號 + Email 副本）。
+
+### 注意事項（經驗教訓）
+- 林業署各分署的格式略有差異，請套用既有「該分署最近一份函」的範本
+- 期末報告若延遲超過限辦日 3 天，分署將啟動催辦並影響後續案件評分
+- 附件須含財務核銷對照表，與會計部協同準備</pre>
+              <div class="download-row">
+                <a class="download-btn" href="2.5_收文管理助理_資源/2_知識庫範例資料/常見處理流程庫.txt" download>下載 常見處理流程庫.txt</a>
+              </div>
+            </div>
+            
 <div class="callout info"><strong>一鍵下載全部知識庫範例</strong><div class="download-row" style="margin-top:8px">
 <a class="download-btn" href="2.5_收文管理助理_資源/2_知識庫範例資料/派工對應表.csv" download>派工對應表.csv</a>
+<a class="download-btn" href="2.5_收文管理助理_資源/2_知識庫範例資料/常見處理流程庫.txt" download>常見處理流程庫.txt</a>
 </div></div>
 
     <h3>資料清洗指南</h3>
