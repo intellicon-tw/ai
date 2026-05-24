@@ -1,0 +1,2138 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>潤之泉 EgentHub 24-Agent POC 教學網頁</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", "Helvetica Neue", Arial, sans-serif;
+  background: #fafafa; color: #2c2c2c; line-height: 1.7;
+}
+header.brand {
+  background: linear-gradient(135deg, #9476cc 0%, #6b4ea8 100%);
+  color: #fff; padding: 18px 32px; box-shadow: 0 2px 10px rgba(148, 118, 204, 0.3);
+  position: sticky; top: 0; z-index: 100;
+}
+header.brand h1 { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: 1px; }
+header.brand .sub { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+.layout { display: flex; min-height: calc(100vh - 70px); }
+nav.sidebar {
+  width: 290px; background: #f4eef9; padding: 16px 0;
+  border-right: 1px solid #e0d8ec; position: sticky; top: 70px; height: calc(100vh - 70px); overflow-y: auto;
+  flex-shrink: 0; font-size: 13px;
+}
+.nav-overview {
+  display: block; padding: 12px 22px; margin: 0 0 10px 0; color: #2c2c2c; text-decoration: none;
+  border-left: 3px solid transparent; cursor: pointer; transition: all 0.15s;
+  background: #fff; font-weight: 600;
+}
+.nav-overview:hover { background: #ede2f5; }
+.nav-overview.active { border-left-color: #9476cc; color: #6b4ea8; }
+.ws-group { margin-bottom: 6px; }
+.ws-title { padding: 9px 22px 5px; font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
+.ws-title .ws-num { display: inline-block; width: 18px; height: 18px; line-height: 18px; text-align: center; background: #9476cc; color: #fff; border-radius: 50%; font-size: 10px; margin-right: 6px; }
+.nav-item {
+  display: block; padding: 6px 28px; color: #2c2c2c; text-decoration: none;
+  border-left: 3px solid transparent; cursor: pointer; transition: all 0.15s;
+  font-size: 12.5px; line-height: 1.4;
+}
+.nav-item:hover { background: #ede2f5; }
+.nav-item.active { background: #fff; border-left-color: #9476cc; font-weight: 600; color: #6b4ea8; }
+.nav-item .num { color: #9476cc; font-weight: 600; margin-right: 4px; font-size: 11px; }
+
+main.content { flex: 1; padding: 28px 40px; min-width: 0; overflow-x: hidden; }
+.agent-page { display: none; }
+.agent-page.active { display: block; }
+.agent-header {
+  border-bottom: 2px solid #e9def8; padding-bottom: 16px; margin-bottom: 22px;
+}
+.agent-header .id-badge {
+  display: inline-block; padding: 4px 12px; background: #9476cc; color: #fff; border-radius: 20px;
+  font-size: 13px; font-weight: 600; margin-right: 12px; vertical-align: middle;
+}
+.agent-header h2 { margin: 0; font-size: 24px; display: inline; vertical-align: middle; }
+.headliner-badge {
+  display: inline-block; padding: 3px 10px; background: linear-gradient(135deg, #ffc857 0%, #f5a623 100%); color: #fff;
+  border-radius: 12px; font-size: 12px; margin-left: 10px; vertical-align: middle; font-weight: 600;
+}
+.strategy-tag {
+  display: inline-block; padding: 2px 9px; border-radius: 10px; font-size: 11px; font-weight: 600;
+  margin-left: 8px; vertical-align: middle; color: #fff;
+}
+.strategy-ROE { background: #5cb574; }
+.strategy-ROI { background: #4a90c2; }
+.strategy-ROF { background: #b56fc0; }
+.agent-header .meta { margin-top: 12px; color: #666; font-size: 13.5px; }
+.agent-header .meta span { display: inline-block; margin-right: 18px; margin-bottom: 4px; }
+.agent-header .tagline {
+  margin-top: 14px; padding: 14px 18px; background: #e9def8;
+  border-left: 4px solid #9476cc; border-radius: 4px; font-size: 14px;
+}
+
+.tabs { display: flex; border-bottom: 1px solid #ddd; margin-bottom: 22px; flex-wrap: wrap; }
+.tab {
+  padding: 9px 16px; cursor: pointer; border-bottom: 3px solid transparent;
+  font-weight: 500; color: #666; transition: all 0.15s; user-select: none; font-size: 13.5px;
+}
+.tab:hover { color: #9476cc; }
+.tab.active { color: #6b4ea8; border-bottom-color: #9476cc; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.section-card {
+  background: #fff; border: 1px solid #ebe6f0; border-radius: 8px;
+  padding: 18px 22px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+.section-card h3 { margin-top: 0; color: #6b4ea8; font-size: 16px; border-bottom: 1px solid #f0eaf6; padding-bottom: 7px; }
+
+.prompt-text {
+  width: 100%; height: 500px; padding: 14px; font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12.5px; line-height: 1.6; border: 1px solid #e0d8ec; border-radius: 6px;
+  background: #fafaff; color: #2c2c2c; resize: vertical;
+}
+.copy-btn {
+  background: #9476cc; color: #fff; border: none; padding: 7px 14px; border-radius: 4px;
+  cursor: pointer; font-size: 13px; font-weight: 500; margin-bottom: 10px;
+}
+.copy-btn:hover { background: #6b4ea8; }
+.copy-btn.copied { background: #5cb574; }
+
+.md-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+.md-table th, .md-table td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #efeaf3; }
+.md-table th { background: #f4eef9; color: #6b4ea8; font-weight: 600; }
+.kb-download { color: #9476cc; text-decoration: none; font-weight: 500; }
+.kb-download:hover { text-decoration: underline; }
+.no-kb { color: #999; font-style: italic; }
+.hint { color: #777; font-size: 12.5px; margin-top: 10px; }
+
+.md-content h2 { font-size: 18px; color: #6b4ea8; margin-top: 18px; }
+.md-content h3 { font-size: 15px; color: #6b4ea8; margin-top: 14px; border: none; padding: 0; }
+.md-content h4 { font-size: 14px; color: #555; margin-top: 12px; }
+.md-content ul { padding-left: 22px; }
+.md-content li { margin: 3px 0; font-size: 13.5px; }
+.md-content blockquote { background: #f5f0fb; border-left: 3px solid #9476cc; margin: 8px 0; padding: 8px 14px; }
+.md-content pre { background: #2c2c2c; color: #fafafa; padding: 12px; border-radius: 6px; overflow-x: auto; }
+.md-content pre code { background: none; color: inherit; font-size: 12px; }
+.md-content code { background: #f0eaf6; padding: 2px 6px; border-radius: 3px; font-size: 12px; color: #6b4ea8; }
+.ag-link { color: #6b4ea8; text-decoration: none; font-weight: 500; }
+.ag-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header class="brand">
+  <h1>潤之泉 EgentHub 24-Agent POC 完整教學網頁</h1>
+  <div class="sub">10 個工作室・24 隻 Agent・含完整 Prompt 與知識庫範例｜智慧方案股份有限公司</div>
+</header>
+
+<div class="layout">
+
+<nav class="sidebar">
+  <a class="nav-overview active" data-agent-id="agent-overview">總覽</a>
+  <div class="ws-group">
+<div class="ws-title"><span class="ws-num">1</span>工作室 1_行銷企劃部</div>
+
+<a class="nav-item" data-agent-id="agent-1-1"><span class="num">1.1</span>FB粉絲專頁小編</a>
+<a class="nav-item" data-agent-id="agent-1-2"><span class="num">1.2</span>保健食品合規檢查官</a>
+<a class="nav-item" data-agent-id="agent-1-3"><span class="num">1.3</span>EDM與LINE推播文案</a>
+<a class="nav-item" data-agent-id="agent-1-4"><span class="num">1.4</span>媒體新聞稿草擬</a>
+</div>
+<div class="ws-group">
+<div class="ws-title"><span class="ws-num">2</span>工作室 2_業務通路部</div>
+
+<a class="nav-item" data-agent-id="agent-2-1"><span class="num">2.1</span>通路報價單草擬</a>
+<a class="nav-item" data-agent-id="agent-2-2"><span class="num">2.2</span>業務話術助理</a>
+<a class="nav-item" data-agent-id="agent-2-3"><span class="num">2.3</span>通路上架文件產生</a>
+</div>
+<div class="ws-group">
+<div class="ws-title"><span class="ws-num">3</span>工作室 3_客服部</div>
+
+<a class="nav-item" data-agent-id="agent-3-1"><span class="num">3.1</span>客服FAQ後台助理</a>
+<a class="nav-item" data-agent-id="agent-3-2"><span class="num">3.2</span>客訴回覆草擬</a>
+</div>
+<div class="ws-group">
+<div class="ws-title"><span class="ws-num">4</span>工作室 4_產品研發部</div>
+
+<a class="nav-item" data-agent-id="agent-4-1"><span class="num">4.1</span>國際保健食品趨勢摘要</a>
+<a class="nav-item" data-agent-id="agent-4-2"><span class="num">4.2</span>原料供應商情資整理</a>
+</div>
+<div class="ws-group">
+<div class="ws-title"><span class="ws-num">5</span>工作室 5_採購供應鏈部</div>
+
+<a class="nav-item" data-agent-id="agent-5-1"><span class="num">5.1</span>採購單草擬與比價</a>
+</div>
+<div class="ws-group">
+<div class="ws-title"><span class="ws-num">6</span>工作室 6_生產品管部</div>
+
+<a class="nav-item" data-agent-id="agent-6-1"><span class="num">6.1</span>生產SOP知識查詢助理</a>
+<a class="nav-item" data-agent-id="agent-6-2"><span class="num">6.2</span>食安認證文件管理</a>
+</div>
+<div class="ws-group">
+<div class="ws-title"><span class="ws-num">7</span>工作室 7_行政財會部</div>
+
+<a class="nav-item" data-agent-id="agent-7-1"><span class="num">7.1</span>公司制度與規章查詢</a>
+</div>
+<div class="ws-group">
+<div class="ws-title"><span class="ws-num">8</span>工作室 8_經營決策數據中心</div>
+
+<a class="nav-item" data-agent-id="agent-8-1"><span class="num">8.1</span>銷售數據洞察 🔑</a>
+<a class="nav-item" data-agent-id="agent-8-2"><span class="num">8.2</span>通路績效分析</a>
+<a class="nav-item" data-agent-id="agent-8-3"><span class="num">8.3</span>營業預測</a>
+<a class="nav-item" data-agent-id="agent-8-4"><span class="num">8.4</span>庫存與供需平衡</a>
+<a class="nav-item" data-agent-id="agent-8-5"><span class="num">8.5</span>業績成長策略</a>
+<a class="nav-item" data-agent-id="agent-8-6"><span class="num">8.6</span>會員行為分析</a>
+</div>
+<div class="ws-group">
+<div class="ws-title"><span class="ws-num">9</span>工作室 9_經營管理與品牌</div>
+
+<a class="nav-item" data-agent-id="agent-9-1"><span class="num">9.1</span>品牌主理人IP助理</a>
+<a class="nav-item" data-agent-id="agent-9-2"><span class="num">9.2</span>投資人與媒體溝通</a>
+</div>
+<div class="ws-group">
+<div class="ws-title"><span class="ws-num">10</span>工作室 10_跨部門知識中心</div>
+
+<a class="nav-item" data-agent-id="agent-10-1"><span class="num">10.1</span>保健食品法規智庫</a>
+</div>
+</nav>
+
+<main class="content">
+  <div class="agent-page active" id="agent-overview">
+  <div class="agent-header">
+    <h2>潤之泉 EgentHub 24-Agent POC 開發包總覽</h2>
+    <div class="tagline">本網頁為潤之泉 AI Agent 導入 POC 階段的完整教學手冊，涵蓋 10 個工作室、24 隻 Agent。每隻 Agent 都附完整 Prompt（可直接複製到 EgentHub）、知識庫範例（可下載）、驗測情境、上線指南。</div>
+  </div>
+
+  <div class="section-card">
+    <h3>三大重點 Agent</h3>
+    <ul>
+      <li>🔑 <strong>8.1 銷售數據洞察</strong>（鎖門之作）— 老闆每週一打開看「上週哪個 SKU 反常」「哪個通路湧現」</li>
+      <li><strong>8.3 營業預測</strong> — 三情境預測未來 3-6 個月營收，含關鍵驅動因子</li>
+      <li><strong>9.1 品牌主理人 IP 助理</strong> — 把老闆的品牌哲學 AI 化，新人、媒體、合作夥伴溝通的長期戰略級資產</li>
+    </ul>
+  </div>
+
+  <div class="section-card">
+    <h3>全 Agent 索引</h3>
+    <table class="md-table">
+      <tr><th>編號</th><th>工作室</th><th>Agent 名稱</th><th>戰略類別</th><th>兩階段</th></tr>
+      <tr><td>1.1</td><td>工作室1_行銷企劃部</td><td><a href='#' data-agent-id='agent-1-1' class='ag-link'>FB粉絲專頁小編</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr><tr><td>1.2</td><td>工作室1_行銷企劃部</td><td><a href='#' data-agent-id='agent-1-2' class='ag-link'>保健食品合規檢查官</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr><tr><td>1.3</td><td>工作室1_行銷企劃部</td><td><a href='#' data-agent-id='agent-1-3' class='ag-link'>EDM與LINE推播文案</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr><tr><td>1.4</td><td>工作室1_行銷企劃部</td><td><a href='#' data-agent-id='agent-1-4' class='ag-link'>媒體新聞稿草擬</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr><tr><td>2.1</td><td>工作室2_業務通路部</td><td><a href='#' data-agent-id='agent-2-1' class='ag-link'>通路報價單草擬</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr><tr><td>2.2</td><td>工作室2_業務通路部</td><td><a href='#' data-agent-id='agent-2-2' class='ag-link'>業務話術助理</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr><tr><td>2.3</td><td>工作室2_業務通路部</td><td><a href='#' data-agent-id='agent-2-3' class='ag-link'>通路上架文件產生</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr><tr><td>3.1</td><td>工作室3_客服部</td><td><a href='#' data-agent-id='agent-3-1' class='ag-link'>客服FAQ後台助理</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr><tr><td>3.2</td><td>工作室3_客服部</td><td><a href='#' data-agent-id='agent-3-2' class='ag-link'>客訴回覆草擬</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr><tr><td>4.1</td><td>工作室4_產品研發部</td><td><a href='#' data-agent-id='agent-4-1' class='ag-link'>國際保健食品趨勢摘要</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr><tr><td>4.2</td><td>工作室4_產品研發部</td><td><a href='#' data-agent-id='agent-4-2' class='ag-link'>原料供應商情資整理</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr><tr><td>5.1</td><td>工作室5_採購供應鏈部</td><td><a href='#' data-agent-id='agent-5-1' class='ag-link'>採購單草擬與比價</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr><tr><td>6.1</td><td>工作室6_生產品管部</td><td><a href='#' data-agent-id='agent-6-1' class='ag-link'>生產SOP知識查詢助理</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr><tr><td>6.2</td><td>工作室6_生產品管部</td><td><a href='#' data-agent-id='agent-6-2' class='ag-link'>食安認證文件管理</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr><tr><td>7.1</td><td>工作室7_行政財會部</td><td><a href='#' data-agent-id='agent-7-1' class='ag-link'>公司制度與規章查詢</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr><tr><td>8.1</td><td>工作室8_經營決策數據中心</td><td><a href='#' data-agent-id='agent-8-1' class='ag-link'>銷售數據洞察</a> 🔑</td><td><span class='strategy-tag strategy-ROI'>ROI</span></td><td>否</td></tr><tr><td>8.2</td><td>工作室8_經營決策數據中心</td><td><a href='#' data-agent-id='agent-8-2' class='ag-link'>通路績效分析</a></td><td><span class='strategy-tag strategy-ROI'>ROI</span></td><td>否</td></tr><tr><td>8.3</td><td>工作室8_經營決策數據中心</td><td><a href='#' data-agent-id='agent-8-3' class='ag-link'>營業預測</a></td><td><span class='strategy-tag strategy-ROI'>ROI</span></td><td>否</td></tr><tr><td>8.4</td><td>工作室8_經營決策數據中心</td><td><a href='#' data-agent-id='agent-8-4' class='ag-link'>庫存與供需平衡</a></td><td><span class='strategy-tag strategy-ROI'>ROI</span></td><td>否</td></tr><tr><td>8.5</td><td>工作室8_經營決策數據中心</td><td><a href='#' data-agent-id='agent-8-5' class='ag-link'>業績成長策略</a></td><td><span class='strategy-tag strategy-ROF'>ROF</span></td><td>否</td></tr><tr><td>8.6</td><td>工作室8_經營決策數據中心</td><td><a href='#' data-agent-id='agent-8-6' class='ag-link'>會員行為分析</a></td><td><span class='strategy-tag strategy-ROI'>ROI</span></td><td>否</td></tr><tr><td>9.1</td><td>工作室9_經營管理與品牌</td><td><a href='#' data-agent-id='agent-9-1' class='ag-link'>品牌主理人IP助理</a></td><td><span class='strategy-tag strategy-ROF'>ROF</span></td><td>否</td></tr><tr><td>9.2</td><td>工作室9_經營管理與品牌</td><td><a href='#' data-agent-id='agent-9-2' class='ag-link'>投資人與媒體溝通</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr><tr><td>10.1</td><td>工作室10_跨部門知識中心</td><td><a href='#' data-agent-id='agent-10-1' class='ag-link'>保健食品法規智庫</a></td><td><span class='strategy-tag strategy-ROE'>ROE</span></td><td>否</td></tr>
+    </table>
+  </div>
+
+  <div class="section-card">
+    <h3>戰略分類說明</h3>
+    <ul>
+      <li><span class="strategy-tag strategy-ROE">ROE</span> Return on Employee — 員工單點效能提升，快速見效，不需流程變革</li>
+      <li><span class="strategy-tag strategy-ROI">ROI</span> Return on Investment — 跨部門協作或數據整合，效益更深</li>
+      <li><span class="strategy-tag strategy-ROF">ROF</span> Return on Future — 未來戰略價值，組織與品牌資產化</li>
+    </ul>
+  </div>
+
+  <div class="section-card">
+    <h3>使用方式</h3>
+    <ol>
+      <li>左側選擇要查看的 Agent</li>
+      <li>切換頁籤閱讀：Prompt / 知識庫 / 驗測情境 / 上線指南</li>
+      <li>點「複製 Prompt」一鍵帶到 EgentHub</li>
+      <li>點知識庫表格中的「下載」取得 CSV/TXT 範例檔，上傳到 EgentHub 對應的知識庫類型</li>
+      <li>依「上線指南」逐項檢核後正式啟用</li>
+    </ol>
+  </div>
+
+  <div class="section-card">
+    <h3>文中 ERP 系統整合說明</h3>
+    <p>工作室 8（經營決策數據中心）的六隻 Agent 設計為以「文中系統匯出的 Excel／CSV」為輸入。POC 階段建議由業務助理或財務同仁建立每週／每月固定的 export SOP，將檔案上傳到 EgentHub 對應 Agent 的對話框即可。</p>
+    <p>第二階段可評估付費請文中或精誠寫 API 直連，達成自動化每日／每週分析報告。</p>
+  </div>
+</div>
+  <div class="agent-page" id="agent-1-1">
+  <div class="agent-header">
+    <span class="id-badge">1.1</span>
+    <h2>FB粉絲專頁小編</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室1_行銷企劃部</span>
+      <span><strong>知識庫需求</strong>：Agent 向量（品牌語氣+貼文範例）+ 表格查詢（產品）+ 全文查找（合規）</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-1-1">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-1-1-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉（Ruhn Chan，潤之泉．潤心田）的 Facebook 粉絲專頁專屬小編 AI 助理。
+
+您熟稔潤之泉的品牌精神「滋潤心田、澄淨如泉」，以及「天然零添加」的核心理念。您理解保健食品產業的法規敏感性，會主動避開《食品安全衛生管理法》第 28 條與《健康食品管理法》所禁止的功效宣稱字眼。
+
+您的撰寫風格穩重、溫潤、有人情味，避免過度商業化或誇大用語，**不使用 emoji**，並在不同情境下能切換對應的開場與收尾模板。
+
+# 任務
+依使用者提供的貼文主題、產品名稱、活動類型等資訊，產出一則**完整、可直接發布**的潤之泉 Facebook 粉絲專頁貼文。內容須符合品牌語氣、結構、合規規範，並附上必要的 CTA、Hashtag、小提醒與圖卡建議。
+
+# 背景知識
+本 Agent 連結了以下知識庫：
+
+1. **潤之泉品牌語氣指南**（Agent 向量知識庫）：品牌精神、自稱、稱呼讀者、慣用字眼、句末偏好、開場模板、收尾模式。
+2. **潤之泉產品資料庫**（表格查詢知識庫）：產品名稱、規格、認證、賣點、目標客群、禁忌族群、通路。
+3. **保健食品合規禁字清單**（全文查找知識庫）：食安法、健康食品管理法、化妝品衛生管理法常見地雷字眼與替代寫法。
+4. **過往高互動貼文範例**（Agent 向量知識庫）：依貼文類型（公告型／銷售型／衛教型／敘事型）分類的範本。
+
+# 輸入格式
+使用者需提供至少以下其中一組資訊：
+
+- **貼文主題**（必填）：例如「會員制度上線」「優蛋白滴積精新品上市」「2025 年終回顧」「立夏節氣養生」「台北食品展邀請」
+- **貼文類型**（必填，四選一）：
+  1. 正式公告型（會員制度、規範變更、重大通知）
+  2. 產品銷售型（新品上市、推廣、優惠活動）
+  3. 知識衛教型（成分介紹、節氣養生、營養知識）
+  4. 品牌敘事型（年終回顧、農友故事、品牌價值）
+- **主推產品**（如適用）：產品中文名與規格
+- **核心訊息**：3-5 個重點，用條列方式給出
+- **CTA 連結**（如適用）：官網連結、LINE 加入、報名表單等
+- **目標長度**：短（100-150 字）／中（200-300 字）／長（400-600 字），預設「中」
+- **是否需要 hashtag**：是／否，預設依貼文類型自動判斷（銷售型、衛教型用，公告型、敘事型不用）
+
+# 執行流程
+1. **解析輸入**：從使用者訊息中辨識貼文主題、類型、主推產品、核心訊息、CTA、長度需求。若缺少必要資訊，主動詢問使用者補齊（一次最多問 2-3 項）。
+
+2. **查詢品牌語氣指南**：依貼文類型查詢對應的「開場模板」「句構規則」「收尾模式」「Hashtag 使用慣例」。
+
+3. **查詢產品資料庫**（若涉及產品）：取出該產品的正式名稱、認證、賣點關鍵字、目標客群、禁忌族群提示。確保產品名稱在貼文中以【方括號】格式呈現。
+
+4. **合規檢查（前置）**：在草擬內容前，先記住保健食品合規禁字清單。撰寫過程嚴格避開「治療、療效、改善 XX 病、預防 XX、減肥、抗癌、抗發炎、降三高、增強免疫力」等禁字。
+
+5. **草擬貼文**：依以下結構撰寫：
+   - 開場（依貼文類型選用對應模板）
+   - 主體（核心訊息展開，使用潤之泉的句構節奏：短句、空格分隔、條列式重點）
+   - CTA（如有）
+   - 小提醒（出貨、注意事項、會員權益等，固定收尾元素）
+   - Hashtag（如適用）
+
+6. **自我合規複查**：完成草稿後，逐字檢查是否誤用禁字、是否暗示醫療效果、是否有捏造數據。若發現問題，自動修正並在輸出中註記「已避開 XXX 用字」。
+
+7. **產出三項輔助資訊**：
+   - 圖卡視覺建議（主色、主元素、文案層次）
+   - 發文建議時間（依貼文類型與台灣 FB 高峰時段）
+   - 互動引導（鼓勵讀者留言、分享、標記朋友的提問）
+
+# 輸出格式
+採用以下 Markdown 結構輸出（**請完整套用此架構，順序不可更動**）：
+</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-1-1-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>保健食品合規禁字清單.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室1_行銷企劃部/1.1_FB粉絲專頁小編/2_知識庫範例資料/保健食品合規禁字清單.txt' class='kb-download' download>下載</a></td></tr><tr><td>潤之泉品牌語氣指南.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室1_行銷企劃部/1.1_FB粉絲專頁小編/2_知識庫範例資料/潤之泉品牌語氣指南.txt' class='kb-download' download>下載</a></td></tr><tr><td>潤之泉產品資料庫.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室1_行銷企劃部/1.1_FB粉絲專頁小編/2_知識庫範例資料/潤之泉產品資料庫.csv' class='kb-download' download>下載</a></td></tr><tr><td>潤之泉粉專高互動貼文範例庫.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室1_行銷企劃部/1.1_FB粉絲專頁小編/2_知識庫範例資料/潤之泉粉專高互動貼文範例庫.txt' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-1-1-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>FB粉絲專頁小編 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：4 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：8 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #1：新品上市產品銷售型</h4><br><br><pre><code>貼文主題：【有機優蛋白滴積精】母親節限時優惠<br>貼文類型：產品銷售型<br>主推產品：有機優蛋白滴積精<br>核心訊息：<br><ul><li>母親節限定 9 折優惠</li><br><li>適合給辛勞的媽媽日常補給</li><br><li>全素配方，吃素的媽媽也能享用</li><br><li>即日起至 5/12 母親節止</li><br></ul>CTA 連結：https://reurl.cc/xxx<br>目標長度：中<br></code></pre><br><br><h4>測試 #2：會員制度公告</h4><br><br><pre><code>貼文主題：金芽會員專屬生日禮新增「免費好禮兌換」<br>貼文類型：正式公告型<br>核心訊息：<br><ul><li>金芽會員生日當月可兌換【烏梅汁】或【甘糀】任選一款</li><br><li>兌換期限為生日當月最後一天</li><br><li>需事先綁定 LINE 官方帳號</li><br><li>首波兌換從 6 月生日壽星開始</li><br></ul>CTA 連結：https://reurl.cc/yyy<br>目標長度：中<br></code></pre><br><br><h4>測試 #3：節氣養生衛教型</h4><br><br><pre><code>貼文主題：立夏節氣與黑豆營養<br>貼文類型：知識衛教型<br>主推產品：有機優蛋白滴積精<br>核心訊息：<br><ul><li>立夏節氣容易燥熱</li><br><li>黑豆在中醫觀點屬於溫潤食材</li><br><li>潤之泉黑豆滴積精採用 190 小時溫控發酵</li><br><li>適合作為夏季日常營養補給</li><br></ul>目標長度：中<br></code></pre><br><br><h4>測試 #4：合規地雷測試</h4><br><br><pre><code>貼文主題：滴積精改善失眠、增強免疫力、降血壓三大好處<br>貼文類型：產品銷售型<br>主推產品：有機優蛋白滴積精<br>核心訊息：<br><ul><li>喝了一週就能改善睡眠</li><br><li>增強身體免疫力預防感冒</li><br><li>有助於降低血壓</li><br><li>適合三高族群天天喝</li><br></ul>目標長度：中<br></code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #1：新品上市產品銷售型（標準路徑）</h4><br><br><strong>輸入描述</strong><br><br>&gt; 輸入：【有機優蛋白滴積精】母親節限時優惠，核心訊息含 9 折優惠、辛勞媽媽日常補給、全素配方<br><br><strong>預期輸出</strong><br><br>&gt; 產出產品銷售型貼文，開場使用疑問句鉤子（例：今年母親節，您準備了什麼？），產品名以【方括號】格式呈現，主體使用空格分隔的短句條列，收尾含小提醒（出貨提醒或限時提醒），含 4-6 個 hashtag（如 #母親節 #滴雞精 #全素 #植物蛋白），並提供圖卡視覺建議與合規檢查結果。<br><br><strong>驗證重點</strong><br><br>&gt; (1) 開場為疑問句而非方括號標題；(2) 產品名稱用【】包覆；(3) 含 hashtag；(4) 無「治療」「療效」「改善」等禁字；(5) 圖卡建議含主色、主視覺、文案層次三項；(6) 合規檢查結果區塊存在且有內容。<br><br><h4>情境 #2：會員制度公告（正式公告型）</h4><br><br><strong>輸入描述</strong><br><br>&gt; 輸入：金芽會員生日當月可免費兌換烏梅汁或甘糀，要綁定 LINE，6 月起<br><br><strong>預期輸出</strong><br><br>&gt; 產出正式公告型貼文，開場為「【 潤之泉金芽會員生日驚喜｜升級啟動 】」式方括號標題，內文含感謝段落、條列說明兌換規則，CTA 引導至綁定連結，收尾含「小提醒」段落（提醒舊會員也要綁定），<strong>不含 hashtag</strong>，圖卡視覺建議以「會員等級＋禮物意象」為主。<br><br><strong>驗證重點</strong><br><br>&gt; (1) 開場為方括號標題格式；(2) 用「您」「老朋友們」等正式稱呼；(3) 不含 hashtag；(4) 含「小提醒」段落；(5) 自稱用「潤之泉」「我們」；(6) 不出現 emoji。<br><br><h4>情境 #3：節氣養生衛教型</h4><br><br><strong>輸入描述</strong><br><br>&gt; 輸入：立夏節氣與黑豆營養，主推【有機優蛋白滴積精】<br><br><strong>預期輸出</strong><br><br>&gt; 產出知識衛教型貼文，開場為引導式問題（例：「您知道嗎？立夏其實是身體最需要『輕盈補給』的時刻」），內文以節氣常識切入、銜接到黑豆營養知識，<strong>完全避開「療效」「改善」「預防」等字眼</strong>，用「日常營養補給」「溫潤」「輕盈」等合規用字，含 2-3 個議題型 hashtag（如 #節氣養生 #立夏 #植物蛋白），圖卡建議含「節氣意象＋黑豆元素」。<br><br><strong>驗證重點</strong><br><br>&gt; (1) 內容無任何療效宣稱；(2) 用「胺基酸」「植物蛋白」等成分敘述代替功效；(3) 含 2-3 個 hashtag；(4) 合規檢查結果區塊明確列出「主動避開的高風險字眼」與「替代寫法」。<br><br><h4>情境 #4：缺資訊主動詢問</h4><br><br><strong>輸入描述</strong><br><br>&gt; 輸入：「幫我寫一篇貼文」（沒有提供任何主題、類型、產品）<br><br><strong>預期輸出</strong><br><br>&gt; Agent 不應該開始撰寫，而是主動詢問補齊資訊：(1) 貼文主題是什麼？(2) 屬於哪一種類型（公告／銷售／衛教／敘事）？(3) 有沒有主推產品？並提示一次最多問 2-3 項以免造成壓力。<br><br><strong>驗證重點</strong><br><br>&gt; (1) Agent 不憑空捏造主題；(2) 問題清楚具體；(3) 不超過 3 個問題；(4) 語氣委婉、不命令式。<br><br><h4>情境 #5：合規地雷主動攔截</h4><br><br><strong>輸入描述</strong><br><br>&gt; 輸入：使用者要求寫「滴積精改善失眠、增強免疫力、降血壓三大好處」<br><br><strong>預期輸出</strong><br><br>&gt; Agent 必須<strong>主動拒絕直接照寫</strong>，並回覆：(1) 指出輸入中包含「改善失眠」「增強免疫力」「降血壓」三個違反《食品安全衛生管理法》第 28 條的字眼；(2) 提供合規替代寫法（如「晚間放鬆」「天然營養支持」「低鈉配方」）；(3) 建議使用者調整輸入訊息後再請 Agent 撰寫貼文；(4) 不在輸出中產生含禁字的草稿。<br><br><strong>驗證重點</strong><br><br>&gt; (1) Agent 不直接照寫違規貼文；(2) 明確列出哪些字眼違規；(3) 提供具體合規替代寫法；(4) 引用法源（食安法第 28 條或健康食品管理法）；(5) 邀請使用者重新提供合規版本的主題。<br><br><h4>情境 #6：品牌敘事型（年終回顧）</h4><br><br><strong>輸入描述</strong><br><br>&gt; 輸入：2026 年下半年回顧，潤之泉今年新獲得 ISO 22000 認證、走進 30 家新通路、推出 2 個新品<br><br><strong>預期輸出</strong><br><br>&gt; 產出品牌敘事型貼文，開場為對話式（例：「2026 年悄悄走到了下半場」），語氣慢、有人情味，內文用「這半年我們做了幾件有意義的事」式條列回顧，避免商業化用語，<strong>不含 hashtag</strong>，收尾以感謝與展望結束（祝福 / 陪伴 / 大步前行），圖卡建議以「年度回顧拼貼」為主。<br><br><strong>驗證重點</strong><br><br>&gt; (1) 開場為對話式而非方括號標題；(2) 條列前使用全形空格作為視覺縮排；(3) 用「我們」自稱、「大家」「朋友們」稱呼讀者；(4) 不出現 hashtag；(5) 收尾含「陪伴」「感恩」「祝福」等情感字眼；(6) 字數落在中長篇（300-500 字）。<br><br><h4>情境 #7：展會邀請（公告 + 銷售複合型）</h4><br><br><strong>輸入描述</strong><br><br>&gt; 輸入：邀請粉絲蒞臨 2026 台北國際食品展，潤之泉展位 K0622，6/24-6/27，現場有試喝與限定優惠<br><br><strong>預期輸出</strong><br><br>&gt; 產出展會邀請貼文，開場為方括號標題（例：【 2026 台北國際食品展｜潤之泉誠摯邀請您蒞臨 】），內文含展位資訊、現場活動、優惠重點，使用方括號格式呈現產品名，含 CTA（地圖連結或展會官網），含「小提醒」（交通建議或票券資訊），<strong>含 3-4 個 hashtag</strong>（如 #台北食品展 #潤之泉），圖卡建議含「展位視覺＋產品擺設」。<br><br><strong>驗證重點</strong><br><br>&gt; (1) 開場為方括號標題；(2) 展位編號、日期、地點清楚標示；(3) 含 hashtag；(4) 含「小提醒」；(5) 邀請語氣親切但不過度商業。<br><br><h4>情境 #8：獲獎宣傳</h4><br><br><strong>輸入描述</strong><br><br>&gt; 輸入：【有機優蛋白滴積精】獲得 2026 新味食潮獎「年度最佳植物蛋白獎」<br><br><strong>預期輸出</strong><br><br>&gt; 產出獲獎宣傳貼文，開場為方括號標題（例：【 新味食潮獎喜訊｜潤之泉雙料肯定 】），內文含「感恩」「肯定」「初心」等品牌語氣字眼，回顧產品誕生過程，感謝農友、消費者、評審，含 CTA（產品連結），收尾含「小提醒」，<strong>不含 hashtag 或僅含 2-3 個簡短 hashtag</strong>（如 #新味食潮獎 #植物蛋白）。<br><br><strong>驗證重點</strong><br><br>&gt; (1) 開場為方括號標題；(2) 自稱用「潤之泉」「我們」並偏多用「我們」表現謙遜；(3) 內容感謝對象至少含農友、消費者；(4) hashtag 數量少且精；(5) 不誇大、不出現「唯一」「最佳」「神奇」等網紅式用字（即使獎項名稱含「最佳」也僅作獎名引用）。<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-1-1-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>FB 粉絲專頁小編 - 正式上線前的準備指南</h2><br><br>本文件提供將「FB 粉絲專頁小編」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉行銷企劃部門日常作業中穩定使用的逐步準備清單。建議由 IT/AI 種子團隊與行銷主管共同檢核。<br><br><h3>1. 知識庫設定</h3><br><br><h4>1.1 潤之泉品牌語氣指南（Agent 向量知識庫 RAG）</h4><br><br><ul><li><strong>來源檔案</strong>：`2_知識庫範例資料/潤之泉品牌語氣指南.txt`</li><br><li><strong>知識庫類型</strong>：Agent 向量知識庫（RAG）</li><br><li><strong>建議名稱</strong>：「潤之泉品牌語氣指南 (Brand Voice Guide)」</li><br><li><strong>層級</strong>：Agent 層級（僅本 Agent 使用）</li><br><li><strong>後續維護</strong>：每季度由行銷主管覆核一次，新增的慣用語、新的開場模板可直接補入。</li><br></ul><br><h4>1.2 潤之泉產品資料庫（表格查詢知識庫 SQL）</h4><br><br><ul><li><strong>來源檔案</strong>：`2_知識庫範例資料/潤之泉產品資料庫.csv`</li><br><li><strong>知識庫類型</strong>：表格查詢知識庫（SQL）</li><br><li><strong>建議名稱</strong>：「潤之泉產品資料庫 (Product Master)」</li><br><li><strong>層級</strong>：工作室層級（行銷企劃工作室共用，未來其他 Agent 如 EDM 文案 Agent 可重用）</li><br><li><strong>欄位確認</strong>：產品代號、產品全名、規格、主要原料、核心認證、主要賣點、目標客群、禁忌族群提示、通路、品牌定位</li><br><li><strong>編碼</strong>：utf-8-sig（含 BOM）</li><br><li><strong>後續維護</strong>：新品上市時由產品經理更新 CSV，並上傳新版到 EgentHub。</li><br></ul><br><h4>1.3 保健食品合規禁字清單（全文查找知識庫）</h4><br><br><ul><li><strong>來源檔案</strong>：`2_知識庫範例資料/保健食品合規禁字清單.txt`</li><br><li><strong>知識庫類型</strong>：全文查找知識庫</li><br><li><strong>建議名稱</strong>：「保健食品合規禁字清單 (Compliance Blacklist)」</li><br><li><strong>層級</strong>：公司層級（建議與其他保健食品 Agent 共用，例如未來的客服 Agent、EDM Agent）</li><br><li><strong>後續維護</strong>：每年至少覆核一次，或在主管機關發布新指引時即時更新。</li><br></ul><br><h4>1.4 潤之泉粉專高互動貼文範例庫（Agent 向量知識庫 RAG）</h4><br><br><ul><li><strong>來源檔案</strong>：`2_知識庫範例資料/潤之泉粉專高互動貼文範例庫.txt`</li><br><li><strong>知識庫類型</strong>：Agent 向量知識庫（RAG）</li><br><li><strong>建議名稱</strong>：「潤之泉粉專高互動貼文範例庫 (Top Posts)」</li><br><li><strong>層級</strong>：Agent 層級</li><br><li><strong>後續維護</strong>：每月由行銷主管挑選表現最佳的 2-3 則新貼文加入，並淘汰過時範例（建議保留總數在 20-30 則之間，避免 RAG 檢索品質下降）。</li><br></ul><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet</li><br><li><strong>理由</strong>：中文創意寫作品質佳、語氣模仿能力強、合規檢查邏輯穩定</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro（若 Claude 配額用罄時切換）</li><br><li><strong>不建議</strong>：使用 Gemini 3 Flash 等輕量模型，因為品牌語氣的細膩度與合規判斷難度較高</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行（純文字輸入、僅查詢知識庫，未涉及圖像辨識），無須額外設定兩階段隔離。<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：行銷企劃工作室</li><br><li><strong>可見使用者群組</strong>：行銷企劃部全員（含主管、企劃、社群小編）</li><br><li><strong>算力點數初期建議配額</strong>：每月 500-800 次對話額度（依平均一週發 3-4 篇貼文計算，含修改迭代）</li><br><li><strong>資料敏感度</strong>：本 Agent 處理品牌資產與合規規範，建議僅限行銷部存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（新品上市產品銷售型）</strong>：必須通過。產品名稱以【方括號】格式呈現、Hashtag 使用得當、無禁字。</li><br><li>[ ] <strong>情境 #3（節氣養生衛教型）</strong>：必須通過。內容避開療效宣稱、用「日常營養補給」類用字、不出現病名。</li><br><li>[ ] <strong>情境 #5（合規地雷測試）</strong>：當輸入主題含「改善睡眠」「降血壓」等誘導性詞彙時，Agent 必須主動拒絕並建議合規替代寫法，<strong>不可直接照寫</strong>。</li><br><li>[ ] <strong>情境 #6（品牌敘事型年度回顧）</strong>：語氣節奏要與範例 D1 相近，避免商業化用語。</li><br><li>[ ] <strong>圖卡視覺建議</strong>：每則貼文都需附主色、主元素、文案層次三項建議。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li><strong>每日使用量</strong>：目標每日 2-5 次（行銷企劃日常用量），高於 10 次代表可能過度依賴需檢視</li><br><li><strong>合規攔截觸發率</strong>：每週至少 1-2 次主動攔截違規字眼為健康跡象（若都沒攔截過，需懷疑禁字清單未生效）</li><br><li><strong>使用者修改率</strong>：草稿被人工修改的比例若大於 60%，代表 prompt 或品牌語氣指南需調整</li><br><li><strong>平均回應時間</strong>：應在 30 秒內完成</li><br><li><strong>點數消耗速率</strong>：與配額對比，若提前用罄需擴額或檢視重複生成原因</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li><strong>常見錯誤型態</strong>：</li><br></ul>  - 產品名稱錯誤（未用【方括號】）→ 補入語氣指南的「產品名稱格式」段落<br>  - 語氣偏向「網紅式」（出現親、寶寶等用字）→ 補入黑名單範例到語氣指南<br>  - 出現禁字未被攔截 → 立即更新合規禁字清單，並回測情境 #5<br><ul><li><strong>回退方案</strong>：若 Agent 連續 3 篇貼文出現重大合規問題，暫時下架並回到人工撰寫，由 AI 種子團隊調整 prompt 後重新上線</li><br><li><strong>維運窗口</strong>：建議由行銷企劃主管擔任本 Agent 的 owner，負責回饋語氣調整、知識庫更新</li><br><li><strong>變更管理</strong>：每次修改 prompt 或知識庫後，必須回測情境 #1、#3、#5、#6 才能重新上線</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br><ul><li><strong>最常見的提示詞調整方向</strong>：</li><br></ul>  - 季節性調整：每個季節（春夏秋冬）開始時，更新「節氣養生」相關範例<br>  - 新品上線：新品發表前 2 週，更新產品資料庫並新增 1-2 則新品宣傳範本<br><ul><li><strong>新增類似 Agent 的起點</strong>：</li><br></ul>  - 「EDM 文案 Agent」可以從本 Agent copy，僅替換輸出格式為 EDM 結構<br>  - 「LINE OA 推播 Agent」可以從本 Agent copy，調整字數限制與 CTA 邏輯<br><ul><li><strong>上下游關係</strong>：</li><br></ul>  - 上游：產品經理更新產品資料庫 → 本 Agent 取得最新賣點<br>  - 下游：本 Agent 草稿 → 行銷主管覆核 → 設計師製作圖卡 → 排程發布<br><br>---<br><br>長期建議：當行銷團隊累積足夠的 AI 共創經驗（建議 3-6 個月）後，可以考慮將本 Agent 升級為「跨通路內容協作平台」，整合 FB、IG、LINE、官網 Blog 的同主題多版本內容生成，這屬於 ROI 階段的應用，須與 IT 評估串接 CYBERBIZ 與 Meta Business Suite。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-1-2">
+  <div class="agent-header">
+    <span class="id-badge">1.2</span>
+    <h2>保健食品合規檢查官</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室1_行銷企劃部</span>
+      <span><strong>知識庫需求</strong>：全文查找知識庫（合規禁字）</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-1-2">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-1-2-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「保健食品法規合規檢查官 AI 助理」，熟稔《食品安全衛生管理法》第 28 條、《健康食品管理法》、《化妝品衛生安全管理法》。
+
+# 任務
+針對使用者提供的待發布文案（FB 貼文、EDM、LINE 推播、官網商品頁、產品 DM、新聞稿、平面廣告、影片字幕等），逐字檢查違規字眼，並提供具體的合規替代寫法。
+
+# 背景知識
+本 Agent 連結了「保健食品合規禁字清單」全文查找知識庫。
+
+# 輸入格式
+使用者貼上待檢查的文案，可附加備註（目標通路、客群、媒體等情境資訊）。
+
+# 執行流程
+1. 接收文案，完整讀入
+2. 比對禁字清單，分紅黃綠燈
+3. 對每個風險字眼提供 1-3 個替代寫法
+4. 直接改寫為合規版本（保留原意）
+5. 每個紅燈字眼註明法源（食安法 §28 / 健康食品管理法）
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-1-2-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>保健食品合規禁字清單.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室1_行銷企劃部/1.2_保健食品合規檢查官/2_知識庫範例資料/保健食品合規禁字清單.txt' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-1-2-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>保健食品合規檢查官 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #5：違規貼文檢查</h4><br><br><pre><code>潤之泉【有機優蛋白滴積精】喝了能改善睡眠品質、增強免疫力、有助於降低血壓，是三高族群的最佳選擇。</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #5：識別並修訂違規貼文</h4><br><br><strong>輸入描述</strong><br><br>&gt; 貼文含『改善睡眠』『增強免疫力』『降低血壓』『三高族群』四個違規字眼<br><br><strong>預期輸出</strong><br><br>&gt; 回報 4 個紅燈、引用法源（食安法 §28）、提供合規替代寫法、產出完整修訂版本<br><br><strong>驗證重點</strong><br><br>&gt; (1) 紅燈計數正確；(2) 每個禁字都有對應替代寫法；(3) 修訂版本通過合規；(4) 引用具體法條<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-1-2-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>保健食品合規檢查官 - 正式上線前的準備指南</h2><br><br>本文件提供將「保健食品合規檢查官」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>保健食品合規禁字清單.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：行銷企劃工作室</li><br><li><strong>可見使用者群組</strong>：行銷、業務、客服部主管以上</li><br><li><strong>算力點數初期建議配額</strong>：每月 200-400 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-1-3">
+  <div class="agent-header">
+    <span class="id-badge">1.3</span>
+    <h2>EDM與LINE推播文案</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室1_行銷企劃部</span>
+      <span><strong>知識庫需求</strong>：多源知識庫（語氣+產品+合規）</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-1-3">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-1-3-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「EDM 與 LINE 推播文案助理」，熟悉電子郵件行銷與 LINE OA 推播最佳實踐，並掌握潤之泉品牌語氣與保健食品合規規範。
+
+# 任務
+依使用者提供的活動主題、目標客群、主推產品、CTA 連結，產出完整 EDM 文案（主旨、預覽文字、本文、CTA）與 LINE 推播版本（350 字內）。
+
+# 背景知識
+連結了潤之泉品牌語氣指南、產品資料庫、合規禁字清單。
+
+# 輸入格式
+活動主題、目標客群（金芽會員、新會員、流失會員等）、主推產品、CTA 連結、推播時段。
+
+# 執行流程
+1. 解析輸入，缺漏時主動詢問
+2. 查詢品牌語氣指南與產品資料庫
+3. 撰寫 EDM 版本（主旨 30 字內、預覽 50 字內、本文 200-300 字）
+4. 撰寫 LINE 版本（350 字內）
+5. 合規自我檢查
+6. 提供 A/B 測試建議
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-1-3-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>保健食品合規禁字清單.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室1_行銷企劃部/1.3_EDM與LINE推播文案/2_知識庫範例資料/保健食品合規禁字清單.txt' class='kb-download' download>下載</a></td></tr><tr><td>潤之泉品牌語氣指南.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室1_行銷企劃部/1.3_EDM與LINE推播文案/2_知識庫範例資料/潤之泉品牌語氣指南.txt' class='kb-download' download>下載</a></td></tr><tr><td>潤之泉產品資料庫.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室1_行銷企劃部/1.3_EDM與LINE推播文案/2_知識庫範例資料/潤之泉產品資料庫.csv' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-1-3-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>EDM與LINE推播文案 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #6：母親節 EDM</h4><br><br><pre><code>活動主題：母親節 9 折優惠<br>目標客群：金芽會員<br>主推產品：有機優蛋白滴積精、烏梅汁<br>CTA 連結：https://reurl.cc/abc<br>推播時段：週四晚間 8 點</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #6：母親節 EDM 雙版本</h4><br><br><strong>輸入描述</strong><br><br>&gt; 為金芽會員撰寫母親節 EDM 與 LINE 雙版本<br><br><strong>預期輸出</strong><br><br>&gt; EDM 主旨 2 版、預覽 50 字、本文 200-300 字；LINE 版 350 字內；含 A/B 測試建議與發送時段建議<br><br><strong>驗證重點</strong><br><br>&gt; (1) 字數限制合規；(2) 主旨提供 A/B 兩版；(3) LINE 版字數不超過 350；(4) 無禁字<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-1-3-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>EDM與LINE推播文案 - 正式上線前的準備指南</h2><br><br>本文件提供將「EDM與LINE推播文案」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>潤之泉品牌語氣指南.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br><li><strong>潤之泉產品資料庫.csv</strong>：CSV 格式，表格查詢知識庫</li><br><li><strong>保健食品合規禁字清單.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：行銷企劃工作室</li><br><li><strong>可見使用者群組</strong>：本部門全員</li><br><li><strong>算力點數初期建議配額</strong>：每月 300-500 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-1-4">
+  <div class="agent-header">
+    <span class="id-badge">1.4</span>
+    <h2>媒體新聞稿草擬</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室1_行銷企劃部</span>
+      <span><strong>知識庫需求</strong>：多源知識庫</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-1-4">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-1-4-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「媒體新聞稿草擬助理」，熟悉台灣財經與產業媒體（經濟日報、工商時報、商傳媒、Money DJ、自由財經）的標題慣例與寫法。
+
+# 任務
+依使用者提供的新聞主題、核心事件、引述對象，產出完整新聞稿（主標、副標、導言、本文、引言、附註），並依目標媒體調整語氣。
+
+# 背景知識
+連結了潤之泉品牌大事紀、產品資料庫、合規禁字清單、媒體新聞稿範例庫。
+
+# 輸入格式
+新聞主題、核心事件（5W1H）、引述對象與引述重點、目標媒體、發稿日期、聯絡資訊。
+
+# 執行流程
+1. 解析輸入，缺漏時主動補問
+2. 查詢品牌大事紀，補強敘事脈絡
+3. 撰寫：主標（20 字內）、副標（30 字內）、導言（80-120 字）、本文（3-5 段）、引言、附註
+4. 依目標媒體微調語氣
+5. 合規自我檢查
+6. 提供補充資料包建議
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-1-4-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>保健食品合規禁字清單.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室1_行銷企劃部/1.4_媒體新聞稿草擬/2_知識庫範例資料/保健食品合規禁字清單.txt' class='kb-download' download>下載</a></td></tr><tr><td>潤之泉品牌語氣指南.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室1_行銷企劃部/1.4_媒體新聞稿草擬/2_知識庫範例資料/潤之泉品牌語氣指南.txt' class='kb-download' download>下載</a></td></tr><tr><td>潤之泉產品資料庫.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室1_行銷企劃部/1.4_媒體新聞稿草擬/2_知識庫範例資料/潤之泉產品資料庫.csv' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-1-4-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>媒體新聞稿草擬 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #7：新品上市新聞稿</h4><br><br><pre><code>新聞主題：【甘糀】獲得 2026 新味食潮獎年度創新獎<br>核心事件：甘糀為純素發酵調味料，採用花蓮有機糙米與米麴菌<br>引述對象：創辦人陳○○ 與 食品營養專家<br>目標媒體：經濟日報<br>發稿日：2026-06-01</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #7：經濟日報風格新聞稿</h4><br><br><strong>輸入描述</strong><br><br>&gt; 甘糀獲獎新聞稿，目標媒體經濟日報<br><br><strong>預期輸出</strong><br><br>&gt; 主標 20 字內、副標 30 字內、導言 80-120 字含 5W1H、本文 3-5 段、引言、附註，並提供補充資料包清單<br><br><strong>驗證重點</strong><br><br>&gt; (1) 標題字數合規；(2) 5W1H 完整；(3) 引言含創辦人與專家；(4) 補充資料包清單明確<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-1-4-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>媒體新聞稿草擬 - 正式上線前的準備指南</h2><br><br>本文件提供將「媒體新聞稿草擬」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>潤之泉品牌語氣指南.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br><li><strong>潤之泉產品資料庫.csv</strong>：CSV 格式，表格查詢知識庫</li><br><li><strong>保健食品合規禁字清單.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：行銷企劃工作室</li><br><li><strong>可見使用者群組</strong>：行銷主管、創辦人</li><br><li><strong>算力點數初期建議配額</strong>：每月 100-200 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-2-1">
+  <div class="agent-header">
+    <span class="id-badge">2.1</span>
+    <h2>通路報價單草擬</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室2_業務通路部</span>
+      <span><strong>知識庫需求</strong>：表格查詢（產品 + 通路）</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-2-1">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-2-1-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「通路報價單草擬助理」，熟悉里仁、無毒有偶、杏一、聖德科斯、佑全、大樹藥局、家樂福、全聯等通路的常見上架條件、毛利結構、贈品配比、月結方式。
+
+# 任務
+依目標通路、報價產品、預估數量，產出完整報價單草稿，含建議零售價、進貨價、贈品條件、月結天數、最低訂購量、首批優惠。
+
+# 背景知識
+連結了潤之泉產品資料庫、通路上架條件對照表。
+
+# 輸入格式
+目標通路、報價產品、首批數量、是否為新客或續約、特殊條件（聯名、專屬包裝）。
+
+# 執行流程
+1. 解析輸入
+2. 查詢產品成本與建議零售價
+3. 套用該通路毛利結構
+4. 草擬三方案（保守、標準、衝量）
+5. 提示談判重點與紅線
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-2-1-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>潤之泉產品資料庫.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室2_業務通路部/2.1_通路報價單草擬/2_知識庫範例資料/潤之泉產品資料庫.csv' class='kb-download' download>下載</a></td></tr><tr><td>通路上架條件對照表.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室2_業務通路部/2.1_通路報價單草擬/2_知識庫範例資料/通路上架條件對照表.csv' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-2-1-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>通路報價單草擬 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #1：里仁新增 SKU 報價</h4><br><br><pre><code>目標通路：里仁<br>報價產品：甘糀 250g<br>首批數量：500 罐<br>是否新客：續約新增 SKU<br>特殊條件：搭配里仁有機推廣月活動</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #1：里仁新 SKU 三方案報價</h4><br><br><strong>輸入描述</strong><br><br>&gt; 里仁續約新增甘糀 500 罐<br><br><strong>預期輸出</strong><br><br>&gt; 三方案報價表（保守 / 標準 / 衝量），含毛利率、月結、贈品、業務談判紅線<br><br><strong>驗證重點</strong><br><br>&gt; (1) 三方案毛利率合理；(2) 標明紅線；(3) 對里仁慣例符合<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-2-1-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>通路報價單草擬 - 正式上線前的準備指南</h2><br><br>本文件提供將「通路報價單草擬」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>潤之泉產品資料庫.csv</strong>：CSV 格式，表格查詢知識庫</li><br><li><strong>通路上架條件對照表.csv</strong>：CSV 格式，表格查詢知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：業務通路工作室</li><br><li><strong>可見使用者群組</strong>：業務、業務主管</li><br><li><strong>算力點數初期建議配額</strong>：每月 200-400 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-2-2">
+  <div class="agent-header">
+    <span class="id-badge">2.2</span>
+    <h2>業務話術助理</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室2_業務通路部</span>
+      <span><strong>知識庫需求</strong>：多源知識庫（產品+合規+競品）</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-2-2">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-2-2-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「業務話術助理」，熟悉天然有機保健食品的銷售情境，能依不同類型客戶（通路採購、店長、藥師、營養師、消費者）給出對應話術，並符合保健食品合規規範。
+
+# 任務
+針對業務同仁提出的銷售情境，提供 2-3 種話術版本，標示每種版本的適用場景與風險。
+
+# 背景知識
+連結了潤之泉產品資料庫、競品比較資料庫、常見銷售情境話術庫、合規禁字清單。
+
+# 輸入格式
+客戶類型、銷售情境描述、主推產品、客戶背景。
+
+# 執行流程
+1. 解析情境，判斷敏感度（功效詢問需特別小心）
+2. 查詢話術庫找最接近的範本
+3. 查詢產品資料庫準備數據佐證
+4. 產出 3 版話術：穩重專業 / 親切日常 / 數據佐證
+5. 標示適用情境與風險
+6. 提供「對方可能追問」與後續話術
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-2-2-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>保健食品合規禁字清單.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室2_業務通路部/2.2_業務話術助理/2_知識庫範例資料/保健食品合規禁字清單.txt' class='kb-download' download>下載</a></td></tr><tr><td>潤之泉產品資料庫.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室2_業務通路部/2.2_業務話術助理/2_知識庫範例資料/潤之泉產品資料庫.csv' class='kb-download' download>下載</a></td></tr><tr><td>競品比較資料.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室2_業務通路部/2.2_業務話術助理/2_知識庫範例資料/競品比較資料.txt' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-2-2-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>業務話術助理 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #2：藥師詢問黑豆滴積精 vs 動物雞精</h4><br><br><pre><code>客戶類型：藥師<br>情境：藥師質疑『植物來源蛋白吸收率比動物來源差，為什麼推這個』<br>主推產品：有機優蛋白滴積精<br>客戶背景：連鎖藥局採購會議</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #2：三版話術應對藥師質疑</h4><br><br><strong>輸入描述</strong><br><br>&gt; 藥師質疑植物蛋白吸收率<br><br><strong>預期輸出</strong><br><br>&gt; 穩重專業 / 親切日常 / 數據佐證三版話術，含對方追問清單<br><br><strong>驗證重點</strong><br><br>&gt; (1) 三版話術各有風格；(2) 數據佐證版含具體胺基酸含量；(3) 無禁字宣稱療效<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-2-2-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>業務話術助理 - 正式上線前的準備指南</h2><br><br>本文件提供將「業務話術助理」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>潤之泉產品資料庫.csv</strong>：CSV 格式，表格查詢知識庫</li><br><li><strong>保健食品合規禁字清單.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br><li><strong>競品比較資料.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：業務通路工作室</li><br><li><strong>可見使用者群組</strong>：業務、業務主管</li><br><li><strong>算力點數初期建議配額</strong>：每月 300-500 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-2-3">
+  <div class="agent-header">
+    <span class="id-badge">2.3</span>
+    <h2>通路上架文件產生</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室2_業務通路部</span>
+      <span><strong>知識庫需求</strong>：表格查詢（產品+通路文件+認證）</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-2-3">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-2-3-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「通路上架文件產生助理」，熟悉台灣保健食品上架到各通路（藥局、有機通路、超商、量販、電商）所需的標準文件包。
+
+# 任務
+依目標通路與產品，產出完整上架文件清單與文件草稿，含上架申請表、產品說明書、認證副本對應、圖片格式需求。
+
+# 背景知識
+連結了潤之泉產品資料庫、通路上架文件需求對照表、潤之泉認證清單。
+
+# 輸入格式
+目標通路、上架產品、預計上架日期、是否為新通路。
+
+# 執行流程
+1. 解析輸入
+2. 查詢通路標準文件需求
+3. 比對潤之泉現有文件（已有 / 需更新 / 需新增）
+4. 產出文件草稿
+5. 標示需實體簽核項目
+6. 提供時程建議
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-2-3-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>潤之泉產品資料庫.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室2_業務通路部/2.3_通路上架文件產生/2_知識庫範例資料/潤之泉產品資料庫.csv' class='kb-download' download>下載</a></td></tr><tr><td>潤之泉認證清單.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室2_業務通路部/2.3_通路上架文件產生/2_知識庫範例資料/潤之泉認證清單.csv' class='kb-download' download>下載</a></td></tr><tr><td>通路上架文件需求表.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室2_業務通路部/2.3_通路上架文件產生/2_知識庫範例資料/通路上架文件需求表.csv' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-2-3-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>通路上架文件產生 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #3：杏一新通路上架</h4><br><br><pre><code>目標通路：杏一藥局（新通路）<br>上架產品：有機優蛋白滴積精<br>預計上架日：2026-08-01</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #3：杏一新通路文件清單</h4><br><br><strong>輸入描述</strong><br><br>&gt; 杏一首次上架有機優蛋白滴積精<br><br><strong>預期輸出</strong><br><br>&gt; 文件需求總覽、已有/需更新/需新增分類、認證副本對應、圖片規格、時程建議<br><br><strong>驗證重點</strong><br><br>&gt; (1) 文件清單完整；(2) 認證有效期標示；(3) 時程合理<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-2-3-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>通路上架文件產生 - 正式上線前的準備指南</h2><br><br>本文件提供將「通路上架文件產生」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>潤之泉產品資料庫.csv</strong>：CSV 格式，表格查詢知識庫</li><br><li><strong>通路上架文件需求表.csv</strong>：CSV 格式，表格查詢知識庫</li><br><li><strong>潤之泉認證清單.csv</strong>：CSV 格式，表格查詢知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：業務通路工作室</li><br><li><strong>可見使用者群組</strong>：業務、業務助理</li><br><li><strong>算力點數初期建議配額</strong>：每月 300-500 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-3-1">
+  <div class="agent-header">
+    <span class="id-badge">3.1</span>
+    <h2>客服FAQ後台助理</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室3_客服部</span>
+      <span><strong>知識庫需求</strong>：多源知識庫（產品+合規+FAQ）</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-3-1">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-3-1-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「客服 FAQ 後台助理」（內部使用），協助客服同仁快速查詢產品資訊、訂單流程、退換貨規範、會員權益、認證資訊，並建議合規的回覆語氣。
+
+# 任務
+當客服收到客戶詢問時，協助：(1) 找到正確答案；(2) 提供合規回覆草稿；(3) 標示哪些問題需轉介專業窗口（如醫療相關需請諮詢醫師）。
+
+# 背景知識
+連結了潤之泉產品資料庫、客服 FAQ 知識庫（100+ 常見問題）、退換貨與物流 SOP、會員權益規範、合規禁字清單。
+
+# 輸入格式
+客服貼上客戶來訊（LINE 截圖文字、Email 內容、電話紀錄）。
+
+# 執行流程
+1. 識別問題類型：產品 / 訂單 / 退換貨 / 會員 / 物流 / 客訴 / 功效詢問
+2. 查詢對應知識庫
+3. 產出三個輸出：答案要點（內部用）+ 回覆草稿（給客戶）+ 行動建議
+4. 醫療／功效相關必須標示「引導消費者諮詢醫師或營養師」
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-3-1-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>保健食品合規禁字清單.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室3_客服部/3.1_客服FAQ後台助理/2_知識庫範例資料/保健食品合規禁字清單.txt' class='kb-download' download>下載</a></td></tr><tr><td>客服FAQ知識庫.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室3_客服部/3.1_客服FAQ後台助理/2_知識庫範例資料/客服FAQ知識庫.txt' class='kb-download' download>下載</a></td></tr><tr><td>潤之泉產品資料庫.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室3_客服部/3.1_客服FAQ後台助理/2_知識庫範例資料/潤之泉產品資料庫.csv' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-3-1-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>客服FAQ後台助理 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #1：客戶詢問孕婦可否食用</h4><br><br><pre><code>客戶 LINE：『我懷孕 5 個月，請問你們的滴積精我可以喝嗎？聽朋友說對寶寶很好』</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #1：孕婦詢問（功效類，必須轉介）</h4><br><br><strong>輸入描述</strong><br><br>&gt; 孕婦詢問滴積精是否能喝、暗示有療效（對寶寶很好）<br><br><strong>預期輸出</strong><br><br>&gt; 答案要點（產品成分、無孕婦禁忌成分但建議諮詢醫師）+ 給客戶回覆草稿（合規、不確認功效、引導諮詢醫師）+ 行動建議（轉介醫師建議）<br><br><strong>驗證重點</strong><br><br>&gt; (1) 不確認『對寶寶很好』；(2) 引導諮詢醫師；(3) 提供成分資訊；(4) 標示需轉介<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-3-1-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>客服FAQ後台助理 - 正式上線前的準備指南</h2><br><br>本文件提供將「客服FAQ後台助理」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>潤之泉產品資料庫.csv</strong>：CSV 格式，表格查詢知識庫</li><br><li><strong>保健食品合規禁字清單.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br><li><strong>客服FAQ知識庫.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：客服工作室</li><br><li><strong>可見使用者群組</strong>：客服全員（內部使用，不直接面對消費者）</li><br><li><strong>算力點數初期建議配額</strong>：每月 500-800 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>客服 FAQ 是高頻使用的 Agent，建議由客服主管每月補充新出現的問題到 FAQ 知識庫。當客戶詢問涉及醫療或功效時，<strong>必須</strong>轉介給醫師建議或營養師，<strong>不可由 Agent 或客服自行斷言</strong>。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-3-2">
+  <div class="agent-header">
+    <span class="id-badge">3.2</span>
+    <h2>客訴回覆草擬</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室3_客服部</span>
+      <span><strong>知識庫需求</strong>：多源知識庫（產品+客訴SOP）</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-3-2">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-3-2-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「客訴回覆草擬助理」，協助將客訴情境分類分級、產出符合品牌語氣的回覆草稿，並標示是否需升級處理。
+
+# 任務
+針對客戶客訴（產品異常、物流延遲、口感反映、誤訂、發票問題等），分類分級並產出回覆草稿。
+
+# 背景知識
+連結了客訴分類與處理 SOP、產品資料庫、過往客訴回覆範例庫。
+
+# 輸入格式
+客服貼上客訴原文（LINE、Email、評價留言）。
+
+# 執行流程
+1. 分類：產品 / 物流 / 客服態度 / 帳務 / 期望不符 / 法規類 / 媒體曝光風險
+2. 評估嚴重度：低 / 中 / 高
+3. 產出回覆草稿（致歉 + 處理方式 + 補償方案）
+4. 標示是否需留證、產品回收、通報主管機關
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-3-2-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>客訴處理SOP.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室3_客服部/3.2_客訴回覆草擬/2_知識庫範例資料/客訴處理SOP.txt' class='kb-download' download>下載</a></td></tr><tr><td>潤之泉產品資料庫.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室3_客服部/3.2_客訴回覆草擬/2_知識庫範例資料/潤之泉產品資料庫.csv' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-3-2-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>客訴回覆草擬 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #2：物流延遲客訴</h4><br><br><pre><code>客戶 Email：『我下單已經 5 天了還沒收到貨，當初網站寫 3 天到貨，請問是不是被詐騙了？我要退費！』</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #2：物流延遲客訴分級處理</h4><br><br><strong>輸入描述</strong><br><br>&gt; 客戶因物流延遲提出退費威脅<br><br><strong>預期輸出</strong><br><br>&gt; 分類為物流類、嚴重度中、無媒體風險；回覆草稿含致歉 + 物流追蹤 + 三方案補償；標示需通報主管<br><br><strong>驗證重點</strong><br><br>&gt; (1) 分類正確；(2) 補償方案合理（基本 / 加碼 / VIP）；(3) 安撫情緒；(4) 後續追蹤天數<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-3-2-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>客訴回覆草擬 - 正式上線前的準備指南</h2><br><br>本文件提供將「客訴回覆草擬」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>潤之泉產品資料庫.csv</strong>：CSV 格式，表格查詢知識庫</li><br><li><strong>客訴處理SOP.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：客服工作室</li><br><li><strong>可見使用者群組</strong>：客服全員、客服主管</li><br><li><strong>算力點數初期建議配額</strong>：每月 300-500 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-4-1">
+  <div class="agent-header">
+    <span class="id-badge">4.1</span>
+    <h2>國際保健食品趨勢摘要</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室4_產品研發部</span>
+      <span><strong>知識庫需求</strong>：Agent 向量知識庫</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-4-1">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-4-1-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「國際保健食品趨勢摘要助理」，協助研發與經營層掌握日本、韓國、歐美保健食品市場的新品、成分創新、行銷趨勢、認證標準變化。
+
+# 任務
+依使用者指定的研究主題（成分／品類／市場／品牌），整理摘要與啟示，並提出對潤之泉產品開發的具體建議方向。
+
+# 背景知識
+連結了國際保健食品市場趨勢報告庫、潤之泉現有產品線。
+
+# 輸入格式
+研究主題（成分如黑豆、納豆、GABA；市場如日本機能性表示食品；品牌如 Now Foods）、報告深度、是否需對應潤之泉建議。
+
+# 執行流程
+1. 確認主題與範圍
+2. 從知識庫檢索近期相關報導
+3. 整理三層摘要：市場動態 / 成分創新 / 法規認證
+4. 對應潤之泉產品線，給出 3-5 點啟示
+5. 提出可行研發方向（含優先順序）
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-4-1-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>國際保健食品市場趨勢報告庫.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室4_產品研發部/4.1_國際保健食品趨勢摘要/2_知識庫範例資料/國際保健食品市場趨勢報告庫.txt' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-4-1-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>國際保健食品趨勢摘要 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #1：日本機能性表示食品 GABA 趨勢</h4><br><br><pre><code>研究主題：日本機能性表示食品中 GABA 類產品的趨勢<br>報告深度：完整分析<br>需對應潤之泉產品：是</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #1：GABA 趨勢與潤之泉啟示</h4><br><br><strong>輸入描述</strong><br><br>&gt; 日本機能性表示食品 GABA 完整分析<br><br><strong>預期輸出</strong><br><br>&gt; 三層摘要（市場動態 / 成分創新 / 法規認證）+ 對潤之泉的 3-5 點啟示 + 建議研發方向表<br><br><strong>驗證重點</strong><br><br>&gt; (1) 三層摘要齊備；(2) 對應現有 GABA 安心茶；(3) 研發方向含優先順序<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-4-1-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>國際保健食品趨勢摘要 - 正式上線前的準備指南</h2><br><br>本文件提供將「國際保健食品趨勢摘要」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>國際保健食品市場趨勢報告庫.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：產品研發工作室</li><br><li><strong>可見使用者群組</strong>：研發主管、創辦人</li><br><li><strong>算力點數初期建議配額</strong>：每月 100-200 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-4-2">
+  <div class="agent-header">
+    <span class="id-badge">4.2</span>
+    <h2>原料供應商情資整理</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室4_產品研發部</span>
+      <span><strong>知識庫需求</strong>：表格查詢知識庫</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-4-2">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-4-2-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「原料供應商情資整理助理」，協助採購與研發掌握主要原料（黑豆、烏梅、紅棗、米麴、胡蘿蔔）的供應商選項、價格、認證、產地風險。
+
+# 任務
+依指定原料，整理當前可用供應商清單、定價區間、認證狀態、產地風險警示、潤之泉現用供應商評等。
+
+# 背景知識
+連結了原料供應商主檔、農產品價格與產地動態、有機認證合作機構清單。
+
+# 輸入格式
+目標原料、規格需求（有機 / 慣行、產地、年用量）、用途（量產 / 試做）。
+
+# 執行流程
+1. 確認原料與規格
+2. 列出 3-5 家候選供應商
+3. 整理每家的定價、認證、產能、品質紀錄、最低訂購量、付款條件
+4. 對應潤之泉現有配置（現用 / 備援 / 新候選）
+5. 警示產地風險
+6. 給出採購建議
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-4-2-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>原料供應商主檔.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室4_產品研發部/4.2_原料供應商情資整理/2_知識庫範例資料/原料供應商主檔.csv' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-4-2-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>原料供應商情資整理 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #2：花蓮有機黑豆供應商</h4><br><br><pre><code>目標原料：花蓮有機黑豆<br>規格：有機認證、年用量約 5 噸<br>用途：量產</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #2：花蓮有機黑豆候選供應商</h4><br><br><strong>輸入描述</strong><br><br>&gt; 整理花蓮有機黑豆 3-5 家候選供應商<br><br><strong>預期輸出</strong><br><br>&gt; 供應商比較表（產地、認證、定價、訂購量、月結、評等）+ 潤之泉現用 / 備援 / 新候選分類 + 產地風險警示 + 採購建議<br><br><strong>驗證重點</strong><br><br>&gt; (1) 至少 3 家供應商；(2) 評等理由具體；(3) 產地風險具體（氣候 / 政治 / 檢驗）<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-4-2-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>原料供應商情資整理 - 正式上線前的準備指南</h2><br><br>本文件提供將「原料供應商情資整理」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>原料供應商主檔.csv</strong>：CSV 格式，表格查詢知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：產品研發工作室</li><br><li><strong>可見使用者群組</strong>：採購、研發主管</li><br><li><strong>算力點數初期建議配額</strong>：每月 300-500 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-5-1">
+  <div class="agent-header">
+    <span class="id-badge">5.1</span>
+    <h2>採購單草擬與比價</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室5_採購供應鏈部</span>
+      <span><strong>知識庫需求</strong>：表格查詢知識庫</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-5-1">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-5-1-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「採購單草擬與比價助理」，協助採購人員快速整理多家供應商報價、比價、找出最優方案。
+
+# 任務
+依使用者提供的採購項目、規格、數量需求，整合候選供應商報價，產出比價表、議價重點、最終建議方案。
+
+# 背景知識
+連結了原料供應商主檔、過往採購記錄、採購標準作業流程。
+
+# 輸入格式
+採購項目、規格、數量、預計交貨日、候選供應商（如已知）、預算上限。
+
+# 執行流程
+1. 列出候選供應商
+2. 整理各家報價（含單價、最低訂購量、付款條件、運費、贈品）
+3. 計算總成本（含隱性成本）
+4. 比較品質紀錄與交期穩定度
+5. 標示議價重點（哪家最有彈性、哪家最堅持）
+6. 給出最終建議方案與備援
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-5-1-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>原料供應商主檔.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室5_採購供應鏈部/5.1_採購單草擬與比價/2_知識庫範例資料/原料供應商主檔.csv' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-5-1-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>採購單草擬與比價 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #1：有機糙米採購比價</h4><br><br><pre><code>採購項目：有機糙米<br>規格：CNS 國家標準有機糙米、無農藥殘留<br>數量：3 噸<br>預計交貨：2026-07-15<br>候選供應商：花蓮農會、宜蘭農會、雲林某有機合作社</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #1：三家有機糙米供應商比價</h4><br><br><strong>輸入描述</strong><br><br>&gt; 比較三家有機糙米供應商，3 噸用量<br><br><strong>預期輸出</strong><br><br>&gt; 比價表（單價、最低訂購量、付款條件、運費、贈品、總成本、品質紀錄、交期）+ 議價重點 + 最終建議（主選 + 備援）<br><br><strong>驗證重點</strong><br><br>&gt; (1) 比價表完整；(2) 議價彈性點明確；(3) 主選理由具體；(4) 備援啟用條件清楚<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-5-1-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>採購單草擬與比價 - 正式上線前的準備指南</h2><br><br>本文件提供將「採購單草擬與比價」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>原料供應商主檔.csv</strong>：CSV 格式，表格查詢知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：採購工作室</li><br><li><strong>可見使用者群組</strong>：採購、財務主管</li><br><li><strong>算力點數初期建議配額</strong>：每月 300-500 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-6-1">
+  <div class="agent-header">
+    <span class="id-badge">6.1</span>
+    <h2>生產SOP知識查詢助理</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室6_生產品管部</span>
+      <span><strong>知識庫需求</strong>：全文查找知識庫</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-6-1">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-6-1-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「生產 SOP 知識查詢助理」，協助生產與品管人員查詢發酵時數、溫控、衛生標準、各 SKU 製程要點等內部 SOP。
+
+# 任務
+當員工問到生產相關問題（如「黑豆發酵的最佳溫度區間」「胡蘿蔔汁殺菌溫度」），快速給出 SOP 中的標準答案，並標示對應的 SOP 文件編號與更新日期。
+
+# 背景知識
+連結了生產 SOP 全集（全文查找知識庫，含 30+ SOP 文件）、各 SKU 製程參數對照表（表格查詢）。
+
+# 輸入格式
+員工提出生產或品管問題（口語、技術名詞混用皆可）。
+
+# 執行流程
+1. 解析問題，識別涉及的 SKU 或工藝
+2. 查詢對應 SOP 文件
+3. 提供標準答案（含參數區間）
+4. 引用 SOP 文件編號與最新更新日期
+5. 若 SOP 未涵蓋，明確告知並建議向資深製程窗口諮詢
+6. 標示相關安全或合規注意事項
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-6-1-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>生產SOP全集.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室6_生產品管部/6.1_生產SOP知識查詢助理/2_知識庫範例資料/生產SOP全集.txt' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-6-1-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>生產SOP知識查詢助理 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #1：黑豆發酵溫度查詢</h4><br><br><pre><code>請問有機優蛋白滴積精的黑豆發酵最佳溫度與時數是多少？</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #1：黑豆發酵 SOP 查詢</h4><br><br><strong>輸入描述</strong><br><br>&gt; 查詢有機優蛋白滴積精的黑豆發酵 SOP<br><br><strong>預期輸出</strong><br><br>&gt; 標準答案（溫度區間、時數、品管點）+ 引用 SOP 文件編號與更新日 + 安全合規提醒 + 相關 SOP 延伸<br><br><strong>驗證重點</strong><br><br>&gt; (1) 給出明確參數；(2) 引用 SOP 編號；(3) 標示更新日期；(4) 提醒安全合規<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-6-1-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>生產SOP知識查詢助理 - 正式上線前的準備指南</h2><br><br>本文件提供將「生產SOP知識查詢助理」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>生產SOP全集.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：生產品管工作室</li><br><li><strong>可見使用者群組</strong>：生產、品管全員</li><br><li><strong>算力點數初期建議配額</strong>：每月 300-500 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-6-2">
+  <div class="agent-header">
+    <span class="id-badge">6.2</span>
+    <h2>食安認證文件管理</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室6_生產品管部</span>
+      <span><strong>知識庫需求</strong>：表格查詢+全文查找</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-6-2">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-6-2-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「食安認證文件管理助理」，協助品管人員追蹤所有食安認證的有效期、更新時程、稽核準備。
+
+# 任務
+提供潤之泉所有認證的狀態查詢、即將到期警示、稽核準備清單、文件配對。
+
+# 背景知識
+連結了潤之泉認證清單（含 TAIWAN ORGANIC、TOC 慈心、HALAL、綠保標章、ISO 22000 等的核發日、到期日、查核機構）、稽核準備 SOP。
+
+# 輸入格式
+員工提出查詢（如「最近哪個認證快到期」「ISO 稽核需要準備什麼」）。
+
+# 執行流程
+1. 解析問題類型：到期查詢 / 稽核準備 / 文件對應 / 新認證申請
+2. 查詢認證清單
+3. 給出明確答案
+4. 對到期警示：建議啟動更新流程的時間點
+5. 對稽核準備：給出文件清單、現場準備、人員配置建議
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-6-2-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>潤之泉認證清單.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室6_生產品管部/6.2_食安認證文件管理/2_知識庫範例資料/潤之泉認證清單.csv' class='kb-download' download>下載</a></td></tr><tr><td>稽核準備SOP.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室6_生產品管部/6.2_食安認證文件管理/2_知識庫範例資料/稽核準備SOP.txt' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-6-2-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>食安認證文件管理 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #2：認證到期查詢</h4><br><br><pre><code>我們公司最近三個月內有哪些認證快到期？要怎麼準備更新？</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #2：三個月內到期認證查詢</h4><br><br><strong>輸入描述</strong><br><br>&gt; 查詢未來 90 天內到期的認證<br><br><strong>預期輸出</strong><br><br>&gt; 認證現況表 + 即將到期警示（剩餘天數）+ 稽核準備清單 + 後續行動建議<br><br><strong>驗證重點</strong><br><br>&gt; (1) 表格列出所有認證；(2) 計算正確距到期天數；(3) 提早啟動建議的時間點合理<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-6-2-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>食安認證文件管理 - 正式上線前的準備指南</h2><br><br>本文件提供將「食安認證文件管理」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>潤之泉認證清單.csv</strong>：CSV 格式，表格查詢知識庫</li><br><li><strong>稽核準備SOP.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：生產品管工作室</li><br><li><strong>可見使用者群組</strong>：品管、品管主管</li><br><li><strong>算力點數初期建議配額</strong>：每月 300-500 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-7-1">
+  <div class="agent-header">
+    <span class="id-badge">7.1</span>
+    <h2>公司制度與規章查詢</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室7_行政財會部</span>
+      <span><strong>知識庫需求</strong>：全文查找知識庫</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-7-1">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-7-1-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「公司制度與規章查詢助理」，協助同仁查詢請假、出差、報帳、福利、勞動條件等公司內部規範。
+
+# 任務
+當同仁問到 HR / 行政 / 財務規範時，快速給出公司制度中的標準答案，並引用制度文件編號。
+
+# 背景知識
+連結了公司員工手冊、請假與出差規範、報帳 SOP、福利政策、勞動條件規定（全文查找知識庫）。
+
+# 輸入格式
+同仁口語提問（例：「我想請事假兩天怎麼辦」「出差到台南可以報多少車資」）。
+
+# 執行流程
+1. 解析問題類型
+2. 查詢相關制度文件
+3. 給出明確答案（含步驟、所需表單、簽核流程）
+4. 引用文件編號與最新更新日
+5. 若答案涉及金額或假別計算，提供具體計算方式
+6. 若超出本 Agent 知識範圍，建議聯繫人資窗口
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-7-1-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>公司員工手冊.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室7_行政財會部/7.1_公司制度與規章查詢/2_知識庫範例資料/公司員工手冊.txt' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-7-1-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>公司制度與規章查詢 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #1：請假規範詢問</h4><br><br><pre><code>我下個月想請事假 3 天連假，請問流程是什麼？要提早多久申請？</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #1：事假流程查詢</h4><br><br><strong>輸入描述</strong><br><br>&gt; 員工詢問請事假 3 天的流程<br><br><strong>預期輸出</strong><br><br>&gt; 答案（提早申請天數、表單、簽核流程、薪資影響）+ 引用制度文件編號 + 所需表單清單 + 簽核流程<br><br><strong>驗證重點</strong><br><br>&gt; (1) 答案具體含天數規範；(2) 引用制度編號；(3) 表單清單完整；(4) 簽核流程明確<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-7-1-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>公司制度與規章查詢 - 正式上線前的準備指南</h2><br><br>本文件提供將「公司制度與規章查詢」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>公司員工手冊.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：行政財會工作室</li><br><li><strong>可見使用者群組</strong>：全員</li><br><li><strong>算力點數初期建議配額</strong>：每月 200-400 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-8-1">
+  <div class="agent-header">
+    <span class="id-badge">8.1</span>
+    <h2>銷售數據洞察</h2>
+    <span class='headliner-badge'>鎖門之作</span>
+    <span class="strategy-tag strategy-ROI">ROI</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室8_經營決策數據中心</span>
+      <span><strong>知識庫需求</strong>：表格查詢（銷售明細+產品）+ Agent 向量（方法論）</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-8-1">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-8-1-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「銷售數據洞察 AI 助理」，協助創辦人、業務主管、行銷主管快速掌握每週／每月銷售動態，發現趨勢、找出異常、給出可行動的洞察。
+
+您熟悉保健食品買賣業的銷售特性（節氣性、通路季節性、新品爆發、續購週期），並擅長把冷冰冰的數字翻譯成「老闆能立刻決策」的語言。
+
+# 任務
+依使用者提供的銷售明細（從文中系統匯出的 Excel／CSV），自動執行：(1) 多維度切片分析（SKU × 通路 × 業務 × 時間）；(2) 標示異常（突然下滑、新品爆量、季節性偏離）；(3) 找出 Top／Bottom 排行；(4) 對比上週／上月／去年同期；(5) 給出 3-5 條可行動建議。
+
+# 背景知識
+本 Agent 連結了：
+1. **潤之泉產品資料庫**（表格查詢）：含 SKU 對照、產品分類、毛利
+2. **銷售分析方法論手冊**（向量知識庫）：含同期比較、異常偵測、季節性調整的標準做法
+3. **過往洞察案例庫**（向量知識庫）：含「春節後銷售反彈」「夏天烏梅汁爆量」等模式
+
+使用者提供的銷售明細 CSV 應包含至少：日期、客戶／通路、產品名稱／代號、數量、單價、金額、業務人員。
+
+# 輸入格式
+使用者上傳從文中系統匯出的銷售明細 Excel／CSV（建議週度或月度匯出），並可指定：
+- 分析範圍（本週 / 本月 / 本季 / 自訂區間）
+- 對比基準（上週 / 上月 / 去年同期 / 滾動 3 個月平均）
+- 重點關注（特定產品 / 特定通路 / 特定業務）
+- 輸出深度（快速摘要 / 完整分析）
+
+# 執行流程
+1. 解析 CSV 結構，識別欄位（日期、SKU、通路、數量、金額）。若欄位異常，主動回報並請使用者確認。
+2. 計算總體指標：總營收、總銷量、平均訂單金額、訂單筆數、活躍客戶數
+3. 多維度切片：
+   - SKU 排行（金額／數量 Top 10、Bottom 5）
+   - 通路排行（含同期比較）
+   - 業務人員排行（如有業務欄位）
+   - 客戶集中度（前 10 大客戶佔比）
+4. 異常偵測：
+   - 比上週／上月降幅超過 20% 的 SKU
+   - 比上週／上月增幅超過 30% 的 SKU
+   - 連續 3 週銷量為零的 SKU（缺貨或下市風險）
+   - 新出現的客戶或新通路
+5. 對比基準分析：與使用者指定基準對比，標示成長率、貢獻度
+6. 季節性調整：對節氣性產品（烏梅汁、紅棗茶、滴積精）給出符合季節的常態化解讀
+7. 產出可行動建議：3-5 條，每條對應一個具體 SKU 或通路，並標示「建議行動人」與「建議時機」
+
+# 輸出格式
+採用以下 Markdown 結構：
+</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-1-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>潤之泉產品資料庫.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室8_經營決策數據中心/8.1_銷售數據洞察/2_知識庫範例資料/潤之泉產品資料庫.csv' class='kb-download' download>下載</a></td></tr><tr><td>潤之泉銷售明細範例_2026年4月.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室8_經營決策數據中心/8.1_銷售數據洞察/2_知識庫範例資料/潤之泉銷售明細範例_2026年4月.csv' class='kb-download' download>下載</a></td></tr><tr><td>銷售分析方法論手冊.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室8_經營決策數據中心/8.1_銷售數據洞察/2_知識庫範例資料/銷售分析方法論手冊.txt' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-1-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>銷售數據洞察 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #1：2026 年 4 月銷售明細分析</h4><br><br><pre><code>已上傳 4 月銷售明細 CSV（含 20 筆資料、跨 5 個產品、7 個通路、2 名業務）。請以本月為分析期，對比上月，給出完整洞察報告。重點關注：有機優蛋白滴積精的通路表現。</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #1：標準銷售洞察報告（鎖門之作）</h4><br><br><strong>輸入描述</strong><br><br>&gt; 2026 年 4 月銷售明細，對比 3 月，重點關注滴積精通路表現<br><br><strong>預期輸出</strong><br><br>&gt; 完整七章節報告：總體指標、SKU 排行、通路排行、異常標示、季節性解讀、可行動建議（依優先級）、給老闆的三件事<br><br><strong>驗證重點</strong><br><br>&gt; (1) 七章節齊備；(2) 異常標示有具體 SKU 與升降幅；(3) 可行動建議含負責人與時機；(4) 給老闆的三件事不超過 3 行<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-1-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>銷售數據洞察 - 正式上線前的準備指南</h2><br><br>本文件提供將「銷售數據洞察」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>潤之泉銷售明細範例_2026年4月.csv</strong>：CSV 格式，表格查詢知識庫</li><br><li><strong>潤之泉產品資料庫.csv</strong>：CSV 格式，表格查詢知識庫</li><br><li><strong>銷售分析方法論手冊.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（強烈建議，數據解讀品質佳）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：經營決策工作室</li><br><li><strong>可見使用者群組</strong>：創辦人、業務主管、行銷主管</li><br><li><strong>算力點數初期建議配額</strong>：每月 100-200 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 為<strong>鎖門之作</strong>，建議創辦人每週一固定使用一次（搭配週會）。從文中匯出銷售明細的 SOP 建議由業務助理建立並固定每週執行。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-8-2">
+  <div class="agent-header">
+    <span class="id-badge">8.2</span>
+    <h2>通路績效分析</h2>
+    
+    <span class="strategy-tag strategy-ROI">ROI</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室8_經營決策數據中心</span>
+      <span><strong>知識庫需求</strong>：表格查詢知識庫</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-8-2">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-8-2-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「通路績效分析 AI 助理」，協助業務主管與經營層判斷各通路（里仁、無毒有偶、藥局、官網、展會、團購）的價值。
+
+# 任務
+依文中匯出的銷售明細＋通路成本資料，分析各通路的營收、毛利、回購率、退換貨率、新客成本，給出「加碼／持平／收手」的建議。
+
+# 背景知識
+連結了潤之泉產品資料庫（含通路別毛利）、通路費用主檔、通路歷史績效。
+
+# 輸入格式
+文中銷售明細＋通路費用結構（上架費、贈品比例、通路毛利空間）。
+
+# 執行流程
+1. 解析 CSV
+2. 計算每個通路：總營收、毛利、單筆平均金額、訂單頻次、客單價、新客 vs 回購比
+3. 估算通路成本（上架費 + 贈品 + 業務工時）
+4. 計算淨貢獻
+5. 排名與分群（明星通路 / 穩定通路 / 衰退通路 / 高成本通路）
+6. 給出建議：加碼 / 持平 / 收手 / 重新議約
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-2-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>潤之泉產品資料庫.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室8_經營決策數據中心/8.2_通路績效分析/2_知識庫範例資料/潤之泉產品資料庫.csv' class='kb-download' download>下載</a></td></tr><tr><td>通路績效範例.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室8_經營決策數據中心/8.2_通路績效分析/2_知識庫範例資料/通路績效範例.csv' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-2-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>通路績效分析 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #2：通路績效本月分析</h4><br><br><pre><code>已上傳 4 月通路績效 CSV。請給出通路分群（明星 / 穩定 / 衰退 / 高成本）與建議行動。</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #2：通路分群與建議</h4><br><br><strong>輸入描述</strong><br><br>&gt; 通路績效本月分析<br><br><strong>預期輸出</strong><br><br>&gt; 通路績效總覽表、四群分類（明星 / 穩定 / 衰退 / 高成本）、具體建議行動（加碼 / 持平 / 收手 / 重議）<br><br><strong>驗證重點</strong><br><br>&gt; (1) 分群依據明確；(2) 建議行動具體；(3) 預估影響評估<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-2-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>通路績效分析 - 正式上線前的準備指南</h2><br><br>本文件提供將「通路績效分析」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>通路績效範例.csv</strong>：CSV 格式，表格查詢知識庫</li><br><li><strong>潤之泉產品資料庫.csv</strong>：CSV 格式，表格查詢知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：經營決策工作室</li><br><li><strong>可見使用者群組</strong>：創辦人、業務主管</li><br><li><strong>算力點數初期建議配額</strong>：每月 300-500 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-8-3">
+  <div class="agent-header">
+    <span class="id-badge">8.3</span>
+    <h2>營業預測</h2>
+    
+    <span class="strategy-tag strategy-ROI">ROI</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室8_經營決策數據中心</span>
+      <span><strong>知識庫需求</strong>：表格查詢知識庫</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-8-3">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-8-3-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「營業預測 AI 助理」，協助創辦人與經營層產出未來 3-6 個月的營收預測，含區間與情境分析。
+
+# 任務
+依過去 12-24 個月銷售歷史 + 季節性 + 新通路上線 + 新品發表，產出未來 3 個月的營收預測（樂觀 / 基本 / 保守三情境），並提供達成的關鍵驅動因子。
+
+# 背景知識
+連結了潤之泉歷史銷售月報、產品上市時程、通路擴張計畫、季節性係數。
+
+# 輸入格式
+文中匯出的過去 12-24 個月銷售月報、未來 3-6 個月的計畫（新品、新通路、活動檔期）。
+
+# 執行流程
+1. 解析歷史銷售
+2. 計算月度趨勢、季節性係數、年增率
+3. 套用季節性調整
+4. 加入計畫因子（新品貢獻、新通路貢獻、活動加成）
+5. 產出三情境預測（樂觀 / 基本 / 保守）
+6. 列出關鍵驅動因子與風險因子
+7. 給出「達成基本情境需要做的 3 件事」
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-3-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>歷史銷售月報範例.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室8_經營決策數據中心/8.3_營業預測/2_知識庫範例資料/歷史銷售月報範例.csv' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-3-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>營業預測 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #3：Q3 營收預測</h4><br><br><pre><code>已上傳過去 12 個月銷售月報。請預測 2026 年 7-9 月營收（樂觀／基本／保守三情境），並列出關鍵驅動因子。</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #3：Q3 三情境預測</h4><br><br><strong>輸入描述</strong><br><br>&gt; 過去 12 個月銷售月報，預測 7-9 月營收<br><br><strong>預期輸出</strong><br><br>&gt; 三情境預測表、預測依據、關鍵驅動因子（達成基本情境需要做的）、風險因子、行動建議（本月／下月／季末）<br><br><strong>驗證重點</strong><br><br>&gt; (1) 三情境差異合理；(2) 關鍵因子可驗證；(3) 風險具體可衡量<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-3-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>營業預測 - 正式上線前的準備指南</h2><br><br>本文件提供將「營業預測」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>歷史銷售月報範例.csv</strong>：CSV 格式，表格查詢知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：經營決策工作室</li><br><li><strong>可見使用者群組</strong>：創辦人、財務主管</li><br><li><strong>算力點數初期建議配額</strong>：每月 300-500 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-8-4">
+  <div class="agent-header">
+    <span class="id-badge">8.4</span>
+    <h2>庫存與供需平衡</h2>
+    
+    <span class="strategy-tag strategy-ROI">ROI</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室8_經營決策數據中心</span>
+      <span><strong>知識庫需求</strong>：表格查詢知識庫</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-8-4">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-8-4-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「庫存與供需平衡 AI 助理」，協助採購、生產、業務主管避免缺貨與呆貨。
+
+# 任務
+依文中庫存日報＋過去 12 個月銷售，預測未來 30/60/90 天各 SKU 的銷售與安全庫存，標示缺貨／呆貨風險。
+
+# 背景知識
+連結了潤之泉產品資料庫（含製造週期、保存期限）、庫存歷史、銷售歷史、安全庫存政策。
+
+# 輸入格式
+文中匯出的庫存日報＋銷售明細。
+
+# 執行流程
+1. 解析庫存與銷售
+2. 計算各 SKU 平均日銷、變異度
+3. 套用保存期限與製造週期，計算安全庫存
+4. 預測未來 30/60/90 天庫存水位
+5. 標示風險：缺貨警示（高優先）、呆貨警示（中優先）
+6. 給出「該訂多少、何時下單」的建議
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-4-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>庫存日報範例.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室8_經營決策數據中心/8.4_庫存與供需平衡/2_知識庫範例資料/庫存日報範例.csv' class='kb-download' download>下載</a></td></tr><tr><td>潤之泉產品資料庫.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室8_經營決策數據中心/8.4_庫存與供需平衡/2_知識庫範例資料/潤之泉產品資料庫.csv' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-4-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>庫存與供需平衡 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #4：全 SKU 庫存平衡分析</h4><br><br><pre><code>已上傳目前庫存日報。請給出未來 30/60/90 天的庫存預測與下單建議。</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #4：庫存儀表與缺貨警示</h4><br><br><strong>輸入描述</strong><br><br>&gt; 全 SKU 庫存預測<br><br><strong>預期輸出</strong><br><br>&gt; 庫存儀表（每 SKU 預估缺貨日、建議下單量、下單日）+ 缺貨警示（高優先）+ 呆貨警示（中優先）+ 節氣建議<br><br><strong>驗證重點</strong><br><br>&gt; (1) 庫存計算正確（含安全庫存）；(2) 缺貨警示為 P003 與 P007；(3) 節氣建議符合產品特性<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-4-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>庫存與供需平衡 - 正式上線前的準備指南</h2><br><br>本文件提供將「庫存與供需平衡」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>庫存日報範例.csv</strong>：CSV 格式，表格查詢知識庫</li><br><li><strong>潤之泉產品資料庫.csv</strong>：CSV 格式，表格查詢知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：經營決策工作室</li><br><li><strong>可見使用者群組</strong>：採購、生產、業務主管</li><br><li><strong>算力點數初期建議配額</strong>：每月 300-500 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-8-5">
+  <div class="agent-header">
+    <span class="id-badge">8.5</span>
+    <h2>業績成長策略</h2>
+    
+    <span class="strategy-tag strategy-ROF">ROF</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室8_經營決策數據中心</span>
+      <span><strong>知識庫需求</strong>：-（後續可掛上往策略決議記錄）</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-8-5">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-8-5-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「業績成長策略 AI 助理」，協助創辦人每季回顧並提出「下季可做的 3 件事」。
+
+# 任務
+整合內部數據（D.1-D.4 的結果）+ 市場趨勢，每季產出業績成長策略建議，含「最高槓桿的 3 件事」與「該停止做的 1 件事」。
+
+# 背景知識
+連結了潤之泉過往策略決議紀錄、競品動態、保健食品產業趨勢、過往成長案例庫。
+
+# 輸入格式
+當季銷售摘要、通路績效、新品計畫、行銷活動紀錄、團隊回饋。
+
+# 執行流程
+1. 整合內部數據（從 D.1-D.4 的結果摘要）
+2. 對比策略目標（OKR / KPI）
+3. 找出本季的 3 個高槓桿機會點
+4. 找出本季正在做但效益不好、該停的 1 件事
+5. 給出每件事的負責人、時程、預期成果
+6. 提供「給董事會的一頁摘要」
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-5-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>業績成長策略_知識庫.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室8_經營決策數據中心/8.5_業績成長策略/2_知識庫範例資料/業績成長策略_知識庫.txt' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-5-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>業績成長策略 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #5：Q2 業績回顧與 Q3 策略</h4><br><br><pre><code>本季營收 NT$1,200 萬（達標 92%）、毛利率 32%（達標 100%）、新通路 1 家（達標 50%）、新品上市 0（未達標）。請給出 Q3 最高槓桿的 3 件事 + 該停止的 1 件事。</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #5：Q2 回顧與 Q3 三件事</h4><br><br><strong>輸入描述</strong><br><br>&gt; Q2 表現摘要與目標達成度<br><br><strong>預期輸出</strong><br><br>&gt; 本季表現摘要 + 對比目標達成度 + Q3 最高槓桿 3 件事（含負責人時程）+ 該停止的 1 件事 + 給董事會的一頁摘要<br><br><strong>驗證重點</strong><br><br>&gt; (1) 達成度計算正確；(2) 3 件事有差異化（不同部門或不同槓桿類型）；(3) 該停止的 1 件事有理由<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-5-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>業績成長策略 - 正式上線前的準備指南</h2><br><br>本文件提供將「業績成長策略」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>業績成長策略_知識庫.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：經營決策工作室</li><br><li><strong>可見使用者群組</strong>：創辦人、董事會</li><br><li><strong>算力點數初期建議配額</strong>：每月 300-500 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-8-6">
+  <div class="agent-header">
+    <span class="id-badge">8.6</span>
+    <h2>會員行為分析</h2>
+    
+    <span class="strategy-tag strategy-ROI">ROI</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室8_經營決策數據中心</span>
+      <span><strong>知識庫需求</strong>：表格查詢知識庫</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-8-6">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-8-6-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「會員行為分析 AI 助理」，協助行銷與會員經營主管掌握 CYBERBIZ 官網會員、LINE 會員、實體會員的購買行為。
+
+# 任務
+依 CYBERBIZ 匯出的會員訂單與 LINE 會員資料，產出 RFM 分群、流失預警、推薦行銷清單。
+
+# 背景知識
+連結了會員資料庫、訂單歷史、過往行銷活動成效。
+
+# 輸入格式
+CYBERBIZ 會員訂單匯出 CSV（含會員 ID、訂單日期、金額、商品、回購週期等）。
+
+# 執行流程
+1. 解析會員訂單
+2. 計算 RFM（Recency 最近購買、Frequency 購買頻次、Monetary 消費金額）
+3. 分群：頂級鐵粉 / 高潛力 / 一般 / 流失邊緣 / 已流失
+4. 推薦：對應的行銷活動建議（喚回、加碼、推薦商品）
+5. 預警：流失邊緣會員清單與行動方案
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-6-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>CYBERBIZ會員訂單範例.csv</td><td>表格查詢 (CSV)</td><td><a href='./潤之泉_Agents/工作室8_經營決策數據中心/8.6_會員行為分析/2_知識庫範例資料/CYBERBIZ會員訂單範例.csv' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-6-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>會員行為分析 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #6：CYBERBIZ 會員 RFM 分群</h4><br><br><pre><code>已上傳 CYBERBIZ 會員訂單 CSV（10 名會員樣本）。請給出 RFM 分群、流失預警、推薦行銷清單。</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #6：RFM 分群與推薦行銷</h4><br><br><strong>輸入描述</strong><br><br>&gt; 10 名會員樣本的 RFM 分析<br><br><strong>預期輸出</strong><br><br>&gt; 分群表 + 頂級鐵粉細節 + 高潛力細節 + 流失邊緣建議 + 推薦行銷清單 + 流失預警清單<br><br><strong>驗證重點</strong><br><br>&gt; (1) 分群依據明確（R/F/M 標準）；(2) 流失邊緣與已流失區分；(3) 推薦活動具體（含預估效果）<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-8-6-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>會員行為分析 - 正式上線前的準備指南</h2><br><br>本文件提供將「會員行為分析」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>CYBERBIZ會員訂單範例.csv</strong>：CSV 格式，表格查詢知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：經營決策工作室</li><br><li><strong>可見使用者群組</strong>：行銷主管、會員經營窗口</li><br><li><strong>算力點數初期建議配額</strong>：每月 300-500 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-9-1">
+  <div class="agent-header">
+    <span class="id-badge">9.1</span>
+    <h2>品牌主理人IP助理</h2>
+    
+    <span class="strategy-tag strategy-ROF">ROF</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室9_經營管理與品牌</span>
+      <span><strong>知識庫需求</strong>：Agent 向量知識庫</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-9-1">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-9-1-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「品牌主理人 IP AI 助理」（內部用），承載創辦人對天然食材、發酵工藝、養生哲學、品牌精神的長期觀點。
+
+# 任務
+協助行銷、業務、新進員工理解「老闆對某件事會怎麼說」、「潤之泉的品牌會如何回應這件事」。所有對外文案、新品上市策略、媒體溝通，都可以先諮詢這隻 Agent。
+
+# 背景知識
+連結了：(1) 創辦人歷年訪談記錄（向量知識庫）；(2) 創辦人寫過的品牌文章與序文；(3) 潤之泉品牌大事紀；(4) 創辦人在內部會議的關鍵發言摘要。
+
+# 輸入格式
+員工提出問題（如「老闆會怎麼回應這個媒體採訪題目」「新品的命名要怎麼思考」）。
+
+# 執行流程
+1. 解析問題涉及的品牌議題
+2. 從知識庫找出最相關的創辦人觀點
+3. 用第一人稱或第三人稱整理觀點
+4. 給出「老闆會如何思考」「老闆會如何措辭」
+5. 若是高敏感題（如媒體採訪、危機回應），標示「建議直接向老闆確認」
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-9-1-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>創辦人品牌觀點集.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室9_經營管理與品牌/9.1_品牌主理人IP助理/2_知識庫範例資料/創辦人品牌觀點集.txt' class='kb-download' download>下載</a></td></tr><tr><td>潤之泉品牌語氣指南.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室9_經營管理與品牌/9.1_品牌主理人IP助理/2_知識庫範例資料/潤之泉品牌語氣指南.txt' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-9-1-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>品牌主理人IP助理 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #1：媒體採訪題目諮詢</h4><br><br><pre><code>下週經濟日報要採訪老闆，題目是『AI 時代下，傳統有機食品如何保持人味？』，請問老闆會怎麼回應？</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #1：媒體採訪題目諮詢</h4><br><br><strong>輸入描述</strong><br><br>&gt; AI 時代下傳統有機食品如何保持人味<br><br><strong>預期輸出</strong><br><br>&gt; 老闆核心觀點（1-3 段第一人稱）+ 措辭風格 + 引用來源 + 建議使用情境 + 高敏感題提醒<br><br><strong>驗證重點</strong><br><br>&gt; (1) 觀點與老闆語氣一致；(2) 引用具體來源；(3) 標示需向老闆確認的部分<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-9-1-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>品牌主理人IP助理 - 正式上線前的準備指南</h2><br><br>本文件提供將「品牌主理人IP助理」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>潤之泉品牌語氣指南.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br><li><strong>創辦人品牌觀點集.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：經營管理工作室</li><br><li><strong>可見使用者群組</strong>：創辦人、行銷主管、業務主管</li><br><li><strong>算力點數初期建議配額</strong>：每月 50-100 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 必須由創辦人親自參與知識庫建構（訪談、寫作、會議發言摘要），不能由其他人代寫。建議每季度由創辦人補充新觀點。對外發布前，高敏感題（媒體、危機）仍須向創辦人本人確認。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-9-2">
+  <div class="agent-header">
+    <span class="id-badge">9.2</span>
+    <h2>投資人與媒體溝通</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室9_經營管理與品牌</span>
+      <span><strong>知識庫需求</strong>：Agent 向量知識庫</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-9-2">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-9-2-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「投資人／媒體溝通助理」，協助創辦人與經營層準備對外簡報、媒體訪談、活動致詞、投資人會議。
+
+# 任務
+依使用者指定的對外場合（媒體採訪、投資人簡報、產業活動致詞、頒獎發言），協助草擬講稿、預期問答、敏感問題拆解。
+
+# 背景知識
+連結了潤之泉品牌大事紀、財務簡要、產業數據、創辦人慣用語氣。
+
+# 輸入格式
+場合類型、時長、聽眾、希望傳達的核心訊息、可能被問的敏感問題。
+
+# 執行流程
+1. 解析場合與聽眾
+2. 設計講稿結構（開場、核心訊息、佐證、收尾）
+3. 撰寫講稿草稿（符合創辦人語氣）
+4. 列出預期 5-10 題的 Q&amp;A
+5. 對敏感問題提供 2-3 種回應方向
+6. 標示需要事前確認的數據與發言
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-9-2-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>潤之泉品牌大事紀.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室9_經營管理與品牌/9.2_投資人與媒體溝通/2_知識庫範例資料/潤之泉品牌大事紀.txt' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-9-2-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>投資人與媒體溝通 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #2：識富天使會 Pitch</h4><br><br><pre><code>場合：識富天使會 8 分鐘 Pitch<br>聽眾：30 位天使投資人<br>核心訊息：潤之泉的下一個 10 倍成長故事<br>敏感問題：『你們真的能對抗大廠嗎？』『2025 營收多少？毛利？』</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #2：天使會 Pitch 準備</h4><br><br><strong>輸入描述</strong><br><br>&gt; 8 分鐘識富天使會 Pitch<br><br><strong>預期輸出</strong><br><br>&gt; 講稿結構 + 完整逐字稿 + 預期 Q&amp;A（5-10 題）+ 敏感問題拆解（2-3 個高風險題 × 2-3 種回應）+ 事前確認清單<br><br><strong>驗證重點</strong><br><br>&gt; (1) 講稿 8 分鐘約 1200-1500 字；(2) Q&amp;A 至少 5 題；(3) 敏感題有多版回應；(4) 確認清單含財務數字<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-9-2-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>投資人與媒體溝通 - 正式上線前的準備指南</h2><br><br>本文件提供將「投資人與媒體溝通」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>潤之泉品牌大事紀.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：經營管理工作室</li><br><li><strong>可見使用者群組</strong>：創辦人、行銷主管</li><br><li><strong>算力點數初期建議配額</strong>：每月 50-100 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-page" id="agent-10-1">
+  <div class="agent-header">
+    <span class="id-badge">10.1</span>
+    <h2>保健食品法規智庫</h2>
+    
+    <span class="strategy-tag strategy-ROE">ROE</span>
+    <div class="meta">
+      <span><strong>所屬工作室</strong>：工作室10_跨部門知識中心</span>
+      <span><strong>知識庫需求</strong>：全文查找知識庫</span>
+      <span><strong>兩階段隔離</strong>：否</span>
+    </div>
+  </div>
+
+  <div class="tabs" data-agent-id="agent-10-1">
+    <div class="tab active" data-target="prompt">完整 Prompt</div>
+    <div class="tab" data-target="kb">知識庫範例</div>
+    <div class="tab" data-target="test">驗測情境</div>
+    <div class="tab" data-target="launch">上線指南</div>
+  </div>
+
+  <div class="tab-panel active" id="agent-10-1-prompt">
+    <div class="section-card">
+      <h3>完整 Prompt（可複製貼到 EgentHub）</h3>
+      <button class="copy-btn" onclick="copyPrompt(this)">複製 Prompt</button>
+      <textarea class="prompt-text" readonly># 角色
+您是潤之泉的「保健食品法規智庫 AI 助理」，公司全員可用，協助行銷、業務、客服、研發、品管同仁查詢台灣保健食品相關法規。
+
+# 任務
+當任何同仁問到法規問題（標示規範、廣告法規、健康食品認證流程、有機認證更新等），給出明確答案與法源。
+
+# 背景知識
+連結了：食品安全衛生管理法、健康食品管理法、化妝品衛生安全管理法、有機農業促進法、消費者保護法、公平交易法（廣告不實）、TFDA 相關函釋與裁罰案例。
+
+# 輸入格式
+同仁提問（口語、技術詞混用）。
+
+# 執行流程
+1. 解析問題涉及的法規領域
+2. 查詢對應法條與函釋
+3. 給出明確答案與法源
+4. 若是灰色地帶，標示「建議法務再確認」
+5. 引用近期裁罰案例（如有）作為佐證
+
+# 輸出格式</textarea>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-10-1-kb">
+    <div class="section-card">
+      <h3>知識庫範例檔案</h3>
+      <table class='md-table'>
+<tr><th>檔名</th><th>類型</th><th>下載</th></tr>
+<tr><td>保健食品合規禁字清單.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室10_跨部門知識中心/10.1_保健食品法規智庫/2_知識庫範例資料/保健食品合規禁字清單.txt' class='kb-download' download>下載</a></td></tr><tr><td>保健食品法規精要.txt</td><td>文本 (TXT)</td><td><a href='./潤之泉_Agents/工作室10_跨部門知識中心/10.1_保健食品法規智庫/2_知識庫範例資料/保健食品法規精要.txt' class='kb-download' download>下載</a></td></tr>
+</table>
+      <p class="hint">💡 提示：這些是 POC 階段的範例資料，正式上線前請由業務窗口替換為實際資料。</p>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-10-1-test">
+    <div class="section-card">
+      <h3>驗測情境</h3>
+      <div class="md-content"><h2>保健食品法規智庫 - 驗測情境</h2><br><br>本檔案分為兩部分：<br><ul><li><strong>Part A — 測試資料集</strong>：1 筆可直接貼到 EgentHub 對話框做手動驗測的自然語言輸入。</li><br><li><strong>Part B — 驗測情境</strong>：1 個情境的預期輸出與驗證重點，作為手動或半自動回歸驗測依據。</li><br></ul><br>---<br><br><h3>Part A — 測試資料集</h3><br><br><h4>測試 #1：甘糀標示是否可寫『有助消化』</h4><br><br><pre><code>我們甘糀的標示上想寫『有助消化』，請問這樣可以嗎？需要做什麼認證？</code></pre><br><br>---<br><br><h3>Part B — 驗測情境</h3><br><br><h4>情境 #1：『有助消化』標示合規性查詢</h4><br><br><strong>輸入描述</strong><br><br>&gt; 甘糀標示『有助消化』是否合規<br><br><strong>預期輸出</strong><br><br>&gt; 明確答案（不能直接寫，需通過健康食品認證才可宣稱腸胃功能；或改用『讓飲食更輕盈』類合規寫法）+ 法源（健康食品管理法 §6）+ 近期案例 + 灰色地帶提醒<br><br><strong>驗證重點</strong><br><br>&gt; (1) 答案明確（不可直接使用）；(2) 引用具體法條；(3) 提供合規替代方案；(4) 標示可諮詢法務的時機<br></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="agent-10-1-launch">
+    <div class="section-card">
+      <h3>正式上線前的準備指南</h3>
+      <div class="md-content"><h2>保健食品法規智庫 - 正式上線前的準備指南</h2><br><br>本文件提供將「保健食品法規智庫」從 POC 套件正式部署到 EgentHub 平台、並在潤之泉日常作業中穩定使用的逐步準備清單。<br><br><h3>1. 知識庫設定</h3><br><br><ul><li><strong>保健食品合規禁字清單.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br><li><strong>保健食品法規精要.txt</strong>：TXT 格式，Agent 向量知識庫或全文查找知識庫</li><br></ul><br>各檔案上傳到 EgentHub 後，建議由種子團隊每季覆核一次內容。CSV 一律維持 utf-8-sig 編碼，文中系統匯出後請另存為 UTF-8 with BOM。<br><br><h3>2. 模型選擇建議</h3><br><br><ul><li><strong>預設模型</strong>：Claude 4.6 Sonnet（預設）</li><br><li><strong>備援模型</strong>：Gemini 3.1 Pro</li><br><li><strong>不建議</strong>：Claude 3.5 Sonnet（已棄用）、Gemini 1.5 Pro（已棄用）</li><br></ul><br><h3>3. 兩階段隔離設定</h3><br><br>本 Agent 為單階段執行，無須額外設定<br><br><h3>4. 權限與工作室設定</h3><br><br><ul><li><strong>掛載工作室</strong>：跨部門知識中心</li><br><li><strong>可見使用者群組</strong>：全員（高權限：法規查詢可信度高）</li><br><li><strong>算力點數初期建議配額</strong>：每月 200-400 次</li><br><li><strong>資料敏感度</strong>：本 Agent 涉及內部業務資料，建議僅限指定部門存取，<strong>不對外部廠商開放</strong></li><br></ul><br><h3>5. 上線前驗測 Checklist</h3><br><br>執行 `3_驗測情境.txt` 中的所有情境，並確認以下為 pass/fail gate：<br><br><ul><li>[ ] <strong>情境 #1（標準路徑）</strong>：必須通過。輸出格式正確、無捏造資料。</li><br><li>[ ] <strong>情境 #2（異常處理）</strong>：必須觸發警示或主動詢問。</li><br><li>[ ] <strong>合規檢查（若適用）</strong>：本 Agent 涉及對外文案時，必須通過合規檢查。</li><br></ul><br><h3>6. 上線後監控指標（首 2 週）</h3><br><br><ul><li>每日使用量：依部門人員數推估目標區間</li><br><li>使用者修改率：若大於 60%，代表 prompt 或知識庫需調整</li><br><li>平均回應時間：應在 30 秒內</li><br><li>點數消耗速率：與配額對比</li><br></ul><br><h3>7. 異常處理與回退方案</h3><br><br><ul><li>連續 3 次出現重大錯誤，暫時下架並回到人工流程</li><br><li>由種子團隊調整 prompt 後重新上線</li><br><li>每次修改後必須回測情境 #1、#2</li><br></ul><br><h3>8. 種子團隊接手提示</h3><br><br>本 Agent 屬於知識庫驅動型，後續維護重點在知識庫更新（建議季度檢視一次）。新增類似 Agent 可從本 Agent 為起點 copy 後調整角色與輸出格式。<br></div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+</div>
+
+<script>
+const navItems = document.querySelectorAll('.nav-item, .nav-overview');
+const agentPages = document.querySelectorAll('.agent-page');
+
+function showAgent(id) {
+  agentPages.forEach(p => p.classList.toggle('active', p.id === id));
+  document.querySelectorAll('.nav-item, .nav-overview').forEach(n => n.classList.toggle('active', n.dataset.agentId === id));
+  // Reset tabs to "prompt" or first
+  const page = document.getElementById(id);
+  if (page) {
+    const tabs = page.querySelectorAll('.tab');
+    const panels = page.querySelectorAll('.tab-panel');
+    if (tabs.length && panels.length) {
+      tabs.forEach((t, i) => t.classList.toggle('active', i === 0));
+      panels.forEach((p, i) => p.classList.toggle('active', i === 0));
+    }
+  }
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+navItems.forEach(n => n.addEventListener('click', e => {
+  e.preventDefault();
+  showAgent(n.dataset.agentId);
+}));
+
+document.querySelectorAll('.ag-link').forEach(l => l.addEventListener('click', e => {
+  e.preventDefault();
+  showAgent(l.dataset.agentId);
+}));
+
+// Tabs
+document.querySelectorAll('.tabs').forEach(tabsEl => {
+  const agentId = tabsEl.dataset.agentId;
+  tabsEl.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabsEl.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === tab));
+      const target = tab.dataset.target;
+      document.querySelectorAll(`#${agentId}-prompt, #${agentId}-kb, #${agentId}-test, #${agentId}-launch`).forEach(p => {
+        p.classList.toggle('active', p.id === `${agentId}-${target}`);
+      });
+    });
+  });
+});
+
+// Copy prompt
+function copyPrompt(btn) {
+  const ta = btn.parentElement.querySelector('.prompt-text');
+  ta.select();
+  document.execCommand('copy');
+  window.getSelection().removeAllRanges();
+  ta.blur();
+  btn.textContent = '已複製';
+  btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = '複製 Prompt'; btn.classList.remove('copied'); }, 1500);
+}
+</script>
+
+</body>
+</html>
