@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>中壢天晟醫院 EgentHub Agent POC 教材總覽</title>
+<style>
+:root {
+  --brand: #6B46C1;
+  --brand-deep: #4C1D95;
+  --brand-light: #F5F3FF;
+  --brand-border: #E9D5FF;
+  --text: #1F2937;
+  --muted: #6B7280;
+  --bg: #FAFAFB;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--brand); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.topbar {
+  background: linear-gradient(135deg, var(--brand-deep) 0%, var(--brand) 100%);
+  color: #fff;
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(76, 29, 149, 0.15);
+}
+.topbar .brand {
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+}
+.topbar .brand .small {
+  font-weight: 400;
+  font-size: 13px;
+  opacity: 0.85;
+  margin-left: 8px;
+}
+.topbar a, .topbar a:hover {
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.92;
+}
+.topbar .nav-right {
+  font-size: 14px;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+.breadcrumb {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.breadcrumb a { color: var(--muted); }
+.breadcrumb .sep { margin: 0 8px; }
+
+h1 { font-size: 28px; color: var(--brand-deep); margin-bottom: 8px; font-weight: 700; }
+h2 { font-size: 20px; color: var(--brand-deep); margin: 36px 0 14px; font-weight: 700;
+     padding-bottom: 8px; border-bottom: 2px solid var(--brand-border); }
+h3 { font-size: 16px; color: var(--brand-deep); margin: 20px 0 10px; font-weight: 600; }
+p { margin-bottom: 10px; }
+ul, ol { margin: 8px 0 12px 24px; }
+li { margin-bottom: 4px; }
+
+.hero {
+  background: linear-gradient(135deg, #ffffff 0%, var(--brand-light) 100%);
+  border: 1px solid var(--brand-border);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin-bottom: 28px;
+}
+.hero .subtitle { color: var(--muted); margin-top: 6px; font-size: 15px; }
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+.meta-card {
+  background: #fff;
+  border: 1px solid var(--brand-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.meta-card .label {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.meta-card .value {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.stat-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 20px 0 30px;
+}
+.stat-card {
+  background: #fff;
+  border: 1px solid var(--brand-border);
+  border-radius: 10px;
+  padding: 18px;
+  text-align: center;
+}
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--brand);
+  display: block;
+}
+.stat-card .lbl {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.section { margin-bottom: 28px; }
+
+.callout {
+  background: var(--brand-light);
+  border-left: 4px solid var(--brand);
+  padding: 12px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--brand-deep);
+  margin: 12px 0;
+}
+
+.prompt-box {
+  position: relative;
+  background: #FCFAFE;
+  border: 1px solid var(--brand-border);
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 12px;
+}
+.prompt-box pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: "SF Mono", "Consolas", "Microsoft JhengHei", monospace;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--text);
+  max-height: 600px;
+  overflow-y: auto;
+}
+.copy-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.copy-btn:hover { background: var(--brand-deep); }
+.copy-btn.copied { background: #10B981; }
+
+.test-card {
+  background: #fff;
+  border: 1px solid var(--brand-border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+}
+.test-card .test-no {
+  display: inline-block;
+  background: var(--brand-light);
+  color: var(--brand-deep);
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.test-card .test-name {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.test-card .test-input {
+  background: #F9FAFB;
+  border: 1px dashed #D1D5DB;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 13.5px;
+  color: var(--text);
+  margin-top: 6px;
+  white-space: pre-wrap;
+}
+
+.scenario-grid {
+  display: grid;
+  gap: 12px;
+}
+.scenario-card {
+  background: #fff;
+  border: 1px solid var(--brand-border);
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+.scenario-card h4 {
+  color: var(--brand-deep);
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+.scenario-row { display: grid; grid-template-columns: 90px 1fr; gap: 12px; margin-bottom: 8px; font-size: 14px; }
+.scenario-row .k { color: var(--muted); font-weight: 500; }
+.scenario-row .v { color: var(--text); }
+
+.deploy-list { display: grid; gap: 10px; }
+.deploy-item {
+  background: #fff;
+  border: 1px solid var(--brand-border);
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+.deploy-item h3 {
+  color: var(--brand);
+  margin: 0 0 8px 0;
+}
+.deploy-item ul { margin-left: 20px; font-size: 14px; }
+
+.kb-card {
+  background: #fff;
+  border: 1px solid var(--brand-border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+}
+.kb-card .kb-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.kb-card .kb-name {
+  font-weight: 600;
+  color: var(--brand-deep);
+}
+.dl-btn {
+  background: #fff;
+  color: var(--brand);
+  border: 1.5px solid var(--brand);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+}
+.dl-btn:hover { background: var(--brand); color: #fff; text-decoration: none; }
+.csv-note { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.csv-wrap { overflow-x: auto; }
+.csv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.csv-table th, .csv-table td {
+  border: 1px solid #E5E7EB;
+  padding: 6px 10px;
+  text-align: left;
+}
+.csv-table th { background: var(--brand-light); color: var(--brand-deep); font-weight: 600; }
+.csv-table tr:nth-child(even) td { background: #FAFAFA; }
+
+.footer {
+  margin-top: 60px;
+  padding-top: 24px;
+  border-top: 1px solid #E5E7EB;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.back-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--brand);
+  color: #fff;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  box-shadow: 0 4px 12px rgba(107, 70, 193, 0.3);
+  display: none;
+}
+.back-top.show { display: block; }
+
+/* Index 頁專屬 */
+.workshop-section { margin-top: 36px; }
+.workshop-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  padding-left: 12px;
+  border-left: 4px solid var(--ws-color, var(--brand));
+}
+.workshop-title .ws-num {
+  background: var(--ws-color, var(--brand));
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+}
+.agent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+.agent-tile {
+  background: #fff;
+  border: 1px solid var(--brand-border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.15s ease;
+  display: block;
+}
+.agent-tile:hover {
+  border-color: var(--ws-color, var(--brand));
+  box-shadow: 0 4px 12px rgba(107, 70, 193, 0.12);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+.agent-tile .code {
+  font-size: 12px;
+  color: var(--ws-color, var(--brand));
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.agent-tile .name {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.toc-bar {
+  background: #fff;
+  border: 1px solid var(--brand-border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 16px 0 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13px;
+}
+.toc-bar a {
+  background: var(--brand-light);
+  color: var(--brand-deep);
+  padding: 4px 12px;
+  border-radius: 14px;
+  text-decoration: none;
+  font-weight: 500;
+}
+.toc-bar a:hover { background: var(--brand); color: #fff; text-decoration: none; }
+
+@media (max-width: 700px) {
+  .container { padding: 20px 14px 60px; }
+  .topbar { padding: 12px 16px; font-size: 14px; }
+  .stat-bar { grid-template-columns: repeat(2, 1fr); }
+  .meta-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">中壢天晟醫院 · EgentHub Agent POC 教材 <span class="small">第一階段 65 Agent</span></div>
+  <div class="nav-right"><a href="#">← 回總覽</a></div>
+</div>
+<div class="container">
+  <div class="hero">
+    <h1>中壢天晟醫院 · EgentHub Agent POC 教材</h1>
+    <div class="subtitle">第一階段概念驗證 · 15 個工作室 · 65 個 AI Agent</div>
+    <p style="margin-top:18px;font-size:14.5px;color:var(--muted);">
+      本教材彙整天晟醫院 EgentHub 平台第一階段建議導入的 65 個 AI 助理。每一個 Agent 都附有完整 Prompt、實際輸入示範、驗測情境、與正式上線前的整備清單。
+      點擊任一 Agent 卡片即可進入該助理的完整說明頁。
+    </p>
+  </div>
+
+  <div class="stat-bar">
+    <div class="stat-card"><span class="num">15</span><div class="lbl">工作室</div></div>
+    <div class="stat-card"><span class="num">65</span><div class="lbl">AI Agent</div></div>
+    <div class="stat-card"><span class="num">16</span><div class="lbl">含知識庫</div></div>
+    <div class="stat-card"><span class="num">100%</span><div class="lbl">繁中介面</div></div>
+  </div>
+
+  <h2 style="margin-top:24px;">工作室快速跳轉</h2>
+  <div class="toc-bar">
+    <a href="#ws-1">1. 醫務行政</a>
+    <a href="#ws-2">2. 藥劑科</a>
+    <a href="#ws-3">3. 人資</a>
+    <a href="#ws-4">4. 教研中心</a>
+    <a href="#ws-5">5. 採購總務</a>
+    <a href="#ws-6">6. 品管中心</a>
+    <a href="#ws-7">7. 資訊室</a>
+    <a href="#ws-8">8. 公關行銷</a>
+    <a href="#ws-9">9. 院長室</a>
+    <a href="#ws-10">10. 法務法遵</a>
+    <a href="#ws-11">11. 財會出納</a>
+    <a href="#ws-12">12. 經營管理</a>
+    <a href="#ws-13">13. 護理部</a>
+    <a href="#ws-14">14. 門診部</a>
+    <a href="#ws-15">15. 健檢中心</a>
+  </div>
+
+  <div class="workshop-section" id="ws-1" style="--ws-color: #7C3AED;">
+    <div class="workshop-title">
+      <span class="ws-num">工作室 1</span>
+      <span>醫務行政</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400;margin-left:8px;">5 個 Agent</span>
+    </div>
+    <div class="agent-grid">
+      <a class="agent-tile" href="agent_1_1.html" style="--ws-color: #7C3AED;">
+        <div class="code">1.1</div>
+        <div class="name">會議逐字稿整理助理</div>
+      </a>
+      <a class="agent-tile" href="agent_1_2.html" style="--ws-color: #7C3AED;">
+        <div class="code">1.2</div>
+        <div class="name">公文簽核摘要助理</div>
+      </a>
+      <a class="agent-tile" href="agent_1_3.html" style="--ws-color: #7C3AED;">
+        <div class="code">1.3</div>
+        <div class="name">院內SOP問答助理</div>
+      </a>
+      <a class="agent-tile" href="agent_1_4.html" style="--ws-color: #7C3AED;">
+        <div class="code">1.4</div>
+        <div class="name">評鑑文件草擬助理</div>
+      </a>
+      <a class="agent-tile" href="agent_1_5.html" style="--ws-color: #7C3AED;">
+        <div class="code">1.5</div>
+        <div class="name">跨部門行動項追蹤助理</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="workshop-section" id="ws-2" style="--ws-color: #10B981;">
+    <div class="workshop-title">
+      <span class="ws-num">工作室 2</span>
+      <span>藥劑科</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400;margin-left:8px;">6 個 Agent</span>
+    </div>
+    <div class="agent-grid">
+      <a class="agent-tile" href="agent_2_1.html" style="--ws-color: #10B981;">
+        <div class="code">2.1</div>
+        <div class="name">院際藥品調撥助手</div>
+      </a>
+      <a class="agent-tile" href="agent_2_2.html" style="--ws-color: #10B981;">
+        <div class="code">2.2</div>
+        <div class="name">藥敏統計報表整理助理</div>
+      </a>
+      <a class="agent-tile" href="agent_2_3.html" style="--ws-color: #10B981;">
+        <div class="code">2.3</div>
+        <div class="name">月底庫存控管顧問</div>
+      </a>
+      <a class="agent-tile" href="agent_2_4.html" style="--ws-color: #10B981;">
+        <div class="code">2.4</div>
+        <div class="name">藥品仿單問答助理</div>
+      </a>
+      <a class="agent-tile" href="agent_2_5.html" style="--ws-color: #10B981;">
+        <div class="code">2.5</div>
+        <div class="name">藥廠交期追蹤助理</div>
+      </a>
+      <a class="agent-tile" href="agent_2_6.html" style="--ws-color: #10B981;">
+        <div class="code">2.6</div>
+        <div class="name">健保藥品代碼對照查詢</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="workshop-section" id="ws-3" style="--ws-color: #F59E0B;">
+    <div class="workshop-title">
+      <span class="ws-num">工作室 3</span>
+      <span>人資</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400;margin-left:8px;">6 個 Agent</span>
+    </div>
+    <div class="agent-grid">
+      <a class="agent-tile" href="agent_3_1.html" style="--ws-color: #F59E0B;">
+        <div class="code">3.1</div>
+        <div class="name">履歷篩選助理</div>
+      </a>
+      <a class="agent-tile" href="agent_3_2.html" style="--ws-color: #F59E0B;">
+        <div class="code">3.2</div>
+        <div class="name">性向測驗分析助理</div>
+      </a>
+      <a class="agent-tile" href="agent_3_3.html" style="--ws-color: #F59E0B;">
+        <div class="code">3.3</div>
+        <div class="name">員工Q&amp;A助理</div>
+      </a>
+      <a class="agent-tile" href="agent_3_4.html" style="--ws-color: #F59E0B;">
+        <div class="code">3.4</div>
+        <div class="name">新人到職指引助理</div>
+      </a>
+      <a class="agent-tile" href="agent_3_5.html" style="--ws-color: #F59E0B;">
+        <div class="code">3.5</div>
+        <div class="name">排班與假勤規則問答</div>
+      </a>
+      <a class="agent-tile" href="agent_3_6.html" style="--ws-color: #F59E0B;">
+        <div class="code">3.6</div>
+        <div class="name">離職面談摘要彙整</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="workshop-section" id="ws-4" style="--ws-color: #3B82F6;">
+    <div class="workshop-title">
+      <span class="ws-num">工作室 4</span>
+      <span>教研中心</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400;margin-left:8px;">9 個 Agent</span>
+    </div>
+    <div class="agent-grid">
+      <a class="agent-tile" href="agent_4_1.html" style="--ws-color: #3B82F6;">
+        <div class="code">4.1</div>
+        <div class="name">補助申請智能助理</div>
+      </a>
+      <a class="agent-tile" href="agent_4_2.html" style="--ws-color: #3B82F6;">
+        <div class="code">4.2</div>
+        <div class="name">講師費計算助理</div>
+      </a>
+      <a class="agent-tile" href="agent_4_3.html" style="--ws-color: #3B82F6;">
+        <div class="code">4.3</div>
+        <div class="name">院內認證教師資料維護</div>
+      </a>
+      <a class="agent-tile" href="agent_4_4.html" style="--ws-color: #3B82F6;">
+        <div class="code">4.4</div>
+        <div class="name">學員動態查詢助理</div>
+      </a>
+      <a class="agent-tile" href="agent_4_5.html" style="--ws-color: #3B82F6;">
+        <div class="code">4.5</div>
+        <div class="name">課程規劃助理</div>
+      </a>
+      <a class="agent-tile" href="agent_4_6.html" style="--ws-color: #3B82F6;">
+        <div class="code">4.6</div>
+        <div class="name">醫學文獻摘要助理</div>
+      </a>
+      <a class="agent-tile" href="agent_4_7.html" style="--ws-color: #3B82F6;">
+        <div class="code">4.7</div>
+        <div class="name">學分時數統計助理</div>
+      </a>
+      <a class="agent-tile" href="agent_4_8.html" style="--ws-color: #3B82F6;">
+        <div class="code">4.8</div>
+        <div class="name">醫教會議事規則問答</div>
+      </a>
+      <a class="agent-tile" href="agent_4_9.html" style="--ws-color: #3B82F6;">
+        <div class="code">4.9</div>
+        <div class="name">檢驗放射訓練教材整理助手</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="workshop-section" id="ws-5" style="--ws-color: #EF4444;">
+    <div class="workshop-title">
+      <span class="ws-num">工作室 5</span>
+      <span>採購總務</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400;margin-left:8px;">3 個 Agent</span>
+    </div>
+    <div class="agent-grid">
+      <a class="agent-tile" href="agent_5_1.html" style="--ws-color: #EF4444;">
+        <div class="code">5.1</div>
+        <div class="name">採購規格書草擬助理</div>
+      </a>
+      <a class="agent-tile" href="agent_5_2.html" style="--ws-color: #EF4444;">
+        <div class="code">5.2</div>
+        <div class="name">廠商詢價郵件助理</div>
+      </a>
+      <a class="agent-tile" href="agent_5_3.html" style="--ws-color: #EF4444;">
+        <div class="code">5.3</div>
+        <div class="name">醫材庫存週轉分析</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="workshop-section" id="ws-6" style="--ws-color: #06B6D4;">
+    <div class="workshop-title">
+      <span class="ws-num">工作室 6</span>
+      <span>品管中心</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400;margin-left:8px;">3 個 Agent</span>
+    </div>
+    <div class="agent-grid">
+      <a class="agent-tile" href="agent_6_1.html" style="--ws-color: #06B6D4;">
+        <div class="code">6.1</div>
+        <div class="name">評鑑條文問答助理</div>
+      </a>
+      <a class="agent-tile" href="agent_6_2.html" style="--ws-color: #06B6D4;">
+        <div class="code">6.2</div>
+        <div class="name">流程改善PDCA整理助理</div>
+      </a>
+      <a class="agent-tile" href="agent_6_3.html" style="--ws-color: #06B6D4;">
+        <div class="code">6.3</div>
+        <div class="name">內部稽核問題彙整</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="workshop-section" id="ws-7" style="--ws-color: #6366F1;">
+    <div class="workshop-title">
+      <span class="ws-num">工作室 7</span>
+      <span>資訊室</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400;margin-left:8px;">3 個 Agent</span>
+    </div>
+    <div class="agent-grid">
+      <a class="agent-tile" href="agent_7_1.html" style="--ws-color: #6366F1;">
+        <div class="code">7.1</div>
+        <div class="name">IT工單分類分流助理</div>
+      </a>
+      <a class="agent-tile" href="agent_7_2.html" style="--ws-color: #6366F1;">
+        <div class="code">7.2</div>
+        <div class="name">系統公告產生器</div>
+      </a>
+      <a class="agent-tile" href="agent_7_3.html" style="--ws-color: #6366F1;">
+        <div class="code">7.3</div>
+        <div class="name">資安政策問答助理</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="workshop-section" id="ws-8" style="--ws-color: #EC4899;">
+    <div class="workshop-title">
+      <span class="ws-num">工作室 8</span>
+      <span>公關行銷</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400;margin-left:8px;">4 個 Agent</span>
+    </div>
+    <div class="agent-grid">
+      <a class="agent-tile" href="agent_8_1.html" style="--ws-color: #EC4899;">
+        <div class="code">8.1</div>
+        <div class="name">衛教文章草稿助理</div>
+      </a>
+      <a class="agent-tile" href="agent_8_2.html" style="--ws-color: #EC4899;">
+        <div class="code">8.2</div>
+        <div class="name">醫師介紹文案生成</div>
+      </a>
+      <a class="agent-tile" href="agent_8_3.html" style="--ws-color: #EC4899;">
+        <div class="code">8.3</div>
+        <div class="name">社群貼文排程草擬</div>
+      </a>
+      <a class="agent-tile" href="agent_8_4.html" style="--ws-color: #EC4899;">
+        <div class="code">8.4</div>
+        <div class="name">媒體回應草稿助手</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="workshop-section" id="ws-9" style="--ws-color: #8B5CF6;">
+    <div class="workshop-title">
+      <span class="ws-num">工作室 9</span>
+      <span>院長室</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400;margin-left:8px;">3 個 Agent</span>
+    </div>
+    <div class="agent-grid">
+      <a class="agent-tile" href="agent_9_1.html" style="--ws-color: #8B5CF6;">
+        <div class="code">9.1</div>
+        <div class="name">每日重要新聞彙整</div>
+      </a>
+      <a class="agent-tile" href="agent_9_2.html" style="--ws-color: #8B5CF6;">
+        <div class="code">9.2</div>
+        <div class="name">來賓接待動線助理</div>
+      </a>
+      <a class="agent-tile" href="agent_9_3.html" style="--ws-color: #8B5CF6;">
+        <div class="code">9.3</div>
+        <div class="name">跨會議重點摘要助理</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="workshop-section" id="ws-10" style="--ws-color: #F97316;">
+    <div class="workshop-title">
+      <span class="ws-num">工作室 10</span>
+      <span>法務法遵</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400;margin-left:8px;">2 個 Agent</span>
+    </div>
+    <div class="agent-grid">
+      <a class="agent-tile" href="agent_10_1.html" style="--ws-color: #F97316;">
+        <div class="code">10.1</div>
+        <div class="name">合約初審重點提示</div>
+      </a>
+      <a class="agent-tile" href="agent_10_2.html" style="--ws-color: #F97316;">
+        <div class="code">10.2</div>
+        <div class="name">法規異動追蹤摘要</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="workshop-section" id="ws-11" style="--ws-color: #14B8A6;">
+    <div class="workshop-title">
+      <span class="ws-num">工作室 11</span>
+      <span>財會出納</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400;margin-left:8px;">6 個 Agent</span>
+    </div>
+    <div class="agent-grid">
+      <a class="agent-tile" href="agent_11_1.html" style="--ws-color: #14B8A6;">
+        <div class="code">11.1</div>
+        <div class="name">費用核銷規則問答助理</div>
+      </a>
+      <a class="agent-tile" href="agent_11_2.html" style="--ws-color: #14B8A6;">
+        <div class="code">11.2</div>
+        <div class="name">員工請款流程指引</div>
+      </a>
+      <a class="agent-tile" href="agent_11_3.html" style="--ws-color: #14B8A6;">
+        <div class="code">11.3</div>
+        <div class="name">廠商付款追蹤助理</div>
+      </a>
+      <a class="agent-tile" href="agent_11_4.html" style="--ws-color: #14B8A6;">
+        <div class="code">11.4</div>
+        <div class="name">預算執行率追蹤助理</div>
+      </a>
+      <a class="agent-tile" href="agent_11_5.html" style="--ws-color: #14B8A6;">
+        <div class="code">11.5</div>
+        <div class="name">健保申報規則解說助理</div>
+      </a>
+      <a class="agent-tile" href="agent_11_6.html" style="--ws-color: #14B8A6;">
+        <div class="code">11.6</div>
+        <div class="name">採購發票對帳助理</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="workshop-section" id="ws-12" style="--ws-color: #0EA5E9;">
+    <div class="workshop-title">
+      <span class="ws-num">工作室 12</span>
+      <span>經營管理</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400;margin-left:8px;">5 個 Agent</span>
+    </div>
+    <div class="agent-grid">
+      <a class="agent-tile" href="agent_12_1.html" style="--ws-color: #0EA5E9;">
+        <div class="code">12.1</div>
+        <div class="name">醫院營運KPI問答助理</div>
+      </a>
+      <a class="agent-tile" href="agent_12_2.html" style="--ws-color: #0EA5E9;">
+        <div class="code">12.2</div>
+        <div class="name">健保政策異動追蹤摘要</div>
+      </a>
+      <a class="agent-tile" href="agent_12_3.html" style="--ws-color: #0EA5E9;">
+        <div class="code">12.3</div>
+        <div class="name">競品醫院動態彙整</div>
+      </a>
+      <a class="agent-tile" href="agent_12_4.html" style="--ws-color: #0EA5E9;">
+        <div class="code">12.4</div>
+        <div class="name">月度經營檢討資料整備助理</div>
+      </a>
+      <a class="agent-tile" href="agent_12_5.html" style="--ws-color: #0EA5E9;">
+        <div class="code">12.5</div>
+        <div class="name">院務簡報重點生成助理</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="workshop-section" id="ws-13" style="--ws-color: #D946EF;">
+    <div class="workshop-title">
+      <span class="ws-num">工作室 13</span>
+      <span>護理部</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400;margin-left:8px;">4 個 Agent</span>
+    </div>
+    <div class="agent-grid">
+      <a class="agent-tile" href="agent_13_1.html" style="--ws-color: #D946EF;">
+        <div class="code">13.1</div>
+        <div class="name">交班結構化模板助理</div>
+      </a>
+      <a class="agent-tile" href="agent_13_2.html" style="--ws-color: #D946EF;">
+        <div class="code">13.2</div>
+        <div class="name">護理觀察紀錄結構化助理</div>
+      </a>
+      <a class="agent-tile" href="agent_13_3.html" style="--ws-color: #D946EF;">
+        <div class="code">13.3</div>
+        <div class="name">衛教講義產生器</div>
+      </a>
+      <a class="agent-tile" href="agent_13_4.html" style="--ws-color: #D946EF;">
+        <div class="code">13.4</div>
+        <div class="name">新進護理SOP小幫手</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="workshop-section" id="ws-14" style="--ws-color: #84CC16;">
+    <div class="workshop-title">
+      <span class="ws-num">工作室 14</span>
+      <span>門診部</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400;margin-left:8px;">3 個 Agent</span>
+    </div>
+    <div class="agent-grid">
+      <a class="agent-tile" href="agent_14_1.html" style="--ws-color: #84CC16;">
+        <div class="code">14.1</div>
+        <div class="name">常見門診衛教產生器</div>
+      </a>
+      <a class="agent-tile" href="agent_14_2.html" style="--ws-color: #84CC16;">
+        <div class="code">14.2</div>
+        <div class="name">醫師診間公告助理</div>
+      </a>
+      <a class="agent-tile" href="agent_14_3.html" style="--ws-color: #84CC16;">
+        <div class="code">14.3</div>
+        <div class="name">衛教簡訊LINE文案助手</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="workshop-section" id="ws-15" style="--ws-color: #A855F7;">
+    <div class="workshop-title">
+      <span class="ws-num">工作室 15</span>
+      <span>健檢中心</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400;margin-left:8px;">3 個 Agent</span>
+    </div>
+    <div class="agent-grid">
+      <a class="agent-tile" href="agent_15_1.html" style="--ws-color: #A855F7;">
+        <div class="code">15.1</div>
+        <div class="name">健檢項目說明助理</div>
+      </a>
+      <a class="agent-tile" href="agent_15_2.html" style="--ws-color: #A855F7;">
+        <div class="code">15.2</div>
+        <div class="name">自費療程介紹撰寫助手</div>
+      </a>
+      <a class="agent-tile" href="agent_15_3.html" style="--ws-color: #A855F7;">
+        <div class="code">15.3</div>
+        <div class="name">健檢報告衛教解說助理</div>
+      </a>
+    </div>
+  </div>
+
+<div class="footer">
+本教材由智慧方案股份有限公司製作 · Intellicon Solutions × Tien-Sheng Hospital · Powered by EgentHub
+</div>
+<button id="backTop" class="back-top" onclick="backTop()">↑</button>
+</div>
+<script>
+function copyPrompt(btnId, textId) {
+  const text = document.getElementById(textId).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById(btnId);
+    const original = btn.innerText;
+    btn.innerText = '已複製 ✓';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.innerText = original;
+      btn.classList.remove('copied');
+    }, 1800);
+  });
+}
+window.addEventListener('scroll', () => {
+  const bt = document.getElementById('backTop');
+  if (bt) bt.classList.toggle('show', window.scrollY > 400);
+});
+function backTop() { window.scrollTo({top: 0, behavior: 'smooth'}); }
+</script>
+</body>
+</html>
