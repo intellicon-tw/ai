@@ -75,8 +75,29 @@ details.acc .accbody{padding:6px 18px 16px}
 .steps4 .c b{color:var(--navy);font-size:14px}.steps4 .c span{font-size:12px;color:var(--sub)}
 footer{text-align:center;color:var(--sub);font-size:12.5px;margin:30px 12px 0;padding-top:18px;border-top:1px solid var(--line)}
 @media(max-width:860px){nav.side{display:none}.steps4{grid-template-columns:repeat(2,1fr)}}
+#gate{position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,var(--navy),var(--steel));display:flex;align-items:center;justify-content:center}
+.gatebox{background:#fff;border-radius:16px;padding:38px 42px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35);max-width:390px;width:90%}
+.glogo{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:6px}
+.gsub{font-size:12px;color:var(--sub);margin-bottom:18px}
+.gatebox p{font-size:13.5px;color:var(--sub);margin-bottom:16px}
+#gpw{width:100%;padding:12px 14px;font-size:17px;border:2px solid var(--line);border-radius:10px;text-align:center;letter-spacing:3px;margin-bottom:12px}
+#gpw:focus{outline:none;border-color:var(--steel)}
+#gbtn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:700;cursor:pointer}
+#gbtn:hover{background:var(--steel)}
+#gerr{color:var(--red);font-size:13px;margin-top:12px;min-height:18px}
+body.locked{overflow:hidden;height:100vh}
 </style></head>
-<body>
+<body class="locked">
+<div id="gate">
+  <div class="gatebox">
+    <div class="glogo">🔒 盛餘烤漆審單助手</div>
+    <div class="gsub">開發實作手冊 · Intellicon EgentHub</div>
+    <p>請輸入密碼以開啟手冊</p>
+    <input id="gpw" type="password" inputmode="numeric" placeholder="請輸入密碼" autocomplete="off" maxlength="8">
+    <button id="gbtn">開啟手冊</button>
+    <div id="gerr"></div>
+  </div>
+</div>
 <div class="layout">
 <nav class="side">
   <div class="brand">盛餘烤漆審單助手</div>
@@ -977,6 +998,21 @@ footer{text-align:center;color:var(--sub);font-size:12.5px;margin:30px 12px 0;pa
 </div>
 <a class="egbtn-fixed" href="https://intellicon.app/" target="_blank" rel="noopener">🚀 打開 EgentHub</a>
 <script>
+(function(){
+  function taipeiPw(){
+    var now=new Date();
+    var t=new Date(now.getTime()+now.getTimezoneOffset()*60000+8*3600000);
+    return ''+t.getFullYear()+String(t.getMonth()+1).padStart(2,'0')+String(t.getDate()).padStart(2,'0');
+  }
+  var g=document.getElementById('gate'),inp=document.getElementById('gpw'),btn=document.getElementById('gbtn'),err=document.getElementById('gerr');
+  function unlock(){
+    if(inp.value.trim()===taipeiPw()){ g.style.display='none'; document.body.classList.remove('locked'); }
+    else { err.textContent='密碼錯誤，請重新輸入'; inp.value=''; inp.focus(); }
+  }
+  btn.addEventListener('click',unlock);
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter') unlock(); });
+  window.addEventListener('load',function(){ inp.focus(); });
+})();
 document.querySelectorAll('.copybtn').forEach(function(b){
   b.addEventListener('click',function(){
     var t=document.getElementById(b.dataset.target);
