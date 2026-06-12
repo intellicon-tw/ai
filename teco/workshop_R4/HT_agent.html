@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>空調通路情報 Agent 實作教學｜Dify vs Hermes</title>
+<style>
+  :root{
+    --purple:#3D2462; --purple-lt:#F3EEFA; --purple-mid:#6B4FA0;
+    --dify:#3B5BDB; --dify-lt:#EDF1FD;
+    --hermes:#0E7C66; --hermes-lt:#E7F4F0;
+    --ink:#222632; --muted:#6A7080; --line:#E3E6EE; --bg:#FAFAFC;
+    --code-bg:#1E2230; --code-ink:#E8EAF2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;background:var(--bg);color:var(--ink);line-height:1.75}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px 80px}
+
+  header{background:var(--purple);color:#fff;padding:42px 0 36px}
+  header .wrap{padding-bottom:0}
+  .kicker{font-size:13px;letter-spacing:3px;color:#CBB8EC;margin-bottom:10px}
+  header h1{font-size:30px;line-height:1.4}
+  header p{color:#D8CCEF;margin-top:10px;font-size:15px}
+
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:50}
+  nav .wrap{display:flex;gap:4px;padding-top:0;padding-bottom:0}
+  nav button{flex:1;border:none;background:none;padding:14px 8px;font-size:15px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;font-family:inherit}
+  nav button.active{color:var(--purple)}
+  nav button.active.t-dify{color:var(--dify);border-bottom-color:var(--dify)}
+  nav button.active.t-hermes{color:var(--hermes);border-bottom-color:var(--hermes)}
+  nav button.active.t-task,nav button.active.t-practice{border-bottom-color:var(--purple)}
+
+  section.tab{display:none;padding-top:34px}
+  section.tab.show{display:block}
+  h2{font-size:22px;margin:26px 0 12px;color:var(--purple)}
+  .dify h2{color:var(--dify)} .hermes h2{color:var(--hermes)}
+  h3{font-size:16px;margin:20px 0 8px}
+  p.lead{font-size:15px;color:var(--muted)}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px 22px;margin:14px 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+  .pill{display:inline-block;font-size:12px;font-weight:700;padding:2px 10px;border-radius:99px;margin-bottom:8px}
+  .pill.dify{background:var(--dify-lt);color:var(--dify)}
+  .pill.hermes{background:var(--hermes-lt);color:var(--hermes)}
+  .pill.purple{background:var(--purple-lt);color:var(--purple)}
+
+  table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--purple-lt);color:var(--purple)}
+  td.d{background:var(--dify-lt)} td.h{background:var(--hermes-lt)}
+
+  .codebox{position:relative;margin:14px 0}
+  .codebox pre{background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:20px 18px;font-size:12.5px;line-height:1.65;overflow-x:auto;white-space:pre-wrap;word-break:break-word;font-family:"SFMono-Regular",Consolas,"Microsoft JhengHei",monospace;max-height:560px;overflow-y:auto}
+  .copybtn{position:absolute;top:10px;right:10px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;color:var(--ink);font-family:inherit}
+  .copybtn:active{transform:scale(.96)}
+
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+  .flow .step{background:#fff;border:1.5px solid var(--line);border-radius:8px;padding:8px 14px;font-size:13.5px;font-weight:700}
+  .flow .arr{color:var(--muted);font-weight:700}
+  .dify .flow .step{border-color:var(--dify);color:var(--dify)}
+  .hermes .flow .step{border-color:var(--hermes);color:var(--hermes)}
+
+  .note{background:var(--purple-lt);border-radius:8px;padding:12px 16px;font-size:13.5px;margin:14px 0}
+  .note b{color:var(--purple)}
+  ul.tight{padding-left:22px;font-size:14.5px}
+  ul.tight li{margin:5px 0}
+  .ex{border-left:4px solid var(--purple);background:#fff;border-radius:0 10px 10px 0;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 20px;margin:14px 0}
+  .ex h3{margin-top:0;color:var(--purple)}
+  footer{margin-top:50px;color:var(--muted);font-size:12.5px;text-align:center}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">東元電機 AI AGENT 開發實務工作坊 · 實作教學</div>
+    <h1>空調通路情報 Agent：Dify 與 Hermes 兩種開發方式</h1>
+    <p>同一份 SOP，兩種部署。先看 Dify（現在的主流），再看 Hermes（2026 年的新答案）。所有 Prompt 可直接複製練習。</p>
+  </div>
+</header>
+
+<nav><div class="wrap">
+  <button class="t-task active" onclick="go('task',this)">任務目標</button>
+  <button class="t-dify" onclick="go('dify',this)">開發方式一：Dify</button>
+  <button class="t-hermes" onclick="go('hermes',this)">開發方式二：Hermes</button>
+  <button class="t-practice" onclick="go('practice',this)">對照與練習</button>
+</div></nav>
+
+<div class="wrap">
+
+<!-- ============ TAB 1 任務 ============ -->
+<section id="task" class="tab show">
+  <h2>這個 Agent 要做什麼</h2>
+  <p class="lead">站在東元「空調科技事業群」立場，每天自動完成台灣 B2C 零售通路的市場情報採集。</p>
+  <div class="grid2">
+    <div class="card"><span class="pill purple">監控通路</span><br>momo、PChome 24h、全國電子、燦坤、蝦皮商城、家樂福線上、好市多線上、特力屋</div>
+    <div class="card"><span class="pill purple">監控品牌</span><br>東元 TECO（基準，HS8 系列第一優先）＋大金、日立、Panasonic、三菱、富士通、禾聯、聲寶、大同、三洋、歌林、LG、三星等</div>
+    <div class="card"><span class="pill purple">每日產出（08:00 前）</span><br>《每日空調通路情報》：①今日重點 ②價格與促銷變動 ③新品動態 ④銷售排名 ⑤輿情摘要 ⑥資料品質聲明</div>
+    <div class="card"><span class="pill purple">即時警報</span><br>競品主力機種降價逾 10%、東元負面輿情擴散、疑似遭下架缺貨、節能補助政策變動——當下立即推播，不等日報</div>
+  </div>
+  <div class="note"><b>共同的核心：</b>不論用哪個平台，Agent 的靈魂都是同一份 SOP——監控什麼、怎麼判斷重要性、何時警報、報告長什麼樣子。把 SOP 寫清楚，才有資格談平台。</div>
+</section>
+
+<!-- ============ TAB 2 DIFY ============ -->
+<section id="dify" class="tab dify">
+  <h2>在 Dify 上開發：先蓋環境，再寫指令</h2>
+  <p class="lead">Dify Agent App 是「無狀態」的：沒有記憶、沒有鬧鐘。開發的一半工作量在幫它補這些洞。</p>
+
+  <h3>架構</h3>
+  <div class="flow">
+    <span class="step">外部排程 06:30 呼叫 API</span><span class="arr">→</span>
+    <span class="step">Dify Agent App</span><span class="arr">→</span>
+    <span class="step">Tavily 搜尋</span><span class="arr">＋</span>
+    <span class="step">Firecrawl 抓頁</span><span class="arr">＋</span>
+    <span class="step">4 個自訂工具</span>
+  </div>
+  <div class="card">
+    <span class="pill dify">要做的五件事</span>
+    <ul class="tight">
+      <li>安裝市集插件：<b>Tavily</b>（搜尋）、<b>Firecrawl</b>（網頁抓取）</li>
+      <li>自建四個 API 自訂工具：<b>get_baseline</b>（讀昨日基準）、<b>save_snapshot</b>（寫今日數據）、<b>send_report</b>（發日報）、<b>send_alert</b>（發警報），後端可用 Google Sheets + Apps Script</li>
+      <li>把 SOP 寫成系統提示詞（下方完整版）</li>
+      <li>把「最大迭代次數」調到平台上限（預設 5 次絕對不夠）</li>
+      <li>設定外部排程（crontab / cron-job.org）每天 06:30 呼叫 chat-messages API</li>
+    </ul>
+  </div>
+
+  <h3>完整系統提示詞（貼入 Dify Agent 的「提示詞」欄位）</h3>
+  <div class="codebox">
+    <button class="copybtn" onclick="cp(this,'p-dify')">複製</button>
+    <pre id="p-dify">你是東元電機「空調科技事業群」的市場情報分析師 Agent。每次被觸發代表新的一個工作日，
+你要完成台灣 B2C 空調零售通路的情報採集，並產出《每日空調通路情報報告》。
+
+# 事業群背景（判斷情報重要度用）
+- 東元是台灣最大的水冷式冷卻機與封裝型空調機供應商，B2C 主力為變頻分離式、多聯機、
+  變頻窗型、隱藏式、天井式、落地式冷氣；HS8 系列為旗艦（節能超越日本 2025 年 1 級標準 7%、
+  R32 冷媒），是監控第一優先。
+- 商用冷鏈（冰櫃、冷凍櫃）有零售通路銷售，列入監控。
+- IoT 雲端控制與 APP 遠端操作是東元差異化訴求，競品同類功能動態要特別留意。
+- 冰水主機與大型 HVAC 系統整合屬 B2B，不每日追蹤，但重大新聞列入輿情。
+
+# 監控範圍
+通路（依優先序，迭代次數有限，依序完成，寧可少而準）：
+1. momo  2. PChome 24h  3. 全國電子  4. 燦坤  5. 蝦皮商城（官方旗艦店）
+6. 家樂福線上  7. 好市多線上  8. 特力屋
+品牌：東元 TECO（基準）+ 大金、日立、Panasonic、三菱電機、三菱重工、富士通、
+禾聯、聲寶、大同、台灣三洋、歌林、良峰、萬士益、LG、三星。
+品類：分離式變頻（核心，依噸數級距 2.x/3.x/4.x/5.x kW 對比）、變頻窗型、移動式、
+吊隱/天井/落地式、冰櫃冷凍櫃；除濕機/清淨機/電扇只記促銷主打款。
+
+# 執行檢核清單（嚴格依序，每步完成才進下一步）
+□ Step 0：呼叫 get_baseline 取得昨日基準。若回傳為空 → 進入「Day 0 模式」（見下）。
+□ Step 1：價格與促銷掃描——逐通路用 tavily_search 找冷氣分類頁/促銷頁，
+  用 firecrawl_scrape 抓取。每通路記錄：各品牌排行前 10 機種 + 東元全部在售機種的
+  型號、噸數、牌價、券後價、促銷條件（贈品/分期/含安裝與否/舊換新補助）。
+  與基準比對，記下所有價格變動（含變動 %）、新出現 SKU、消失 SKU。
+□ Step 2：新品查證——對新 SKU 搜尋品牌官網/新聞稿，確認是否正式新品，
+  整理能效（CSPF）、冷媒、IoT 功能、靜音值、是否通路獨家。
+□ Step 3：排行榜——抓 momo、PChome、蝦皮的冷氣品類銷售排行前 20，
+  記錄東元名次（未進榜要明說）與競品名次對比昨日的升降。
+□ Step 4：輿情——搜尋過去 24 小時 PTT（e-appliance、Lifeismoney）、Mobile01、
+  Dcard、Google 新聞中上述品牌的討論。東元負面輿情（故障/噪音/安裝糾紛）一律列入。
+  同時查節能補助/汰舊換新政策動態。
+□ Step 5：呼叫 save_snapshot 寫入今日全部數據。
+□ Step 6：產出報告並呼叫 send_report 發送。
+
+# 即時警報（發現當下立即呼叫 send_alert，不等報告）
+- 競品主力機種降價超過 10%
+- 東元出現跨平台擴散的負面輿情
+- 東元機種疑似遭通路下架/缺貨
+- 節能補助政策變動
+警報訊息 3 行內，開頭加【即時警報】。
+
+# 報告格式（send_report 的 body_markdown，嚴格遵守）
+# 每日空調通路情報 YYYY-MM-DD
+## 1. 今日重點（3–5 條，紅/黃/綠標記，主管 30 秒看完）
+## 2. 價格與促銷變動（只列有變動：品牌｜機種｜噸數級距｜通路｜昨日價→今日價｜變動%｜促銷；
+     東元與同級距競品並列；註明是否含標準安裝；無變動寫「今日無顯著變動」）
+## 3. 新品與上架動態（品牌｜型號｜定價｜通路｜規格亮點；無則寫「今日無」）
+## 4. 通路動態與銷售排名（東元名次、競品升降、檔期觀察）
+## 5. 輿情摘要（東元正負面都要、競品重大動態、補助政策；每條附來源連結）
+## 6. 資料品質聲明（列出今日抓取失敗的通路與項目，標明「未能取得」）
+（週五加：## 7. 本週趨勢彙總）
+
+# Day 0 模式（get_baseline 回傳為空時）
+不出日報，改做基準建檔：完成 Step 1 全量採集（不做比對）→ save_snapshot →
+產出《基準盤點報告》（各通路品牌陳列概況、東元 vs 競品價格帶定位、進行中檔期與補助）
+→ send_report。
+
+# 鐵則
+1. 絕不編造價格、排名、輿情。抓不到就在資料品質聲明中註明「未能取得」，不要用推測補。
+2. 每筆數據必附來源 URL。
+3. 價格區分牌價與券後價，冷氣註明含安裝與否。
+4. 事實與判讀分開，判讀只放「今日重點」並以「研判：」開頭。
+5. 頁面被反爬蟲擋住就記錄失敗，不要規避。
+6. 迭代預算有限：若接近上限，優先保證 momo、PChome、全國電子三通路 + 輿情完成，
+   其餘通路標「今日未巡」，照常出報告。報告一定要發出去，寧可不完整也不可沉默。
+7. 繁體中文，技術術語保留英文。</pre>
+  </div>
+
+  <h3>排程觸發（外部 cron）</h3>
+  <div class="codebox">
+    <button class="copybtn" onclick="cp(this,'p-cron')">複製</button>
+    <pre id="p-cron"># crontab：每日 06:30 Asia/Taipei
+30 6 * * * curl -s -X POST 'https://YOUR_DIFY_HOST/v1/chat-messages' \
+  -H 'Authorization: Bearer {APP_API_KEY}' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "query": "開始執行今日的空調通路情報任務",
+    "inputs": {},
+    "response_mode": "blocking",
+    "user": "intel-cron"
+  }'</pre>
+  </div>
+  <div class="note"><b>觀察重點：</b>注意提示詞裡有多少篇幅在「補平台的洞」——Step 0 讀記憶、Step 5 存檔、鐵則 6 的降級策略，都是因為 Dify Agent 無狀態、迭代有限而存在的。記住這個感覺，待會看 Hermes 版。</div>
+</section>
+
+<!-- ============ TAB 3 HERMES ============ -->
+<section id="hermes" class="tab hermes">
+  <h2>在 Hermes 上開發：寫一份任務書就好</h2>
+  <p class="lead">Hermes Agent 長駐在自己的伺服器上：有長期記憶、會自我排程、做完任務會把經驗寫成 Skill。開發方式從「蓋環境」變成「寫任務書」。</p>
+
+  <h3>架構</h3>
+  <div class="flow">
+    <span class="step">Hermes（長駐自家伺服器）</span><span class="arr">→</span>
+    <span class="step">內建記憶（本機資料庫）</span><span class="arr">＋</span>
+    <span class="step">內建排程（一句話）</span><span class="arr">＋</span>
+    <span class="step">自動寫 Skill 越跑越穩</span>
+  </div>
+  <div class="card">
+    <span class="pill hermes">要做的一件事</span>
+    <ul class="tight">
+      <li>把下方任務書整份貼給 Hermes，再說：「建立一個每天早上 8 點執行的排程任務，內容是這份指令。」</li>
+      <li>（IT 一次性工作：在伺服器安裝 Hermes、接好 Telegram／Slack／Email 投遞通道）</li>
+    </ul>
+  </div>
+
+  <h3>完整任務書（直接貼給 Hermes）</h3>
+  <div class="codebox">
+    <button class="copybtn" onclick="cp(this,'p-hermes')">複製</button>
+    <pre id="p-hermes"># 任務：東元空調 B2C 通路每日市場情報
+
+## 一、角色與使命
+你是東元電機「空調科技事業群」的市場情報分析師。每天監控台灣 B2C 家電零售通路與
+空調競品動態，在每天上午 8:00（台北時間）前產出一份《每日空調通路情報報告》。
+你是長期任務：必須維護歷史資料、每天與前一日比對、累積趨勢觀察。
+
+事業群背景（判斷情報重要度用）：
+- 東元是台灣最大的水冷式冷卻機與封裝型空調機供應商；B2C 主力為變頻分離式、多聯機、
+  變頻窗型、隱藏式、天井式、落地式冷氣；HS8 系列為旗艦（節能超越日本 2025 年
+  1 級標準 7%、R32 冷媒），監控第一優先。
+- 商用冷鏈（冰櫃、冷凍櫃）有零售通路銷售，列入監控。
+- IoT 雲端控制與 APP 遠端操作是東元差異化訴求，競品同類功能動態特別留意。
+- 冰水主機、大型 HVAC 系統整合屬 B2B，不每日追蹤，重大新聞列入輿情。
+
+## 二、監控範圍
+通路：全國電子、燦坤、順發（3C 連鎖）；家樂福、大潤發/大全聯、好市多（量販）；
+momo、PChome 24h、蝦皮商城官方旗艦店（電商）；特力屋、品牌官方商城。
+品牌：東元 TECO（基準）+ 大金、日立、Panasonic、三菱電機、三菱重工、富士通、
+禾聯、聲寶、大同、台灣三洋、歌林、良峰、萬士益、LG、三星；發現新進品牌主動回報。
+品類：分離式變頻空調（核心，依噸數級距分組對比）、變頻窗型、移動式、
+吊隱/天井/落地式、冰櫃冷凍櫃；除濕機/清淨機/電扇摘要即可。
+
+## 三、每日工作流程（06:30 開工，08:00 前交付）
+Step 1 價格與促銷掃描：逐通路記錄各品牌主力機種售價與促銷條件
+（贈品/分期/含安裝與否/舊換新與節能補助），與你維護的歷史價格表比對，標記所有變動。
+Step 2 新品偵測：發現歷史資料庫中不存在的新型號，查品牌官網確認是否正式新品，
+記錄能效（CSPF）、冷媒、IoT 功能、靜音值、首發通路與定價。
+Step 3 排行榜：抓 momo、PChome、蝦皮冷氣品類銷售排行前 20，記錄東元名次與升降。
+Step 4 輿情：掃 PTT（e-appliance、Lifeismoney）、Mobile01、Dcard、Google 新聞
+近 24 小時討論；東元負面輿情一律列入；補助政策動態一併查。
+Step 5 資料持久化：當日數據寫入你維護的資料庫
+（price_history / new_products / rankings / sentiment_log 四張表）。
+
+## 四、報告格式（Markdown，固定結構）
+# 每日空調通路情報 YYYY-MM-DD
+1. 今日重點（3–5 條，紅/黃/綠標記）
+2. 價格與促銷變動（只列有變動，東元與同級距競品並列，註明含安裝與否）
+3. 新品與上架動態（無則寫「今日無」）
+4. 通路動態與銷售排名
+5. 輿情摘要（每條附來源連結）
+6. 資料品質聲明（抓取失敗項目標明「未能取得」）
+（每週五加：本週趨勢彙總）
+
+## 五、即時警報（不等日報，立即推播，3 行內，開頭加【即時警報】）
+競品主力機種降價逾 10%／東元負面輿情擴散／東元機種疑遭下架缺貨／節能補助政策變動
+
+## 六、鐵則
+1. 絕不編造價格、排名、輿情；抓不到就註明「未能取得」。
+2. 每筆數據附來源 URL 與擷取時間。
+3. 牌價與券後價分開記錄。
+4. 事實與判讀分開，判讀以「研判：」開頭。
+5. 遇反爬蟲記錄失敗即可，不要規避。
+6. 4–9 月空調旺季，加密監控頻率與促銷追蹤深度。
+7. 繁體中文，技術術語保留英文。
+
+## 七、首次執行（Day 0 建檔）
+第一次執行不出日報：建立資料庫結構 → 全品牌在售機種基準快照 →
+產出《基準盤點報告》→ 把這次摸索出的抓取流程寫成 skill，之後每天重用。</pre>
+  </div>
+
+  <h3>排程設定（對 Hermes 說一句話）</h3>
+  <div class="codebox">
+    <button class="copybtn" onclick="cp(this,'p-sched')">複製</button>
+    <pre id="p-sched">建立一個每天早上 8 點執行的排程任務，內容是上面這份「東元空調 B2C 通路每日市場情報」指令。
+實際執行時間排 06:30 開工、08:00 前把報告發送到（Telegram / Slack / Email 擇一）。</pre>
+  </div>
+  <div class="note"><b>觀察重點：</b>對照 Dify 版——這裡沒有 get_baseline／save_snapshot（記憶內建）、沒有外部 cron（排程內建）、沒有降級策略（長駐執行沒有迭代壓力），還多了「把流程寫成 skill」這個 Dify 做不到的自我進化步驟。</div>
+</section>
+
+<!-- ============ TAB 4 對照與練習 ============ -->
+<section id="practice" class="tab">
+  <h2>兩版 Prompt 對照</h2>
+  <table>
+    <tr><th style="width:18%">面向</th><th>Dify 版</th><th>Hermes 版</th></tr>
+    <tr><td><b>記憶</b></td><td class="d">Step 0 / Step 5 呼叫自建工具讀寫外部資料表</td><td class="h">「維護歷史資料」一句話，本機資料庫內建</td></tr>
+    <tr><td><b>排程</b></td><td class="d">外部 cron 每天打 API（要 IT 設定）</td><td class="h">對它說「每天 8 點執行」即完成</td></tr>
+    <tr><td><b>體力</b></td><td class="d">迭代上限 → 通路收斂 + 降級策略（鐵則 6）</td><td class="h">長駐執行，無迭代壓力，通路清單更長</td></tr>
+    <tr><td><b>學習</b></td><td class="d">無，行為固定，要人工改 prompt</td><td class="h">Day 0 把抓取流程寫成 skill，之後每天重用</td></tr>
+    <tr><td><b>相同處</b></td><td colspan="2" style="background:var(--purple-lt)">監控範圍、報告格式、警報條件、品質鐵則——SOP 核心完全一樣。指令寫得好，換平台九成可以沿用。</td></tr>
+  </table>
+
+  <h2>動手練習</h2>
+  <div class="ex">
+    <h3>練習 1｜讀懂檢核清單（15 分鐘）</h3>
+    <p>打開「Dify」分頁的系統提示詞，找出：哪三個段落是在「補 Dify 平台的洞」？如果把這三段刪掉，Agent 會發生什麼事？</p>
+  </div>
+  <div class="ex">
+    <h3>練習 2｜找出兩版差異（15 分鐘）</h3>
+    <p>把兩版 Prompt 並排，圈出 Hermes 版「沒有」的內容。想一想：每一處消失的段落，對應 Hermes 的哪一個內建能力？</p>
+  </div>
+  <div class="ex">
+    <h3>練習 3｜改成你的題目（30 分鐘）</h3>
+    <p>複製任一版 Prompt，把監控對象換成你部門負責的產品線（例如商用空調經銷報價、冷凍冷藏設備標案）。需要改的四個區塊：<b>監控範圍</b>（通路/品牌/品類）、<b>報告格式</b>（你的主管想看什麼）、<b>警報條件</b>（什麼事不能等到明天）、<b>鐵則</b>（你的領域裡 AI 最容易出錯的地方）。改完先在 Dify 手動跑一次驗證。</p>
+  </div>
+
+  <div class="note"><b>建議路徑：</b>先在 Dify 用兩個通路跑一個月 POC，淬鍊出穩定的 SOP 與提示詞 → 驗證有價值後，把指令改寫成任務書，部署到 Hermes 長駐執行。Prompt 的功力是帶得走的，平台只是宿舍。</div>
+</section>
+
+</div>
+<footer>東元電機 AI Agent 開發實務工作坊 · 第四梯 R4｜Albert Chen · 智慧方案</footer>
+
+<script>
+function go(id, btn){
+  document.querySelectorAll('section.tab').forEach(s=>s.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  window.scrollTo({top:0});
+}
+function cp(btn, id){
+  const t = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(t).then(()=>{
+    const o = btn.textContent; btn.textContent = '已複製 ✓';
+    setTimeout(()=>btn.textContent=o, 1500);
+  });
+}
+</script>
+</body>
+</html>
