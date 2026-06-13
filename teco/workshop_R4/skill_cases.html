@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三個商機查找案例：把 Prompt 變成 Skill｜Hermes 實作</title>
+<style>
+  :root{
+    --purple:#3D2462; --purple-lt:#F3EEFA; --purple-mid:#6B4FA0;
+    --b2c:#3B5BDB; --b2c-lt:#EDF1FD;
+    --b2b:#0E7C66; --b2b-lt:#E7F4F0;
+    --gm:#B26A00; --gm-lt:#FBF1E0;
+    --ink:#222632; --muted:#6A7080; --line:#E3E6EE; --bg:#FAFAFC;
+    --code-bg:#1E2230; --code-ink:#E8EAF2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;background:var(--bg);color:var(--ink);line-height:1.75}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px 80px}
+
+  header{background:var(--purple);color:#fff;padding:42px 0 36px;position:relative}
+  header .wrap{padding-bottom:0}
+  .kicker{font-size:13px;letter-spacing:3px;color:#CBB8EC;margin-bottom:10px}
+  header h1{font-size:30px;line-height:1.4}
+  header p{color:#D8CCEF;margin-top:10px;font-size:15px}
+
+  body.lang-en .zh{display:none}
+  body.lang-zh .en{display:none}
+  .langtoggle{position:absolute;top:14px;right:18px;font-size:13px;z-index:60}
+  .langtoggle a{color:#fff;text-decoration:none;opacity:.65;padding:3px 9px;border-radius:6px;cursor:pointer}
+  .langtoggle a.on{opacity:1;background:rgba(255,255,255,.2);font-weight:700}
+  .ht-back{display:inline-block;color:#CBB8EC;text-decoration:none;font-size:13px;margin-bottom:12px}
+  .ht-back:hover{color:#fff}
+
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:50}
+  nav .wrap{display:flex;gap:4px;padding-top:0;padding-bottom:0}
+  nav button{flex:1;border:none;background:none;padding:14px 8px;font-size:14.5px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;font-family:inherit}
+  nav button.active{color:var(--purple);border-bottom-color:var(--purple)}
+  nav button.active.t-c1{color:var(--b2c);border-bottom-color:var(--b2c)}
+  nav button.active.t-c2{color:var(--b2b);border-bottom-color:var(--b2b)}
+  nav button.active.t-c3{color:var(--gm);border-bottom-color:var(--gm)}
+
+  section.tab{display:none;padding-top:34px}
+  section.tab.show{display:block}
+  h2{font-size:22px;margin:26px 0 12px;color:var(--purple)}
+  .c1 h2{color:var(--b2c)} .c2 h2{color:var(--b2b)} .c3 h2{color:var(--gm)}
+  h3{font-size:16px;margin:20px 0 8px}
+  p.lead{font-size:15px;color:var(--muted)}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin:14px 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+  .pill{display:inline-block;font-size:12px;font-weight:700;padding:2px 10px;border-radius:99px;margin-bottom:8px}
+  .pill.purple{background:var(--purple-lt);color:var(--purple)}
+  .pill.b2c{background:var(--b2c-lt);color:var(--b2c)}
+  .pill.b2b{background:var(--b2b-lt);color:var(--b2b)}
+  .pill.gm{background:var(--gm-lt);color:var(--gm)}
+
+  .codebox{position:relative;margin:14px 0}
+  .codebox pre{background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:20px 18px;font-size:13px;line-height:1.7;overflow-x:auto;white-space:pre-wrap;word-break:break-word;font-family:"SFMono-Regular",Consolas,"Microsoft JhengHei",monospace}
+  .copybtn{position:absolute;top:10px;right:10px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;color:var(--ink);font-family:inherit}
+  .copybtn:active{transform:scale(.96)}
+
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0}
+  .flow .step{background:#fff;border:1.5px solid var(--b2c);color:var(--b2c);border-radius:8px;padding:8px 14px;font-size:13.5px;font-weight:700}
+  .flow .arr{color:var(--muted);font-weight:700}
+
+  .note{background:var(--purple-lt);border-radius:8px;padding:12px 16px;font-size:13.5px;margin:14px 0}
+  .note b{color:var(--purple)}
+  ul.tight{padding-left:22px;font-size:14.5px}
+  ul.tight li{margin:5px 0}
+  .teco-badge{display:inline-block;background:#fff;color:var(--purple);font-weight:800;letter-spacing:4px;border:2px solid var(--purple);border-radius:10px;padding:6px 22px;font-size:24px;margin:4px 0}
+  footer{margin-top:50px;color:var(--muted);font-size:12.5px;text-align:center}
+</style>
+</head>
+<body class="lang-zh">
+
+<header>
+  <div class="wrap">
+    <div class="langtoggle"><a onclick="setLang('zh')" data-l="zh">中文</a><a onclick="setLang('en')" data-l="en">EN</a></div>
+    <a class="ht-back" href="index.html"><span class="zh">← 回題型總覽</span><span class="en">← Back to overview</span></a>
+    <div class="kicker"><span class="zh">東元電機 AI AGENT 開發實務工作坊 · 下午實作</span><span class="en">TECO AI AGENT DEVELOPMENT WORKSHOP · AFTERNOON LAB</span></div>
+    <h1><span class="zh">三個商機查找案例：把 Prompt 變成 Skill</span><span class="en">Three Opportunity-Hunting Cases: Turn a Prompt into a Skill</span></h1>
+    <p><span class="zh">跟 Hermes Agent 對話，一起做出可重用的 skill。三個案例全用公開資料，每題的對話腳本都能一鍵複製、貼上就能開發＋試跑。</span><span class="en">Work with the Hermes Agent to build reusable skills. All three cases use public data only; every chat script is one-click copyable — paste it to develop and test-run.</span></p>
+  </div>
+</header>
+
+<nav><div class="wrap">
+  <button class="t-start active" onclick="go('start',this)"><span class="zh">開始這裡</span><span class="en">Start Here</span></button>
+  <button class="t-c1" onclick="go('c1',this)"><span class="zh">案例 1 · HT B2C</span><span class="en">Case 1 · HT B2C</span></button>
+  <button class="t-c2" onclick="go('c2',this)"><span class="zh">案例 2 · HT B2B</span><span class="en">Case 2 · HT B2B</span></button>
+  <button class="t-c3" onclick="go('c3',this)"><span class="zh">案例 3 · GM 馬達</span><span class="en">Case 3 · GM Motors</span></button>
+</div></nav>
+
+<div class="wrap">
+
+<!-- ============ TAB 0 開始這裡 ============ -->
+<section id="start" class="tab show">
+  <h2><span class="zh">怎麼跟 Hermes 一起做 skill</span><span class="en">How to Build a Skill with Hermes</span></h2>
+  <p class="lead"><span class="zh">你不用寫程式、也不用手寫 SKILL.md。你的工作是把規格講清楚、判斷哪裡要 script、驗收。Hermes 負責把它做出來。</span><span class="en">You don't write code or hand-author a SKILL.md. Your job is to give the spec, decide what needs a script, and verify. Hermes builds it.</span></p>
+
+  <div class="grid2">
+    <div class="card">
+      <span class="pill purple"><span class="zh">1 · 加入你的 Bot</span><span class="en">1 · Join your Bot</span></span><br>
+      <span class="zh">三人一組共用一個 Bot。打開 Telegram，掃描講師發下的 QR 把 Bot 加為好友。</span>
+      <span class="en">Three people share one Bot. Open Telegram and scan the QR handed out to add the Bot as a friend.</span>
+    </div>
+    <div class="card">
+      <span class="pill purple"><span class="zh">2 · 通關密語</span><span class="en">2 · Pass-phrase</span></span><br>
+      <span class="teco-badge">TECO</span><br>
+      <span class="zh">在對話框輸入 TECO（四個字母全大寫）即可開始；大小寫要一致。</span>
+      <span class="en">Type TECO (all four letters uppercase) to start; case must match exactly.</span>
+    </div>
+  </div>
+
+  <h3><span class="zh">兩條開發路徑</span><span class="en">Two Ways to Develop</span></h3>
+  <div class="grid2">
+    <div class="card">
+      <span class="pill purple"><span class="zh">路徑 A · 先寫 Prompt</span><span class="en">Path A · Prompt first</span></span>
+      <ul class="tight">
+        <li><span class="zh">先用「提示詞設計助手」把 prompt 寫好，再交給 Hermes 做成 skill。</span><span class="en">Write the prompt first with the Prompt Design Assistant, then hand it to Hermes to make a skill.</span></li>
+        <li><span class="zh">適合：已寫過 prompt 的題目。好處：結構完整、品質穩。</span><span class="en">Best for: topics you already have a prompt for. Upside: complete structure, stable quality.</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="pill purple"><span class="zh">路徑 B · 直接跟 Hermes 聊</span><span class="en">Path B · Just chat</span></span>
+      <ul class="tight">
+        <li><span class="zh">不先寫 prompt，直接把「開發前 5 個問題」的答案講給 Hermes，邊聊邊生成。</span><span class="en">Skip the prompt — just tell Hermes your answers to the "5 questions before building" and generate as you chat.</span></li>
+        <li><span class="zh">適合：新題目、暖身。好處：快、門檻低。下方腳本就是路徑 B 的寫法。</span><span class="en">Best for: new topics, warm-ups. Upside: fast, low barrier. The scripts below are Path B.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <h3><span class="zh">五步對話腳本（每個案例都照這五步走）</span><span class="en">The Five-Step Chat Script (every case follows it)</span></h3>
+  <div class="card">
+    <ul class="tight">
+      <li><b><span class="zh">① 丟材料</span><span class="en">① Hand over material</span></b><span class="zh">：把 prompt（或 5 問答案）＋ 範例資料貼給 Hermes。</span><span class="en">: paste your prompt (or the 5 answers) plus sample material to Hermes.</span></li>
+      <li><b><span class="zh">② 談觸發</span><span class="en">② Define the trigger</span></b><span class="zh">：這個 skill 什麼情況該被叫起來？讓它寫好 description。</span><span class="en">: when should this skill fire? Have it write the description.</span></li>
+      <li><b><span class="zh">③ 談分工</span><span class="en">③ Split the work</span></b><span class="zh">：哪些給 AI 判斷、哪些一定要用 script（計算／排序／產檔）。</span><span class="en">: what goes to AI judgment vs. what must be a script (compute / sort / file output).</span></li>
+      <li><b><span class="zh">④ 談隨身資料</span><span class="en">④ Bundle resources</span></b><span class="zh">：哪些參考表、模板要打包進 skill，之後不用再貼。</span><span class="en">: which reference tables / templates to bundle so you needn't paste them again.</span></li>
+      <li><b><span class="zh">⑤ 驗測</span><span class="en">⑤ Test</span></b><span class="zh">：丟 1 個正常案例 ＋ 1 個邊界案例，請它實跑、看輸出、一起修。</span><span class="en">: feed 1 normal case + 1 edge case, have it run, review output, fix together.</span></li>
+    </ul>
+  </div>
+
+  <div class="note"><b><span class="zh">三個約定：</span><span class="en">Three ground rules: </span></b><span class="zh">① 全部用公開或虛構資料，不要餵內部機密。② 共用 Bot，請幫 skill 命名加姓名縮寫（如 ABC_B2C區域商機快報），輸出檔也帶名字，避免互相覆蓋。③ 只談自己這一題，別叫它記跨題的事。</span><span class="en">1) Use public or fictional data only — never feed internal secrets. 2) On a shared Bot, prefix skill names with your initials (e.g. ABC_B2C-opportunity-brief) and name your output files, to avoid overwrites. 3) Stay on your own case; don't ask it to remember across cases.</span></div>
+</section>
+
+<!-- ============ TAB 1 案例 1 HT B2C ============ -->
+<section id="c1" class="tab c1">
+  <h2><span class="zh">案例 1：HT 家用空調 B2C 區域商機查找</span><span class="en">Case 1: HVAC B2C Regional Opportunity Hunting</span></h2>
+  <p class="lead"><span class="zh">先做兩個小 skill，再把它們合併成一個完整的——這一題在練「組合 skill」。全程公開資料。</span><span class="en">Build two small skills first, then merge them into one — this case practices composing skills. All public data.</span></p>
+  <div class="flow">
+    <span class="step"><span class="zh">① 區域裝機需求速報</span><span class="en">① Demand radar</span></span><span class="arr">＋</span>
+    <span class="step"><span class="zh">② 競品零售情報速查</span><span class="en">② Competitor retail lookup</span></span><span class="arr">→</span>
+    <span class="step"><span class="zh">③ 合併：區域商機快報</span><span class="en">③ Merge: regional brief</span></span>
+  </div>
+
+  <h3><span class="zh">① 區域裝機需求速報（第一個小任務）</span><span class="en">① Demand Radar (first small task)</span></h3>
+  <p><span class="zh">找出『哪裡即將有家用空調裝機需求』——需求面。</span><span class="en">Find where residential AC installation demand is about to surge — the demand side.</span></p>
+  <div class="codebox">
+    <button class="copybtn" onclick="cp(this,'c1a')"><span class="zh">複製</span><span class="en">Copy</span></button>
+    <pre id="c1a">請幫我做一個 skill，名稱「[你的縮寫]_B2C裝機需求速報」。
+用途：找出某地區即將出現大量家用空調裝機需求的訊號。
+資料來源：公開網路新聞，不用任何內部資料。
+輸入：一個地區（例：桃園、台中北屯）。
+輸出：5–8 則需求訊號，每則「日期 ｜ 事件(新建案/交屋/危老/汰換補助) ｜ 推估裝機量級 ｜ 連結」。
+步驟：① 搜尋該地區新建住宅/交屋/危老/補助 ② 挑最相關 ③ 套上面格式 ④ 查不到就說明、不要編。
+
+做好後，先用「桃園」跑一次給我看。</pre>
+  </div>
+
+  <h3><span class="zh">② 競品零售情報速查（第二個小任務）</span><span class="en">② Competitor Retail Lookup (second small task)</span></h3>
+  <p><span class="zh">看『競品在這個市場賣什麼』——競品面。</span><span class="en">See what competitors are selling in this market — the competitor side.</span></p>
+  <div class="codebox">
+    <button class="copybtn" onclick="cp(this,'c1b')"><span class="zh">複製</span><span class="en">Copy</span></button>
+    <pre id="c1b">請幫我做一個 skill，名稱「[你的縮寫]_B2C競品零售速查」。
+用途：快速掌握家用變頻空調主要品牌的當前主打與促銷。
+資料來源：品牌官網、購物通路、公開新聞，不用內部資料。
+輸入：一個品牌或機種類型（例：日立 變頻分離式）。
+輸出：每筆「品牌 ｜ 主打機種 ｜ 訴求(節能/靜音/價格) ｜ 近期促銷 ｜ 通路 ｜ 連結」。
+步驟：① 搜尋該品牌當前主打與促銷 ② 整理 ③ 標訴求與通路 ④ 查不到寫「未公開」。
+
+做好後，先用「日立 變頻分離式」跑一次給我看。</pre>
+  </div>
+
+  <h3><span class="zh">③ 合併：區域商機快報（把 ①② 組起來）</span><span class="en">③ Merge: Regional Opportunity Brief (combine ① & ②)</span></h3>
+  <p><span class="zh">把兩個小 skill 合併成一個——學會「組合」既有的 skill。</span><span class="en">Merge the two small skills into one — learn to compose existing skills.</span></p>
+  <div class="codebox">
+    <button class="copybtn" onclick="cp(this,'c1c')"><span class="zh">複製</span><span class="en">Copy</span></button>
+    <pre id="c1c">請把前面的「B2C裝機需求速報」和「B2C競品零售速查」合併成一個 skill，
+名稱「[你的縮寫]_B2C區域商機快報」。
+用途：針對一個地區，產出「需求＋競品」的商機快報，給通路業務做攻略。
+輸入：一個地區（例：桃園）。
+輸出：報告分三段——
+　1) 該區裝機需求訊號（用需求速報的做法）
+　2) 競品在當地的主打與促銷（用競品速查的做法）
+　3) 一句話：我們該主打什麼、切哪個點。
+步驟：先跑需求訊號、再跑競品零售、最後彙整成一份 Markdown 快報；全用公開資料。
+
+做好後，先用「桃園」跑一份完整商機快報給我看。</pre>
+  </div>
+</section>
+
+<!-- ============ TAB 2 案例 2 HT B2B ============ -->
+<section id="c2" class="tab c2">
+  <h2><span class="zh">案例 2：HT 商用空調 B2B 標案商機查找</span><span class="en">Case 2: HVAC B2B Tender Opportunity Hunting</span></h2>
+  <p class="lead"><span class="zh">找中央空調／冰水主機的公開招標與大型新建案商機。一支完整 skill，全用公開資料。</span><span class="en">Find public tenders and large new-build opportunities for central HVAC / chillers. One complete skill, all public data.</span></p>
+  <div class="card">
+    <span class="pill b2b"><span class="zh">重點</span><span class="en">Key idea</span></span><br>
+    <span class="zh">商機來自兩種公開來源：① 政府電子採購網等公開招標；② 大型廠房／大樓開發新聞（蓋廠、整棟大樓）。把兩者一起掃，再篩出跟商用空調相關的。</span>
+    <span class="en">Opportunities come from two public sources: 1) government e-procurement tenders; 2) news of large factory / building developments. Sweep both, then filter for commercial-HVAC relevance.</span>
+  </div>
+  <div class="codebox">
+    <button class="copybtn" onclick="cp(this,'c2')"><span class="zh">複製</span><span class="en">Copy</span></button>
+    <pre id="c2">請幫我做一個 skill，名稱「[你的縮寫]_商用空調商機雷達」。
+用途：找商用空調（中央空調／冰水主機）的公開招標與大型新建案商機。
+資料來源：政府電子採購網等公開招標＋公開建廠／大樓開發新聞，不用內部資料。
+輸入：關鍵字（預設：冰水主機 OR 中央空調 OR 空調工程）＋可選地區。
+輸出：每筆「案名/業主或機關 ｜ 類型(公標/新建案) ｜ 規模(噸數/坪數,如有) ｜ 時程或截止 ｜ 連結」，依時程近到遠。
+步驟：① 搜尋公開招標＋大型開發新聞 ② 篩商用空調相關 ③ 估規模 ④ 排時程 ⑤ 查不到就說查無、不硬湊。
+
+做好後，先用「中央空調」跑一次給我看。</pre>
+  </div>
+  <div class="note"><b><span class="zh">延伸：</span><span class="en">Extension: </span></b><span class="zh">穩定後可加「競品情報」段（誰常得標、用什麼品牌），讓快報同時看得到商機與對手。</span><span class="en">Once stable, add a "competitor intelligence" section (who usually wins, which brands) so the brief shows both opportunities and rivals.</span></div>
+</section>
+
+<!-- ============ TAB 3 案例 3 GM 馬達 ============ -->
+<section id="c3" class="tab c3">
+  <h2><span class="zh">案例 3：GM 馬達／重電 目標公司商機研究</span><span class="en">Case 3: GM Motors / Heavy-Electric Target-Company Research</span></h2>
+  <p class="lead"><span class="zh">站在 TECO 馬達立場，研究一家對手公司，找出對我們的商機與威脅。這是商情研究 skill 的簡化教學版。</span><span class="en">From TECO's motor standpoint, research a rival company to surface opportunities and threats. A simplified teaching version of the intelligence-research skill.</span></p>
+  <div class="card">
+    <span class="pill gm"><span class="zh">為什麼這題適合 skill</span><span class="en">Why this suits a skill</span></span><br>
+    <span class="zh">這是會重複做的事（每週／每換一家對手就跑一次），有固定產出格式，最適合包成 skill 反覆用。完整版可再外掛 sub-agents 與報表產出；這裡先做「一頁情報」就好。</span>
+    <span class="en">It's recurring (run weekly or per rival) with a fixed output format — ideal to package as a reusable skill. The full version can add sub-agents and report generation; here we keep it to a one-page brief.</span>
+  </div>
+  <div class="codebox">
+    <button class="copybtn" onclick="cp(this,'c3')"><span class="zh">複製</span><span class="en">Copy</span></button>
+    <pre id="c3">請幫我做一個 skill，名稱「[你的縮寫]_目標公司商機研究」。
+用途：站在 TECO 馬達／重電立場，研究一家目標或競品公司，找出對我們的商機與威脅。
+資料來源：公開網路（公司官網、新聞、法說會），不用內部資料。
+輸入：一家公司名稱（例：KSB、Flowserve、ABB）。
+輸出：一頁情報——
+　1) 公司概覽
+　2) 近期重要大案 3–5 筆（區域/產業/金額如有）
+　3) 對 TECO 馬達的商機或威脅
+　4) 三個行動建議。
+步驟：搜尋公司近況與大案 → 整理 → 對照 TECO 立場找商機/威脅 → 給 3 個行動；查不到標「未揭露」、不編造。
+
+做好後，先用「KSB」跑一次給我看。</pre>
+  </div>
+  <div class="note"><b><span class="zh">驗收重點：</span><span class="en">What to check: </span></b><span class="zh">每個結論要回到「對 TECO 有什麼商機／威脅」；金額查不到要標「未揭露」，不要編。</span><span class="en">Every conclusion must tie back to "what's the opportunity / threat for TECO"; if a figure isn't found, mark it "undisclosed" — don't fabricate.</span></div>
+</section>
+
+</div>
+<footer><span class="zh">東元電機 AI Agent 開發實務工作坊 · 第四梯 R4｜Albert Chen · 智慧方案</span><span class="en">TECO AI Agent Development Workshop · Cohort R4 | Albert Chen · Intellicon Solutions</span></footer>
+
+<script>
+function go(id, btn){
+  document.querySelectorAll('section.tab').forEach(s=>s.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  window.scrollTo({top:0});
+}
+function cp(btn, id){
+  const t = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(t).then(()=>{
+    const o = btn.innerHTML; btn.textContent = '✓';
+    setTimeout(()=>btn.innerHTML=o, 1500);
+  });
+}
+function setLang(l){
+  document.body.classList.remove('lang-zh','lang-en');
+  document.body.classList.add('lang-'+l);
+  try{localStorage.setItem('tecoLang',l);}catch(e){}
+  document.querySelectorAll('.langtoggle a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-l')===l);});
+}
+(function(){var l='zh';try{l=localStorage.getItem('tecoLang')||'zh';}catch(e){}setLang(l);})();
+</script>
+</body>
+</html>
