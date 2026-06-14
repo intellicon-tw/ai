@@ -89,13 +89,13 @@ body.lang-zh .en{display:none}
 3. Expected Output: A can-add / partial / requires-re-application determination + a list of documents to supplement + a draft of the application form; for submission staff.
 4. Task Steps: 1) Read the specification sheet and extract specs 2) Compare against the parent model and document-requirement checklist 3) Dual-track determination (safety-related vs energy-efficiency-related) 4) List documents to supplement 5) Produce the application-form draft.
 5. Knowledge Source: Full-text search (document-requirement checklist / determination points) + table query (verified-model reference table).</pre></div>
-    <p class="muted"><span class="zh">用法：把上方「5 個問題」的答案複製貼進 EgentHub 提示詞設計助手，即可引導生成這支 Agent 的提示詞。資料來源：學員課前調查表（R4）。</span><span class="en">How to use: copy the answers to the 5 questions above into EgentHub's Prompt Design Assistant to generate this Agent's prompt. Source: students' pre-class survey (R4).</span></p>
+    <p class="muted"><span class="zh">用法：把上方「5 個問題」的答案複製貼進 提示詞設計助手，即可引導生成這支 Agent 的提示詞。資料來源：學員課前調查表（R4）。</span><span class="en">How to use: copy the answers to the 5 questions above into the Prompt Design Assistant to generate this Agent's prompt. Source: students' pre-class survey (R4).</span></p>
   </section>
   <section id="idea"><h2><span class="zh">② 開發思路</span><span class="en">② Development Approach</span></h2>
     <ul class="flow"><li><span class="zh">兩階段：階段一讀規格書 PDF 萃取規格；階段二查三個知識庫比對。</span><span class="en">Two-stage: stage one reads the specification-sheet PDF and extracts specs; stage two queries three knowledge bases for comparison.</span></li><li><span class="zh">雙線判定：安全相關特性（BSMI 增列）vs 能效相關特性（節能標章增列）→ 可增列／部分／須重新申請。</span><span class="en">Dual-track determination: safety-related characteristics (BSMI addition) vs energy-efficiency-related characteristics (energy-label addition) -&gt; can be added / partial / requires re-application.</span></li><li><span class="zh">內化規則：跨電壓群須重測、外觀變更免測、壓縮機等能效核心元件變更須補測。</span><span class="en">Internalized rules: crossing voltage groups requires re-testing, appearance changes are exempt from testing, and changes to energy-efficiency core components such as the compressor require supplementary testing.</span></li></ul>
   </section>
-  <section id="prompt"><h2><span class="zh">③ 完整系統提示詞（EgentHub 7 段式）</span><span class="en">③ Full System Prompt (EgentHub 7-section)</span></h2>
-    <p class="muted"><span class="zh">可直接複製貼到 EgentHub／Dify 測試。元資料（建議模型、知識庫配置、是否兩階段）見下方收合區。</span><span class="en">Copy-paste directly into EgentHub / Dify to test. Metadata (model, knowledge-base type, two-stage or not) is in the collapsible block below.</span>　<span class="zh">（系統提示詞為實際交付的中文版本）</span><span class="en">(The system prompt is the actual Chinese deliverable.)</span></p>
+  <section id="prompt"><h2><span class="zh">③ 完整系統提示詞（7 段式）</span><span class="en">③ Full System Prompt (7-section)</span></h2>
+    <p class="muted"><span class="zh">可直接複製貼到 Dify 測試。元資料（建議模型、知識庫配置、是否兩階段）見下方收合區。</span><span class="en">Copy-paste directly into Dify to test. Metadata (model, knowledge-base type, two-stage or not) is in the collapsible block below.</span>　<span class="zh">（系統提示詞為實際交付的中文版本）</span><span class="en">(The system prompt is the actual Chinese deliverable.)</span></p>
     <details><summary><span class="zh">元資料 Metadata</span><span class="en">Metadata</span></summary><div class="inner"><pre>==========================================================
 【元資料 Metadata】
 ==========================================================
@@ -104,7 +104,7 @@ Agent 名稱：安規／節能標章 增列機種比對助理
 需求來源：第四梯工作坊(R4) 課前問卷 #6 ○○○ （信箱已遮罩）
 原始需求：「安規申請資料, 節能標章請資料, 增列機種內容比對確認及填寫。」
 題型分類：文件判讀／比對型（Document Comparison &amp; Compliance Checking）
-平台：Intellicon EgentHub（課堂於 AWS Dify 實作）
+平台：Dify（課堂於 AWS Dify 實作）
 建議模型：Claude 4.6 Sonnet（需具備 PDF／圖片視覺解讀能力，禁用 Claude 3.5 Sonnet 等已下架舊模型）
 執行模式：兩階段執行（第一階段讀取新機種規格書／型錄 PDF；第二階段查詢知識庫申請文件要求清單與已驗證機種對照表後比對輸出）
 知識庫設定：
@@ -119,7 +119,7 @@ Token 預算：約 20K
 並自動產出「申請文件檢核清單」與「申請表欄位協助填寫草稿」，降低漏件與退補風險。
 
 ==========================================================
-【EgentHub 7 段式提示詞】
+【7 段式提示詞】
 ==========================================================</pre></div></details>
     <pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)"><span class="zh">複製</span><span class="en">Copy</span></button># 角色
 

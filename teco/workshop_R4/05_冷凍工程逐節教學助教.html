@@ -89,15 +89,15 @@ body.lang-zh .en{display:none}
 3. Expected Output: Section-by-section teaching content + checking questions + the 'current progress' at the end of each turn; for the trainee engineer.
 4. Task Steps: 1) Present the section's key points 2) Ask a question to check understanding 3) Advance on a correct answer / reinforce on a wrong one 4) Chapter-end summary 5) Output current progress.
 5. Knowledge Source: Agent-level vector knowledge base: chapter-segmented teaching material.</pre></div>
-    <p class="muted"><span class="zh">用法：把上方「5 個問題」的答案複製貼進 EgentHub 提示詞設計助手，即可引導生成這支 Agent 的提示詞。資料來源：學員課前調查表（R4）。</span><span class="en">How to use: copy the answers to the 5 questions above into EgentHub's Prompt Design Assistant to generate this Agent's prompt. Source: students' pre-class survey (R4).</span></p>
+    <p class="muted"><span class="zh">用法：把上方「5 個問題」的答案複製貼進 提示詞設計助手，即可引導生成這支 Agent 的提示詞。資料來源：學員課前調查表（R4）。</span><span class="en">How to use: copy the answers to the 5 questions above into the Prompt Design Assistant to generate this Agent's prompt. Source: students' pre-class survey (R4).</span></p>
   </section>
   <section id="idea"><h2><span class="zh">② 開發思路</span><span class="en">② Development Approach</span></h2>
     <ul class="flow"><li><span class="zh">RASCEF 腳本：呈現該節 → 提問檢核 → 答對前進／答錯補強 → 章末總結 → 輸出進度。</span><span class="en">RASCEF script: present the section -&gt; ask a checking question -&gt; advance on a correct answer / reinforce on a wrong one -&gt; chapter-end summary -&gt; output progress.</span></li><li><span class="zh">知識庫為分章節教材向量庫（POC 內含三章九節示範教材）。</span><span class="en">The knowledge base is a chapter-segmented teaching-material vector store (the POC contains demo material for three chapters and nine sections).</span></li><li><span class="zh">進度記憶：對話內可追蹤；跨天靠學員回報接續（POC），或以 MCP 寫入資料庫（進階）。</span><span class="en">Progress memory: can be tracked within a conversation; across days it resumes via the learner reporting back (POC), or by writing to a database via MCP (advanced).</span></li></ul>
   </section>
-  <section id="prompt"><h2><span class="zh">③ 完整系統提示詞（EgentHub 7 段式）</span><span class="en">③ Full System Prompt (EgentHub 7-section)</span></h2>
-    <p class="muted"><span class="zh">可直接複製貼到 EgentHub／Dify 測試。元資料（建議模型、知識庫配置、是否兩階段）見下方收合區。</span><span class="en">Copy-paste directly into EgentHub / Dify to test. Metadata (model, knowledge-base type, two-stage or not) is in the collapsible block below.</span>　<span class="zh">（系統提示詞為實際交付的中文版本）</span><span class="en">(The system prompt is the actual Chinese deliverable.)</span></p>
+  <section id="prompt"><h2><span class="zh">③ 完整系統提示詞（7 段式）</span><span class="en">③ Full System Prompt (7-section)</span></h2>
+    <p class="muted"><span class="zh">可直接複製貼到 Dify 測試。元資料（建議模型、知識庫配置、是否兩階段）見下方收合區。</span><span class="en">Copy-paste directly into Dify to test. Metadata (model, knowledge-base type, two-stage or not) is in the collapsible block below.</span>　<span class="zh">（系統提示詞為實際交付的中文版本）</span><span class="en">(The system prompt is the actual Chinese deliverable.)</span></p>
     <details><summary><span class="zh">元資料 Metadata</span><span class="en">Metadata</span></summary><div class="inner"><pre>==========================================================
-EgentHub POC Agent 提示詞
+Dify POC Agent 提示詞
 Agent 名稱：冷凍工程逐節教學助教（Cold-Chain Tutor）
 ==========================================================
 
@@ -108,7 +108,7 @@ Agent 名稱：冷凍工程逐節教學助教（Cold-Chain Tutor）
 - 工作坊梯次：R4
 - 對應問卷編號：#5
 - Agent 類型：教學型多輪對話 Agent（Mastery Learning 逐節精熟教學）
-- 建議部署：EgentHub Agent + LINE 整合（工程師以 LINE Bot 互動）
+- 建議部署：Dify Agent + LINE 整合（工程師以 LINE Bot 互動）
 - 知識庫類型：Agent 向量知識庫（RAG）— 放分章節教材
 - 建議模型：Claude 4.6 Sonnet（教學對話、語意理解佳）
 - 可用工具：知識庫向量檢索（內建）、Google Search（補充查詢，選用）
@@ -117,7 +117,7 @@ Agent 名稱：冷凍工程逐節教學助教（Cold-Chain Tutor）
   跨 session 持久化進度列為進階整合項（MCP 寫入資料庫／Google Sheet）。詳見 4_指南。
 
 ----------------------------------------------------------
-以下為正式提示詞，請整段貼入 EgentHub Agent 的 System Prompt 欄位。
+以下為正式提示詞，請整段貼入 Dify Agent 的 System Prompt 欄位。
 ----------------------------------------------------------</pre></div></details>
     <pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)"><span class="zh">複製</span><span class="en">Copy</span></button># 角色
 
@@ -553,7 +553,7 @@ Q2（情境）：壓縮機因散熱不良跳脫，是哪一個保護裝置動作
     <details open><summary><span class="zh">正式上線前的準備指南</span><span class="en">Pre-launch preparation guide</span></summary><div class="inner"><pre>==========================================================
 正式上線前的準備指南
 Agent：冷凍工程逐節教學助教（TECO 空調 R4 #5）
-平台：Intellicon EgentHub（課堂環境為 AWS Dify）＋ LINE 整合
+平台：Dify（課堂環境為 AWS Dify）＋ LINE 整合
 ==========================================================
 
 本指南協助○○○及其團隊，把這支 POC 從「課堂可跑」推進到「部門可正式上線」。
@@ -576,7 +576,7 @@ Agent：冷凍工程逐節教學助教（TECO 空調 R4 #5）
 ──────────────────────────────────────
 這是本需求最關鍵的技術難點，須誠實告知客戶平台現況與落地方案：
 
-【現況】LLM 本身沒有長期記憶。EgentHub 的記憶分兩層：
+【現況】LLM 本身沒有長期記憶。Dify 的記憶分兩層：
   (1) 單一對話（session）內：有上下文記憶（約 20K token 容量），在「同一次連續對話」中，Agent 能記住學員學到哪一節、答對與否，據此逐節推進。POC 的逐節教學、答對前進、答錯補強，都靠這層記憶運作，課堂與短期學習完全可行。
   (2) 跨對話（跨 session／跨天）：預設不會自動保留。學員換一天重開對話，Agent 不會「自己記得」上次學到哪。
 
@@ -596,7 +596,7 @@ Agent：冷凍工程逐節教學助教（TECO 空調 R4 #5）
 ──────────────────────────────────────
 三、LINE 整合
 ──────────────────────────────────────
-1. EgentHub 支援 LINE 整合，工程師可直接在 LINE 與助教互動，符合○○○「透過 LINE Bot 學習」的設定。
+1. Dify 支援 LINE 整合，工程師可直接在 LINE 與助教互動，符合○○○「透過 LINE Bot 學習」的設定。
 2. 上線前確認：LINE Official Account、Channel 串接、Webhook 設定由 IT／智慧方案協助完成。
 3. LINE 訊息長度有限制：教學段落已設計為 200～400 字小節，避免單則訊息過長被截斷；必要時可分則發送。
 4. 注意 LINE 環境下「同一使用者的對話延續性」與「進度接續」的搭配（見第二點方案）。

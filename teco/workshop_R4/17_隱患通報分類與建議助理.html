@@ -89,20 +89,20 @@ body.lang-zh .en{display:none}
 3. Expected Output: Hazard classification + occupational-safety regulations possibly violated + recommended corrective actions + responsible unit + risk level; for the safety &amp; health and responsible units.
 4. Task Steps: 1) Read the event (with a photo attached, first read the image and describe the hazard) 2) Query the hazard-type reference 3) Map to occupational-safety regulations 4) Recommend corrective actions and the responsible unit 5) Output the recommendation table.
 5. Knowledge Source: Full-text search (key occupational-safety regulation articles) + table query (hazard type -&gt; regulation -&gt; corrective action -&gt; responsible-unit reference).</pre></div>
-    <p class="muted"><span class="zh">用法：把上方「5 個問題」的答案複製貼進 EgentHub 提示詞設計助手，即可引導生成這支 Agent 的提示詞。資料來源：學員課前調查表（R4）。</span><span class="en">How to use: copy the answers to the 5 questions above into EgentHub's Prompt Design Assistant to generate this Agent's prompt. Source: students' pre-class survey (R4).</span></p>
+    <p class="muted"><span class="zh">用法：把上方「5 個問題」的答案複製貼進 提示詞設計助手，即可引導生成這支 Agent 的提示詞。資料來源：學員課前調查表（R4）。</span><span class="en">How to use: copy the answers to the 5 questions above into the Prompt Design Assistant to generate this Agent's prompt. Source: students' pre-class survey (R4).</span></p>
   </section>
   <section id="idea"><h2><span class="zh">② 開發思路</span><span class="en">② Development Approach</span></h2>
     <ul class="flow"><li><span class="zh">Dify 可行核心『判斷的腦』：輸入事件描述（可附照片）→ 輸出危害分類／違反法規／矯正措施／權責單位／風險等級。</span><span class="en">The 'decision-making brain' that is feasible in Dify: input an event description (optionally with a photo) -&gt; output hazard classification / regulations violated / corrective actions / responsible unit / risk level.</span></li><li><span class="zh">附照片→兩階段（階段一讀圖描述危害事實 → 階段二查法規知識庫）。</span><span class="en">Photo attached -&gt; two-stage (stage one reads the image and describes the hazard facts -&gt; stage two queries the regulation knowledge base).</span></li><li><span class="zh">Dify 不可行（需工作流平台／整合）：QR 掃碼、自動編號、自動寄信／Line、逾時催詢、語音輸入——建議 Make／n8n＋Google Sheet 補上。</span><span class="en">Not feasible in Dify (requires a workflow platform / integration): QR scanning, auto-numbering, auto-emailing / Line, overdue reminders, voice input — recommend supplementing with Make / n8n + Google Sheet.</span></li></ul>
   </section>
-  <section id="prompt"><h2><span class="zh">③ 完整系統提示詞（EgentHub 7 段式）</span><span class="en">③ Full System Prompt (EgentHub 7-section)</span></h2>
-    <p class="muted"><span class="zh">可直接複製貼到 EgentHub／Dify 測試。元資料（建議模型、知識庫配置、是否兩階段）見下方收合區。</span><span class="en">Copy-paste directly into EgentHub / Dify to test. Metadata (model, knowledge-base type, two-stage or not) is in the collapsible block below.</span>　<span class="zh">（系統提示詞為實際交付的中文版本）</span><span class="en">(The system prompt is the actual Chinese deliverable.)</span></p>
+  <section id="prompt"><h2><span class="zh">③ 完整系統提示詞（7 段式）</span><span class="en">③ Full System Prompt (7-section)</span></h2>
+    <p class="muted"><span class="zh">可直接複製貼到 Dify 測試。元資料（建議模型、知識庫配置、是否兩階段）見下方收合區。</span><span class="en">Copy-paste directly into Dify to test. Metadata (model, knowledge-base type, two-stage or not) is in the collapsible block below.</span>　<span class="zh">（系統提示詞為實際交付的中文版本）</span><span class="en">(The system prompt is the actual Chinese deliverable.)</span></p>
     <details><summary><span class="zh">元資料 Metadata</span><span class="en">Metadata</span></summary><div class="inner"><pre>==================================================
 元資料 (Metadata)
 ==================================================
 Agent 名稱：隱患/虛驚事件分類與建議 Agent
 題目編號：#17
 學員：○○○｜觀音廠 安衛股｜（信箱已遮罩）
-平台：Intellicon EgentHub（課堂環境：AWS Dify）
+平台：AWS Dify
 題型：知識庫問答型 + 文件判讀型（讀圖兩階段）
 建議模型：Claude 4.6 Sonnet（具備視覺判讀能力，可讀現場照片；禁用已下架模型）
 知識庫需求：
@@ -121,7 +121,7 @@ POC 範圍說明（請務必理解）
 （這些屬工作流/系統整合範疇，詳見 _回饋與資料清單.md 的替代方案）。
 
 ==================================================
-7 段式系統提示詞（請整段貼入 EgentHub Prompt 欄位）
+7 段式系統提示詞（請整段貼入 Dify Prompt 欄位）
 ==================================================</pre></div></details>
     <pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)"><span class="zh">複製</span><span class="en">Copy</span></button># 角色設定
 你是東元電機觀音廠「安全衛生股」的隱患/虛驚事件分析助理。你的任務是協助第一線同仁與安衛人員，將現場發現的隱患（unsafe condition）或虛驚事件（near miss）快速分類，並比對台灣職業安全衛生法規，提出矯正預防措施與權責單位建議。你熟悉《職業安全衛生法》《職業安全衛生設施規則》以及廠內常見職災/危害類型（墜落滾落、感電、火災爆炸、被捲被夾、物體飛落、衝撞、跌倒、缺氧、有害物暴露等）。
