@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PQ／PU／AHU 報價與成案率分析助手 — 開發教學</title>
+<style>
+  :root{
+    --purple:#3D2462; --purple-lt:#F3EEFA; --purple-mid:#6B4FA0;
+    --quote:#3B5BDB; --quote-lt:#EDF1FD;
+    --win:#0E7C66; --win-lt:#E7F4F0;
+    --gold:#B26A00; --gold-lt:#FBF1E0;
+    --ink:#222632; --muted:#6A7080; --line:#E3E6EE; --bg:#FAFAFC;
+    --code-bg:#1E2230; --code-ink:#E8EAF2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;background:var(--bg);color:var(--ink);line-height:1.75}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px 80px}
+  header{background:var(--purple);color:#fff;padding:42px 0 36px}
+  header .wrap{padding-bottom:0}
+  .kicker{font-size:13px;letter-spacing:3px;color:#CBB8EC;margin-bottom:10px}
+  header h1{font-size:28px;line-height:1.4}
+  header p{color:#D8CCEF;margin-top:10px;font-size:15px}
+
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:50}
+  nav .wrap{display:flex;gap:4px;padding-top:0;padding-bottom:0;flex-wrap:wrap}
+  nav button{flex:1;min-width:140px;border:none;background:none;padding:14px 8px;font-size:15px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;font-family:inherit}
+  nav button.active{color:var(--purple);border-bottom-color:var(--purple)}
+  nav button.active.t-q{color:var(--quote);border-bottom-color:var(--quote)}
+  nav button.active.t-w{color:var(--win);border-bottom-color:var(--win)}
+  nav button.active.t-d{color:var(--gold);border-bottom-color:var(--gold)}
+
+  section.tab{display:none;padding-top:34px}
+  section.tab.show{display:block}
+  h2{font-size:22px;margin:26px 0 12px;color:var(--purple)}
+  .q h2{color:var(--quote)} .w h2{color:var(--win)} .d h2{color:var(--gold)}
+  h3{font-size:16px;margin:22px 0 8px;color:var(--purple)}
+  .q h3{color:var(--quote)} .w h3{color:var(--win)}
+  p.lead{font-size:15px;color:var(--muted)}
+  p{margin:8px 0}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin:14px 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+  .pill{display:inline-block;font-size:12px;font-weight:700;padding:2px 10px;border-radius:99px;margin-bottom:8px}
+  .pill.purple{background:var(--purple-lt);color:var(--purple)}
+  .pill.q{background:var(--quote-lt);color:var(--quote)}
+  .pill.w{background:var(--win-lt);color:var(--win)}
+  .pill.d{background:var(--gold-lt);color:var(--gold)}
+
+  table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--purple-lt);color:var(--purple)}
+  .must{color:#C0392B;font-weight:700}
+
+  .codebox{position:relative;margin:14px 0}
+  .codebox pre{background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:20px 18px;font-size:12.5px;line-height:1.7;overflow-x:auto;white-space:pre-wrap;word-break:break-word;font-family:"SFMono-Regular",Consolas,"Microsoft JhengHei",monospace}
+  .copybtn{position:absolute;top:10px;right:10px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;color:var(--ink);font-family:inherit}
+  .copybtn:active{transform:scale(.96)}
+
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+  .flow .step{background:#fff;border:1.5px solid var(--line);border-radius:8px;padding:8px 14px;font-size:13.5px;font-weight:700}
+  .flow .arr{color:var(--muted);font-weight:700}
+  .note{background:var(--purple-lt);border-radius:8px;padding:12px 16px;font-size:13.5px;margin:14px 0}
+  .note b{color:var(--purple)}
+  ul.tight{padding-left:22px;font-size:14.5px}
+  ul.tight li{margin:5px 0}
+  ol.tight{padding-left:22px;font-size:14.5px}
+  ol.tight li{margin:5px 0}
+  footer{margin-top:50px;color:var(--muted);font-size:12.5px;text-align:center}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">東元電機 HT 事業處 · AI Agent 開發教學</div>
+    <h1>PQ／PU／AHU 報價與成案率分析助手</h1>
+    <p>把「報價」和「成案率分析」拆成兩支 Agent，先用 POC 搭骨架、邊蒐資料邊長大。本頁含可直接複製的提示詞與資料蒐集清單。</p>
+  </div>
+</header>
+
+<nav><div class="wrap">
+  <button class="t-ov active" onclick="go('ov',this)">概覽與建議</button>
+  <button class="t-q" onclick="go('q',this)">① 報價助手</button>
+  <button class="t-w" onclick="go('w',this)">② 成案率分析</button>
+  <button class="t-d" onclick="go('d',this)">③ 資料蒐集清單</button>
+</div></nav>
+
+<div class="wrap">
+
+<!-- ===== 概覽 ===== -->
+<section id="ov" class="tab show">
+  <h2>這個助手要解決什麼</h2>
+  <p class="lead">業務／工程在報 PQ／PU／AHU 案件時，選型與報價要查很多表、靠經驗；報完之後，哪些會成案、為什麼輸，也缺乏系統化回顧。這支助手要同時幫上這兩件事——但這兩件事本質不同，建議拆成兩支 Agent。</p>
+
+  <div class="grid2">
+    <div class="card"><span class="pill q">① 報價助手</span><br><b>文件生成／選型計算型</b><br>輸入案件需求 → 選機型與配件 → 產出報價草稿與選型理由。<b>先做這支</b>，看得到、見效快。</div>
+    <div class="card"><span class="pill w">② 成案率分析</span><br><b>預測／分析型</b><br>吃歷史「報價 vs 成交」資料，找出成案的規律，並對新報價給成案研判與建議。<b>第二期再做</b>，它吃資料量。</div>
+  </div>
+
+  <h2>三個關鍵建議</h2>
+  <div class="card">
+    <ol class="tight">
+      <li><b>拆兩支、別綁一起。</b>報價是「選型＋生成」，成案率是「分析＋研判」，資料需求與驗收方式都不同。先把報價助手做出來，成案率分析做好了再串。</li>
+      <li><b>別等資料到齊才開始。</b>用你們已有的試作內容＋表單欄位定義，先把 prompt、知識庫結構、輸出格式定下來（POC）。資料到位再灌進去。先求能跑，再逐步加深。</li>
+      <li><b>成案率分析的成敗，90% 在「表單收了哪些欄位」。</b>沒有「結果（成交／未成交）＋輸贏原因」，再強的 AI 也分析不出成案率。資料蒐集清單見第 ③ 分頁。</li>
+    </ol>
+  </div>
+
+  <div class="note"><b>對應目前進度：</b>你們已有①項目需求 ②功能架構與流程 ③蒐集表單 ④小範圍試作——這正好是 POC 的起手包。下一步不是等資料，而是先用試作內容把「報價助手」的提示詞與知識庫骨架做出來，同時用第 ③ 分頁的清單去校準表單欄位（確保收得到成案率分析要的資料）。</div>
+
+  <h2>落地節奏建議</h2>
+  <div class="flow">
+    <span class="step">第 1 期：報價助手 POC</span><span class="arr">→</span>
+    <span class="step">同步校準表單欄位</span><span class="arr">→</span>
+    <span class="step">累積歷史報價–成交資料</span><span class="arr">→</span>
+    <span class="step">第 2 期：成案率分析</span>
+  </div>
+</section>
+
+<!-- ===== 報價助手 ===== -->
+<section id="q" class="tab q">
+  <h2>① 報價助手</h2>
+  <p class="lead">輸入案件需求 → 選型與配件 → 產出報價草稿與選型理由，讓業務快速確認、調整後對外報價。</p>
+
+  <h3>開發前必答的 5 個問題（填好可貼進提示詞設計助手）</h3>
+  <div class="card"><ol class="tight">
+    <li><b>應用場景與業務流程</b>：幫業務／工程在收到 PQ／PU／AHU 案件需求時，快速選型並產出報價草稿。</li>
+    <li><b>資料輸入與來源</b>：案件需求（文字或上傳客戶規格書／圖面）——場域、面積／噸位、風量／靜壓、電源、數量、交期、特殊需求。</li>
+    <li><b>預期輸出內容</b>：報價草稿（品項／型號／規格／數量／參考單價／小計／交期）＋選型理由＋需人工確認項目。</li>
+    <li><b>任務步驟</b>：①理解需求 ②查選型規則與規格 ③選機型配件 ④帶參考單價 ⑤彙整報價草稿。</li>
+    <li><b>知識來源</b>：選型規則表、產品規格表、報價範本與歷史單價（表格查詢為主）。</li>
+  </ol></div>
+
+  <h3>開發思路</h3>
+  <p>若客戶會附規格書／圖面，採<b>兩階段</b>：階段一只讀檔、把需求整理成結構化文字（不查庫）；階段二再依整理結果查選型知識庫、算報價。避免「看圖」與「查表」互相干擾。</p>
+
+  <h3>完整系統提示詞（可複製，貼進 Dify Agent 的提示詞欄位）</h3>
+  <div class="codebox">
+    <button class="copybtn" onclick="cp(this,'p-q')">複製</button>
+    <pre id="p-q">＃ 角色
+你是東元電機 HT 事業處的「PQ／PU／AHU 報價工程師助手」，
+協助業務／工程依客戶案件需求完成機型選配與報價草稿。
+
+＃ 任務
+依輸入的案件需求，選出合適機型與配件，產出結構清楚的報價草稿與選型理由，
+讓業務能快速確認、調整後對外報價。
+
+＃ 背景知識（知識庫）
+- 選型規則表：依噸數／風量／靜壓／使用場域對應建議機型與配件（表格查詢）。
+- 產品規格表：PQ／PU／AHU 各機型規格（表格查詢）。
+- 報價範本與歷史單價：報價單格式與各品項參考單價（模板＋表格查詢）。
+
+＃ 執行流程（若附規格書／圖面，採兩階段）
+階段一（理解需求）：只讀客戶規格書／需求文件／圖面，整理成結構化需求
+（場域、面積／噸位、風量／靜壓、電源、數量、交期、特殊要求）。此階段不查知識庫。
+階段二（選型與報價）：依整理好的需求查選型規則與規格表，選機型與配件，
+帶入參考單價，產出報價草稿。
+
+＃ 輸入格式
+案件需求（文字或上傳規格書）：場域用途、面積／噸位、風量／靜壓、電源、
+數量、交期、特殊需求。
+
+＃ 輸出格式（Markdown）
+1. 需求摘要（我理解的需求，請業務確認）
+2. 建議機型與配件：品項｜型號｜規格｜數量｜參考單價｜小計｜選型理由
+3. 報價彙總：設備小計、配件小計、預估交期、報價有效期
+4. 提醒：需人工確認的項目（特殊規格、現場條件、最終定價）
+
+＃ 問答指引（固定，原文照貼不改）
+- 查不到對應規格或單價時，明確標「資料庫無此項，請人工補」，絕不杜撰型號或價格。
+- 參考單價僅供內部估算，最終對外報價由業務／主管核定。
+- 事實（規格、單價）與建議（選型理由）分開呈現。
+- 繁體中文，技術術語保留英文。</pre>
+  </div>
+
+  <h3>知識庫設計</h3>
+  <ul class="tight">
+    <li><b>選型規則表</b>（表格查詢）：場域／噸數／風量／靜壓 → 建議機型＋配件。</li>
+    <li><b>產品規格表</b>（表格查詢）：PQ／PU／AHU 各型號規格欄位。</li>
+    <li><b>報價範本</b>（模板）＋<b>歷史單價表</b>（表格查詢）：報價單格式與各品項參考單價。</li>
+  </ul>
+
+  <h3>建置流程（Dify）</h3>
+  <ol class="tight">
+    <li>建 Agent App，貼上上方系統提示詞。</li>
+    <li>上傳三類知識庫（先用試作的小樣本，能跑就好）。</li>
+    <li>需讀規格書 PDF 才開「兩階段」；純文字輸入可單階段。</li>
+    <li>用 2–3 個真實案件試跑，調到報價草稿可用。</li>
+  </ol>
+
+  <h3>驗測情境</h3>
+  <ul class="tight">
+    <li><b>正常案</b>：一個標準商辦 AHU 案，確認選型、單價、彙整正確。</li>
+    <li><b>邊界案</b>：規格庫查無的特殊噸位／特殊需求——確認它會說「資料庫無此項，請人工補」而不是硬湊。</li>
+    <li><b>缺資料案</b>：輸入缺靜壓／電源——確認它會回問或標註待補，不擅自假設。</li>
+  </ul>
+</section>
+
+<!-- ===== 成案率分析 ===== -->
+<section id="w" class="tab w">
+  <h2>② 成案率分析</h2>
+  <p class="lead">根據歷史「報價 vs 成交」紀錄，找出影響成案的因子，並對新報價給成案研判與建議。</p>
+
+  <div class="note"><b>定位（很重要）：</b>先做「描述性分析＋建議」，<b>不要做黑箱機率預測</b>。案件量通常不足以訓練嚴謹模型；定位成「哪類案子成案率高／低、這張報價相對歷史落在哪、風險與建議」最實用且可信。等資料累積到數十～上百筆且有輸贏標記，再談機率預測。</div>
+
+  <h3>開發前必答的 5 個問題</h3>
+  <div class="card"><ol class="tight">
+    <li><b>應用場景與業務流程</b>：回顧歷史報價成敗、找出成案規律；並對新報價給成案機會研判與建議。</li>
+    <li><b>資料輸入與來源</b>：一張「歷史報價–成交對照表」（見第 ③ 分頁欄位）；單案研判時另輸入本案資訊。</li>
+    <li><b>預期輸出內容</b>：整體分析（成案率高／低的族群、影響因子）＋單案研判（高／中／低＋理由＋建議）。</li>
+    <li><b>任務步驟</b>：①釐清整體或單案 ②查歷史做描述性統計 ③本案落點比對 ④給研判與建議＋資料依據。</li>
+    <li><b>知識來源</b>：歷史報價–成交對照表（表格查詢，必須含「結果＋輸贏原因」）。</li>
+  </ol></div>
+
+  <h3>完整系統提示詞（可複製）</h3>
+  <div class="codebox">
+    <button class="copybtn" onclick="cp(this,'p-w')">複製</button>
+    <pre id="p-w">＃ 角色
+你是東元電機 HT 事業處的「報價成案率分析助手」，
+根據歷史報價與成交紀錄，找出影響成案的因子，並對新報價給成案研判與建議。
+
+＃ 任務（兩種模式）
+（A）整體分析：從歷史資料找出「哪類案子成案率高／低」的規律。
+（B）單案研判：對一張新報價，比對歷史，給成案機會 高／中／低 的研判與可行建議。
+
+＃ 背景知識（知識庫）
+- 歷史報價–成交對照表（表格查詢）：每筆含產品線、案件規模、報價金額、毛利、
+  客戶類型／產業、案件來源、交期、競爭對手與其報價、業務員、
+  結果（成交／未成交）、輸贏原因。這是分析的命脈。
+
+＃ 執行流程
+1. 先釐清是「整體分析」還是「單案研判」。
+2. 查歷史對照表做描述性統計：依產品線／規模／價格帶／客戶類型／案件來源分群，比較成案率。
+3. 單案研判：把本案放進對應分群，看相對歷史落點（價格偏高？交期偏長？該客戶類型成案率？），
+   給 高／中／低 研判與 2–3 個可行建議。
+4. 每個結論都附「依據哪些歷史資料」。
+
+＃ 輸入格式
+- 整體分析：直接問（可指定產品線／期間）。
+- 單案研判：本案的產品線、案件規模、報價金額、客戶類型、案件來源、交期、競品報價（若知）。
+
+＃ 輸出格式（Markdown）
+1. 分析範圍與樣本數（明說用了幾筆歷史資料）
+2. 關鍵發現（成案率高／低的族群、主要影響因子）
+3. 本案研判（若為單案）：成案機會 高／中／低 ＋ 理由 ＋ 2–3 建議
+4. 資料品質提醒（樣本不足或欄位缺漏要說明）
+
+＃ 問答指引（固定，原文照貼不改）
+- 不做黑箱機率預測；只做有資料依據的描述性分析與研判，每個結論說清楚來自哪些資料。
+- 樣本數太少（例如該族群少於 10 筆）必須明講「樣本不足，僅供參考」。
+- 絕不編造數字或趨勢。
+- 繁體中文，技術術語保留英文。</pre>
+  </div>
+
+  <h3>知識庫設計</h3>
+  <p>核心就一張<b>歷史報價–成交對照表</b>（表格查詢）。它的欄位完整度，直接決定這支 Agent 有沒有用——欄位清單與必填項見第 ③ 分頁。</p>
+
+  <h3>驗測情境</h3>
+  <ul class="tight">
+    <li><b>整體分析</b>：問「哪個價格帶／客戶類型成案率最高」，確認它有引用樣本數與依據。</li>
+    <li><b>單案研判</b>：丟一張明顯偏貴的報價，確認它判低成案並指出原因、給建議。</li>
+    <li><b>樣本不足</b>：問一個歷史很少的冷門族群，確認它會說「樣本不足，僅供參考」而非硬給結論。</li>
+  </ul>
+</section>
+
+<!-- ===== 資料蒐集清單 ===== -->
+<section id="d" class="tab d">
+  <h2>③ 資料蒐集清單</h2>
+  <p class="lead">給對應單位蒐集資料時用。<span class="must">紅色為成案率分析的必填欄位</span>——缺了這些，成案率就分析不出來。</p>
+
+  <table>
+    <tr><th style="width:22%">欄位</th><th>說明</th><th style="width:14%">用途</th></tr>
+    <tr><td>案件編號／報價日期</td><td>唯一識別與時間序</td><td>兩者皆需</td></tr>
+    <tr><td>產品線</td><td>PQ／PU／AHU（可複選）</td><td>兩者皆需</td></tr>
+    <tr><td>案件規模</td><td>噸數／台數／金額級距</td><td>兩者皆需</td></tr>
+    <tr><td>客戶名稱／<span class="must">客戶類型・產業</span></td><td>直客／經銷／系統商；製造／商辦／醫院…</td><td><span class="must">成案率必填</span></td></tr>
+    <tr><td><span class="must">案件來源</span></td><td>經銷、直客、公開標案、舊客回購…</td><td><span class="must">成案率必填</span></td></tr>
+    <tr><td>需求規格摘要</td><td>場域、風量／靜壓、電源、特殊需求</td><td>報價用</td></tr>
+    <tr><td><span class="must">報價金額</span>／估算成本・毛利</td><td>對外報價與內部成本（毛利率）</td><td><span class="must">成案率必填</span></td></tr>
+    <tr><td>交期</td><td>承諾／要求交期</td><td>兩者皆需</td></tr>
+    <tr><td>競爭對手與其報價</td><td>對手品牌、得標價（若知）</td><td>成案率（加分）</td></tr>
+    <tr><td>業務員</td><td>承辦業務</td><td>成案率（分群）</td></tr>
+    <tr><td>報價日 → 結案日</td><td>從報價到結案的天數</td><td>成案率</td></tr>
+    <tr><td class="must">結果</td><td class="must">成交／未成交／未定 — 最關鍵</td><td><span class="must">成案率必填</span></td></tr>
+    <tr><td class="must">輸／贏的原因</td><td class="must">價格、規格、交期、關係、競品…（可複選＋備註）</td><td><span class="must">成案率必填</span></td></tr>
+  </table>
+
+  <div class="note"><b>一句話提醒：</b>表單一定要收到「<span class="must">結果＋輸贏原因</span>」這兩欄。很多公司收了一堆報價資料卻沒記「最後有沒有成、為什麼輸」，結果成案率分析做不起來。這兩欄現在就要加進表單。</div>
+
+  <h3>資料量門檻（誠實的期待管理）</h3>
+  <ul class="tight">
+    <li>單案研判要有意義，對應族群至少要有約 <b>10 筆以上</b>有輸贏標記的歷史。</li>
+    <li>整體規律要穩，最好累積 <b>數十～上百筆</b>。</li>
+    <li>資料還不夠時，第 1 期先讓「報價助手」見效（價值在快與一致），成案率分析邊累積邊上。</li>
+  </ul>
+</section>
+
+</div>
+<footer>東元電機 HT 事業處 · PQ／PU／AHU 報價與成案率分析助手 開發教學｜Albert Chen · 智慧方案</footer>
+
+<script>
+function go(id, btn){
+  document.querySelectorAll('section.tab').forEach(s=>s.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  window.scrollTo({top:0});
+}
+function cp(btn, id){
+  const t = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(t).then(()=>{
+    const o = btn.textContent; btn.textContent = '已複製 ✓';
+    setTimeout(()=>btn.textContent=o, 1500);
+  });
+}
+</script>
+</body>
+</html>
