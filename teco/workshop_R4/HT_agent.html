@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>空調通路情報 Agent 實作教學｜Dify vs Hermes</title>
+<title>主動新知搜查 Agent 實作教學｜Dify vs Hermes</title>
 <style>
   :root{
     --purple:#3D2462; --purple-lt:#F3EEFA; --purple-mid:#6B4FA0;
@@ -88,8 +88,8 @@
     <div class="langtoggle"><a class="deck zh" href="https://docs.google.com/presentation/d/1kqfJQQ2KckOP0gWWvu-VierBj3cftPDk/" target="_blank" rel="noopener">講義</a><a class="deck en" href="https://docs.google.com/presentation/d/1cX_I9JEJPG61nLp1K3GcBVX6NZ96V1vc/" target="_blank" rel="noopener">Slides</a><a onclick="setLang('zh')" data-l="zh">中文</a><a onclick="setLang('en')" data-l="en">EN</a></div>
     <a class="ht-back" href="index.html"><span class="zh">← 回題型總覽</span><span class="en">← Back to overview</span></a>
     <div class="kicker"><span class="zh">東元電機 AI AGENT 開發實務工作坊 · 實作教學</span><span class="en">TECO AI AGENT DEVELOPMENT WORKSHOP · HANDS-ON GUIDE</span></div>
-    <h1><span class="zh">空調通路情報 Agent：Dify 與 Hermes 兩種開發方式</span><span class="en">HVAC Retail-Channel Intelligence Agent: Two Ways to Build It — Dify vs Hermes</span></h1>
-    <p><span class="zh">同一份 SOP，兩種部署。先看 Dify（2025 年的主流），再看 Hermes（2026 年的新答案）。所有 Prompt 可直接複製練習。</span><span class="en">One SOP, two deployments. Start with Dify (the 2025 mainstream), then Hermes (the 2026 answer). Every prompt is ready to copy and practice.</span></p>
+    <h1><span class="zh">主動新知搜查 Agent：Dify 與 Hermes 兩種開發方式</span><span class="en">Proactive AI-News Scout Agent: Two Ways to Build It — Dify vs Hermes</span></h1>
+    <p><span class="zh">每天自動搜查最新 AI Agent 市場與技術新知，產出給生產力與幕僚單位都能參考的日報。同一份 SOP，兩種部署：先看 Dify（2025 年的主流），再看 Hermes（2026 年的新答案）。所有 Prompt 可直接複製練習。</span><span class="en">Auto-searches the latest AI-Agent market and tech news every day and produces a daily brief useful to both delivery and staff functions. One SOP, two deployments: start with Dify (the 2025 mainstream), then Hermes (the 2026 answer). Every prompt is ready to copy and practice.</span></p>
   </div>
 </header>
 
@@ -105,14 +105,14 @@
 <!-- ============ TAB 1 任務 ============ -->
 <section id="task" class="tab show">
   <h2><span class="zh">這個 Agent 要做什麼</span><span class="en">What This Agent Does</span></h2>
-  <p class="lead"><span class="zh">站在東元「空調科技事業群」立場，每天自動完成台灣 B2C 零售通路的市場情報採集。</span><span class="en">From the perspective of TECO's HVAC Technology Business Group, it automatically gathers daily market intelligence across Taiwan's B2C retail channels.</span></p>
+  <p class="lead"><span class="zh">每天自動搜查「AI Agent／生成式 AI」最新的市場與技術新知，整理成一份結構化日報，給全公司各單位快速掌握趨勢。</span><span class="en">Every day it automatically searches the latest AI-Agent / generative-AI market and tech news and compiles a structured daily brief so every team can grasp trends fast.</span></p>
   <div class="grid2">
-    <div class="card"><span class="pill purple"><span class="zh">監控通路</span><span class="en">Channels Monitored</span></span><br><span class="zh">momo、PChome 24h、全國電子、燦坤、蝦皮商城、家樂福線上、好市多線上、特力屋</span><span class="en">momo, PChome 24h, 全國電子, 燦坤, 蝦皮商城, 家樂福線上, 好市多線上, 特力屋</span></div>
-    <div class="card"><span class="pill purple"><span class="zh">監控品牌</span><span class="en">Brands Monitored</span></span><br><span class="zh">東元 TECO（基準，HS8 系列第一優先）＋大金、日立、Panasonic、三菱、富士通、禾聯、聲寶、大同、三洋、歌林、LG、三星等</span><span class="en">TECO (baseline, HS8 series top priority) plus 大金, 日立, Panasonic, 三菱, 富士通, 禾聯, 聲寶, 大同, 三洋, 歌林, LG, 三星, and others</span></div>
-    <div class="card"><span class="pill purple"><span class="zh">每日產出（08:00 前）</span><span class="en">Daily Output (by 08:00)</span></span><br><span class="zh">《每日空調通路情報》：①今日重點 ②價格與促銷變動 ③新品動態 ④銷售排名 ⑤輿情摘要 ⑥資料品質聲明</span><span class="en">The Daily HVAC Channel Intelligence report: 1) today's highlights 2) price & promotion changes 3) new-product activity 4) sales rankings 5) sentiment summary 6) data-quality statement</span></div>
-    <div class="card"><span class="pill purple"><span class="zh">即時警報</span><span class="en">Real-Time Alerts</span></span><br><span class="zh">競品主力機種降價逾 10%、東元負面輿情擴散、疑似遭下架缺貨、節能補助政策變動——當下立即推播，不等日報</span><span class="en">Competitor flagship models cut more than 10%, negative TECO sentiment spreading, suspected delisting or stockout, or changes to energy-subsidy policy — pushed immediately, not held for the daily report</span></div>
+    <div class="card"><span class="pill purple"><span class="zh">監控向度</span><span class="en">Dimensions Monitored</span></span><br><span class="zh">① 國際大廠動態 ② 台灣產業與政策 ③ 企業應用案例 ④ 工具與平台 ⑤ 法規與風險</span><span class="en">1) Global vendor moves 2) Taiwan industry & policy 3) Enterprise use cases 4) Tools & platforms 5) Regulation & risk</span></div>
+    <div class="card"><span class="pill purple"><span class="zh">給誰看</span><span class="en">Who It's For</span></span><br><span class="zh">全公司——生產力單位（研發、製造、業務…）看應用與工具；幕僚單位（人資、財會、法務…）看治理與風險。</span><span class="en">The whole company — delivery teams (R&D, manufacturing, sales…) read the applications and tools; staff functions (HR, finance, legal…) read governance and risk.</span></div>
+    <div class="card"><span class="pill purple"><span class="zh">每日產出（08:00 前）</span><span class="en">Daily Output (by 08:00)</span></span><br><span class="zh">《每日 AI Agent 新知日報》：①今日重點 ②國際大廠 ③台灣產業政策 ④企業應用 ⑤工具平台 ⑥法規風險 ⑦資料品質聲明</span><span class="en">The Daily AI-Agent News Brief: 1) highlights 2) global vendors 3) Taiwan industry & policy 4) enterprise use cases 5) tools & platforms 6) regulation & risk 7) data-quality statement</span></div>
+    <div class="card"><span class="pill purple"><span class="zh">即時提醒</span><span class="en">Real-Time Alerts</span></span><br><span class="zh">重大新模型／重大 Agent 能力發布、影響企業導入的重大法規或資安事件、與我們高度相關的落地案例——當下立即推播，不等日報。</span><span class="en">A major new model or agent capability, a regulation or security event affecting enterprise adoption, or a highly relevant landing case — pushed immediately, not held for the daily brief.</span></div>
   </div>
-  <div class="note"><b><span class="zh">共同的核心：</span><span class="en">The shared core: </span></b><span class="zh">不論用哪個平台，Agent 的靈魂都是同一份 SOP——監控什麼、怎麼判斷重要性、何時警報、報告長什麼樣子。把 SOP 寫清楚，才有資格談平台。</span><span class="en">Whichever platform you use, the soul of the Agent is the same SOP — what to monitor, how to judge importance, when to alert, and what the report looks like. Only once the SOP is clear are you ready to talk about platforms.</span></div>
+  <div class="note"><b><span class="zh">共同的核心：</span><span class="en">The shared core: </span></b><span class="zh">不論用哪個平台，Agent 的靈魂都是同一份 SOP——搜查哪些向度、怎麼判斷重要性、何時提醒、報告長什麼樣子。把 SOP 寫清楚，才有資格談平台。</span><span class="en">Whichever platform you use, the soul of the Agent is the same SOP — which dimensions to search, how to judge importance, when to alert, and what the report looks like. Only once the SOP is clear are you ready to talk about platforms.</span></div>
 </section>
 
 <!-- ============ TAB 2 DIFY ============ -->
@@ -132,9 +132,9 @@
   <div class="card">
     <span class="pill dify"><span class="zh">要做的事（盡量用 Dify 原生）</span><span class="en">What to do (use Dify built-ins as much as possible)</span></span>
     <ul class="tight">
-      <li><span class="zh">啟用 Dify 原生工具：<b>Google</b>（搜尋）、<b>WebScraper</b>（網頁抓取）——免裝市集插件，當天就能用</span><span class="en">Enable Dify's built-in tools: <b>Google</b> (search) and <b>WebScraper</b> (web scraping) — no marketplace plugin needed, ready to use on day one</span></li>
-      <li><span class="zh"><b>記憶（唯一的外接）</b>：用已安裝的 <b>google_sheets 外掛</b> 讀／寫一張 Google Sheet——<b>google_sheets(Batch Get)</b> 讀昨日基準、<b>google_sheets(Batch Update)</b> 寫今日數據，免寫程式</span><span class="en"><b>Memory (the only external piece)</b>: use the installed <b>google_sheets plugin</b> to read/write one Google Sheet — <b>google_sheets(Batch Get)</b> for the baseline, <b>google_sheets(Batch Update)</b> for today's data; no coding</span></li>
-      <li><span class="zh"><b>發報／警報</b>：用 Dify <b>原生 HTTP 請求節點</b>直接發到 LINE／Telegram，免後端、免自訂工具</span><span class="en"><b>Report / alert</b>: use Dify's <b>built-in HTTP Request node</b> to post straight to LINE / Telegram — no backend, no custom tool</span></li>
+      <li><span class="zh">啟用 Dify 原生工具：<b>Google</b>（搜尋）、<b>WebScraper</b>（網頁抓取）——免裝市集插件，當天就能用</span><span class="en">Enable Dify's built-in tools: <b>Google</b> (search) and <b>WebScraper</b> (web scraping) — no marketplace plugin needed, ready on day one</span></li>
+      <li><span class="zh"><b>記憶（唯一的外接）</b>：用已安裝的 <b>google_sheets 外掛</b> 讀／寫一張 Google Sheet——<b>google_sheets(Batch Get)</b> 讀「已收錄清單」、<b>google_sheets(Batch Update)</b> 寫今日收錄，免寫程式</span><span class="en"><b>Memory (the only external piece)</b>: use the installed <b>google_sheets plugin</b> to read/write one Google Sheet — <b>google_sheets(Batch Get)</b> for the "already-collected" list, <b>google_sheets(Batch Update)</b> for today's items; no coding</span></li>
+      <li><span class="zh"><b>發報／提醒</b>：用 Dify <b>原生 HTTP 請求節點</b>直接發到 LINE／Telegram，免後端、免自訂工具</span><span class="en"><b>Report / alert</b>: use Dify's <b>built-in HTTP Request node</b> to post straight to LINE / Telegram — no backend, no custom tool</span></li>
       <li><span class="zh">把 SOP 寫成系統提示詞（下方完整版）</span><span class="en">Turn the SOP into a system prompt (full version below)</span></li>
       <li><span class="zh">把「最大迭代次數」調到平台上限（預設 5 次絕對不夠）</span><span class="en">Raise "max iterations" to the platform ceiling (the default of 5 is nowhere near enough)</span></li>
       <li><span class="zh"><b>每天人工驅動</b>：不設外部排程；上班時在對話框輸入「開始今天的任務」手動執行一次</span><span class="en"><b>Trigger manually each day</b>: no external scheduler — just type "start today's task" in the chat box once when you start work</span></li>
@@ -144,29 +144,29 @@
   <div class="card">
     <span class="pill dify"><span class="zh">記憶與發報怎麼接（用已裝的外掛，最純 Dify）</span><span class="en">Wiring up memory & delivery (use the installed plugin — the most Dify-native way)</span></span>
     <p style="font-size:14.5px;margin:6px 0 10px">
-      <span class="zh">原則：能用 Dify 原生／外掛就不自己寫程式。<b>發報／警報</b>＝原生 <b>HTTP 請求節點</b>直接打 LINE／Telegram。<b>記憶</b>＝用已安裝的 <b>google_sheets 外掛</b>讀寫一張 Google Sheet——讀用 <b>google_sheets(Batch Get)</b>、寫用 <b>google_sheets(Batch Update)</b>，免 Apps Script、免 OpenAPI。唯一外接就只剩「那張 Sheet」本身。</span>
+      <span class="zh">原則：能用 Dify 原生／外掛就不自己寫程式。<b>發報／提醒</b>＝原生 <b>HTTP 請求節點</b>直接打 LINE／Telegram。<b>記憶</b>＝用已安裝的 <b>google_sheets 外掛</b>讀寫一張 Google Sheet——讀用 <b>google_sheets(Batch Get)</b>、寫用 <b>google_sheets(Batch Update)</b>，免 Apps Script、免 OpenAPI。唯一外接就只剩「那張 Sheet」本身。</span>
       <span class="en">Principle: if Dify or a plugin can do it, don't write code. <b>Report / alert</b> = a native <b>HTTP Request node</b> to LINE / Telegram. <b>Memory</b> = the installed <b>google_sheets plugin</b> reading/writing one Google Sheet — read with <b>google_sheets(Batch Get)</b>, write with <b>google_sheets(Batch Update)</b>; no Apps Script, no OpenAPI. The only external piece is the Sheet itself.</span>
     </p>
     <ul class="tight">
-      <li><span class="zh"><b>1) 發報／警報（原生，免後端）</b>：用 Dify 原生 HTTP 請求節點 POST 到 LINE Notify／Telegram Bot 的網址即可。</span><span class="en"><b>1) Report / alert (native, no backend)</b>: use Dify's built-in HTTP Request node to POST to a LINE Notify / Telegram Bot URL.</span></li>
+      <li><span class="zh"><b>1) 發報／提醒（原生，免後端）</b>：用 Dify 原生 HTTP 請求節點 POST 到 LINE Notify／Telegram Bot 的網址即可。</span><span class="en"><b>1) Report / alert (native, no backend)</b>: use Dify's built-in HTTP Request node to POST to a LINE Notify / Telegram Bot URL.</span></li>
       <li><span class="zh"><b>2) 設定 google_sheets 外掛憑證</b>：GCP 建專案、啟用 Google Sheets API、建 service account 下載 JSON 金鑰；把目標 Sheet「共用」給該 service account 的 email；在 Dify 外掛設定貼上 JSON。</span><span class="en"><b>2) Configure the google_sheets plugin</b>: in GCP create a project, enable the Google Sheets API, create a service account and download its JSON key; <b>share</b> the target Sheet with the service account's email; paste the JSON into the plugin settings in Dify.</span></li>
-      <li><span class="zh"><b>3) 開工第一步——讀「昨天的資料」</b>：用 <b>google_sheets（Batch Get）</b> 把昨天那張表整個讀進來，當作今天比價的基準。</span><span class="en"><b>3) First step each run — read "yesterday's data"</b>: use <b>google_sheets (Batch Get)</b> to pull in yesterday's whole sheet as today's comparison baseline.</span></li>
-      <li><span class="zh"><b>4) 收工最後一步——存「今天的資料」</b>：用 <b>google_sheets（Batch Update）</b> 把今天抓到的數據寫回那張表、存成新的一列，明天才有得比。</span><span class="en"><b>4) Last step each run — save "today's data"</b>: use <b>google_sheets (Batch Update)</b> to write today's data back to the sheet as a new row, so tomorrow has something to compare against.</span></li>
+      <li><span class="zh"><b>3) 開工第一步——讀「已收錄清單」</b>：用 <b>google_sheets（Batch Get）</b> 把昨天那張表整個讀進來，當作今天去重的基準。</span><span class="en"><b>3) First step each run — read the "already-collected" list</b>: use <b>google_sheets (Batch Get)</b> to pull in yesterday's whole sheet as today's deduplication baseline.</span></li>
+      <li><span class="zh"><b>4) 收工最後一步——存「今日收錄」</b>：用 <b>google_sheets（Batch Update）</b> 把今天收錄的新知寫回那張表、存成新的一列，明天才有得比。</span><span class="en"><b>4) Last step each run — save "today's items"</b>: use <b>google_sheets (Batch Update)</b> to write today's items back to the sheet as new rows, so tomorrow has something to compare against.</span></li>
     </ul>
-    <div class="note"><b><span class="zh">結果：外接只剩「一張 Sheet」，且讀寫都用現成外掛、零自寫程式。</span><span class="en">Result: the only external piece is one Sheet, and even reading/writing uses a ready-made plugin — zero custom code. </span></b><span class="zh">搜尋、抓頁、發報、警報、記憶全在 Dify 內完成。換成 Hermes，連這張 Sheet 都省（記憶內建）——這就是兩者的差距。</span><span class="en">Search, scraping, report, alert and memory all happen inside Dify. On Hermes even this Sheet is unnecessary (memory is built in) — that's the gap between the two.</span></div>
+    <div class="note"><b><span class="zh">結果：外接只剩「一張 Sheet」，且讀寫都用現成外掛、零自寫程式。</span><span class="en">Result: the only external piece is one Sheet, and even reading/writing uses a ready-made plugin — zero custom code. </span></b><span class="zh">搜尋、抓頁、發報、提醒、記憶全在 Dify 內完成。換成 Hermes，連這張 Sheet 都省（記憶內建）——這就是兩者的差距。</span><span class="en">Search, scraping, report, alert and memory all happen inside Dify. On Hermes even this Sheet is unnecessary (memory is built in) — that's the gap between the two.</span></div>
     <details style="margin-top:12px">
       <summary style="cursor:pointer;font-weight:700;color:var(--dify)"><span class="zh">備案：不想用外掛？自己接 Apps Script ＋ 自訂工具（點開）</span><span class="en">Fallback: prefer not to use the plugin? Wire up Apps Script + a custom tool (click to expand)</span></summary>
       <div class="codebox" style="margin-top:10px">
         <button class="copybtn" onclick="cp(this,'p-gas')">複製</button>
-        <pre id="p-gas">// 備案 — Google Apps Script 當「記憶」後端：讀昨日基準 / 寫今日數據
+        <pre id="p-gas">// 備案 — Google Apps Script 當「記憶」後端：讀已收錄清單 / 寫今日收錄
 // 部署：部署 → 新增部署作業 → 類型「網頁應用程式」→ 存取權限「任何人」→ 取得 /exec 網址
 const SHEET_ID = 'YOUR_SHEET_ID';
 
-function doGet(e){            // 讀昨日基準
+function doGet(e){            // 讀已收錄清單
   const sh = SpreadsheetApp.openById(SHEET_ID).getSheetByName('baseline');
   return json({ ok:true, baseline: sh.getDataRange().getValues() });
 }
-function doPost(e){           // 寫今日數據
+function doPost(e){           // 寫今日收錄
   const p = JSON.parse(e.postData.contents || '{}');
   SpreadsheetApp.openById(SHEET_ID).getSheetByName('snapshot')
     .appendRow([new Date(), JSON.stringify(p.data || {})]);
@@ -179,18 +179,18 @@ function json(o){ return ContentService.createTextOutput(JSON.stringify(o))
         <button class="copybtn" onclick="cp(this,'p-schema')">複製</button>
         <pre id="p-schema"># 備案 — Dify 自訂工具 OpenAPI schema（網址換成你的 /exec）
 openapi: 3.0.0
-info: { title: 空調情報記憶, version: 1.0.0 }
+info: { title: 新知記憶, version: 1.0.0 }
 servers:
   - url: https://script.google.com/macros/s/XXXX/exec
 paths:
   /:
     get:
       operationId: get_baseline
-      summary: 讀取昨日價格基準
+      summary: 讀取已收錄清單
       responses: { '200': { description: ok } }
     post:
       operationId: save_snapshot
-      summary: 寫入今日數據
+      summary: 寫入今日收錄
       requestBody:
         content:
           application/json:
@@ -207,79 +207,67 @@ paths:
   <p class="lead"><span class="zh">下方提示詞為實際中文交付物，請保留原文使用。</span><span class="en">The prompt below is the actual Chinese deliverable — keep it as-is.</span></p>
   <div class="codebox">
     <button class="copybtn" onclick="cp(this,'p-dify')">複製</button>
-    <pre id="p-dify">你是東元電機「空調科技事業群」的市場情報分析師 Agent。每次被觸發代表新的一個工作日，
-你要完成台灣 B2C 空調零售通路的情報採集，並產出《每日空調通路情報報告》。
+    <pre id="p-dify">你是公司的「AI 應用新知情報分析師」Agent。每次被觸發代表新的一個工作日，
+你要完成「AI Agent／生成式 AI」最新市場與技術新知的搜查，並產出《每日 AI Agent 新知日報》。
+讀者是全公司各單位——生產力單位（研發、製造、業務…）看應用與工具，
+幕僚單位（人資、財會、法務…）看治理與風險。
 
-# 事業群背景（判斷情報重要度用）
-- 東元是台灣最大的水冷式冷卻機與封裝型空調機供應商，B2C 主力為變頻分離式、多聯機、
-  變頻窗型、隱藏式、天井式、落地式冷氣；HS8 系列為旗艦（節能超越日本 2025 年 1 級標準 7%、
-  R32 冷媒），是監控第一優先。
-- 商用冷鏈（冰櫃、冷凍櫃）有零售通路銷售，列入監控。
-- IoT 雲端控制與 APP 遠端操作是東元差異化訴求，競品同類功能動態要特別留意。
-- 冰水主機與大型 HVAC 系統整合屬 B2B，不每日追蹤，但重大新聞列入輿情。
+# 判斷新知重要度的原則
+- 我們關心「能不能用、值不值得導入、有沒有風險」，不是純學術。
+- 與我們高度相關者（重大模型發布、可落地的工具、同業導入案例、影響合規的法規）優先。
+- 純行銷稿、重複轉載、與企業應用無關的內容，降權或略過。
 
-# 監控範圍
-通路（依優先序，迭代次數有限，依序完成，寧可少而準）：
-1. momo  2. PChome 24h  3. 全國電子  4. 燦坤  5. 蝦皮商城（官方旗艦店）
-6. 家樂福線上  7. 好市多線上  8. 特力屋
-品牌：東元 TECO（基準）+ 大金、日立、Panasonic、三菱電機、三菱重工、富士通、
-禾聯、聲寶、大同、台灣三洋、歌林、良峰、萬士益、LG、三星。
-品類：分離式變頻（核心，依噸數級距 2.x/3.x/4.x/5.x kW 對比）、變頻窗型、移動式、
-吊隱/天井/落地式、冰櫃冷凍櫃；除濕機/清淨機/電扇只記促銷主打款。
+# 監控向度（依優先序，迭代次數有限，依序完成，寧可少而準）
+1. 國際大廠動態：OpenAI、Anthropic、Google、Microsoft、Meta 的新模型與 Agent 新功能。
+2. 台灣產業與政策：台灣企業導入案例、本土廠商、政府 AI 政策與補助。
+3. 企業應用案例：各產業 AI Agent 落地案例、導入成效／ROI、踩雷經驗。
+4. 工具與平台：新框架、MCP、Agent 平台、開源專案、重要 benchmark。
+5. 法規與風險：AI 治理、資安、個資與合規。
 
 # 執行檢核清單（嚴格依序，每步完成才進下一步）
-□ Step 0：用 google_sheets(Batch Get) 讀 baseline 取得昨日基準。若為空 → 進入「Day 0 模式」（見下）。
-□ Step 1：價格與促銷掃描——逐通路用 Google 搜尋工具找冷氣分類頁/促銷頁，
-  用 WebScraper 抓取。每通路記錄：各品牌排行前 10 機種 + 東元全部在售機種的
-  型號、噸數、牌價、券後價、促銷條件（贈品/分期/含安裝與否/舊換新補助）。
-  與基準比對，記下所有價格變動（含變動 %）、新出現 SKU、消失 SKU。
-□ Step 2：新品查證——對新 SKU 搜尋品牌官網/新聞稿，確認是否正式新品，
-  整理能效（CSPF）、冷媒、IoT 功能、靜音值、是否通路獨家。
-□ Step 3：排行榜——抓 momo、PChome、蝦皮的冷氣品類銷售排行前 20，
-  記錄東元名次（未進榜要明說）與競品名次對比昨日的升降。
-□ Step 4：輿情——搜尋過去 24 小時 PTT（e-appliance、Lifeismoney）、Mobile01、
-  Dcard、Google 新聞中上述品牌的討論。東元負面輿情（故障/噪音/安裝糾紛）一律列入。
-  同時查節能補助/汰舊換新政策動態。
-□ Step 5：用 google_sheets(Batch Update) 寫入今日全部數據（snapshot 分頁）。
+□ Step 0：用 google_sheets(Batch Get) 讀 baseline 取得「已收錄清單」。若為空 → 進入「Day 0 模式」（見下）。
+□ Step 1：逐向度用 Google 搜尋近 24–48 小時的新發布、官方部落格、技術媒體；用 WebScraper 抓內文。
+  每則記錄：日期｜標題｜一句重點｜向度｜來源連結。
+□ Step 2：去重與篩選——與「已收錄清單」比對，去掉重複與舊聞；只留「新的、且與我們相關」的。
+□ Step 3：查證——重要消息回到原始出處（官方部落格／論文／新聞稿）確認，不採二手誤傳。
+□ Step 4：關聯——為每則補一句「為何跟我們有關／可用在哪個單位」。
+□ Step 5：用 google_sheets(Batch Update) 把今日收錄寫入（snapshot 分頁）。
 □ Step 6：產出報告並呼叫 send_report 發送。
 
-# 即時警報（發現當下立即呼叫 send_alert，不等報告）
-- 競品主力機種降價超過 10%
-- 東元出現跨平台擴散的負面輿情
-- 東元機種疑似遭通路下架/缺貨
-- 節能補助政策變動
-警報訊息 3 行內，開頭加【即時警報】。
+# 即時提醒（發現當下立即呼叫 send_alert，不等報告）
+- 國際大廠發布重大新模型／重大 Agent 能力
+- 影響企業導入的重大法規或資安事件
+- 與我們業務高度相關、不宜隔天才看的落地案例
+提醒訊息 3 行內，開頭加【即時提醒】。
 
 # 報告格式（send_report 的 body_markdown，嚴格遵守）
-# 每日空調通路情報 YYYY-MM-DD
+# 每日 AI Agent 新知日報 YYYY-MM-DD
 ## 1. 今日重點（3–5 條，紅/黃/綠標記，主管 30 秒看完）
-## 2. 價格與促銷變動（只列有變動：品牌｜機種｜噸數級距｜通路｜昨日價→今日價｜變動%｜促銷；
-     東元與同級距競品並列；註明是否含標準安裝；無變動寫「今日無顯著變動」）
-## 3. 新品與上架動態（品牌｜型號｜定價｜通路｜規格亮點；無則寫「今日無」）
-## 4. 通路動態與銷售排名（東元名次、競品升降、檔期觀察）
-## 5. 輿情摘要（東元正負面都要、競品重大動態、補助政策；每條附來源連結）
-## 6. 資料品質聲明（列出今日抓取失敗的通路與項目，標明「未能取得」）
-（週五加：## 7. 本週趨勢彙總）
+## 2. 國際大廠動態（標題｜一句重點｜為何相關｜連結；無則寫「今日無」）
+## 3. 台灣產業與政策
+## 4. 企業應用案例
+## 5. 工具與平台
+## 6. 法規與風險
+## 7. 資料品質聲明（列出今日抓取失敗或存疑的項目，標明「未能取得」）
+（週五加：## 8. 本週趨勢彙總）
 
 # Day 0 模式（get_baseline 回傳為空時）
-不出日報，改做基準建檔：完成 Step 1 全量採集（不做比對）→ save_snapshot →
-產出《基準盤點報告》（各通路品牌陳列概況、東元 vs 競品價格帶定位、進行中檔期與補助）
-→ send_report。
+不出日報，改做基準建檔：完成 Step 1 全向度一次性盤點（不做比對）→ save_snapshot →
+產出《新知基準盤點報告》（各向度目前的重點玩家與熱門主題）→ send_report。
 
 # 鐵則
-1. 絕不編造價格、排名、輿情。抓不到就在資料品質聲明中註明「未能取得」，不要用推測補。
-2. 每筆數據必附來源 URL。
-3. 價格區分牌價與券後價，冷氣註明含安裝與否。
-4. 事實與判讀分開，判讀只放「今日重點」並以「研判：」開頭。
-5. 頁面被反爬蟲擋住就記錄失敗，不要規避。
-6. 迭代預算有限：若接近上限，優先保證 momo、PChome、全國電子三通路 + 輿情完成，
-   其餘通路標「今日未巡」，照常出報告。報告一定要發出去，寧可不完整也不可沉默。
-7. 繁體中文，技術術語保留英文。</pre>
+1. 絕不編造標題、出處、日期。抓不到就在資料品質聲明中註明「未能取得」，不要用推測補。
+2. 每則必附來源 URL。
+3. 事實與判讀分開，判讀只放「今日重點」並以「研判：」開頭。
+4. 頁面被擋住就記錄失敗，不要規避。
+5. 迭代預算有限：接近上限時，優先保證「國際大廠動態＋台灣產業＋工具平台」三向度完成，
+   其餘標「今日未巡」，照常出報告。報告一定要發出去，寧可不完整也不可沉默。
+6. 繁體中文，技術術語保留英文。</pre>
   </div>
 
   <h3><span class="zh">每天怎麼啟動（人工驅動）</span><span class="en">How to start it each day (manual trigger)</span></h3>
-  <div class="note"><span class="zh">本版<b>不設外部排程</b>。每天上班時，到這個 Agent 的對話框輸入一句話手動驅動即可：<br><b>「開始執行今日的空調通路情報任務」</b><br>（想更省一步可把它釘選／加書籤；真正要「每天定時自動跑、不用人點」是 Hermes 的內建能力，見下一分頁。）</span><span class="en">This version uses <b>no external scheduler</b>. Each morning, just type one line into the Agent's chat box to trigger it:<br><b>"Start today's HVAC channel intelligence task"</b><br>(Pin or bookmark it to save a step. True "runs automatically every day, no clicking" is a built-in Hermes capability — see the next tab.)</span></div>
-  <div class="note"><b><span class="zh">觀察重點：</span><span class="en">What to notice: </span></b><span class="zh">注意提示詞裡有多少篇幅在「補平台的洞」——Step 0 讀記憶、Step 5 存檔、鐵則 6 的降級策略，都是因為 Dify Agent 無狀態、迭代有限而存在的。記住這個感覺，待會看 Hermes 版。</span><span class="en">Notice how much of the prompt is spent patching platform gaps — Step 0 reading memory, Step 5 saving data, and the degradation strategy in Rule 6 all exist only because the Dify Agent is stateless and iteration-limited. Hold on to that feeling as you move to the Hermes version.</span></div>
+  <div class="note"><span class="zh">本版<b>不設外部排程</b>。每天上班時，到這個 Agent 的對話框輸入一句話手動驅動即可：<br><b>「開始執行今日的 AI Agent 新知搜查任務」</b><br>（想更省一步可把它釘選／加書籤；真正要「每天定時自動跑、不用人點」是 Hermes 的內建能力，見下一分頁。）</span><span class="en">This version uses <b>no external scheduler</b>. Each morning, just type one line into the Agent's chat box to trigger it:<br><b>"Start today's AI-Agent news scan"</b><br>(Pin or bookmark it to save a step. True "runs automatically every day, no clicking" is a built-in Hermes capability — see the next tab.)</span></div>
+  <div class="note"><b><span class="zh">觀察重點：</span><span class="en">What to notice: </span></b><span class="zh">注意提示詞裡有多少篇幅在「補平台的洞」——Step 0 讀記憶、Step 5 存檔、鐵則 5 的降級策略，都是因為 Dify Agent 無狀態、迭代有限而存在的。記住這個感覺，待會看 Hermes 版。</span><span class="en">Notice how much of the prompt is spent patching platform gaps — Step 0 reading memory, Step 5 saving data, and the degradation strategy in Rule 5 all exist only because the Dify Agent is stateless and iteration-limited. Hold on to that feeling as you move to the Hermes version.</span></div>
 </section>
 
 <!-- ============ TAB 3 HERMES ============ -->
@@ -306,72 +294,60 @@ paths:
   <p class="lead"><span class="zh">下方任務書為實際中文交付物，請保留原文使用。</span><span class="en">The task brief below is the actual Chinese deliverable — keep it as-is.</span></p>
   <div class="codebox">
     <button class="copybtn" onclick="cp(this,'p-hermes')">複製</button>
-    <pre id="p-hermes"># 任務：東元空調 B2C 通路每日市場情報
+    <pre id="p-hermes"># 任務：公司 AI Agent 新知每日搜查
 
 ## 一、角色與使命
-你是東元電機「空調科技事業群」的市場情報分析師。每天監控台灣 B2C 家電零售通路與
-空調競品動態，在每天上午 8:00（台北時間）前產出一份《每日空調通路情報報告》。
-你是長期任務：必須維護歷史資料、每天與前一日比對、累積趨勢觀察。
+你是公司的「AI 應用新知情報分析師」。每天搜查 AI Agent／生成式 AI 的最新市場與技術新知，
+在每天上午 8:00（台北時間）前產出一份《每日 AI Agent 新知日報》。
+讀者是各單位：生產力單位看應用與工具，幕僚單位看治理與風險。
+你是長期任務：必須維護「已收錄清單」、每天去重、累積趨勢觀察。
 
-事業群背景（判斷情報重要度用）：
-- 東元是台灣最大的水冷式冷卻機與封裝型空調機供應商；B2C 主力為變頻分離式、多聯機、
-  變頻窗型、隱藏式、天井式、落地式冷氣；HS8 系列為旗艦（節能超越日本 2025 年
-  1 級標準 7%、R32 冷媒），監控第一優先。
-- 商用冷鏈（冰櫃、冷凍櫃）有零售通路銷售，列入監控。
-- IoT 雲端控制與 APP 遠端操作是東元差異化訴求，競品同類功能動態特別留意。
-- 冰水主機、大型 HVAC 系統整合屬 B2B，不每日追蹤，重大新聞列入輿情。
+判斷重要度的原則：
+- 我們關心「能不能用、值不值得導入、有沒有風險」，不是純學術。
+- 與我們高度相關者（重大模型、可落地工具、同業案例、影響合規的法規）優先。
+- 行銷稿、重複轉載、與企業應用無關者降權或略過。
 
-## 二、監控範圍
-通路：全國電子、燦坤、順發（3C 連鎖）；家樂福、大潤發/大全聯、好市多（量販）；
-momo、PChome 24h、蝦皮商城官方旗艦店（電商）；特力屋、品牌官方商城。
-品牌：東元 TECO（基準）+ 大金、日立、Panasonic、三菱電機、三菱重工、富士通、
-禾聯、聲寶、大同、台灣三洋、歌林、良峰、萬士益、LG、三星；發現新進品牌主動回報。
-品類：分離式變頻空調（核心，依噸數級距分組對比）、變頻窗型、移動式、
-吊隱/天井/落地式、冰櫃冷凍櫃；除濕機/清淨機/電扇摘要即可。
+## 二、監控向度
+1. 國際大廠動態：OpenAI、Anthropic、Google、Microsoft、Meta 的新模型與 Agent 新功能。
+2. 台灣產業與政策：台灣企業導入、本土廠商、政府 AI 政策與補助。
+3. 企業應用案例：各產業落地案例、導入成效／ROI、踩雷經驗。
+4. 工具與平台：新框架、MCP、Agent 平台、開源專案、重要 benchmark。
+5. 法規與風險：AI 治理、資安、個資與合規。
 
-## 三、每日工作流程（06:30 開工，08:00 前交付）
-Step 1 價格與促銷掃描：逐通路記錄各品牌主力機種售價與促銷條件
-（贈品/分期/含安裝與否/舊換新與節能補助），與你維護的歷史價格表比對，標記所有變動。
-Step 2 新品偵測：發現歷史資料庫中不存在的新型號，查品牌官網確認是否正式新品，
-記錄能效（CSPF）、冷媒、IoT 功能、靜音值、首發通路與定價。
-Step 3 排行榜：抓 momo、PChome、蝦皮冷氣品類銷售排行前 20，記錄東元名次與升降。
-Step 4 輿情：掃 PTT（e-appliance、Lifeismoney）、Mobile01、Dcard、Google 新聞
-近 24 小時討論；東元負面輿情一律列入；補助政策動態一併查。
-Step 5 資料持久化：當日數據寫入你維護的資料庫
-（price_history / new_products / rankings / sentiment_log 四張表）。
+## 三、每日工作流程（08:00 前交付）
+Step 1 逐向度搜查近 24–48 小時的新發布與重要文章，記錄 日期｜標題｜重點｜向度｜連結。
+Step 2 去重：與你維護的「已收錄清單」比對，只留新的、且與我們相關的。
+Step 3 查證：重要消息回原始出處確認，不採二手誤傳。
+Step 4 關聯：每則補一句「為何跟我們有關／可用在哪個單位」。
+Step 5 資料持久化：當日收錄寫入你維護的資料庫（news_log／trend 兩張表）。
 
 ## 四、報告格式（Markdown，固定結構）
-# 每日空調通路情報 YYYY-MM-DD
+# 每日 AI Agent 新知日報 YYYY-MM-DD
 1. 今日重點（3–5 條，紅/黃/綠標記）
-2. 價格與促銷變動（只列有變動，東元與同級距競品並列，註明含安裝與否）
-3. 新品與上架動態（無則寫「今日無」）
-4. 通路動態與銷售排名
-5. 輿情摘要（每條附來源連結）
-6. 資料品質聲明（抓取失敗項目標明「未能取得」）
+2. 國際大廠動態　3. 台灣產業與政策　4. 企業應用案例　5. 工具與平台　6. 法規與風險
+7. 資料品質聲明（抓取失敗項目標明「未能取得」）
 （每週五加：本週趨勢彙總）
 
-## 五、即時警報（不等日報，立即推播，3 行內，開頭加【即時警報】）
-競品主力機種降價逾 10%／東元負面輿情擴散／東元機種疑遭下架缺貨／節能補助政策變動
+## 五、即時提醒（不等日報，立即推播，3 行內，開頭加【即時提醒】）
+重大新模型／重大 Agent 能力發布／影響企業導入的重大法規或資安事件／高度相關的落地案例
 
 ## 六、鐵則
-1. 絕不編造價格、排名、輿情；抓不到就註明「未能取得」。
-2. 每筆數據附來源 URL 與擷取時間。
-3. 牌價與券後價分開記錄。
-4. 事實與判讀分開，判讀以「研判：」開頭。
-5. 遇反爬蟲記錄失敗即可，不要規避。
-6. 4–9 月空調旺季，加密監控頻率與促銷追蹤深度。
-7. 繁體中文，技術術語保留英文。
+1. 絕不編造標題、出處、日期；抓不到就註明「未能取得」。
+2. 每則附來源 URL 與擷取時間。
+3. 事實與判讀分開，判讀以「研判：」開頭。
+4. 遇阻擋記錄失敗即可，不要規避。
+5. 繁體中文，技術術語保留英文。
 
 ## 七、首次執行（Day 0 建檔）
-第一次執行不出日報：建立資料庫結構 → 全品牌在售機種基準快照 →
-產出《基準盤點報告》→ 把這次摸索出的抓取流程寫成 skill，之後每天重用。</pre>
+第一次執行不出日報：建立資料庫結構 → 各向度一次性基準盤點 →
+產出《新知基準盤點報告》→ 把這次摸索出的搜查流程寫成 skill，之後每天重用。</pre>
   </div>
 
   <h3><span class="zh">排程設定（對 Hermes 說一句話）</span><span class="en">Scheduling (just tell Hermes in one sentence)</span></h3>
   <div class="codebox">
     <button class="copybtn" onclick="cp(this,'p-sched')">複製</button>
-    <pre id="p-sched">建立一個每天早上 8 點執行的排程任務，內容是上面這份「東元空調 B2C 通路每日市場情報」指令。
-實際執行時間排 06:30 開工、08:00 前把報告發送到（Telegram / Slack / Email 擇一）。</pre>
+    <pre id="p-sched">建立一個每天早上 8 點執行的排程任務，內容是上面這份「公司 AI Agent 新知每日搜查」指令。
+請在 08:00 前把報告發送到（Telegram / Slack / Email 擇一）。</pre>
   </div>
   <div class="note"><b><span class="zh">觀察重點：</span><span class="en">What to notice: </span></b><span class="zh">對照 Dify 版——這裡沒有 get_baseline／save_snapshot（記憶內建）、沒有外部 cron（排程內建）、沒有降級策略（長駐執行沒有迭代壓力），還多了「把流程寫成 skill」這個 Dify 做不到的自我進化步驟。</span><span class="en">Compared with the Dify version, there is no get_baseline / save_snapshot (memory is built in), no external cron (scheduling is built in), and no degradation strategy (persistent execution has no iteration pressure) — plus it adds "turn the workflow into a skill," a self-evolution step Dify cannot do.</span></div>
 </section>
@@ -381,11 +357,11 @@ Step 5 資料持久化：當日數據寫入你維護的資料庫
   <h2><span class="zh">兩版 Prompt 對照</span><span class="en">Comparing the Two Prompts</span></h2>
   <table>
     <tr><th style="width:18%"><span class="zh">面向</span><span class="en">Dimension</span></th><th><span class="zh">Dify 版</span><span class="en">Dify Version</span></th><th><span class="zh">Hermes 版</span><span class="en">Hermes Version</span></th></tr>
-    <tr><td><b><span class="zh">記憶</span><span class="en">Memory</span></b></td><td class="d"><span class="zh">Step 0／Step 5 用 google_sheets(Batch Get)／google_sheets(Batch Update) 讀寫 Sheet</span><span class="en">Step 0 / Step 5 use google_sheets(Batch Get) / google_sheets(Batch Update) to read/write the Sheet</span></td><td class="h"><span class="zh">「維護歷史資料」一句話，本機資料庫內建</span><span class="en">One line — "maintain historical data" — backed by a built-in local database</span></td></tr>
+    <tr><td><b><span class="zh">記憶</span><span class="en">Memory</span></b></td><td class="d"><span class="zh">Step 0／Step 5 用 google_sheets(Batch Get)／google_sheets(Batch Update) 讀寫 Sheet</span><span class="en">Step 0 / Step 5 use google_sheets(Batch Get) / google_sheets(Batch Update) to read/write the Sheet</span></td><td class="h"><span class="zh">「維護已收錄清單」一句話，本機資料庫內建</span><span class="en">One line — "maintain the collected list" — backed by a built-in local database</span></td></tr>
     <tr><td><b><span class="zh">排程</span><span class="en">Scheduling</span></b></td><td class="d"><span class="zh">每天人工驅動（上班時手動執行一次）</span><span class="en">Triggered manually each day (run once when you start work)</span></td><td class="h"><span class="zh">對它說「每天 8 點執行」即完成</span><span class="en">Just tell it "run every day at 8" and you're done</span></td></tr>
-    <tr><td><b><span class="zh">體力</span><span class="en">Stamina</span></b></td><td class="d"><span class="zh">迭代上限 → 通路收斂 + 降級策略（鐵則 6）</span><span class="en">Iteration ceiling → fewer channels plus a degradation strategy (Rule 6)</span></td><td class="h"><span class="zh">長駐執行，無迭代壓力，通路清單更長</span><span class="en">Persistent execution, no iteration pressure, a longer channel list</span></td></tr>
-    <tr><td><b><span class="zh">學習</span><span class="en">Learning</span></b></td><td class="d"><span class="zh">無，行為固定，要人工改 prompt</span><span class="en">None — behavior is fixed, the prompt must be edited by hand</span></td><td class="h"><span class="zh">Day 0 把抓取流程寫成 skill，之後每天重用</span><span class="en">On Day 0 it turns the scraping workflow into a skill, then reuses it daily</span></td></tr>
-    <tr><td><b><span class="zh">相同處</span><span class="en">In Common</span></b></td><td colspan="2" style="background:var(--purple-lt)"><span class="zh">監控範圍、報告格式、警報條件、品質鐵則——SOP 核心完全一樣。指令寫得好，換平台九成可以沿用。</span><span class="en">Monitoring scope, report format, alert conditions, quality rules — the SOP core is identical. Write the instructions well and roughly 90% carries over when you switch platforms.</span></td></tr>
+    <tr><td><b><span class="zh">體力</span><span class="en">Stamina</span></b></td><td class="d"><span class="zh">迭代上限 → 向度收斂 + 降級策略（鐵則 5）</span><span class="en">Iteration ceiling → fewer dimensions plus a degradation strategy (Rule 5)</span></td><td class="h"><span class="zh">長駐執行，無迭代壓力，向度／來源清單更長</span><span class="en">Persistent execution, no iteration pressure, a longer dimension / source list</span></td></tr>
+    <tr><td><b><span class="zh">學習</span><span class="en">Learning</span></b></td><td class="d"><span class="zh">無，行為固定，要人工改 prompt</span><span class="en">None — behavior is fixed, the prompt must be edited by hand</span></td><td class="h"><span class="zh">Day 0 把搜查流程寫成 skill，之後每天重用</span><span class="en">On Day 0 it turns the search workflow into a skill, then reuses it daily</span></td></tr>
+    <tr><td><b><span class="zh">相同處</span><span class="en">In Common</span></b></td><td colspan="2" style="background:var(--purple-lt)"><span class="zh">監控向度、報告格式、提醒條件、品質鐵則——SOP 核心完全一樣。指令寫得好，換平台九成可以沿用。</span><span class="en">Dimensions, report format, alert conditions, quality rules — the SOP core is identical. Write the instructions well and roughly 90% carries over when you switch platforms.</span></td></tr>
   </table>
 
   <h2><span class="zh">動手練習</span><span class="en">Hands-On Exercises</span></h2>
@@ -399,10 +375,10 @@ Step 5 資料持久化：當日數據寫入你維護的資料庫
   </div>
   <div class="ex">
     <h3><span class="zh">練習 3｜改成你的題目（30 分鐘）</span><span class="en">Exercise 3 | Make It Your Own (30 min)</span></h3>
-    <p><span class="zh">複製任一版 Prompt，把監控對象換成你部門負責的產品線（例如商用空調經銷報價、冷凍冷藏設備標案）。需要改的四個區塊：<b>監控範圍</b>（通路/品牌/品類）、<b>報告格式</b>（你的主管想看什麼）、<b>警報條件</b>（什麼事不能等到明天）、<b>鐵則</b>（你的領域裡 AI 最容易出錯的地方）。改完先在 Dify 手動跑一次驗證。</span><span class="en">Copy either prompt and swap the monitoring target for the product line your department owns (for example, commercial-HVAC dealer quotes or refrigeration-equipment tenders). Four blocks need editing: <b>monitoring scope</b> (channels / brands / categories), <b>report format</b> (what your manager wants to see), <b>alert conditions</b> (what cannot wait until tomorrow), and the <b>rules</b> (where AI is most likely to go wrong in your field). Once edited, run it manually in Dify once to validate.</span></p>
+    <p><span class="zh">複製任一版 Prompt，把「監控向度」換成你部門最關心的主題（例如：法務只追 AI 法規與個資、製造只追 AI 品檢與機台預測維護、人資只追 AI 招募與教育訓練）。需要改的四個區塊：<b>監控向度</b>（追哪些主題）、<b>報告格式</b>（你的主管想看什麼）、<b>提醒條件</b>（什麼事不能等到明天）、<b>鐵則</b>（你的領域裡 AI 最容易出錯的地方）。改完先在 Dify 手動跑一次驗證。</span><span class="en">Copy either prompt and swap the "dimensions" for the topics your department cares about most (e.g., legal tracks only AI regulation & privacy; manufacturing tracks AI inspection & predictive maintenance; HR tracks AI recruiting & training). Four blocks need editing: <b>dimensions</b> (which topics), <b>report format</b> (what your manager wants to see), <b>alert conditions</b> (what cannot wait until tomorrow), and the <b>rules</b> (where AI is most likely to go wrong in your field). Once edited, run it manually in Dify once to validate.</span></p>
   </div>
 
-  <div class="note"><b><span class="zh">建議路徑：</span><span class="en">Recommended path: </span></b><span class="zh">先在 Dify 用兩個通路跑一個月 POC，淬鍊出穩定的 SOP 與提示詞 → 驗證有價值後，把指令改寫成任務書，部署到 Hermes 長駐執行。Prompt 的功力是帶得走的，平台只是宿舍。</span><span class="en">Start with a one-month POC in Dify covering two channels to refine a stable SOP and prompt. Once it proves valuable, rewrite the instructions as a task brief and deploy it on Hermes for persistent execution. Prompt skill is portable — the platform is just the dormitory.</span></div>
+  <div class="note"><b><span class="zh">建議路徑：</span><span class="en">Recommended path: </span></b><span class="zh">先在 Dify 用兩個向度跑一個月 POC，淬鍊出穩定的 SOP 與提示詞 → 驗證有價值後，把指令改寫成任務書，部署到 Hermes 長駐執行。Prompt 的功力是帶得走的，平台只是宿舍。</span><span class="en">Start with a one-month POC in Dify covering two dimensions to refine a stable SOP and prompt. Once it proves valuable, rewrite the instructions as a task brief and deploy it on Hermes for persistent execution. Prompt skill is portable — the platform is just the dormitory.</span></div>
 </section>
 
 </div>
