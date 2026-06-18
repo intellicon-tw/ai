@@ -61,6 +61,24 @@ body.lang-zh .en{display:none}
 .langtoggle a.deck{opacity:1;border:1px solid rgba(255,255,255,.55);margin-right:10px;font-weight:700}
 .langtoggle a.deck:hover{background:rgba(255,255,255,.18)}
 </style></head><body class="lang-zh">
+<div id="tecoGate" style="position:fixed;inset:0;z-index:99999;background:#1f1147;display:flex;align-items:center;justify-content:center;font-family:'Microsoft JhengHei',Arial,sans-serif">
+  <div style="background:#fff;padding:34px 28px;border-radius:16px;max-width:360px;width:86%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.35)">
+    <div style="font-size:34px;margin-bottom:6px">&#128274;</div>
+    <h2 style="margin:0 0 6px;color:#2C3E50;font-size:20px">東元 HT · AI Agent POC 教學</h2>
+    <p style="color:#666;font-size:14px;margin:0 0 16px">請輸入通關密語以開啟</p>
+    <input id="tecoPw" type="password" placeholder="通關密語" autocomplete="off" style="width:100%;box-sizing:border-box;padding:11px 12px;font-size:16px;border:1px solid #ccc;border-radius:10px;outline:none" />
+    <p id="tecoErr" style="color:#c0392b;font-size:13px;height:16px;margin:8px 0 2px"></p>
+    <button id="tecoBtn" style="width:100%;padding:11px;font-size:16px;font-weight:700;color:#fff;background:#7c3aed;border:0;border-radius:10px;cursor:pointer">進入</button>
+  </div>
+</div>
+<script>
+(function(){
+  try{if(sessionStorage.getItem('teco_ok')==='1'){var g=document.getElementById('tecoGate');if(g)g.remove();return;}}catch(e){}
+  function ck(){var v=(document.getElementById('tecoPw').value||'').trim().toUpperCase();if(v==='TECO'){try{sessionStorage.setItem('teco_ok','1')}catch(e){}var g=document.getElementById('tecoGate');if(g)g.remove();}else{document.getElementById('tecoErr').textContent='密語錯誤，請再試一次';var p=document.getElementById('tecoPw');p.value='';p.focus();}}
+  document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('tecoBtn'),p=document.getElementById('tecoPw');if(b)b.addEventListener('click',ck);if(p){p.addEventListener('keydown',function(e){if(e.key==='Enter')ck();});p.focus();}});
+})();
+</script>
+
 <header class="hero">
   
   <a class="backlink" href="index.html">← 回題型總覽</a>
