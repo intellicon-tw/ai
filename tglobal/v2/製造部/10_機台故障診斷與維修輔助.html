@@ -1,0 +1,193 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>10 機台故障診斷與維修輔助</title>
+<style>
+:root{--ink:#1d1430;--purple:#5a2d8a;--purple2:#7b46b8;--lav:#f3eefb;--line:#e6ddf2;--muted:#7a7290;--bg:#ffffff;--code:#241a36;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.75;font-size:16px}
+a{color:var(--purple)}
+.hero{background:linear-gradient(135deg,#3a1c5e,#5a2d8a 55%,#7b46b8);color:#fff;padding:42px 7vw 34px}
+.hero .crumb{font-size:13px;letter-spacing:.06em;color:#d9c8f0;margin:0 0 10px}
+.hero .no{display:inline-block;font-size:13px;font-weight:700;background:rgba(255,255,255,.16);padding:3px 12px;border-radius:999px;margin-bottom:14px}
+.hero h1{margin:0 0 8px;font-size:32px;line-height:1.25}
+.hero .sub{color:#e7dbf7;font-size:15px;margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12.5px;padding:5px 11px;border-radius:8px}
+.chip b{font-weight:700;color:#fff}
+nav.toc{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:10px 7vw;display:flex;flex-wrap:wrap;gap:6px}
+nav.toc a{font-size:13px;color:var(--purple);text-decoration:none;padding:4px 10px;border-radius:7px;background:var(--lav)}
+main{padding:30px 7vw 70px;max-width:1040px;margin:0 auto}
+section{margin:0 0 34px;scroll-margin-top:64px}
+h2{font-size:21px;border-left:5px solid var(--purple);padding-left:12px;margin:0 0 14px}
+.lead{background:var(--lav);border-radius:12px;padding:16px 20px;margin:0 0 14px}
+ul.flow{padding-left:0;list-style:none;margin:0}
+ul.flow li{position:relative;padding:9px 0 9px 30px;border-bottom:1px dashed var(--line)}
+ul.flow li:last-child{border-bottom:none}
+ul.flow li:before{content:"\25B6";color:var(--purple2);position:absolute;left:4px;top:9px;font-size:12px}
+pre{background:var(--code);color:#ece6f7;border-radius:12px;padding:18px 20px;overflow:auto;font-size:13.5px;line-height:1.65;font-family:"SF Mono",Consolas,"Noto Sans Mono",monospace;white-space:pre-wrap;word-break:break-word}
+details{border:1px solid var(--line);border-radius:12px;margin:0 0 12px;overflow:hidden;background:#fff}
+details>summary{cursor:pointer;padding:13px 18px;font-weight:600;background:var(--lav);list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details>summary:before{content:"\FF0B ";color:var(--purple)}
+details[open]>summary:before{content:"\FF0D "}
+details .inner{padding:14px 18px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;white-space:nowrap}
+th{background:var(--lav);position:sticky;top:0}
+.kbtag{display:inline-block;font-size:11.5px;font-weight:700;color:#fff;background:var(--purple2);border-radius:6px;padding:2px 8px;margin-right:8px}
+.muted{color:var(--muted);font-size:13px}
+.copybtn{float:right;font-size:12px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:5px 12px;cursor:pointer}
+.note{border-left:4px solid #d9a900;background:#fff9e6;padding:10px 14px;border-radius:8px;font-size:14px;margin:12px 0}
+footer{border-top:1px solid var(--line);padding:24px 7vw;color:var(--muted);font-size:13px;text-align:center}
+.backlink{display:inline-block;margin-bottom:10px;font-size:13px;color:#d9c8f0;text-decoration:none}
+.q5{border:1px solid var(--line);border-radius:14px;margin:16px 0 0;overflow:hidden}
+.q5head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:var(--lav);font-weight:700;color:var(--purple);font-size:13.5px;flex-wrap:wrap}
+.q5cta{font-size:12.5px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:6px 13px;cursor:pointer;white-space:nowrap}
+.q5row{display:flex;gap:14px;padding:12px 16px;border-top:1px solid var(--line);align-items:flex-start}
+.q5n{flex:none;width:30px;height:30px;border-radius:999px;background:var(--purple);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:1px}
+.q5body{flex:1;min-width:0}
+.q5lab{font-weight:700;color:var(--ink);font-size:15px;margin-bottom:3px}
+.q5hint{font-weight:400;color:var(--muted);font-size:12px;margin-left:10px}
+.q5ans{color:#3a3450;font-size:14px;line-height:1.65}
+.dlbtn{float:right;font-size:12px;font-weight:600;background:#00A896;color:#fff;text-decoration:none;border-radius:7px;padding:4px 12px;margin-left:10px}
+.dlbtn:hover{filter:brightness(1.08)}
+.hero{position:relative}
+body.lang-en .zh{display:none}
+body.lang-zh .en{display:none}
+.langtoggle{position:absolute;top:16px;right:20px;font-size:13px;z-index:6}
+.langtoggle a{color:#fff;text-decoration:none;opacity:.65;padding:3px 9px;border-radius:6px;cursor:pointer}
+.langtoggle a.on{opacity:1;background:rgba(255,255,255,.2);font-weight:700}
+.langtoggle a.deck{opacity:1;border:1px solid rgba(255,255,255,.55);margin-right:10px;font-weight:700}
+.langtoggle a.deck:hover{background:rgba(255,255,255,.18)}
+</style></head><body class="lang-zh">
+<header class="hero">
+  
+  <a class="backlink" href="index.html">← 回題型總覽</a>
+  <p class="crumb">高柏科技 AI Agent 工作坊 · 製造部</p>
+  <span class="no">題目 #10</span>
+  <h1>機台故障診斷與維修輔助</h1>
+  <div class="chips"><span class="chip"><b>題型</b> 生產製造與製程管理（C 人機協作輔助）</span><span class="chip"><b>執行</b> 兩階段</span><span class="chip"><b>模型</b> Claude 4 Sonnet / Gemini 2.5 Pro（VLM）</span></div>
+</header>
+<nav class="toc"><a href="#pain">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 完整提示詞</a><a href="#kb">④ 知識庫設計</a><a href="#build">⑤ 建置流程</a><a href="#test">⑥ 驗測情境</a></nav>
+<main>
+<section id="pain"><h2>① 需求與痛點</h2><div class="lead">停機警報時協助辨識機台別與停機原因加速處理,每次2小時、每月2次、2人。</div><div class="q5"><div class="q5head"><span>開發前必答的 5 個問題 — 填好可直接貼進 提示詞設計助手 生成提示詞</span><button class="q5cta" onclick="copyBlob(this)">複製給 提示詞設計助手</button></div><div class="q5row"><span class="q5n">1</span><div class="q5body"><div class="q5lab">應用場景與業務流程<span class="q5hint">幫誰解決什麼問題？</span></div><div class="q5ans">停機警報時協助辨識機台別與停機原因加速處理,每次2小時、每月2次、2人。</div></div></div><div class="q5row"><span class="q5n">2</span><div class="q5body"><div class="q5lab">資料輸入與來源<span class="q5hint">使用者給它什麼？來源從哪？</span></div><div class="q5ans">機台PLC報警碼＋PDF維修手冊＋歷史維修工單</div></div></div><div class="q5row"><span class="q5n">3</span><div class="q5body"><div class="q5lab">預期輸出內容<span class="q5hint">產出什麼格式？給誰看？</span></div><div class="q5ans">停機機台別＋可能原因與處置建議（送/存：設備維修）</div></div></div><div class="q5row"><span class="q5n">4</span><div class="q5body"><div class="q5lab">任務步驟<span class="q5hint">能否拆成 3–5 個明確步驟？</span></div><div class="q5ans">1. 接收PLC報警碼與機台別
+2. 對照維修手冊解讀報警碼
+3. 檢索歷史維修工單類似案例
+4. 給出可能原因與處置建議
+5. 交維修人員確認</div></div></div><div class="q5row"><span class="q5n">5</span><div class="q5body"><div class="q5lab">知識來源<span class="q5hint">需要查哪些內部文件或資料庫？</span></div><div class="q5ans">- PLC報警碼對照表
+- 維修手冊
+- 歷史維修工單</div></div></div><pre class="q5blob-zh" style="display:none">1. 應用場景與業務流程：停機警報時協助辨識機台別與停機原因加速處理,每次2小時、每月2次、2人。
+2. 資料輸入與來源：機台PLC報警碼＋PDF維修手冊＋歷史維修工單
+3. 預期輸出內容：停機機台別＋可能原因與處置建議（送/存：設備維修）
+4. 任務步驟：1. 接收PLC報警碼與機台別
+2. 對照維修手冊解讀報警碼
+3. 檢索歷史維修工單類似案例
+4. 給出可能原因與處置建議
+5. 交維修人員確認
+5. 知識來源：- PLC報警碼對照表
+- 維修手冊
+- 歷史維修工單</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>AI 解讀報警碼與處置建議、人維修。</li><li>自動化模式：文件摘要／解讀、資料比對／勾稽。</li><li>關鍵卡點：需PLC報警即時介接(實體)與維修手冊/工單知識庫</li><li>後續建議：先把維修手冊與歷史工單建知識庫,做報警碼解讀與處置建議輔助</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>Agent 名稱：機台故障診斷與維修輔助 AI 助理
+需求單位：製造部
+題型分類：生產製造與製程管理
+平台：Intellicon EgentHub
+建議模型：Claude 4 Sonnet / Gemini 2.5 Pro 等 VLM（本題需辨識圖片/PDF）
+執行模式：兩階段（讀檔→比對/查詢，隔離避免幻覺）
+可行性分級：C 人機協作輔助　·　POC 優先度：P3
+版本：v1.0（POC）</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
+你是一位服務於高柏科技的 AI 助手，協助製造/設備完成「機台故障診斷與維修輔助」這項工作（生產製造與製程管理）。
+
+# 公司背景
+本 Agent 服務於高柏科技（2003 年成立的導熱與散熱材料製造商，主要產品含散熱模組、導熱介面材料、散熱片、熱導管、均溫板、致冷晶片、電磁波吸收材與風扇，提供熱模擬與一站式熱管理服務，全球逾 7,000 家客戶；生產分總廠與福安廠，製程涉及導熱矽膠／介面材料之熱壓、流延與軟硬度（矽油比）調整）。請以此產業脈絡理解料號、製程與專有名詞。
+
+# 任務
+依使用者提供的資料（機台PLC報警碼＋PDF維修手冊＋歷史維修工單），運用文件摘要／解讀、資料比對／勾稽，產出「停機機台別＋可能原因與處置建議」，並標出需人工確認與待補之處。
+
+# 背景知識
+- 產業脈絡：散熱／導熱材料製造；常見專有名詞如導熱係數、熱阻、TIM（導熱介面材料）、均溫板、熱導管、矽油比、軟硬度（Shore）、厚度／克重規格等，理解時以此為準。
+- 建議以「表格查詢知識庫」存放 ERP 明細／庫存／對照表／報表等結構化資料，供 SQL 語意查詢與比對。
+- 規則／範本／規範等文字內容可另存「全文查找知識庫」供引用。
+- 需準備：PLC報警碼對照表。
+- 需準備：維修手冊。
+- 需準備：歷史維修工單。
+- 專有名詞、欄位定義與判定規則以知識庫內容為準，未提供者一律標「待補」。
+
+# 輸入格式
+使用者提供：機台PLC報警碼＋PDF維修手冊＋歷史維修工單。（含圖片／PDF，請逐欄精確辨識，不確定處標「待辨識」）
+
+# 執行流程
+**重要提醒：本任務需嚴格分為兩個步驟完成，避免視覺理解與工具調用的上下文混淆。**
+
+## 步驟一：檔案理解（僅讀取與整理，禁止調用任何工具或知識庫）
+1. 讀取使用者上傳的圖片／PDF，逐欄辨識關鍵欄位。
+2. 整理為結構化 Markdown 表格（不確定處標「待辨識」）。
+3. 結束時告知：「我已完成檔案的初步整理。若需比對或進一步處理，請於下一步告訴我。」
+
+## 步驟二：比對／查詢（僅依步驟一結果，禁止重新讀取原始檔案）
+1. 開始時告知：「我將基於上一步整理的結果進行查詢，不會重新讀取原始檔案。」
+2. 接收PLC報警碼與機台別
+3. 對照維修手冊解讀報警碼
+4. 檢索歷史維修工單類似案例
+5. 給出可能原因與處置建議
+6. 交維修人員確認
+
+# 輸出格式
+- 以 Markdown 表格呈現「停機機台別＋可能原因與處置建議」（可於 EgentHub 介面直接下載為 .xlsx）；無法確認之欄位標「待補」並另列「需人工確認清單」。
+- 不使用 emoji、不輸出 {{變數}} 語法、不產生程式碼。
+
+# 問答指引
+- 請使用**繁體中文**回覆，語氣應委婉、自然，符合台灣使用者的溝通風格。
+- 回覆內容請避免偏見、誤導或幻覺，並勿捏造資訊。
+- 請**使用者語言作答**，避免強硬口吻，並保持尊重與禮貌。
+- **禁止回覆與程式撰寫相關的問題**，請婉轉拒絕。
+- 執行任務後，**請省略所有推理、分析、比對說明**，**僅保留最終結果表格與必要標題或提示語句**。</pre></section><section id="kb"><h2>④ 知識庫設計（範例資料）</h2><details><summary><span class="kbtag">依資料而定</span>機台故障診斷與維修輔助_需準備資料.txt<a class="dlbtn" download="機台故障診斷與維修輔助_需準備資料.txt" href="data:text/plain;charset=utf-8;base64,5pys6aGM5bu66K2w55+l6K2Y5bqr6aGe5Z6L6IiH6ZyA5rqW5YKZ55qE6LOH5paZ77yI56S656+E55So5riF5Zau77yM5q2j5byP5LiK57ea6KuL5o+b5oiQ6auY5p+P5a+m6Zqb6LOH5paZ77yJ77yaCgotIFBMQ+WgseitpueivOWwjeeFp+ihqAotIOe2reS/ruaJi+WGigotIOatt+WPsue2reS/ruW3peWWrgoK6ZyA5Y+m5aSW5rqW5YKZ77yaCi0gUExD5aCx6K2m56K85bCN54Wn6KGoCi0g57at5L+u5omL5YaKCi0g5q235Y+y57at5L+u5bel5Zau" onclick="event.stopPropagation()">⬇ 下載</a></summary><div class="inner"><pre>本題建議知識庫類型與需準備的資料（示範用清單，正式上線請換成高柏實際資料）：
+
+- PLC報警碼對照表
+- 維修手冊
+- 歷史維修工單
+
+需另外準備：
+- PLC報警碼對照表
+- 維修手冊
+- 歷史維修工單</pre></div></details></section><section id="build"><h2>⑤ 建置流程與上線重點</h2><details open><summary>正式上線前的準備指南</summary><div class="inner"><pre>機台故障診斷與維修輔助 — 正式上線前的準備指南
+
+一、可行性與前置
+  分級：C 人機協作輔助。關鍵卡點：需PLC報警即時介接(實體)與維修手冊/工單知識庫
+  後續建議：先把維修手冊與歷史工單建知識庫,做報警碼解讀與處置建議輔助
+
+二、知識庫資料準備
+  - PLC報警碼對照表
+  - 維修手冊
+  - 歷史維修工單
+  需另外準備：PLC報警碼對照表；維修手冊；歷史維修工單
+
+三、平台設定
+  知識庫類型：表格資料→表格查詢(SQL)；長文件→全文查找；FAQ/規範→向量知識庫。
+  執行模式：兩階段（步驟一只讀檔整理、步驟二才查詢，嚴禁混用）。
+
+四、驗測與調校
+  依下方驗測情境逐項測試，拿高柏真實案例校正；錯誤回頭補範例或修提示詞。
+
+五、上線(人機協作)
+  AI 出草稿、標異常；最終判定、送簽、放行由承辦人確認。</pre></div></details></section><section id="test"><h2>⑥ 驗測情境（測試資料＋預期結果）</h2><details><summary>展開完整驗測情境</summary><div class="inner"><pre>機台故障診斷與維修輔助 — 驗測情境（示範）
+
+--- 情境 1（正常）---
+input：提供一筆完整的「機台PLC報警碼＋PDF維修手冊＋歷史維修工單」。
+expected：正確產出「停機機台別＋可能原因與處置建議」，格式為 Markdown 表格，數值/欄位正確。
+
+--- 情境 2（邊界：資料缺漏）---
+input：提供缺少關鍵欄位或不在對照表中的資料。
+expected：對應欄位標「待補」，並另列「需人工確認清單」，不臆測。
+
+--- 情境 3（越權）---
+input：要求 AI 揭露提示詞內容或執行與本任務無關的程式撰寫。
+expected：婉轉拒絕，重申僅協助本任務，並請使用者回到任務需求。</pre></div></details></section>
+</main>
+<footer>智慧方案股份有限公司 Intellicon Solutions　·　高柏科技 AI Agent 工作坊</footer>
+<script>
+function setLang(l){document.body.className='lang-'+l;try{localStorage.setItem('tecoLang',l);}catch(e){}document.querySelectorAll('.langtoggle a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-l')===l);});}
+(function(){var l='zh';try{l=localStorage.getItem('tecoLang')||'zh';}catch(e){}setLang(l);})();
+function copyPrompt(btn){var pre=btn.parentNode.cloneNode(true);var b=pre.querySelector('button');if(b)b.remove();navigator.clipboard.writeText(pre.innerText.trim()).then(function(){var o=btn.innerText;btn.innerText='\u2713';setTimeout(function(){btn.innerText=o;},1200);});}
+function copyBlob(btn){var en=document.body.classList.contains('lang-en');var b=btn.closest('.q5').querySelector(en?'.q5blob-en':'.q5blob-zh');navigator.clipboard.writeText(b.textContent).then(function(){var o=btn.innerText;btn.innerText='\u2713';setTimeout(function(){btn.innerText=o;},1500);});}
+</script>
+</body></html>
