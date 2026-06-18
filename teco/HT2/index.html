@@ -1,0 +1,159 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>東元 HT AI Agent 開發實務 · POC 教學</title>
+<style>
+:root{--ink:#1d1430;--purple:#5a2d8a;--purple2:#7b46b8;--lav:#f3eefb;--line:#e6ddf2;--muted:#7a7290;--bg:#ffffff;--code:#241a36;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.75;font-size:16px}
+a{color:var(--purple)}
+.hero{background:linear-gradient(135deg,#3a1c5e,#5a2d8a 55%,#7b46b8);color:#fff;padding:42px 7vw 34px}
+.hero .crumb{font-size:13px;letter-spacing:.06em;color:#d9c8f0;margin:0 0 10px}
+.hero .no{display:inline-block;font-size:13px;font-weight:700;background:rgba(255,255,255,.16);padding:3px 12px;border-radius:999px;margin-bottom:14px}
+.hero h1{margin:0 0 8px;font-size:32px;line-height:1.25}
+.hero .sub{color:#e7dbf7;font-size:15px;margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12.5px;padding:5px 11px;border-radius:8px}
+.chip b{font-weight:700;color:#fff}
+nav.toc{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:10px 7vw;display:flex;flex-wrap:wrap;gap:6px}
+nav.toc a{font-size:13px;color:var(--purple);text-decoration:none;padding:4px 10px;border-radius:7px;background:var(--lav)}
+main{padding:30px 7vw 70px;max-width:1040px;margin:0 auto}
+section{margin:0 0 34px;scroll-margin-top:64px}
+h2{font-size:21px;border-left:5px solid var(--purple);padding-left:12px;margin:0 0 14px}
+.lead{background:var(--lav);border-radius:12px;padding:16px 20px;margin:0 0 14px}
+ul.flow{padding-left:0;list-style:none;margin:0}
+ul.flow li{position:relative;padding:9px 0 9px 30px;border-bottom:1px dashed var(--line)}
+ul.flow li:last-child{border-bottom:none}
+ul.flow li:before{content:"\25B6";color:var(--purple2);position:absolute;left:4px;top:9px;font-size:12px}
+pre{background:var(--code);color:#ece6f7;border-radius:12px;padding:18px 20px;overflow:auto;font-size:13.5px;line-height:1.65;font-family:"SF Mono",Consolas,"Noto Sans Mono",monospace;white-space:pre-wrap;word-break:break-word}
+details{border:1px solid var(--line);border-radius:12px;margin:0 0 12px;overflow:hidden;background:#fff}
+details>summary{cursor:pointer;padding:13px 18px;font-weight:600;background:var(--lav);list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details>summary:before{content:"\FF0B ";color:var(--purple)}
+details[open]>summary:before{content:"\FF0D "}
+details .inner{padding:14px 18px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;white-space:nowrap}
+th{background:var(--lav);position:sticky;top:0}
+.kbtag{display:inline-block;font-size:11.5px;font-weight:700;color:#fff;background:var(--purple2);border-radius:6px;padding:2px 8px;margin-right:8px}
+.muted{color:var(--muted);font-size:13px}
+.copybtn{float:right;font-size:12px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:5px 12px;cursor:pointer}
+.note{border-left:4px solid #d9a900;background:#fff9e6;padding:10px 14px;border-radius:8px;font-size:14px;margin:12px 0}
+footer{border-top:1px solid var(--line);padding:24px 7vw;color:var(--muted);font-size:13px;text-align:center}
+.backlink{display:inline-block;margin-bottom:10px;font-size:13px;color:#d9c8f0;text-decoration:none}
+.q5{border:1px solid var(--line);border-radius:14px;margin:16px 0 0;overflow:hidden}
+.q5head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:var(--lav);font-weight:700;color:var(--purple);font-size:13.5px;flex-wrap:wrap}
+.q5cta{font-size:12.5px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:6px 13px;cursor:pointer;white-space:nowrap}
+.q5row{display:flex;gap:14px;padding:12px 16px;border-top:1px solid var(--line);align-items:flex-start}
+.q5n{flex:none;width:30px;height:30px;border-radius:999px;background:var(--purple);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:1px}
+.q5body{flex:1;min-width:0}
+.q5lab{font-weight:700;color:var(--ink);font-size:15px;margin-bottom:3px}
+.q5hint{font-weight:400;color:var(--muted);font-size:12px;margin-left:10px}
+.q5ans{color:#3a3450;font-size:14px;line-height:1.65}
+.dlbtn{float:right;font-size:12px;font-weight:600;background:#00A896;color:#fff;text-decoration:none;border-radius:7px;padding:4px 12px;margin-left:10px}
+.dlbtn:hover{filter:brightness(1.08)}
+.hero{position:relative}
+body.lang-en .zh{display:none}
+body.lang-zh .en{display:none}
+.langtoggle{position:absolute;top:16px;right:20px;font-size:13px;z-index:6}
+.langtoggle a{color:#fff;text-decoration:none;opacity:.65;padding:3px 9px;border-radius:6px;cursor:pointer}
+.langtoggle a.on{opacity:1;background:rgba(255,255,255,.2);font-weight:700}
+.langtoggle a.deck{opacity:1;border:1px solid rgba(255,255,255,.55);margin-right:10px;font-weight:700}
+.langtoggle a.deck:hover{background:rgba(255,255,255,.18)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{display:block;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:18px 20px;transition:.15s;background:#fff}
+.card:hover{border-color:var(--purple2);box-shadow:0 8px 24px rgba(90,45,138,.12);transform:translateY(-2px)}
+.cardno{display:inline-block;font-size:12px;font-weight:700;color:#fff;background:var(--purple);border-radius:999px;padding:2px 11px}
+.card h3{margin:10px 0 4px;font-size:18px}
+.ctype{font-size:12.5px;color:var(--purple2);font-weight:600;margin:8px 0 8px}
+.cpain{font-size:13.5px;color:#4a4360;margin:0}
+.card.feat{border:2px solid var(--purple2);background:linear-gradient(180deg,#faf7ff,#ffffff)}
+.card.demo{border-left:4px solid var(--purple2)}
+.tbadge{display:inline-block;font-size:11.5px;font-weight:700;color:#fff;background:var(--purple2);border-radius:999px;padding:2px 10px;margin-left:8px}
+.intro{max-width:820px;margin:0 0 24px;color:#4a4360}
+</style><style>
+.grouphd{font-size:19px;font-weight:800;margin:30px 0 14px;padding:8px 0 8px 14px;border-left:6px solid #7c3aed;display:flex;align-items:center;gap:10px}
+.grouphd .gn{font-size:12px;font-weight:700;color:#fff;border-radius:999px;padding:3px 11px}
+.grouphd.b2c{border-left-color:#2563eb;color:#1d4ed8}
+.grouphd.b2c .gn{background:#2563eb}
+.grouphd.b2b{border-left-color:#ea7a17;color:#c05a0b}
+.grouphd.b2b .gn{background:#ea7a17}
+</style>
+</head><body class="lang-zh">
+<header class="hero">
+  
+  <p class="crumb">智慧方案 × 東元電機空調科技事業群</p>
+  <h1>東元 HT AI Agent 開發實務 · POC 教學</h1>
+  <p class="sub">依 6/5 會議題目開發的 11 隻 POC Agent 解題示範（通路經營 B2C × 商機探尋 B2B）</p>
+  <div class="chips"><span class="chip"><b>共</b> 11 款 POC（B2C 4＋B2B 7）</span><span class="chip"><b>資料依據</b> CAC 27,692／RAC 45,722＋通路實銷全量</span><span class="chip"><b>平台</b> AI Agent 平台 / Hermes</span></div>
+</header>
+<main>
+  <p class="intro">以下每一頁對應一隻可用東元真實資料開發的 POC Agent，分為「通路經營（B2C）」與「商機探尋（B2B）」兩組。由上而下讀就走過一次完整開發流程：開發前 5 問 → 開發思路 → 完整提示詞 → 知識庫設計 → 上線準備 → 驗測情境。提示詞可一鍵複製貼入 AI Agent 平台，知識庫範例檔可直接下載。</p>
+  <h2 class="grouphd b2c">🏬 一、通路經營（B2C 量販）<span class="gn">4 款 POC</span></h2>
+  <div class="grid"><a class="card demo" href="1_%E9%80%9A%E8%B7%AF%E9%96%80%E5%B8%82%E5%88%86%E7%B4%9A%E8%88%87%E5%84%AA%E5%85%88%E6%8B%9C%E8%A8%AA%E5%8A%A9%E6%89%8B.html">
+      <span class="cardno">1</span><span class="tbadge">通路經營 · B2C</span>
+      <h3>通路門市分級與優先拜訪助手</h3>
+      <p class="ctype">數據解讀（門市分級）</p>
+      <p class="cpain">8 位巡店業務要管約 700 家店，靠感覺平均跑，旺季來不及把時間投到對的門市。</p>
+    </a><a class="card demo" href="2_%E9%80%9A%E8%B7%AF%E9%80%B2%E9%8A%B7%E5%AD%98%E7%B6%93%E7%87%9F%E5%BF%AB%E5%A0%B1.html">
+      <span class="cardno">2</span><span class="tbadge">通路經營 · B2C</span>
+      <h3>通路進銷存經營快報</h3>
+      <p class="ctype">數據解讀（sell-through 週報）</p>
+      <p class="cpain">各通路進銷存格式不一、無人定期轉成決策；缺貨流失與滯銷壓貨常旺季尾才發現。</p>
+    </a><a class="card demo" href="3_KA%20%E8%AB%87%E5%88%A4%E6%88%B0%E6%83%85%E5%8A%A9%E6%89%8B.html">
+      <span class="cardno">3</span><span class="tbadge">通路經營 · B2C</span>
+      <h3>KA 談判戰情助手</h3>
+      <p class="ctype">數據解讀（談判情報）</p>
+      <p class="cpain">與通路 KA 談價格與檔期常憑感覺讓利；缺乏以資料為基礎的談判籌碼。</p>
+    </a><a class="card demo" href="4_%E5%BA%97%E5%93%A1%E9%8A%B7%E5%94%AE%E5%8A%A9%E6%89%8B%EF%BC%88%E8%A3%9C%E5%8A%A9%E8%A9%A6%E7%AE%97%EF%BC%8B%E8%A9%B1%E8%A1%93%EF%BC%89.html">
+      <span class="cardno">4</span><span class="tbadge">通路經營 · B2C</span>
+      <h3>店員銷售助手（補助試算＋話術）</h3>
+      <p class="ctype">知識庫問答（規格＋補助）</p>
+      <p class="cpain">真正面對消費者的是賣場店員；產品知識分散、補助話術說不清，錯失成交。</p>
+    </a></div>
+  <h2 class="grouphd b2b">🎯 二、商機探尋（B2B：RAC ＋ CAC）<span class="gn">7 款 POC</span></h2>
+  <div class="grid">
+  <a class="card feat" href="5_RAC%20%E7%B6%AD%E4%BF%AE%E7%B4%80%E9%8C%84%E5%95%86%E6%A9%9F%E6%B4%9E%E5%AF%9F.html">
+      <span class="cardno">5</span><span class="tbadge">商機探尋 · B2B</span>
+      <h3>RAC 維修紀錄商機洞察</h3>
+      <p class="ctype">數據解讀（售後商機）</p>
+      <p class="cpain">維修紀錄被當成本看；其實每筆＝一台在外運轉的機器＋一個聯絡得到的客戶——保養合約年金商機幾乎空白。</p>
+    </a><a class="card feat" href="6_%E6%A8%99%E6%A1%88%E9%9B%B7%E9%81%94%EF%BC%88Hermes%20Agent%20%E7%89%88%EF%BC%89.html">
+      <span class="cardno">6</span><span class="tbadge">商機探尋 · B2B</span>
+      <h3>標案雷達（Hermes Agent 版）</h3>
+      <p class="ctype">自主排程 bot（每日掃標案）</p>
+      <p class="cpain">政府標案分散各平台、人工每天盯費時；要的是自主排程、主動爬取、主動推播的長駐 bot。</p>
+    </a><a class="card feat" href="9_%E9%AB%98%E6%95%85%E9%9A%9C%E6%A9%9F%E5%9E%8B%E5%93%81%E8%B3%AA%E5%9B%9E%E9%A5%8B%E5%8A%A9%E6%89%8B.html">
+      <span class="cardno">9</span><span class="tbadge">商機探尋 · B2B</span>
+      <h3>高故障機型品質回饋助手</h3>
+      <p class="ctype">數據解讀（品質回饋）</p>
+      <p class="cpain">維修紀錄藏著品質訊號，卻沒人定期彙整回研發；高故障機型也錯失主動關懷。</p>
+    </a><a class="card feat" href="10_%E6%8F%9B%E6%A9%9F%E5%95%86%E6%A9%9F%E8%A9%95%E5%88%86%E5%8A%A9%E6%89%8B.html">
+      <span class="cardno">10</span><span class="tbadge">商機探尋 · B2B</span>
+      <h3>換機商機評分助手</h3>
+      <p class="ctype">數據解讀（換機名單評分）</p>
+      <p class="cpain">哪些客戶最該汰舊換新沒人算得出來，業務只能憑印象；換機名單其實藏在維修紀錄裡。</p>
+    </a><a class="card feat" href="11_CAC%20%E5%95%86%E7%94%A8%E4%BF%9D%E9%A4%8A%E5%90%88%E7%B4%84%E5%95%86%E6%A9%9F%E5%8A%A9%E6%89%8B.html">
+      <span class="cardno">11</span><span class="tbadge">商機探尋 · B2B</span>
+      <h3>CAC 商用保養合約商機助手</h3>
+      <p class="ctype">數據解讀（年金商機）</p>
+      <p class="cpain">商用機在外運轉量大，過保達 58%，保養合約（年金營收）還有大量空間沒開發。</p>
+    </a><a class="card demo" href="12_%E6%A5%AD%E4%B8%BB%E5%95%86%E6%A9%9F%E9%9B%B7%E9%81%94%E5%8A%A9%E6%89%8B.html">
+      <span class="cardno">12</span><span class="tbadge">商機探尋 · B2B</span>
+      <h3>業主商機雷達助手</h3>
+      <p class="ctype">知識庫＋網搜（spec-in 卡位）</p>
+      <p class="cpain">大型業主決策慢、週期長，等招標才拚低價已晚；要在設計階段就 spec-in 卡位。</p>
+    </a><a class="card demo" href="13_%E7%AB%B6%E5%93%81%E6%83%85%E8%92%90%E5%8A%A9%E6%89%8B.html">
+      <span class="cardno">13</span><span class="tbadge">商機探尋 · B2B</span>
+      <h3>競品情蒐助手</h3>
+      <p class="ctype">知識庫＋網搜（投標對策）</p>
+      <p class="cpain">商用市場資訊不透明，臨案才查競品；不掌握得失標與定位，投標就只能拚單價。</p>
+    </a></div>
+</main>
+<footer>智慧方案股份有限公司　·　東元 HT AI Agent POC 教學（示範用，正式上線請替換為實際資料）</footer>
+<script>
+function setLang(l){document.body.className='lang-'+l;try{localStorage.setItem('tecoLang',l);}catch(e){}document.querySelectorAll('.langtoggle a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-l')===l);});}
+(function(){var l='zh';try{l=localStorage.getItem('tecoLang')||'zh';}catch(e){}setLang(l);})();
+
+</script>
+</body></html>
