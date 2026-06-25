@@ -1,0 +1,108 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>建皇光電 AI Agent 開發實務工作坊 · 業務部</title>
+<style>
+:root{--ink:#1d1430;--purple:#5a2d8a;--purple2:#7b46b8;--lav:#f3eefb;--line:#e6ddf2;--muted:#7a7290;--bg:#ffffff;--code:#241a36;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.75;font-size:16px}
+a{color:var(--purple)}
+.hero{background:linear-gradient(135deg,#3a1c5e,#5a2d8a 55%,#7b46b8);color:#fff;padding:42px 7vw 34px}
+.hero .crumb{font-size:13px;letter-spacing:.06em;color:#d9c8f0;margin:0 0 10px}
+.hero .no{display:inline-block;font-size:13px;font-weight:700;background:rgba(255,255,255,.16);padding:3px 12px;border-radius:999px;margin-bottom:14px}
+.hero h1{margin:0 0 8px;font-size:32px;line-height:1.25}
+.hero .sub{color:#e7dbf7;font-size:15px;margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12.5px;padding:5px 11px;border-radius:8px}
+.chip b{font-weight:700;color:#fff}
+nav.toc{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:10px 7vw;display:flex;flex-wrap:wrap;gap:6px}
+nav.toc a{font-size:13px;color:var(--purple);text-decoration:none;padding:4px 10px;border-radius:7px;background:var(--lav)}
+main{padding:30px 7vw 70px;max-width:1040px;margin:0 auto}
+section{margin:0 0 34px;scroll-margin-top:64px}
+h2{font-size:21px;border-left:5px solid var(--purple);padding-left:12px;margin:0 0 14px}
+.lead{background:var(--lav);border-radius:12px;padding:16px 20px;margin:0 0 14px}
+ul.flow{padding-left:0;list-style:none;margin:0}
+ul.flow li{position:relative;padding:9px 0 9px 30px;border-bottom:1px dashed var(--line)}
+ul.flow li:last-child{border-bottom:none}
+ul.flow li:before{content:"\25B6";color:var(--purple2);position:absolute;left:4px;top:9px;font-size:12px}
+pre{background:var(--code);color:#ece6f7;border-radius:12px;padding:18px 20px;overflow:auto;font-size:13.5px;line-height:1.65;font-family:"SF Mono",Consolas,"Noto Sans Mono",monospace;white-space:pre-wrap;word-break:break-word}
+details{border:1px solid var(--line);border-radius:12px;margin:0 0 12px;overflow:hidden;background:#fff}
+details>summary{cursor:pointer;padding:13px 18px;font-weight:600;background:var(--lav);list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details>summary:before{content:"\FF0B ";color:var(--purple)}
+details[open]>summary:before{content:"\FF0D "}
+details .inner{padding:14px 18px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;white-space:nowrap}
+th{background:var(--lav);position:sticky;top:0}
+.kbtag{display:inline-block;font-size:11.5px;font-weight:700;color:#fff;background:var(--purple2);border-radius:6px;padding:2px 8px;margin-right:8px}
+.muted{color:var(--muted);font-size:13px}
+.copybtn{float:right;font-size:12px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:5px 12px;cursor:pointer}
+.note{border-left:4px solid #d9a900;background:#fff9e6;padding:10px 14px;border-radius:8px;font-size:14px;margin:12px 0}
+footer{border-top:1px solid var(--line);padding:24px 7vw;color:var(--muted);font-size:13px;text-align:center}
+.backlink{display:inline-block;margin-bottom:10px;font-size:13px;color:#d9c8f0;text-decoration:none}
+.q5{border:1px solid var(--line);border-radius:14px;margin:16px 0 0;overflow:hidden}
+.q5head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:var(--lav);font-weight:700;color:var(--purple);font-size:13.5px;flex-wrap:wrap}
+.q5cta{font-size:12.5px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:6px 13px;cursor:pointer;white-space:nowrap}
+.q5row{display:flex;gap:14px;padding:12px 16px;border-top:1px solid var(--line);align-items:flex-start}
+.q5n{flex:none;width:30px;height:30px;border-radius:999px;background:var(--purple);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:1px}
+.q5body{flex:1;min-width:0}
+.q5lab{font-weight:700;color:var(--ink);font-size:15px;margin-bottom:3px}
+.q5hint{font-weight:400;color:var(--muted);font-size:12px;margin-left:10px}
+.q5ans{color:#3a3450;font-size:14px;line-height:1.65}
+.dlbtn{float:right;font-size:12px;font-weight:600;background:#00A896;color:#fff;text-decoration:none;border-radius:7px;padding:4px 12px;margin-left:10px}
+.dlbtn:hover{filter:brightness(1.08)}
+.hero{position:relative}
+body.lang-en .zh{display:none}
+body.lang-zh .en{display:none}
+.langtoggle{position:absolute;top:16px;right:20px;font-size:13px;z-index:6}
+.langtoggle a{color:#fff;text-decoration:none;opacity:.65;padding:3px 9px;border-radius:6px;cursor:pointer}
+.langtoggle a.on{opacity:1;background:rgba(255,255,255,.2);font-weight:700}
+.langtoggle a.deck{opacity:1;border:1px solid rgba(255,255,255,.55);margin-right:10px;font-weight:700}
+.langtoggle a.deck:hover{background:rgba(255,255,255,.18)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{display:block;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:18px 20px;transition:.15s;background:#fff}
+.card:hover{border-color:var(--purple2);box-shadow:0 8px 24px rgba(90,45,138,.12);transform:translateY(-2px)}
+.cardno{display:inline-block;font-size:12px;font-weight:700;color:#fff;background:var(--purple);border-radius:999px;padding:2px 11px}
+.card h3{margin:10px 0 4px;font-size:18px}
+.ctype{font-size:12.5px;color:var(--purple2);font-weight:600;margin:8px 0 8px}
+.cpain{font-size:13.5px;color:#4a4360;margin:0}
+.card.feat{border:2px solid var(--purple2);background:linear-gradient(180deg,#faf7ff,#ffffff)}
+.card.demo{border-left:4px solid var(--purple2)}
+.tbadge{display:inline-block;font-size:11.5px;font-weight:700;color:#fff;background:var(--purple2);border-radius:999px;padding:2px 10px;margin-left:8px}
+.intro{max-width:820px;margin:0 0 24px;color:#4a4360}
+</style></head><body class="lang-zh">
+<header class="hero">
+  <a class="backlink" href="../index.html" style="display:inline-block;margin-bottom:10px;font-size:13px;color:#d9c8f0;text-decoration:none">← 回部門總目錄</a>
+  
+  <p class="crumb">智慧方案 × 建皇光電科技</p>
+  <h1>建皇光電 AI Agent 開發實務工作坊 · 業務部</h1>
+  <p class="sub">由任務盤點轉化的 POC 解題示範（每題一頁）</p>
+  <div class="chips"><span class="chip"><b>共</b> 3 款 Agent POC</span><span class="chip"><b>部門</b> 業務部</span></div>
+</header>
+<main>
+  <p class="intro">業務部的盤點方向很清楚：國際品牌客戶（筆電、車用、醫療）英文往來量大，痛點集中在英文回覆耗時、報價單反覆來回、規格詢問需要翻產品庫。目前缺的是把『品牌客戶語氣偏好』與『產品規格庫』整理成 AI 可查的結構化資料，補齊這兩塊就能讓 Agent 從查資料到出草稿一條龍。建議優先把歷年往來信件、報價範本、規格庫匯出，這是把這三隻 Agent 做準確的關鍵。以下每一頁對應一個需求，點進去可看到：需求與痛點 → 開發思路 → 完整提示詞 → 知識庫設計 → 建置流程 → 驗測情境。</p>
+  <div class="grid"><a class="card demo" href="5.1_%E5%9C%8B%E9%9A%9B%E5%AE%A2%E6%88%B6%E8%8B%B1%E6%96%87%E5%9B%9E%E8%A6%86.html">
+      <span class="cardno">#5.1</span>
+      <h3>國際客戶英文回覆</h3>
+      <p class="ctype">內容生成型</p>
+      <p class="cpain">業務每天平均要回覆 15 到 25 封國際品牌客戶英文信，從筆電大廠的交期催詢到醫療客戶的規格確認都有。每封信要查規格、對語氣、斟酌用字，一封從草擬到寄出常要 20 到 40 分鐘，資淺業務還會卡在英文表達不夠精準導致來回澄清。月底交期旺季時整個團隊幾乎被英文回信淹沒。</p>
+    </a><a class="card demo" href="5.2_%E5%A0%B1%E5%83%B9%E5%96%AE%E8%8D%89%E6%93%AC.html">
+      <span class="cardno">#5.2</span>
+      <h3>報價單草擬</h3>
+      <p class="ctype">標準化作業型（表單生成）</p>
+      <p class="cpain">業務每週要草擬 10 到 20 份國際客戶報價單，需從價目表抓單價、套用對應幣別與付款條件、計算數量級距折扣，再填進固定版型。人工填表一份要 15 到 30 分鐘，且常因抄錯單價、漏填認證或交期條件導致客戶來回詢問，影響成交節奏。</p>
+    </a><a class="card demo" href="5.3_%E5%AE%A2%E6%88%B6%E8%A6%8F%E6%A0%BC%E8%A9%A2%E5%95%8F%E5%95%8F%E7%AD%94.html">
+      <span class="cardno">#5.3</span>
+      <h3>客戶規格詢問問答</h3>
+      <p class="ctype">知識問答型（RAG 文件查詢）</p>
+      <p class="cpain">國際客戶常在信中問規格細節，例如觸控面板的解析度與觸控點數、指紋模組的 FAR/FRR、相機模組的工作溫度與認證。業務每天要回 10 到 20 則這類規格詢問，得翻規格書或問 RD，一則查證常花 10 到 20 分鐘，資淺業務還可能答錯規格造成客訴。</p>
+    </a></div>
+</main>
+<footer>智慧方案股份有限公司　Intellicon Solutions　·　建皇光電 AI Agent 工作坊</footer>
+<script>
+function setLang(l){document.body.className='lang-'+l;try{localStorage.setItem('tecoLang',l);}catch(e){}document.querySelectorAll('.langtoggle a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-l')===l);});}
+(function(){var l='zh';try{l=localStorage.getItem('tecoLang')||'zh';}catch(e){}setLang(l);})();
+
+</script>
+</body></html>
