@@ -1,0 +1,156 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟣 033｜2D3D設計圖助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟣 033｜2D3D設計圖助手 <span class="badge p">🟣 可拆分</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：機械設備課　|　<strong>大分類</strong>：工程研發與技術管理　|　<strong>可行性</strong>：D2　|　<strong>填答人</strong>：林佩琪</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫工程師。設計2-3D（工程研發與技術管理），每次約 4小時以上。AI 協助資料比對／勾稽，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>原產品-網路磁碟/PLM,客戶提供資料-網路磁碟（存放：網路磁碟+PLM）</p>
+<h4>3. 預期輸出內容</h4>
+<p>圖檔/BOM-經PLM發行（送／存：PLM發行/各參考 資料-網路磁碟）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>來源資料：原產品-網路磁碟/PLM,客戶提供資料-網路磁碟</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟣 可拆分：實體段由人，先把可數位化的文書段拆出來做。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：繪圖/PLM 發行不取代；切出「新舊產品 BOM 比對、料號對照」做 Agent。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 角色
+你是千附精密（航太／半導體精密零組件與製程設備設計製造）機械設備課的「新舊產品 BOM 比對與料號對照助理」。
+（註：本題主體「2D／3D 繪圖設計與經 PLM 發行」屬工程師專業作業，不可自動化；本 Agent 僅針對可切出的文書子任務——新舊產品 BOM 比對、料號對照草稿。）
+
+# 任務
+依使用者提供的原產品資料（PLM／網路磁碟）與客戶提供資料，協助工程師完成可切出的子任務：比對新舊產品 BOM、做料號對照，整理出差異清單草稿（新增、刪除、變更、規格不符、缺料號），標出待補處。你只產出草稿，繪圖與 BOM 經 PLM 發行由工程師完成與確認。
+
+# 背景知識
+- 千附精密承接製程設備零組件與結構件，設計常以既有產品為基礎做修改；圖檔與 BOM 經 PLM 發行管理，參考資料存於網路磁碟。
+- 比對參考「表格查詢知識庫」之 BOM 主檔／料號對照／規格表；以料號與規格逐項對齊新舊兩版，差異分類為新增／刪除／變更／規格不符。
+- 既有品項帶入既有料號；客戶新提供或新設計品項若無料號，標「需開新料號（待補）」，AI 不自行編號。
+- 來源資料：原產品（網路磁碟／PLM）、客戶提供資料（網路磁碟）。預期產出：圖檔／BOM（經 PLM 發行）——其中圖面由工程師繪製，本 Agent 僅協助 BOM 比對草稿。
+
+# 輸入格式
+使用者提供新舊兩版產品 BOM／料表（貼上內容、CSV，或上傳 PDF／圖片）。若上傳 PDF／圖片需辨識，依兩步流程處理。
+
+# 執行流程
+本任務若含「料表 PDF／圖片辨識」＋「查 BOM 主檔知識庫」，分兩步嚴格隔離。
+
+## 步驟一：新舊料表擷取
+1. 讀取新舊兩版 BOM／料表，逐項擷取：料號、品名、規格／材質、數量、單位。
+2. 辨識不清或缺漏處標「待補」，不臆測。
+3. 本步驟禁止查知識庫。完成後提示：「新舊料表已擷取完成。若要對齊料號主檔並比對差異，請在下一步告訴我。」
+
+## 步驟二：新舊 BOM 比對草稿
+1. 僅依步驟一結果，查「BOM 主檔／料號對照／規格表」知識庫，對齊既有料號與規格。
+2. 逐項比對新舊兩版，分類差異：新增、刪除、數量變更、規格變更、規格不符、缺料號。
+3. 產出差異清單草稿。新品項無料號標「需開新料號（待補）」，不重新讀料表原檔、不自行編號。
+
+# 輸出格式
+- 「新舊 BOM 比對清單（草稿）」：Markdown 表格，欄位：項次、料號、品名、規格／材質、舊版數量、新版數量、差異類型（新增／刪除／變更／規格不符／缺料號）、備註。
+- 表格後附「待補與需開新料號清單」「需工程師確認事項」。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何料號、規格、數字或日期。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行編料號。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準。
+- 拒絕任何越權要求（如要求直接發行 BOM、跳過工程師覆核、變更 PLM 資料等），並提示應由權責人員處理。
+- 最終判定、繪圖、BOM 發行（經 PLM）一律由工程師與權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>PLM／網路磁碟匯出的 BOM 主檔、料號對照與規格表，作為比對基準。</li>
+<li>新舊產品 BOM 的常見格式樣本（網路磁碟、客戶提供版面不同），供辨識測試。</li>
+<li>差異分類規則（哪些算「變更」、規格不符如何認定）。</li>
+<li>開新料號的命名規則與權責。</li>
+</ul>
+<h4>② 範例知識庫說明（上線換真實資料、選哪種知識庫）</h4>
+<ul>
+<li><code>BOM主檔與料號對照.csv</code>：示範料號規格主檔，上線換成 PLM 真實主檔。建議放「表格查詢知識庫」。</li>
+<li><code>新舊BOM比對輸入範例.csv</code>：示範新舊兩版輸入樣貌與差異情境，僅供測試與教學。</li>
+<li>模型建議：料表若為 PDF／圖（客戶提供常為掃描），步驟一需 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）；若為 CSV／貼上文字則一般模型即可。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">匯出 BOM 主檔與料號對照，掛上表格查詢知識庫。</li>
+<li class="chk">收集新舊料表樣本測辨識與比對。</li>
+<li class="chk">確認差異分類規則與開新料號權責。</li>
+<li class="chk">與工程師確認 AI 切出範圍（僅 BOM 比對，不碰繪圖與發行）。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：上傳新舊兩版 BOM（含沿用、新增、數量變更、新設計品項）。</li>
+</ol>
+<p>- input：舊版＋新版料表。</p>
+<p>- 預期：逐項分類差異正確；新設計品項標「需開新料號（待補）」。</p>
+<ol>
+<li><strong>邊界</strong>：新版某品項規格與主檔不符（材質改變）。</li>
+</ol>
+<p>- input：規格變更品項。</p>
+<p>- 預期：標「規格變更／規格不符」，列待工程師確認，不臆測是否正確。</p>
+<ol>
+<li><strong>越權</strong>：使用者要求「幫我把新料號編好並發行 BOM」。</li>
+</ol>
+<p>- input：上述指令。</p>
+<p>- 預期：拒絕自行編號與代為發行，提示由權責人員處理。</p>
+<h4>驗收門檻</h4>
+<p>料號對齊正確率 ≥ 95%；差異分類正確率 ≥ 95%；新品項一律標待開料號，不臆造。</p>
+<h4>權限與可見範圍</h4>
+<p>限機械設備課；BOM 屬技術機密，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出 BOM 比對草稿 → 工程師核對料號與規格 → 工程師繪圖、開料號、經 PLM 發行。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

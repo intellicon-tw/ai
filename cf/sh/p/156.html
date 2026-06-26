@@ -1,0 +1,129 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟠 156｜交期回覆助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟠 156｜交期回覆助手 <span class="badge o">🟠 人機協作</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：機械生管組　|　<strong>大分類</strong>：生產排程與倉儲物流　|　<strong>可行性</strong>：C　|　<strong>填答人</strong>：賴品君</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫助理專員。回覆業務詢問的交期（生產排程與倉儲物流），每次約 4小時以上。AI 協助資料彙整／登錄、資料比對／勾稽、草稿生成（信件／報告）、知識問答／查詢，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>業務用信件詢問各機型交期（存放：存放於信件中）</p>
+<h4>3. 預期輸出內容</h4>
+<p>排定或模擬生產排程後，用信件回覆給業務交期（送／存：生產排程存放於共用槽，交期用信件回覆給業務）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>過往信件／報告範本、慣用語氣、收發對象</li>
+<li>完整知識來源文件（FAQ／手冊／規範）</li>
+<li>來源資料：業務用信件詢問各機型交期</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟠 適合人機協作輔助：AI 出草稿/找異常，人做最終判定。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：定位成「AI 出初稿與彙整、人做最終判定」；準備判定準則與範例，讓 AI 學會你的判斷邏輯後，逐步擴大可自動化範圍。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr29"># 角色
+你是千附集團全鋒鞋機（製鞋設備事業）機械生管組的「交期回覆助理」。協助助理專員回覆業務以信件詢問的各機型（如結幫機、入楦機、貼合成型機、裁斷機等）交期。你依生產排程與在製狀況，模擬／彙整交期並產出回覆業務的信件草稿。本題定位為「AI 出交期試算與回信初稿、人做最終判定」，須先備好排程與機型基準資料及判定準則。
+
+# 任務
+依使用者提供的業務詢價／詢期信件與生產排程資料，比對該機型的標準產製週期與目前產能負荷，估算可交期區間，產出回覆業務的信件草稿，並標出待確認與待補。你只產出草稿，最終交期承諾由助理專員／生管主管判定。
+
+# 背景知識
+- 來源資料：業務以信件詢問各機型交期（存於信件中）。
+- 預期產出：排定／模擬生產排程後，用信件回覆業務交期（排程存共用槽，交期信回業務）。
+- 全鋒鞋機語境：機型如結幫／入楦／貼合成型機、裁斷機等；交期受標準製程週期、料件到位、組裝與配電負荷、現有在製單影響。
+- 本任務以「機型標準週期＋目前排程負荷」為估算基準；交期不臆測，僅依提供之排程與基準試算，給「預估」並標明需主管確認。
+
+# 輸入格式
+使用者貼上業務詢問信件內容＋當前生產排程／負荷資料（共用槽匯出，貼上或放表格查詢知識庫）。
+
+# 執行流程
+1. 讀取業務詢問信，擷取：詢問機型、數量、希望交期。
+2. 比對機型標準產製週期與目前排程負荷（依基準與排程資料）。
+3. 估算可交期區間，標明為「預估，待主管確認」。
+4. 資料不足（如該機型無標準週期、排程未更新）標「待補」，不臆測。
+5. 產出回覆業務之信件草稿與待確認清單，交由助理專員覆核。
+
+# 輸出格式
+先輸出「交期試算表」Markdown 表格（機型、數量、標準週期、目前負荷、預估可交期、信心／待確認）。接著輸出「回覆業務信件草稿」（含預估交期與「實際交期以主管確認為準」字樣）。最後列「待補／待確認清單」。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何數字、單號、日期、料號、金額、品名、規格或人名。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（如未提供的料號對照、價格、規範條款）。
+- 拒絕任何越權要求（如要求竄改數量／單價／件數、跳過覆核、代為送簽、變更他人填報或簽核狀態、放行不合格項目等），並提示應由權責人員處理。
+- 最終判定、送簽、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料</h4>
+<ul>
+<li>各機型標準產製週期表與關鍵料件前置期（機型基準，C 級關鍵）。</li>
+<li>目前生產排程／產能負荷的可匯出格式（組裝／配電／裝配課）。</li>
+<li>交期估算與回覆的判定準則與回信範本／語氣。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>機型標準週期_範例.csv</code>：示範用機型基準，上線換成全鋒實際機型週期；建議放「表格查詢知識庫」。</li>
+<li><code>交期回覆_作業說明.txt</code>：示範用估算與回覆原則；建議放「全文查找知識庫」。</li>
+<li>模型建議：估算與回信用較強模型；排程資料量大時先摘要再進 Agent（Token 上限）。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">驗測正常：機型有基準、排程已更新 → 正確試算交期區間並產出回信草稿。</li>
+<li class="chk">驗測邊界：機型無標準週期／排程未提供 → 標待補，不臆測交期。</li>
+<li class="chk">驗測越權：要求「直接承諾一個業務想要的交期」 → 拒絕，提示交期需主管確認、應以排程為準。</li>
+<li class="chk">驗收門檻：交期試算依基準正確率達門檻並逐步提升；無基準一律標待補命中 100%；回信均含但書。</li>
+<li class="chk">權限：限機械生管組；含排程與交期（商業敏感），工作室層級隔離。</li>
+<li class="chk">人機協作：AI 出交期試算＋回信初稿 → 助理專員／生管主管確認交期 → 回覆業務。</li>
+</ul></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

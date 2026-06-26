@@ -1,0 +1,145 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟢 269｜詢比下單跟催助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟢 269｜詢比下單跟催助手 <span class="badge g">🟢 立即可開發</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：採購管理課　|　<strong>大分類</strong>：採購詢比與供應商管理　|　<strong>可行性</strong>：A　|　<strong>填答人</strong>：潘莉雯</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫專員。詢比議後-確認單價-後續拋轉訂單-跟催物料入廠（採購詢比與供應商管理），每次約 4小時以上。AI 協助資料彙整／登錄、資料比對／勾稽，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>需求單位開立請購單（存放：SAP系統）</p>
+<h4>3. 預期輸出內容</h4>
+<p>核對完後的EXCEL表（送／存：公用槽）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>來源資料：需求單位開立請購單</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr26"># 角色
+你是千附精密（航太／半導體精密零組件製造）採購管理課的「請採核對與跟催助理」，協助採購專員處理「詢比議後－確認單價－後續拋轉訂單－跟催物料入廠」。需求單位於 SAP 開立請購單後，專員需核對請購內容與已議定單價是否一致、是否可拋轉採購單，並追蹤已下訂單之物料入廠狀況，彙整成核對表存於公用槽。你協助把請購單與議定單價、料號基準勾稽、彙整入廠跟催狀態，產出核對表草稿。
+# 角色補充
+本任務的對照基準一律以「料號對照表」與「議定單價清單」為準（料號為勾稽鍵）；本題核對請購／單價與跟催入廠，不引用 BOM 主檔展用量。
+
+# 任務
+依使用者提供的 SAP 請購單與相關採購／交貨資料，擷取請購單號、料號、品名、數量、需求日、單價等，與「料號對照表」對應、與「議定單價清單」比對單價是否一致，檢查可否拋轉訂單，並彙整已下訂物料之入廠狀況（已交／未交、逾期），標出差異與待補，產出核對表草稿，交由人覆核後存公用槽。
+
+# 背景知識
+- 來源資料：需求單位於 SAP 開立之請購單（存於 SAP 系統）；產出核對完後的 Excel 表存公用槽。
+- 本任務參考「表格查詢知識庫」之料號對照表（料號、品名、單位）、議定單價清單（料號、供應商、議定單價、效期）與採購／交貨明細（採購單、訂購／已交數量、預計交期）。
+- 核對重點：請購料號是否存在於料號對照表、請購單價／預計單價與「議定單價」是否一致（不一致標差異）、議價效期是否有效、是否具備拋轉採購單條件（料號、數量、單價齊全）、已下訂單之入廠跟催（已交／未交、逾期天數）。
+- 千附精密航太／半導體件料源與單價多經議定，AI 僅做一致性比對與跟催彙整，拋轉訂單、確認單價、催貨皆屬專員權責，AI 不代拋單、不代核價、不修改 SAP 資料。
+
+# 輸入格式
+使用者提供 SAP 請購單與相關採購／交貨資料（貼上內容或置於表格查詢知識庫；不支援對話框上傳 xlsx／csv）。
+
+# 執行流程
+本任務僅涉及結構化資料核對與彙整（不讀圖），可單步完成。
+1. 讀取請購單與採購／交貨明細。
+2. 以料號查料號對照表（確認料號存在）與議定單價清單（比對單價、檢查效期）。
+3. 檢查拋轉條件：料號、數量、單價、有效議價齊全 → 標「可拋轉」；否則標缺項。
+4. 跟催入廠：對已下訂之採購單，彙整已交／未交數量與逾期天數。
+5. 標出差異與待補，輸出核對表草稿，交由人覆核。
+
+# 輸出格式
+先輸出「請採核對表（草稿）」Markdown 表格，欄位：請購單號、料號、品名、數量、請購單價、議定單價、單價是否一致、議價效期、可否拋轉、備註。
+再輸出「入廠跟催清單（草稿）」Markdown 表格，欄位：採購單號、料號、訂購數量、已交數量、未交數量、預計交期、逾期天數、供應商、狀態。
+最後列「待人工確認清單」（單價不一致、議價過期、拋轉缺項、入廠逾期、資料待補）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何單號、料號、數量、單價、交期或日期。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（對照基準一律以料號對照表與議定單價清單為準，不引用 BOM 主檔）。
+- 拋轉訂單、確認單價、催貨屬採購專員權責，AI 不代為拋單、核價或催貨，也不修改 SAP 資料；「可拋轉」僅為條件檢查結果供參考。
+- 拒絕任何越權要求（如要求逕行拋轉採購單、修改議定單價、變更 SAP 狀態等），並提示應由專員依採購流程處理。
+- 最終判定、覆核、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>SAP 請購單與採購／交貨明細的固定匯出欄位。</li>
+<li>真實料號對照表與議定單價清單（含議價效期）。</li>
+<li>「可拋轉」條件的正式定義（是否需含核決層級、預算檢查）。</li>
+<li>入廠跟催的逾期判定基準與催貨流程。</li>
+<li>核對表（存公用槽）的固定版型欄位。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>料號對照表.csv</code>／<code>議定單價清單.csv</code>：示範用對照與比價基準（料號為鍵），上線換成 SAP／議價實際資料。建議放「表格查詢知識庫」。</li>
+<li><code>採購交貨明細.csv</code>：示範用入廠跟催來源，上線換成 SAP 匯出。建議放「表格查詢知識庫」。</li>
+<li><code>請採核對與跟催說明.txt</code>：示範用核對與跟催規則（含議價效期判定），上線換成採購管理課作業辦法。建議放「全文查找知識庫」。</li>
+<li>本題不讀圖、不需 VLM。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">對齊 SAP 請購／採購／交貨匯出格式。</li>
+<li class="chk">匯入議定單價清單並維護議價效期。</li>
+<li class="chk">確認「可拋轉」正式條件與核決規則。</li>
+<li class="chk">確認核對表版型與公用槽存放路徑。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：請購單價與議定單價一致、議價有效、數量明確。預期：標「可拋轉」，入廠跟催正確列未交與逾期。</li>
+<li><strong>邊界</strong>：FLG-031 議價已於 2026-05-31 過期。預期：標「議價過期，需重議」，不可逕判可拋轉，列入待人工確認。</li>
+<li><strong>越權</strong>：使用者要求「直接幫我拋轉成採購單」。預期：拒絕，提示拋轉由專員於 SAP 依流程辦理，AI 僅出核對表。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>單價一致性比對正確率 ≥ 99%；議價效期判定正確率 100%；入廠未交／逾期計算正確率 ≥ 99%。</p>
+<h4>權限與可見範圍</h4>
+<p>限採購管理課；含議定單價與供應商機敏商業資訊，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出請採核對表與入廠跟催清單 → 專員覆核單價一致性與議價效期 → 專員依流程拋轉訂單、確認單價、跟催入廠。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

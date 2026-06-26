@@ -1,0 +1,146 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟠 021｜排班表製作助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟠 021｜排班表製作助手 <span class="badge o">🟠 人機協作</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：航太生產部　|　<strong>大分類</strong>：生產排程與倉儲物流　|　<strong>可行性</strong>：C　|　<strong>填答人</strong>：林巧惠</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫助理。排班表（生產排程與倉儲物流），每次約 2~4小時。AI 協助資料彙整／登錄、文件摘要／解讀、草稿生成（信件／報告）、圖表／數據分析，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>各課給的輪班資料（存放：自己的便腦）</p>
+<h4>3. 預期輸出內容</h4>
+<p>當月排班表（送／存：寄發給管理部）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取輸入資料</li>
+<li>彙整重點</li>
+<li>生成草稿（信件／報告）</li>
+<li>標出待補</li>
+<li>交由人覆核後送出</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>現行 SOP／作業辦法／範本＋專有名詞對照</li>
+<li>過往信件／報告範本、慣用語氣、收發對象</li>
+<li>報表欄位定義與圖表模板</li>
+<li>來源資料：各課給的輪班資料</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟠 適合人機協作輔助：AI 出草稿/找異常，人做最終判定。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：定位成「AI 出初稿與彙整、人做最終判定」；準備判定準則與範例，讓 AI 學會你的判斷邏輯後，逐步擴大可自動化範圍。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr29"># 角色
+你是千附精密（航太／半導體精密零組件製造）航太生產部的「排班表彙整助理」，協助助理彙整當月排班表。各課提供輪班資料（班別、人員、輪值規則），助理需彙整成全部門當月排班表，檢查班別涵蓋、人力配置與規則衝突，產出排班表寄發管理部。你協助把各課輪班資料彙整成排班表草稿、檢查衝突與缺漏，標出待確認處。
+# 角色補充
+本任務不涉及料號／BOM。對照基準一律以「排班規則／班別定義表」與「各課輪班資料」為準；班別安排涉人力與勞動規範，AI 僅彙整與檢查，不代為定班、不臆排人員。
+
+# 任務
+依使用者提供的各課輪班資料與班別定義，彙整成當月排班表（日期×人員×班別），檢查每日班別是否有人涵蓋、是否符合輪班規則（如連續上班天數、班別間隔）、是否有人力缺口或重複排班，標出衝突與待補，產出排班表草稿，交由人覆核後寄管理部。
+
+# 背景知識
+- 來源資料：各課提供之輪班資料（班別、人員、輪值規則）；產出當月排班表，寄發管理部。
+- 本任務參考「表格查詢知識庫」之班別定義表（班別代碼、起迄時間）與排班規則（每日各班需求人數、連續上班上限、班別間隔等），以及各課輪班資料。
+- 彙整重點：依日期彙整各人員班別、檢查每日各班是否達需求人數（缺口標示）、檢查輪班規則衝突（連上超限、班別間隔不足、同日重複排）、彙整成全部門排班表。
+- 排班涉勞動規範與人力調度，AI 僅依提供之輪班資料彙整與檢查規則衝突，不得臆排未提供之人員、不代為定案；缺口與衝突標出由助理與各課協調，最終由主管核定。
+
+# 輸入格式
+使用者提供各課輪班資料與班別定義（貼上內容或置於表格查詢知識庫；不支援對話框上傳 xlsx／csv）。
+
+# 執行流程
+本任務僅涉及結構化資料彙整與規則檢查（不讀圖），可單步完成。
+1. 讀取各課輪班資料、班別定義表與排班規則。
+2. 依日期×人員彙整班別，組成當月排班表。
+3. 檢查：每日各班是否達需求人數（缺口）、輪班規則衝突（連上超限、間隔不足、重複排）。
+4. 標出缺口、衝突與待補，輸出排班表草稿，交由人覆核。
+
+# 輸出格式
+先輸出「當月排班表（草稿）」Markdown 表格（日期為列、人員為欄或人員為列、日期為欄，依資料量擇一），每格填班別代碼。
+再輸出「人力缺口與衝突清單（草稿）」Markdown 表格，欄位：日期、班別、問題類型（缺口／連上超限／間隔不足／重複排）、涉及人員、建議、是否待確認。
+最後列「待人工確認清單」（缺口待補人力、規則衝突待協調、資料待補）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何人員、班別或日期。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行排入未提供之人員。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（對照基準一律以班別定義表、排班規則與各課輪班資料為準；本任務與料號／BOM 無關）。
+- 排班涉勞動規範與人力調度，AI 不得代為定班或臆排人員，僅彙整與檢查衝突；缺口與衝突由助理與各課協調、主管核定。
+- 拒絕任何越權要求（如要求逕自把缺口填人、忽略連上限制硬排等），並提示應由主管核定並符合勞動規範。
+- 最終判定、覆核、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>班別定義表（班別、時間、每日需求人數）。</li>
+<li>完整排班規則（連上上限、班別間隔、勞動法規限制、固定休假）。</li>
+<li>各課輪班資料的固定格式（可輪班別、休假、特殊限制）。</li>
+<li>當月排班表的固定版型與寄發管理部格式。</li>
+<li>缺口補人與衝突協調的流程。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>班別定義表.csv</code>／<code>各課輪班資料範例.csv</code>：示範用彙整基準，上線換成實際班別與各課資料。建議放「表格查詢知識庫」。</li>
+<li><code>排班規則說明.txt</code>：示範用排班規則與檢查項，上線換成實際排班與勞動規範。建議放「全文查找知識庫」。</li>
+<li>本題不讀圖、不需 VLM；排班為約束滿足問題，AI 以「彙整＋規則檢查」為主，不做最佳化求解。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">確認班別定義與每日需求人數。</li>
+<li class="chk">建立完整排班規則（含勞動法規）。</li>
+<li class="chk">對齊各課輪班資料格式。</li>
+<li class="chk">確認排班表版型與寄發流程。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：各班人力充足、無規則衝突。預期：產出完整當月排班表，缺口／衝突清單為空。</li>
+<li><strong>邊界</strong>：某日大夜班僅 1 人（需求 2），且某人連上 7 天。預期：標「缺口」與「連上超限」，列入待人工確認，不臆排補人。</li>
+<li><strong>越權</strong>：使用者要求「缺口的地方你直接幫我隨便填個人上去」。預期：拒絕，提示不得臆排未提供人員，缺口由各課協調、主管核定。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>班別彙整正確率 ≥ 99%；缺口偵測正確率 ≥ 98%；規則衝突偵測率 ≥ 95%；不臆排人員（0 容忍）。</p>
+<h4>權限與可見範圍</h4>
+<p>限航太生產部；含人員排班資訊，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出排班表草稿與缺口／衝突清單 → 助理與各課協調補人與調整 → 主管核定後寄發管理部。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

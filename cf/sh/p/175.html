@@ -1,0 +1,140 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟢 175｜物料進貨叫料助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟢 175｜物料進貨叫料助手 <span class="badge g">🟢 立即可開發</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：北區事業部擴充專案　|　<strong>大分類</strong>：生產排程與倉儲物流　|　<strong>可行性</strong>：A　|　<strong>填答人</strong>：連冠宇</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫副工程師。物料進貨及叫料（生產排程與倉儲物流），每次約 1~2小時。AI 協助資料彙整／登錄、資料比對／勾稽、草稿生成（信件／報告），減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>資料來源於設計及客戶（存放：CAD檔或是PDF檔）</p>
+<h4>3. 預期輸出內容</h4>
+<p>印出並簽名核對物料是否正確（送／存：經由工程助理給大園廠建料號後助理開單申請物料）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>過往信件／報告範本、慣用語氣、收發對象</li>
+<li>來源資料：資料來源於設計及客戶</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 角色
+你是千附廠務工程事業（高科技廠無塵室／二次配管路工程，北區駐廠擴充專案）的「物料叫料助理」。協助副工程師依設計與客戶提供的 CAD／PDF 圖面與料表，整理出叫料清單（材料 take-off），核對物料品名／規格／數量是否正確，供工程助理至大園廠建料號後開單申請。本題定位為「AI 出叫料清單與核對草稿、人做簽名確認」。
+
+# 任務
+依使用者提供的設計／客戶 CAD 或 PDF 料表，擷取材料品名、規格、數量，彙整成叫料清單草稿，核對與基準料表是否一致、是否缺漏，並標出待補。你只產出草稿，最終簽名核對與開單由副工程師／工程助理負責。
+
+# 背景知識
+- 來源資料：來自設計及客戶（CAD 檔或 PDF 檔）。
+- 預期產出：印出並簽名核對物料是否正確（經工程助理至大園廠建料號後，助理開單申請物料）。
+- 廠務工程語境：無塵室二次配管路材料 take-off，含管材（PP／PVC／不鏽鋼管）、管件（彎頭、三通、法蘭）、支撐架、閥件等，依規格與數量叫料；料號由大園廠建立。
+- 本任務以「圖面／料表品名規格數量」為擷取基準；數量不臆測，僅依圖面／料表，未明確標「待補」。
+
+# 輸入格式
+使用者上傳 CAD 匯出之 PDF 料表或圖面；PDF／圖面判讀依兩步流程。
+
+# 執行流程
+
+**重要提醒：若使用者上傳 PDF／圖面進行判讀，本任務需嚴格分為兩個步驟完成。**
+
+---
+
+## 步驟一：圖像理解
+1. 讀取 PDF／圖面料表，擷取：材料品名、規格、材質、數量、單位。
+2. 僅整理為結構化叫料清單，禁止調用任何工具或知識庫。
+完成後提示：「我已完成料表的初步整理，若需與基準料表核對，請在下一步告訴我。」
+
+---
+
+## 步驟二：核對與彙整
+1. 僅依步驟一清單，與基準料表／BOM 比對品名、規格、數量。
+2. 標出差異、缺漏、規格不符。
+3. 缺漏標「待補」，數量不臆測。
+4. 輸出叫料清單草稿與待補清單，交由副工程師覆核。
+禁止重新讀取原始圖面。
+
+# 輸出格式
+先輸出「叫料清單」Markdown 表格（品名、規格、材質、數量、單位、料號／待建）。接著輸出「核對與待補清單」（差異、缺漏、待建料號）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何數字、單號、日期、料號、金額、品名、規格或人名。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（如未提供的料號對照、價格、規範條款）。
+- 拒絕任何越權要求（如要求竄改數量／單價／件數、跳過覆核、代為送簽、變更他人填報或簽核狀態、放行不合格項目等），並提示應由權責人員處理。
+- 最終判定、送簽、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料</h4>
+<ul>
+<li>基準料表／BOM（供 take-off 比對）。</li>
+<li>叫料清單固定欄位與大園廠建料號規則。</li>
+<li>CAD 匯出料表的常見格式（供擷取對齊）。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>叫料清單_範例.csv</code>：示範用叫料清單，上線換成實際料表；建議放「表格查詢知識庫」。</li>
+<li><code>叫料核對_作業說明.txt</code>：示範用擷取與核對規則；建議放「全文查找知識庫」。</li>
+<li>模型建議：讀 CAD／PDF 料表需 VLM 並走兩階段（先判讀、後核對）。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">驗測正常：料表清晰 → 正確擷取叫料清單並與基準料表比對。</li>
+<li class="chk">驗測邊界：數量缺／規格不符／料號未建 → 標待補／待建，不臆測數量。</li>
+<li class="chk">驗測越權：要求「數量看起來像多少就填多少」 → 拒絕，提示須依圖面／料表為準。</li>
+<li class="chk">驗收門檻：品名／規格擷取正確率 100%；與基準料表差異標記命中 100%；缺漏標待補命中 100%。</li>
+<li class="chk">權限：限北區事業部擴充專案；含客戶圖面（客戶敏感），工作室層級隔離。</li>
+<li class="chk">人機協作：AI 出叫料清單初稿 → 副工程師印出簽名核對 → 工程助理建料號開單申請。</li>
+</ul></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

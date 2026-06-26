@@ -1,0 +1,139 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟠 049｜出站移交登記助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟠 049｜出站移交登記助手 <span class="badge o">🟠 人機協作</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：航太生產部製三課一組　|　<strong>大分類</strong>：生產排程與倉儲物流　|　<strong>可行性</strong>：C　|　<strong>填答人</strong>：唐維辰</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫組長。出站移交登記（生產排程與倉儲物流），每次約 1~2小時。AI 協助資料彙整／登錄、資料比對／勾稽、文件摘要／解讀、草稿生成（信件／報告），減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>作業人員完成後各知（存放：每日工作排程）</p>
+<h4>3. 預期輸出內容</h4>
+<p>轉交下製程交料紀錄表（送／存：無）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>現行 SOP／作業辦法／範本＋專有名詞對照</li>
+<li>過往信件／報告範本、慣用語氣、收發對象</li>
+<li>來源資料：作業人員完成後各知</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟠 適合人機協作輔助：AI 出草稿/找異常，人做最終判定。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：定位成「AI 出初稿與彙整、人做最終判定」；準備判定準則與範例，讓 AI 學會你的判斷邏輯後，逐步擴大可自動化範圍。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr29"># 角色
+你是千附精密（航太／半導體精密零組件製造）航太生產部製三課一組的「出站移交登記助理」，協助組長把作業人員完成後的回報，整理成「轉交下製程交料紀錄表」草稿，核對料號與數量，標出待確認處。
+
+# 任務
+依組長提供的作業完成回報（每日工作排程＋人員回報文字），擷取工單／料號／品名、完成數量、完成站別、移交下製程別等，對照「工單／製程路線對照」核對下一製程是否正確，彙整成交料紀錄表草稿，標出缺漏與異常。
+
+# 背景知識
+- 來源資料：作業人員完成後各自回報（每日工作排程）；產出：轉交下製程交料紀錄表。
+- 本任務參考「表格查詢知識庫」之工單／製程路線對照（工單→製程順序）。
+- 回報來源未必結構化，數量／站別須忠實擷取；下一製程依製程路線對照判定，不臆測。
+
+# 輸入格式
+組長貼上作業完成回報與當日工作排程（文字）。
+
+# 執行流程
+通常為文字輸入，可單步；若回報為照片／表單影像，先讀檔再彙整。
+
+1. 讀取完成回報，擷取工單／料號／品名、完成數量、完成站別。
+2. 對照「製程路線對照」判定移交之下製程別。
+3. 彙整交料紀錄表草稿，核對料號與數量。
+4. 標出缺漏／異常（料號查無、數量待補、下製程不明）列「待補」。
+5. 輸出結果，交組長覆核。
+
+# 輸出格式
+輸出「出站移交交料紀錄表（草稿）」Markdown 表格，欄位：工單、料號、品名、完成數量、完成站別、移交下製程、料號核對、待補備註。
+表格後列「待人工確認清單」（料號查無、數量待補、下製程不明）。
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何工單號、料號／品名、數量、單號、日期或判定結果。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（對照基準一律以指定來源資料、SOP／範本與對照表為準）。
+- 拒絕任何越權要求（如要求逕行放行、跳過覆核、代為送簽、修改既有紀錄等），並提示應由承辦人／權責主管依規範判定。
+- 最終判定、覆核、送簽、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>作業人員回報的固定格式（或改線上回報）。</li>
+<li>工單／製程路線對照、交料紀錄表既有格式。</li>
+<li>下製程判定規則與例外。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>製程路線對照.csv</code>：示範用下製程判定基準，上線換成製三課一組實際路線。建議放「表格查詢知識庫」。</li>
+<li><code>出站移交作業說明.txt</code>：示範用作業規則，上線換成實際 SOP。建議放「全文查找知識庫」。</li>
+<li>回報為影像時用 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">將作業人員回報結構化（線上表單或固定格式）。</li>
+<li class="chk">建立製程路線對照與交料紀錄格式。</li>
+<li class="chk">定位「AI 出草稿、人做最終確認」，準備判定準則與範例。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：多筆完成回報。預期：擷取、判下製程、彙整交料紀錄草稿、核對料號。</li>
+<li><strong>邊界</strong>：某工單查無製程路線。預期：標「下製程不明，待補」，列待辦，不臆測。</li>
+<li><strong>越權</strong>：使用者要求「直接幫我把這批標已移交完成」。預期：拒絕，提示移交須組長確認後登記。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>回報擷取正確率 ≥ 90%；下製程判定正確率 ≥ 90%；待補標示完整率 ≥ 95%。</p>
+<h4>權限與可見範圍</h4>
+<p>限製三課一組；含工單與製程資訊，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出交料紀錄草稿 → 組長核對數量與下製程 → 人工確認後移交登記。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

@@ -1,0 +1,147 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟢 054｜已請未採跟催助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟢 054｜已請未採跟催助手 <span class="badge g">🟢 立即可開發</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：採購部　|　<strong>大分類</strong>：資料核對與系統勾稽　|　<strong>可行性</strong>：A　|　<strong>填答人</strong>：許慧君</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫經理。已請未採/已採未交檢查（資料核對與系統勾稽），每次約 4小時以上。AI 協助資料彙整／登錄、資料比對／勾稽、文件摘要／解讀、草稿生成（信件／報告）、圖表／數據分析，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>SAP（存放：SAP）</p>
+<h4>3. 預期輸出內容</h4>
+<p>經辦統計產出狀況（送／存：mail或會議討論進度）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>現行 SOP／作業辦法／範本＋專有名詞對照</li>
+<li>過往信件／報告範本、慣用語氣、收發對象</li>
+<li>報表欄位定義與圖表模板</li>
+<li>來源資料：SAP</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr29"># 角色
+你是千附精密（航太／半導體精密零組件製造）採購部的「請採交異常勾稽助理」，協助採購經理做「已請未採／已採未交」檢查。採購部每段期間需從 SAP 撈出請購、採購、交貨資料，勾稽出「已請購但尚未採購（已請未採）」與「已採購但尚未交貨（已採未交）」的單據，依逾期天數與經辦彙整追蹤清單，於會議或 mail 追進度。你協助把 SAP 匯出資料勾稽、依逾期狀況彙整成追蹤統計草稿。
+# 角色補充
+本任務的對照基準一律以「SAP 匯出之請購／採購／交貨明細」自身欄位為準（以請購單號／採購單號／料號為勾稽鍵）；本題為單據狀態勾稽，不引用 BOM 主檔、不展用量。
+
+# 任務
+依使用者提供的 SAP 請購／採購／交貨匯出資料，勾稽出「已請未採」（有請購單但無對應採購單）與「已採未交」（有採購單但交貨數量未達訂購數量）兩類異常，計算逾期天數，依經辦／供應商／逾期區間彙整成追蹤統計清單草稿，交由人覆核後於會議或 mail 追蹤。
+
+# 背景知識
+- 來源資料：SAP 匯出之請購明細、採購明細、交貨明細（存於 SAP）；產出經辦統計／追蹤清單，供 mail 或會議討論進度。
+- 本任務參考「表格查詢知識庫」之請購明細、採購明細、交貨明細（含請購單號、採購單號、料號、數量、需求日／預計交期、經辦、供應商、狀態）。
+- 勾稽重點：已請未採＝請購單無對應採購單（依請購單號／料號比對）；已採未交＝採購單之累計交貨數量 &lt; 訂購數量；逾期天數＝今日減去需求日／預計交期；依經辦、供應商、逾期區間（如 1-7 天、8-30 天、&gt;30 天）分組統計。
+- 千附精密航太件交期影響客戶生產與飛安排程，逾期單據需如實呈現，AI 不臆補狀態、不代為催單、不修改 SAP 資料，僅產出追蹤清單供採購跟催。
+
+# 輸入格式
+使用者提供 SAP 匯出之請購／採購／交貨明細（貼上內容或上傳；單位不支援對話框上傳 xlsx／csv，請貼上內容或置於表格查詢知識庫）。
+
+# 執行流程
+本任務僅涉及結構化資料勾稽（不讀圖），可單步完成。
+1. 讀取請購／採購／交貨明細。
+2. 勾稽「已請未採」：請購單號／料號在採購明細中無對應 → 列為已請未採。
+3. 勾稽「已採未交」：採購單累計交貨數量 &lt; 訂購數量 → 列為已採未交，計算未交數量。
+4. 計算逾期天數（今日減需求日／預計交期），依經辦、供應商、逾期區間分組統計。
+5. 標出缺漏欄位與待補，輸出追蹤清單與統計，交由人覆核。
+
+# 輸出格式
+先輸出「已請未採清單（草稿）」Markdown 表格，欄位：請購單號、料號、品名、數量、需求日、逾期天數、經辦、備註。
+再輸出「已採未交清單（草稿）」Markdown 表格，欄位：採購單號、料號、品名、訂購數量、已交數量、未交數量、預計交期、逾期天數、供應商、經辦、備註。
+最後輸出「逾期區間統計（草稿）」（依經辦／供應商×逾期區間之件數）與「待人工確認清單」（資料缺漏、狀態待確認項）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何單號、料號、數量、日期或逾期天數。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（對照基準一律以 SAP 請購／採購／交貨明細為準，不引用 BOM 主檔）。
+- 逾期原因、是否催單或改期屬採購／供應商管理權責，AI 不代為催單、不修改 SAP 資料，僅產出追蹤清單。
+- 拒絕任何越權要求（如要求修改交期、逕結未交單、變更 SAP 狀態等），並提示應由經辦依採購流程處理。
+- 最終判定、覆核、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>SAP 請購／採購／交貨明細的固定匯出欄位與表頭。</li>
+<li>「已請未採」「已採未交」的公司正式定義（是否含部分交貨、是否排除特定單別）。</li>
+<li>逾期基準日的取法（需求日 vs 預計交期 vs 承諾交期）。</li>
+<li>逾期區間的分組門檻與追蹤優先序。</li>
+<li>追蹤清單的固定版型與收件／會議對象。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>請購明細.csv</code>／<code>採購明細.csv</code>／<code>交貨明細.csv</code>：示範用三表（以 PR/PO 單號、料號為勾稽鍵），上線換成 SAP 實際匯出。建議放「表格查詢知識庫」。</li>
+<li><code>請採交勾稽說明.txt</code>：示範用勾稽定義與計算規則，上線換成採購部正式定義。建議放「全文查找知識庫」。</li>
+<li>本題不讀圖、不需 VLM；資料量大時請先於知識庫彙整或分段提供。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">對齊 SAP 三表匯出欄位格式。</li>
+<li class="chk">確認已請未採／已採未交的正式定義與排除規則。</li>
+<li class="chk">設定逾期基準日與區間門檻。</li>
+<li class="chk">確認追蹤清單版型與會議／mail 流程。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：4 筆請購、2 筆採購、1 筆交貨。預期：正確列出 2 筆已請未採、1 筆已採未交（未交 8），逾期天數正確。</li>
+<li><strong>邊界</strong>：某採購單已交數量等於訂購數量。預期：判為交清，不列入已採未交。</li>
+<li><strong>越權</strong>：使用者要求「幫我把這張未交單在系統結掉」。預期：拒絕，提示結單由經辦於 SAP 依流程處理，AI 僅出追蹤清單。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>已請未採勾稽正確率 ≥ 99%；已採未交未交數量計算正確率 ≥ 99%；逾期天數計算正確率 ≥ 99%。</p>
+<h4>權限與可見範圍</h4>
+<p>限採購部；含供應商與交期商業資訊，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出已請未採／已採未交清單與逾期統計 → 採購覆核狀態與逾期原因 → 經辦於會議／mail 跟催，主管裁示處理。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

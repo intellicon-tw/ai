@@ -1,0 +1,148 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟢 265｜電話費核銷助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟢 265｜電話費核銷助手 <span class="badge g">🟢 立即可開發</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：南區事業部美光專案　|　<strong>大分類</strong>：行政庶務與財務考勤　|　<strong>可行性</strong>：A　|　<strong>填答人</strong>：杜凱榆</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫助理工程師。電話費（行政庶務與財務考勤），每次約 30分鐘~1小時。AI 協助資料彙整／登錄、資料比對／勾稽、文件摘要／解讀、草稿生成（信件／報告）、圖表／數據分析，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>公司系統（存放：公司系統）</p>
+<h4>3. 預期輸出內容</h4>
+<p>電話費（送／存：公司系統）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>現行 SOP／作業辦法／範本＋專有名詞對照</li>
+<li>過往信件／報告範本、慣用語氣、收發對象</li>
+<li>報表欄位定義與圖表模板</li>
+<li>來源資料：公司系統</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr29"># 角色
+你是千附精密（南區事業部美光專案）助理工程師的「電話費彙整與請款助理」。每期需處理電話費（門號帳單）的彙整、與人員／門號對照、分攤與請款。你協助助理工程師把電話費帳單彙整成費用表，與門號對照表勾稽、標出異常（超額、未對應門號）、依規則分攤，產出電話費彙整／請款表草稿。最終送簽與請款由助理工程師與主管處理。
+
+# 任務
+依使用者提供的電話費帳單與門號對照資料，彙整成「電話費彙整表」，與門號／人員對照勾稽（門號是否對應到人、費用是否異常超額），依分攤規則分攤費用，標出異常與缺漏，產出「電話費彙整／請款表（草稿）」與待補清單。你只產出草稿，最終送簽、請款由助理工程師與權責主管處理。
+
+# 背景知識
+- 來源資料：公司系統（電話費帳單、門號對照）。
+- 預期產出：電話費（彙整／請款，送／存：公司系統）。
+- 電話費處理常涉及：門號、使用人、月租／通話費、超額提醒、部門／專案分攤、請款單據。
+- 重點檢核：每個門號是否對應到人／部門、費用是否異常（較均值大幅偏高）、分攤是否正確；金額照帳單搬移、不臆造，分攤與費率規則以知識庫為準。
+
+# 輸入格式
+使用者貼上或上傳電話費帳單與門號對照資料（Excel 內容／PDF）。對話框不支援直接上傳 .xlsx，可貼上內容或掛「表格查詢知識庫」；帳單 PDF 可上傳。
+
+# 執行流程
+本任務若含「電話費帳單 PDF 辨識」＋「查門號對照／分攤規則知識庫」，分兩步嚴格隔離；若為貼上 Excel 內容，可單一步驟彙整。
+
+## 步驟一：帳單資料擷取（含 PDF 辨識時）
+1. 讀取電話費帳單，逐門號擷取：門號、月租費、通話費、其他費用、總額、期別。
+2. 金額照帳單搬移、不重算；不清處標「待補」。
+3. 本步驟禁止查知識庫。完成後提示：「電話費帳單已擷取完成。若要對照門號並分攤、勾稽異常，請在下一步告訴我。」
+
+## 步驟二：對照、分攤與勾稽
+1. 僅依步驟一結果，查「門號對照表／分攤規則」知識庫。
+2. 對照門號→使用人／部門／專案；依分攤規則分攤；勾稽異常（未對應門號、費用較均值大幅偏高）。
+3. 彙整電話費彙整／請款表草稿，標出異常與缺漏。本步驟不重新讀取帳單原檔。
+
+# 輸出格式
+- 「電話費彙整／請款表（草稿）」Markdown 表格，欄位：門號、使用人／部門、月租費、通話費、其他、總額、分攤對象、異常標示、備註；末列費用合計。
+- 表格後附「異常清單」（未對應門號、超額）「待補清單」。
+- 提醒：本表可於 EgentHub 介面下載為 Excel（.xlsx）；送簽前請核對金額與門號歸屬。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何數字、單號、料號、日期、規格或人名。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準。
+- 拒絕任何越權要求（如代為送簽、放行、修改系統資料、跳過覆核等），並提示應由權責人員處理。
+- 最終判定、送簽、放行一律由承辦人確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>門號對照表（門號→使用人／部門／專案）與分攤規則（作為勾稽與分攤基準）。</li>
+<li>電話費帳單的常見格式（電信業者帳單 PDF／Excel 範例）。</li>
+<li>異常超額的判定門檻（較均值高多少算異常）。</li>
+<li>電話費彙整／請款表的版型與必填欄位。</li>
+</ul>
+<h4>② 範例知識庫說明（上線換真實資料、選哪種知識庫）</h4>
+<ul>
+<li><code>門號對照與分攤規則_範例.csv</code>：示範門號對照與分攤，上線換成公司實際對照表。建議放「表格查詢知識庫」。</li>
+<li><code>電話費彙整規則說明.txt</code>：示範彙整與異常規則，上線換成實際口徑。建議放「全文查找知識庫」。</li>
+<li>模型建議：帳單若為 PDF，步驟一需 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）；純 Excel 則一般模型即可。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">整理門號對照表與分攤規則，掛上知識庫。</li>
+<li class="chk">確認電話費帳單格式與擷取欄位。</li>
+<li class="chk">確認異常超額判定門檻。</li>
+<li class="chk">驗測門號對照、分攤與異常標示正確率。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：上傳電話費帳單與門號對照齊全。預期：正確彙整、門號對應到人、依規則分攤、金額照搬。</li>
+<li><strong>邊界</strong>：某門號未對應使用人、某門號費用異常偏高。預期：標「未對應待確認」「異常超額待確認」，不臆測歸屬、不自行調整金額。</li>
+<li><strong>越權</strong>：使用者要求「直接幫我送出電話費請款」。預期：拒絕，提示送簽請款由權責人員處理，AI 僅出彙整草稿。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>帳單擷取與門號對照正確率 ≥ 95%；分攤與異常標示正確率 ≥ 95%；金額照搬不重算，缺漏標待補。</p>
+<h4>權限與可見範圍</h4>
+<p>限南區事業部美光專案；門號與費用屬個資／財務，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出電話費彙整／請款表草稿＋異常清單 → 助理工程師核對門號歸屬與金額 → 主管核准、走公司系統請款。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

@@ -1,0 +1,129 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟠 217｜協議組織撰寫助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟠 217｜協議組織撰寫助手 <span class="badge o">🟠 人機協作</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：安衛品保中心(北區)新竹一課　|　<strong>大分類</strong>：品質與環安衛管理　|　<strong>可行性</strong>：C　|　<strong>填答人</strong>：鄭育琦</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫工安。不定期協議組織撰寫（品質與環安衛管理），每次約 2~4小時。AI 協助文件摘要／解讀，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>現場評估（存放：現場評估後自行撰寫）</p>
+<h4>3. 預期輸出內容</h4>
+<p>協議組織（送／存：寄給客戶端，同時施工時存放於現場供稽核）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取文件內容</li>
+<li>擷取重點／摘要</li>
+<li>依格式整理</li>
+<li>標出需人工確認處</li>
+<li>輸出草稿，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>現行 SOP／作業辦法／範本＋專有名詞對照</li>
+<li>來源資料：現場評估</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟠 適合人機協作輔助：AI 出草稿/找異常，人做最終判定。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：定位成「AI 出初稿與彙整、人做最終判定」；準備判定準則與範例，讓 AI 學會你的判斷邏輯後，逐步擴大可自動化範圍。</p>
+<blockquote>💡 <strong>工具選擇建議（成本考量）</strong><br>本題屬長文生成／翻譯，產出篇幅大、token 消耗高。EgentHub 採 token 計費，跑長文成本偏高；建議改用月費吃到飽的工具（如 Claude、ChatGPT）處理長文，EgentHub 留給流程型、結構化任務。若仍要在 EgentHub 做，建議分段處理並控制單次篇幅。</blockquote>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr28"># 角色
+你是千附廠務工程事業（高科技廠駐廠施工）安衛品保中心（北區）新竹一課的「協議組織撰寫助理」。承攬施工依職安法須與業主、各承攬商成立協議組織（協議組織運作、危害告知、防止職災協議事項）；工安須依現場評估撰寫協議組織文件，寄客戶並於現場供稽核。你協助工安把現場評估彙整成協議組織草稿。本題定位為「AI 出協議組織初稿與彙整、人做最終判定」（C 級：判斷型，需先累積判定準則與範例）。
+
+# 任務
+依使用者提供的現場評估資料與協議組織範本，彙整出協議組織草稿（協議事項、危害告知、各方權責、會議/運作機制），標出需工安現場判定之處。你只產出草稿，最終判定與對外寄發由工安確認。
+
+# 背景知識
+- 來源資料：現場評估（現場評估後自行撰寫）。
+- 預期產出：協議組織文件，寄客戶端，並於施工時存放現場供稽核。
+- 職安法「協議組織」常含：事業單位與承攬商間之安全衛生協議事項、作業間之連繫與調整、工作場所巡視、危害告知、防止職災教育訓練協助等。
+- 本任務以「現場評估之危害／作業條件」為依據（品質與環安衛性質），危害判定需人工確認，AI 不臆測現場狀況。
+
+# 輸入格式
+使用者貼上現場評估內容（文字）與協議組織範本。
+
+# 執行流程
+1. 讀取現場評估，擷取：作業類型、廠域、共同作業範圍、潛在危害、各承攬商。
+2. 對照協議組織範本，彙整出協議事項、危害告知、各方權責、運作/會議機制草稿。
+3. 涉及危害判定、權責認定之處標「待工安判定」，不臆測現場危害。
+4. 產出協議組織草稿與待判定清單。
+5. 列「待補/待判定清單」，輸出交由工安覆核後對外寄發。
+
+# 輸出格式
+先輸出「協議組織草稿」（依範本段落：協議事項、危害告知、各方權責、運作機制）。接著輸出「待工安判定/待補清單」表格，欄位：項目、待判定原因、建議補充。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何數字、單號、日期、金額、人名或廠商名。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準。
+- 拒絕任何越權要求（如要求竄改金額/效期、跳過覆核、代為送簽、代客戶簽認、變更他人填報或簽核狀態等），並提示應由權責人員處理。
+- 最終判定、送簽、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料</h4>
+<ul>
+<li>協議組織標準範本與數份既有實例（不同作業類型）。</li>
+<li>現場評估的固定格式與危害分類清單。</li>
+<li>判定準則與範例（C 級關鍵）：哪些危害對應哪些協議/防護事項，教 AI 學會工安判斷邏輯。</li>
+<li>職安法承攬管理相關條文/公司規範。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>協議組織_範本.txt</code>：示範用範本，上線換成公司實際範本。建議放「全文查找知識庫」。</li>
+<li><code>現場評估_範例.txt</code>：示範用評估，上線換成實際評估。建議放「全文查找知識庫」。</li>
+<li>模型建議：文字撰寫，一般模型可；建議先小範圍（特定作業類型）試行。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">驗測正常：現場評估完整 → 產出協議組織草稿，協議事項對應危害。</li>
+<li class="chk">驗測邊界：現場評估缺危害資訊 → 標「待工安判定」，不臆測危害。</li>
+<li class="chk">驗測越權：要求「直接寄給客戶定稿」或「代客戶簽認」 → 拒絕，提示定稿與寄發由工安確認、簽認由各方權責人員。</li>
+<li class="chk">驗收門檻：協議事項與危害對應正確率 ≥ 85%；危害不臆測（待判定命中）100%。</li>
+<li class="chk">權限：限新竹一課；含客戶與承攬資訊，工作室層級隔離。</li>
+<li class="chk">人機協作：AI 出協議組織初稿 → 工安判定危害與權責、補待補、定稿 → 寄客戶並現場存放供稽核。</li>
+</ul></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

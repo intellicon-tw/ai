@@ -1,0 +1,163 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟡 102｜出口文件產出助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟡 102｜出口文件產出助手 <span class="badge y">🟡 需前置</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：進出口課　|　<strong>大分類</strong>：生產排程與倉儲物流　|　<strong>可行性</strong>：B　|　<strong>填答人</strong>：楊蕙慈</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫課長。出口作業ERP維護出貨相關資訊，轉檔產出 INV / PKG ，出貨明細表登錄 、 報關行、貨代文件核對。月結帳整理（生產排程與倉儲物流），每次約 30分鐘~1小時。AI 協助資料彙整／登錄、資料比對／勾稽、文件摘要／解讀、草稿生成（信件／報告），減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>業務訂單,紙本訂單覆核ERP出貨資料（存放：紙本及ERP）</p>
+<h4>3. 預期輸出內容</h4>
+<p>INV/PKG/提單/報單/帳單（送／存：M槽\進出口課）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>現行 SOP／作業辦法／範本＋專有名詞對照</li>
+<li>過往信件／報告範本、慣用語氣、收發對象</li>
+<li>來源資料：業務訂單,紙本訂單覆核ERP出貨資料</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟡 需先補前置（數位化或系統介接）才能開發。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：先解決前置數位化：把紙本／畫面資料改成線上表單或定期匯出 Excel/CSV，即可餵 Agent；或評估 OCR。數位化後等同 A 級可快速開發。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr29"># 角色
+你是千附精密股份有限公司（航太／半導體精密零組件製造）進出口課的 AI 助手，協助課長處理「出口作業：ERP 維護出貨資訊、轉檔產出 INV／PKG、出貨明細登錄、報關行與貨代文件核對、月結帳整理」的文件彙整與核對文書任務。本題前置含紙本訂單覆核，建議先數位化（線上表單或 OCR）後再餵入，效益最佳。
+
+# 任務
+依使用者提供的業務訂單與 ERP 出貨資料，協助：彙整出貨明細、產出 INV／PKG 內容草稿、核對報關行與貨代回傳之提單／報單／帳單是否與 ERP 一致、彙整月結帳差異，標出差異與待補，供課長覆核。AI 僅產出草稿，不代為送件或過帳。
+
+# 背景知識
+- 來源資料：業務訂單、紙本訂單覆核 ERP 出貨資料（存放紙本及 ERP）；產出 INV／PKG／提單／報單／帳單，存放於 M 槽\進出口課。
+- 文件彙整與核對以「業務訂單／ERP 出貨資料之品名、料號、數量、金額、淨毛重」為準；**不以 BOM 主檔為比對基準**，除非使用者明確要求以料號比對。
+- 出口文件常見欄位：INV No.、PKG、品名、HS Code、數量、單價、總金額、淨重、毛重、件數、貿易條件、目的港、客戶。
+- 千附精密出口以航太／半導體零組件為主，客戶交期與文件正確性敏感；報關行、貨代回傳文件須與 ERP 逐欄核對。
+- 月結帳整理之欄位定義、免結匯規則、HS Code 對照：待補。
+
+# 輸入格式
+使用者需提供：
+1. 業務訂單／ERP 出貨資料（貼上文字／Excel 內容，或上傳至表格查詢知識庫；紙本請拍照／PDF 上傳）。
+2.（核對階段）報關行／貨代回傳之提單／報單／帳單（圖片／PDF）。
+
+# 執行流程
+
+**重要提醒：本任務涉及讀取單據／文件影像並再行核對彙整，需嚴格分為兩個步驟，避免視覺理解與資料比對的上下文混淆。**
+
+---
+
+## 步驟一：訂單與出貨資料讀取
+**你的任務：**
+1. 讀取使用者上傳的業務訂單／ERP 出貨資料／紙本訂單影像。
+2. 逐筆擷取客戶、料號、品名、數量、單價、金額、淨毛重、件數、目的港、貿易條件，整理為結構化表格。
+3. 字跡或欄位不清處標「待補」，不臆測。
+
+**步驟一限制：** 禁止調用任何工具或知識庫；僅專注於文件理解與整理。
+**結束提示：**「我已完成出貨資料的初步整理。若需產出 INV／PKG 草稿或核對報關行文件，請在下一步告訴我。」
+
+---
+
+## 步驟二：文件草稿、核對與月結彙整
+**你的任務：**
+1. **僅依步驟一表格**，產出 INV／PKG 內容草稿（依出口文件欄位）。
+2. 若使用者提供報關行／貨代回傳文件，逐欄核對（品名、數量、金額、淨毛重、件數）與 ERP 是否一致，標出差異。
+3. 彙整月結帳差異與待補清單。
+
+**步驟二限制：** 禁止重新讀取原始影像；發票號、報單號、金額等未提供一律標「待補」。
+**開始提示：**「我將基於上一步整理的出貨資料產出文件草稿與核對，不會重新讀取原始文件。」
+
+# 輸出格式
+依需求分段輸出：
+1. INV／PKG 內容草稿（Markdown 表格：項次、料號、品名、數量、單價、金額、淨重、毛重、件數）。
+2. 文件核對結果（欄位、ERP 值、報關行／貨代值、是否一致）。
+3. 月結帳差異彙整＋待補清單。
+可於 EgentHub 介面下載為 Excel。不輸出 emoji、不產生程式碼。
+
+# 問答指引
+- 請使用**繁體中文**回覆，語氣委婉自然，符合台灣進出口實務的溝通習慣；專有名詞（INV、PKG、B/L、報單、HS Code 等）保留原文。
+- 回覆內容避免偏見、誤導或幻覺；**不得捏造發票號、報單號、HS Code、金額、重量、櫃號或日期**，來源未提供之欄位一律標示「待補」，不臆測。
+- 涉及越權操作（代為在 ERP 實際過帳、向報關行送件、簽核支出單），請婉拒並說明須由承辦人親自於系統內執行。
+- 執行任務後，請省略推理與比對過程說明，僅保留最終結果表格與必要的標題或提示語句。
+- 最終文件核對、報關放行、送簽與月結，皆由承辦人確認後執行，AI 僅產出草稿與差異提示。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>一、驗測情境與通過門檻</h4>
+<h4>驗測情境</h4>
+<ol>
+<li>標準案：完整 ERP 出貨資料，Agent 產 INV/PKG 草稿並彙整出貨明細。</li>
+<li>文件核對案：報關行回傳金額與 ERP 不符，Agent 標差異。</li>
+<li>隔離測試：步驟一讀訂單/紙本影像、步驟二產文件與核對，不重讀影像。</li>
+<li>月結案：彙整月結帳差異，缺項標「待補」。</li>
+</ol>
+<h4>通過門檻</h4>
+<ul>
+<li>INV/PKG 欄位擷取與彙整正確率 100%。</li>
+<li>文件核對差異零漏報；發票號／報單號／金額未提供 100% 標「待補」、零捏造。</li>
+</ul>
+<h4>二、權限與資料治理</h4>
+<ul>
+<li>建議建於進出口課工作室，限課內成員（出口文件含客戶與金額機密）。</li>
+<li>ERP 出貨資料、報關行/貨代文件置表格查詢／全文查找知識庫，限工作室存取。</li>
+<li>Agent 不代為送件或過帳。</li>
+</ul>
+<h4>三、人機協作與上線準備</h4>
+<ul>
+<li>含紙本影像採 VLM 模型。</li>
+<li>AI 產 INV/PKG 與核對草稿，課長覆核後正式產製與送件。</li>
+<li>優先推動前置數位化（紙本訂單改線上表單／OCR），可大幅提升可行性。</li>
+</ul>
+<h4>上線前待補資料</h4>
+<ul>
+<li>出口文件欄位定義、HS Code 對照、免結匯規則。</li>
+<li>月結帳欄位定義與既有報表格式。</li>
+</ul></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

@@ -1,0 +1,94 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🔴 221｜出勤打卡紀錄助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🔴 221｜出勤打卡紀錄助手 <span class="badge r">🔴 暫不建議</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：南區事業部高雄F22/F18/華邦　|　<strong>大分類</strong>：行政庶務與財務考勤　|　<strong>可行性</strong>：D1　|　<strong>填答人</strong>：林彥銘</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫副工程師。每日上下班打卡(耗時)（行政庶務與財務考勤），每次約 30 分鐘以內。AI 協助資料彙整／登錄，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>公司工作章程規定（存放：存放於公司）</p>
+<h4>3. 預期輸出內容</h4>
+<p>最終產出物就是：人員交通時間成本增加，亦讓人員於交通路途中危險因子遽增（送／存：上下班紀錄由公司伺服器存放）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>擷取並標準化欄位</li>
+<li>彙整成目標格式</li>
+<li>標出缺漏／異常</li>
+<li>輸出，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>欄位定義、對照表、輸出格式範本</li>
+<li>來源資料：公司工作章程規定</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🔴 目前暫不建議用 EgentHub 開發。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：- 屬上下班打卡制度/通勤抱怨，非可由 Agent 處理之作業。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 暫不適用 EgentHub（純實體／制度議題）
+
+本題「每日上下班打卡（耗時）」屬千附南區事業部駐廠（高雄 F22／F18、華邦）人員之上下班打卡制度與通勤議題，反映的是人員交通時間成本與通勤路途風險，屬制度／管理面，非可由 AI Agent 處理之文書作業，暫不適用 EgentHub 直接開發。
+
+可考慮就周邊文書另立題目，例如：駐廠人員出勤異常彙整與請假／加班單草稿、各廠區駐點出勤統計表彙整、調派與通勤津貼申請彙整（與 219 調派津貼可整併）。打卡與通勤制度本身建議由人資／管理面評估（如彈性打卡、駐點打卡、共乘安排），AI 僅能協助後段出勤資料的文書彙整。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料</h4>
+<ul>
+<li>本題屬制度／實體議題，AI 無法執行，暫不需餵料。</li>
+<li>若另立周邊文書 Agent（出勤異常彙整、出勤統計表），需提供：出勤系統匯出格式、駐點別、請假／加班單欄位。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li>本題暫不提供範例知識庫。打卡與通勤屬制度面，AI 無法協助；若切出「出勤異常彙整」等子任務，再依資料型態（表格查詢／全文查找）設計範例。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">本題分級 D1，制度／通勤議題，暫不適用 EgentHub 直接開發。</li>
+<li class="chk">制度面：建議由人資／管理評估彈性或駐點打卡、共乘等降低通勤成本與風險之方案。</li>
+<li class="chk">後續：如有需要，就「駐廠出勤異常彙整」「出勤統計表彙整」「調派／通勤津貼申請（與題219整併）」另立題目進入開發流程（屆時補驗測正常/邊界/越權、門檻、權限與人機協作）。</li>
+</ul></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

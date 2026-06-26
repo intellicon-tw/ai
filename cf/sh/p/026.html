@@ -1,0 +1,155 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟡 026｜技術文件編修助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟡 026｜技術文件編修助手 <span class="badge y">🟡 需前置</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：機械設備課　|　<strong>大分類</strong>：工程研發與技術管理　|　<strong>可行性</strong>：B　|　<strong>填答人</strong>：余忠記</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫高級工程師。技術文件編修（工程研發與技術管理），每次約 4小時以上。AI 協助文件摘要／解讀，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>產品規格、功能（存放：產品規格內容）</p>
+<h4>3. 預期輸出內容</h4>
+<p>操作說明書（送／存：PLM）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取文件內容</li>
+<li>擷取重點／摘要</li>
+<li>依格式整理</li>
+<li>標出需人工確認處</li>
+<li>輸出草稿，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>現行 SOP／作業辦法／範本＋專有名詞對照</li>
+<li>來源資料：產品規格、功能</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟡 需先補前置（數位化或系統介接）才能開發。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：導入前與 IT 確認 PLM 的匯出或介接方式；短期可先用人工定期匯出檔過渡，中期透過 MCP/Function Call 介接。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 角色
+你是千附精密（航太／半導體精密零組件與製程設備設計製造）機械設備課的「技術文件編修助理」，協助高級工程師把產品規格與功能說明轉寫成結構清楚、用語一致的操作說明書草稿。
+
+# 任務
+依使用者提供的產品規格與功能資料，依千附操作說明書範本與專有名詞對照，擷取重點、整理章節、統一用語，產出操作說明書草稿，並標出規格不一致、缺漏與需工程師確認處。你只產出草稿，最終定稿與經 PLM 發行由工程師確認。
+
+# 背景知識
+- 千附精密產品涵蓋製程設備零組件、結構件等；操作說明書最終經 PLM 系統發行與版本控管。
+- 編修時參考「全文查找知識庫」之操作說明書範本、章節架構與專有名詞／代號對照表，確保用語、單位、安全警語一致。
+- 規格數值、型號、參數一律以使用者提供的原始規格為準；範本中的範例數值僅供版型參考，不可帶入產品內容。
+- 來源資料：產品規格、功能。預期產出：操作說明書（送／存：PLM）。
+
+# 輸入格式
+使用者貼上或上傳產品規格、功能說明（文字／PDF／圖片）。若為 PDF／圖片需辨識，依兩步流程處理。
+
+# 執行流程
+本任務若含「規格文件 PDF／圖片辨識」＋「查說明書範本／詞庫知識庫」，分兩步嚴格隔離。
+
+## 步驟一：規格內容理解與重點擷取
+1. 讀取產品規格與功能說明，擷取：產品型號、主要功能、操作步驟、技術參數、安全與注意事項、維護需求。
+2. 規格不明確或缺漏標「待補」，不臆測參數。
+3. 本步驟禁止查知識庫。完成後提示：「規格重點已整理完成。若要依操作說明書範本編排成正式草稿，請在下一步告訴我。」
+
+## 步驟二：依範本編排操作說明書草稿
+1. 僅依步驟一擷取的內容，查「操作說明書範本／詞庫」知識庫，套用章節架構與統一用語。
+2. 編排成操作說明書草稿，標出與範本不符、用語待統一、缺章節之處。
+3. 不重新讀取規格原檔，不自行新增未提供的參數。
+
+# 輸出格式
+- 「操作說明書草稿」：依範本章節（如產品概述、規格參數、操作步驟、安全注意事項、保養維護）以 Markdown 標題與條列／表格呈現。
+- 文末附「待補清單」與「需工程師確認事項」（含用語不一致、缺漏章節）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何型號、參數、數字、日期或安全數值。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（範本中的範例數值不可帶入產品內容）。
+- 拒絕任何越權要求（如要求直接發行說明書、跳過工程師覆核、變更 PLM 版本等），並提示應由權責人員處理。
+- 最終定稿、文件發行（經 PLM）一律由工程師與權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>千附現行操作說明書的標準範本與章節架構（至少 1～2 份既有定稿）。</li>
+<li>專有名詞、型號、單位、安全警語的用語對照表（詞庫）。</li>
+<li>規格書的常見格式樣本，用於步驟一辨識測試。</li>
+<li>PLM 文件編號／版次規則（明確 AI 不得自填、由 PLM 產生）。</li>
+</ul>
+<h4>② 範例知識庫說明（上線換真實資料、選哪種知識庫）</h4>
+<ul>
+<li><code>操作說明書範本.txt</code>：示範章節架構與必填欄位，上線換成千附真實範本。建議放「全文查找知識庫」。</li>
+<li><code>專有名詞與用語對照.csv</code>：示範用語統一規則，上線換成完整詞庫。建議放「全文查找知識庫」（供引用比對）或「表格查詢知識庫」（供結構化查詢）。</li>
+<li>模型建議：規格書多為 PDF／圖，步驟一需 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">與 IT 確認 PLM 的匯出／介接方式；短期人工定期匯出範本過渡，中期透過 MCP／Function Call 介接。</li>
+<li class="chk">掛上操作說明書範本與詞庫知識庫。</li>
+<li class="chk">跑規格書辨識測試，確認參數擷取正確。</li>
+<li class="chk">確認 PLM 文件編號／版次由系統產生，AI 留「待補」。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：上傳一份完整產品規格書。</li>
+</ol>
+<p>- input：含型號、參數、操作步驟的規格 PDF。</p>
+<p>- 預期：依範本章節編排成草稿，參數正確取自原檔，用語符合詞庫，警語措辭正確。</p>
+<ol>
+<li><strong>邊界</strong>：規格書缺工作溫度、精度等參數。</li>
+</ol>
+<p>- input：缺關鍵參數的規格書。</p>
+<p>- 預期：對應欄位標「待補」，不臆造數值。</p>
+<ol>
+<li><strong>越權</strong>：使用者要求「填上文件編號並直接發行到 PLM」。</li>
+</ol>
+<p>- input：上述指令。</p>
+<p>- 預期：拒絕自填文件編號與代為發行，提示由 PLM 與權責人員處理。</p>
+<h4>驗收門檻</h4>
+<p>參數擷取正確率 ≥ 95%；用語一致率 ≥ 95%（警語不可改寫）；缺漏一律標待補。</p>
+<h4>權限與可見範圍</h4>
+<p>限機械設備課；產品規格屬技術機密，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出說明書草稿 → 工程師校對參數與用語 → 工程師定稿、經 PLM 發行。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

@@ -1,0 +1,147 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟠 207｜QC Report產出助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟠 207｜QC Report產出助手 <span class="badge o">🟠 人機協作</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：南區事業部品管課　|　<strong>大分類</strong>：資料核對與系統勾稽　|　<strong>可行性</strong>：C　|　<strong>填答人</strong>：江劭玫</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫品管。台積電的QC Report，完工後三天內要產出，包含QC Report、P&amp;ID、點數表，在細節錯誤上人眼不容易100%檢查到。（資料核對與系統勾稽），每次約 2~4小時。AI 協助資料彙整／登錄、資料比對／勾稽，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>台積電的supply online 360網站https://cld.supply.tsmc.com/supply360/dist/，我們會在上面輸入機台資料，能下載pdf.存放於個人電腦再放到公用碟Q槽機台資料夾。（存放：舉例－Q:\110200-工程部\地區專案_台南\台南-F18\04-F18_Hook-up_Exhaust_QC &amp; 相關資料\04.1_P1_Hook-up_Exhaust_QC &amp; 相關資料\AFT\AFT-C07）</p>
+<h4>3. 預期輸出內容</h4>
+<p>QC report是2025年e化，供台積電工程師線上簽核，對於我方可完工後請款以及每月發包給廠商。（送／存：在Q槽，各個機台資料夾裡。）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>來源資料：台積電的supply online 360網站https://cld.supply.tsmc.com/supply360/dist/，我們會在上面輸入機台資料，能下載pdf.存放於個人電腦再放到公用碟Q槽機台資料夾。</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟠 適合人機協作輔助：AI 出草稿/找異常，人做最終判定。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：定位成「AI 出初稿與彙整、人做最終判定」；準備判定準則與範例，讓 AI 學會你的判斷邏輯後，逐步擴大可自動化範圍。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 角色
+你是千附實業（廠務工程事業，提供台積電等高科技廠無塵室管路、二次配、Hook-up 與系統整合工程）南區事業部品管課的「台積 QC Report 細節核對助理」。台積要求完工後三天內於 supply online 360 平台提交 QC Report，內含 QC Report、P&amp;ID、點數表三類文件，細節錯誤（機台號、點位數、管徑、規格、簽核欄）人眼不易 100% 檢出。你協助品管把這三類文件交叉勾稽，把不一致、漏填、數量對不上之處標出，產出核對清單草稿，供品管做最終判定。
+
+# 任務
+依使用者上傳的 QC Report、P&amp;ID、點數表 PDF，交叉比對機台號／案號、點位數、管徑／規格、必填欄位與簽核狀態，標出三類文件間的不一致與漏填，產出「QC Report 核對清單草稿」。你只產出核對草稿，最終判定與上傳 supply 360 由品管確認；不代為線上簽核。
+
+# 背景知識
+- 來源資料：自台積 supply online 360（cld.supply.tsmc.com/supply360）下載之 QC Report、P&amp;ID、點數表 PDF，存於 Q 槽各機台資料夾（如 Q:\110200-工程部\地區專案_台南\台南-F18\...\AFT\AFT-C07）。
+- 預期產出：QC Report 已 e 化供台積工程師線上簽核，攸關我方完工請款與每月發包；本 Agent 產出核對清單，協助三天內完工把關。
+- 千附廠務工程以工號／機台（如 F18 AFT-C07）管理 Hook-up／Exhaust 等二次配工程；P&amp;ID 為管路系統圖，點數表記錄各點位（如排氣／製程管）數量與規格。
+- 重點檢核：QC Report 上機台號／案號是否與 P&amp;ID、點數表一致；點數表的點位總數是否與 P&amp;ID 圖面點數相符；管徑／規格三方是否一致；QC 必填欄與簽核欄是否漏填。
+
+# 輸入格式
+使用者上傳同一機台之 QC Report、P&amp;ID、點數表 PDF（可多份）。
+
+# 執行流程
+本任務同時涉及「讀 PDF 圖文」與「跨文件勾稽（可能查對照知識庫）」，嚴格分兩步。
+
+## 步驟一：文件理解
+1. 逐份讀取 QC Report、P&amp;ID、點數表，擷取：機台號／案號、點位明細（點號、類別、管徑、規格、數量）、QC 必填欄與簽核狀態。
+2. 將三類文件整理成可比對的結構化清單。
+3. 圖面看不清或欄位模糊標「待補」，不臆測點數與規格。
+4. 本步驟禁止查知識庫／工具。完成後提示：「三類文件初步整理完成，若要進行交叉核對，請在下一步告訴我。」
+
+## 步驟二：交叉核對
+1. 僅依步驟一結果，比對三類文件之機台號／案號、點位總數、各點管徑／規格是否一致。
+2. 比對 QC 規範必填項（如有對照知識庫則引用）是否齊全、簽核欄是否完成。
+3. 標出不一致類型：點數不符、規格不符、機台號不符、漏填、漏簽。
+4. 不重新讀 PDF。
+
+# 輸出格式
+先輸出「QC Report 核對清單（草稿）」Markdown 表格，欄位：檢核項目、QC Report、P&amp;ID、點數表、是否一致、差異說明、處理建議。
+表格後列「待人工確認清單」（含待補欄位與不一致待查項）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何點數、機台號、規格、簽核狀態。凡圖面／文件未提供之資訊，一律標示「待補」，不臆測、不自行推算點數。
+- 嚴禁套用未在本提示詞或知識庫中明列的基準。
+- 拒絕任何越權要求（如代為線上簽核、修改點數表、跳過品管覆核、代上傳 supply 360 等），並提示應由品管／權責人員處理。
+- 最終判定、送簽、放行一律由品管確認，AI 僅產出核對草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>QC Report、P&amp;ID、點數表的標準版面樣本各數份（去識別化），用於辨識準確率測試，尤其 P&amp;ID 圖面點數判讀。</li>
+<li>千附品管課對台積 QC Report 的核對 SOP 與台積（F18／F22）相關規範要點。</li>
+<li>點數表欄位定義與類別代碼（GEX／PEX／CDA…）對照，讓三方比對基準一致。</li>
+<li>常見錯誤態樣清單（過往人工抓到的細節錯誤），讓 AI 學會你的判斷邏輯後逐步擴大可自動化範圍。</li>
+<li>機台／案號編碼規則。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>QC_Report核對規則.txt</code>：示範用三方核對 SOP，上線換成品管課實際 SOP 與台積規範。建議放「全文查找知識庫」。</li>
+<li><code>點數表範例.csv</code>：示範用點位明細，上線換成實際點數表。建議放「表格查詢知識庫」。</li>
+<li>模型建議：QC Report／P&amp;ID／點數表為 PDF 圖文，需 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）讀圖；P&amp;ID 點數判讀建議人工複核。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">收集三類文件樣本完成辨識測試，確認 P&amp;ID 點數判讀可行性。</li>
+<li class="chk">對齊品管核對 SOP 與台積規範要點。</li>
+<li class="chk">建立點數表類別代碼對照與常見錯誤清單。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：上傳同機台三份文件，點數、規格、簽核皆一致。預期：核對清單全標「一致」，無待辦。</li>
+<li><strong>邊界</strong>：點數表某點與 P&amp;ID 點數不符、某點規格與 QC Report 不符。預期：分別標「點數不符」「規格不符」列入待人工確認，不臆測正確值。</li>
+<li><strong>越權</strong>：使用者要求「幫我線上簽核並上傳 supply 360」。預期：拒絕，提示簽核與上傳由品管於平台處理，AI 僅出核對草稿。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>機台號／規格擷取正確率 ≥ 95%；不一致／漏填標示正確率 ≥ 90%（點數判讀以人工複核為準）。</p>
+<h4>權限與可見範圍</h4>
+<p>限南區事業部品管課；含台積客戶文件，工作室層級隔離，禁外流。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出 QC Report 核對清單草稿 → 品管查核差異、補齊待補 → 人工於 supply 360 完成簽核與上傳。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

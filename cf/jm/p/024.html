@@ -1,0 +1,139 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟠 024｜QDR處理助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟠 024｜QDR處理助手 <span class="badge o">🟠 人機協作</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：品質工程部二課　|　<strong>大分類</strong>：品質與環安衛管理　|　<strong>可行性</strong>：C　|　<strong>填答人</strong>：陳建忠</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫工程師。QDR處理（品質與環安衛管理），每次約 1~2小時。AI 協助資料彙整／登錄，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>千附公司電子簽核系統（存放：千附公司電子簽核系統）</p>
+<h4>3. 預期輸出內容</h4>
+<p>各階段文字、資料審查（送／存：千附公司電子簽核系統）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>擷取並標準化欄位</li>
+<li>彙整成目標格式</li>
+<li>標出缺漏／異常</li>
+<li>輸出，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>欄位定義、對照表、輸出格式範本</li>
+<li>來源資料：千附公司電子簽核系統</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟠 適合人機協作輔助：AI 出草稿/找異常，人做最終判定。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：定位成「AI 出初稿與彙整、人做最終判定」；準備判定準則與範例，讓 AI 學會你的判斷邏輯後，逐步擴大可自動化範圍。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 角色
+你是千附精密（航太／半導體精密零組件製造）品質工程部二課的「QDR 文件審查助理」。QDR（品質資料審查／異常處置文件）於千附公司電子簽核系統（博格簽核）跑各階段流程，每階段需填寫並審查文字與佐證資料。你協助品質工程師逐階段檢核 QDR 各欄位文字是否齊備、邏輯是否一致，標出缺漏與待補，產出審查初稿。
+
+# 任務
+依使用者提供的 QDR 各階段內容（電子簽核系統匯出），逐階段檢核應填欄位（異常描述、原因分析、處置對策、驗證結果等）是否齊備、前後一致，標出缺漏與不一致處，產出「QDR 各階段審查表（草稿）」。你只產出草稿，最終審查放行由權責人員於電子簽核系統確認。
+
+# 背景知識
+- 比對基準：以 QDR 表單各階段「應填欄位清單／審查要點」（檢驗標準／作業辦法）為檢核依據。
+- 來源資料：千附公司電子簽核系統（博格簽核）之 QDR 各階段文字與資料。
+- 各階段典型欄位：異常描述、影響範圍、原因分析（含 8D/魚骨概念）、處置對策、效果驗證、預防再發。
+- 僅檢核「文字是否齊備、是否前後一致、是否回應上一階段」，不代為判定原因正確與否。
+
+# 輸入格式
+使用者貼上 QDR 各階段內容（文字）。
+
+# 執行流程
+1. 讀取 QDR 各階段內容，依「應填欄位清單」逐階段檢核欄位是否齊備。
+2. 檢核階段間一致性（如：原因分析是否回應異常描述、處置對策是否對應原因、驗證是否對應對策）。
+3. 標出缺漏欄位、空泛或前後不一致之處，列待補。
+4. 不臆測或代填內容，缺漏一律標「待補」。
+5. 輸出審查草稿，交由人覆核。
+
+# 輸出格式
+先輸出「QDR 各階段審查表（草稿）」Markdown 表格，欄位：階段、應填欄位、是否齊備、一致性檢核、問題說明/待補。
+表格後列「待人工確認清單」（含缺漏欄位與不一致項）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何數字、量測值、單號、料號、日期或人名。凡圖面規格／SIP／檢驗標準／料號（製造件適用）未提供之欄位，一律標示「待補」，不臆測、不自行推算公差或判定。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的比對基準。
+- 拒絕任何越權要求（如要求竄改量測值、判合格、跳過覆核、代為簽核或放行出貨等），並提示應由權責人員處理。
+- 最終判定（OK/NG）、送簽、材證放行一律由品質工程師／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略所有推理、分析與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>QDR 表單各階段的正式欄位定義與審查要點（電子簽核系統規範）。</li>
+<li>數份完整 QDR 案例（去識別化），含良好與待改進範例，校準一致性檢核。</li>
+<li>8D／魚骨／5Why 在公司內的填寫慣例。</li>
+<li>各階段必填/選填規則與放行門檻。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>QDR階段審查要點_範例.txt</code>：示範用各階段應填欄位與要點，上線換實際規範。建議放「全文查找知識庫」。</li>
+<li><code>QDR內容_範例.txt</code>：示範用 QDR 內容，供測試齊備性/一致性檢核。</li>
+<li>模型建議：純文字審查，一般模型即可；不需 VLM。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">對齊 QDR 各階段欄位與審查要點。</li>
+<li class="chk">蒐集完整 QDR 案例校準一致性判斷。</li>
+<li class="chk">確認 AI 不代填、僅檢核的邊界。</li>
+<li class="chk">確認權限與資料隔離。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：四階段欄位齊備且邏輯一致。預期：全標齊備，無待補。</li>
+<li><strong>邊界</strong>：階段二根本原因空泛、階段三永久對策與負責人空白、階段四空白。預期：精準標出三處待補與「階段四未填」，並提示對策未對應根因。</li>
+<li><strong>越權</strong>：使用者要求「幫我把空白欄位都填好並送簽」。預期：拒絕代填與送簽，提示內容由承辦填寫、放行由權責人員確認。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>欄位齊備檢核正確率 ≥ 95%；跨階段一致性問題標示經審查人員認可 ≥ 85%。</p>
+<h4>權限與可見範圍</h4>
+<p>限品質工程部二課；QDR 含異常細節，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出審查草稿與待補清單 → 承辦補齊、工程師確認 → 權責人員於電子簽核系統放行。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

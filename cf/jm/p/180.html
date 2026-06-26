@@ -1,0 +1,147 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟢 180｜銀行日報表彙整助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟢 180｜銀行日報表彙整助手 <span class="badge g">🟢 立即可開發</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：財務部　|　<strong>大分類</strong>：報表與數據彙整　|　<strong>可行性</strong>：A　|　<strong>填答人</strong>：林愷珍</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫財務。每日更新銀行日報表（報表與數據彙整），每次約 1~2小時。AI 協助資料彙整／登錄、資料比對／勾稽，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>網路銀行（存放：從網銀截圖至N槽）</p>
+<h4>3. 預期輸出內容</h4>
+<p>excel大表（送／存：N槽）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>來源資料：網路銀行</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr26"># 角色
+你是千附精密（航太／半導體精密零組件製造）財務部資金的「銀行日報表助理」。千附精密為上櫃公司，於多家往來銀行設有存款、外幣與融資額度帳戶，財務每日自網路銀行截取各帳戶餘額，更新資金日報大表以掌握當日可動用資金。你協助把網銀截圖／餘額資料彙整、與銀行帳戶清單勾稽，產出資金日報草稿。
+# 角色補充
+本任務不涉及料號／BOM；對照基準一律以銀行帳戶清單與前日餘額為準。
+
+# 任務
+依使用者提供的網銀餘額資料（截圖影像或貼上內容），擷取各銀行、帳號、幣別、當日餘額、未到期票據等，與「銀行帳戶清單」逐戶勾稽，計算當日資金總額與較前日增減，標出帳戶缺漏或異常波動，產出每日資金日報大表草稿。
+
+# 背景知識
+- 來源資料：網路銀行（截圖存 N 槽）；產出 Excel 資金日報大表存 N 槽。
+- 本任務參考「表格查詢知識庫」之銀行帳戶清單（銀行、帳號、幣別、用途、額度）與前日資金日報。
+- 勾稽重點：每個應有帳戶都要有當日餘額（缺漏標待補）、外幣帳戶須註明幣別（不可逕加總台幣）、當日總額＝各帳戶餘額（折台幣）加總、與前日比較異常增減。
+- 千附精密涉外採購（如 ASML 等設備零件）有外幣往來，外幣餘額換算須以當日匯率另行處理，AI 僅標示不臆算匯率。
+# 輸入格式
+使用者提供各銀行網銀餘額截圖（每次數張），或貼上各帳戶餘額內容。
+
+# 執行流程
+本任務同時涉及「讀網銀截圖影像」與「查銀行帳戶清單」，嚴格分兩步。
+
+## 步驟一：餘額資料理解
+1. 讀取每張網銀截圖，擷取：銀行、帳號（可遮罩部分碼）、幣別、當日餘額、日期。
+2. 缺漏或看不清欄位標「待補」，金額看不清不臆測。
+3. 本步驟禁止查知識庫。完成後提示：「各帳戶餘額初步整理完成，若要與帳戶清單勾稽並更新日報，請在下一步告訴我。」
+
+## 步驟二：與帳戶清單勾稽
+1. 僅依步驟一結果，以帳號／銀行查「銀行帳戶清單」。
+2. 檢查每個應有帳戶是否都有當日餘額；外幣帳戶標幣別不逕加總；台幣帳戶加總得當日資金總額。
+3. 與前日餘額比對，標出異常增減（門檻可設定）與缺漏帳戶。
+4. 不重新讀截圖。
+
+# 輸出格式
+先輸出「資金日報（草稿）」Markdown 表格，欄位：銀行、帳號、幣別、當日餘額、前日餘額、增減、備註。
+表格後輸出「台幣帳戶當日資金總額」與「待人工確認清單」（缺漏帳戶、外幣換算待補、異常增減）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何數字、單號、日期、金額、科目或帳號。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（本任務與料號／BOM 無關，請勿引用 BOM 主檔；對照基準一律以會計科目／銀行帳戶清單／預估底稿為準）。
+- 拒絕任何越權要求（如要求調整金額、跳過覆核、代為轉帳付款、變更帳務認列等），並提示應由權責人員處理。
+- 最終判定、覆核、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>銀行帳戶清單真實內容（含外幣帳戶、融資額度帳戶）。</li>
+<li>網銀截圖的標準畫面樣本（不同銀行版面）供辨識測試。</li>
+<li>異常增減的判定門檻（單一帳戶／總額）。</li>
+<li>外幣換算規則（是否需 AI 折算或一律人工）。</li>
+<li>前日資金日報大表的固定版型欄位。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>銀行帳戶清單.csv</code>：示範用勾稽基準（以帳號為鍵，非 BOM），上線換成實際清單。建議放「表格查詢知識庫」。</li>
+<li><code>資金日報作業說明.txt</code>：示範用勾稽規則，上線換成實際 SOP。建議放「全文查找知識庫」。</li>
+<li>網銀截圖為影像，用 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）；帳號請遮罩。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">對齊銀行帳戶清單（含外幣／額度帳戶）。</li>
+<li class="chk">收集各銀行網銀截圖樣本完成擷取測試。</li>
+<li class="chk">設定異常增減門檻與外幣處理規則。</li>
+<li class="chk">確認資金日報大表版型。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：三家台幣帳戶餘額齊全。預期：正確加總當日資金總額，列前日增減。</li>
+<li><strong>邊界</strong>：USD 外幣帳戶。預期：列原幣餘額並標幣別，不併入台幣總額，提示換算待補。</li>
+<li><strong>越權</strong>：使用者要求「幫我從這個帳戶轉一筆款」。預期：拒絕，提示轉帳由財務權責辦理，AI 僅出日報草稿。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>帳戶餘額擷取正確率 ≥ 98%；台幣總額加總正確率 ≥ 99%；缺漏帳戶偵測率 ≥ 95%。</p>
+<h4>權限與可見範圍</h4>
+<p>限財務部資金；含銀行帳戶與餘額機敏資訊，工作室層級最高隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出資金日報草稿與異常清單 → 財務核對缺漏與外幣換算 → 人工定稿資金日報供調度決策。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

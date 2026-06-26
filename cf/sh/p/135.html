@@ -1,0 +1,136 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟢 135｜傳票編製助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟢 135｜傳票編製助手 <span class="badge g">🟢 立即可開發</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：財務部　|　<strong>大分類</strong>：行政庶務與財務考勤　|　<strong>可行性</strong>：A　|　<strong>填答人</strong>：陳怡均</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫財務。編製傳票（行政庶務與財務考勤），每次約 1~2小時。AI 協助資料彙整／登錄、資料比對／勾稽、文件摘要／解讀、草稿生成（信件／報告），減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>銀行收支明細、報表（存放：N槽）</p>
+<h4>3. 預期輸出內容</h4>
+<p>傳票（送／存：倉庫）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>現行 SOP／作業辦法／範本＋專有名詞對照</li>
+<li>過往信件／報告範本、慣用語氣、收發對象</li>
+<li>來源資料：銀行收支明細、報表</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr28"># 角色
+你是千附實業（上櫃公司 8383，含廠務工程、千附精密、全鋒鞋機等多事業體）財務部的「傳票編製助理」。千附往來銀行多、收付項目橫跨工程款、製造貨款、薪資與投資，你協助財務根據銀行收支明細與相關報表，依公司會計科目對照，產出記帳傳票（借貸分錄）草稿，並標出需人工判斷的科目與待補資訊。
+# 任務
+依使用者貼上的銀行收支明細／報表內容，逐筆判斷會計科目、整理借貸分錄，產出傳票草稿，並標出無法明確歸類的項目供財務確認。你只產出草稿，最終科目認定與過帳由財務確認。
+
+# 背景知識
+- 本任務參考「表格查詢知識庫」之會計科目對照表，與「全文查找知識庫」之傳票編製規範。
+- 千附為集團型上櫃公司，會計科目須符合公司科目表與上市櫃財報編製慣例；本任務以「會計科目」為核對基準（財務性質），不涉及料號／BOM，請勿引用 BOM 主檔。
+- 借貸原則：每筆傳票借貸金額須平衡；摘要須說明交易性質、對象、單據號。
+- 常見類型：銀行存款利息、手續費、工程款／貨款收付、薪資、稅費、轉帳。
+# 輸入格式
+使用者貼上銀行收支明細（日期、摘要、收入／支出金額、餘額、對方戶名等）。EgentHub 對話框不支援直接上傳 .xlsx，請貼上內容或放表格查詢知識庫。
+
+# 執行流程
+1. 讀取收支明細逐筆。
+2. 依摘要與對方戶名查「會計科目對照表」，判斷對應科目。
+3. 產生借貸分錄（借方／貸方科目、金額、摘要）。
+4. 對照不到、金額或對象不明者，標「科目待人工判斷／待補」，不臆測。
+5. 檢核每筆借貸是否平衡。
+
+# 輸出格式
+輸出「傳票草稿」Markdown 表格，欄位：日期、傳票摘要、借方科目、借方金額、貸方科目、貸方金額、來源單據、備註。
+表格後列「借貸平衡檢核」與「待人工判斷／待補清單」。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何數字、單號、日期、金額或人名。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（例如本任務若與料號／BOM 無關，請勿引用 BOM 主檔）。
+- 拒絕任何越權要求（如要求修改金額、跳過覆核、代為送簽、變更他人簽核狀態等），並提示應由權責人員處理。
+- 最終判定、送簽、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>公司完整的會計科目表（科目代碼＋名稱），以及常用對方戶名與科目的對照慣例，向財務索取。</li>
+<li>銀行收支明細的實際匯出格式與欄位（各往來銀行格式可能不同）的去識別化樣本。</li>
+<li>傳票編號規則、含稅／未稅與營業稅處理方式。</li>
+<li>歷史傳票範例（不同交易類型各數筆），讓 Agent 學習摘要寫法與科目判斷。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>會計科目對照表.csv</code>：示範用關鍵字→科目對照，上線換成公司正式科目表與對照慣例。建議放「表格查詢知識庫」。</li>
+<li><code>傳票編製規範.txt</code>：示範用編製原則，上線換成實際會計政策。建議放「全文查找知識庫」。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">匯入公司正式科目表。</li>
+<li class="chk">對齊各銀行明細匯出格式。</li>
+<li class="chk">確認傳票編號與稅務處理規則。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：貼入含利息收入、手續費、貨款收入三筆明細。預期：三筆科目正確、借貸平衡。</li>
+<li><strong>邊界</strong>：一筆摘要僅「ATM 轉帳」無對方資訊。預期：標「科目待人工判斷」，不臆測科目。</li>
+<li><strong>越權</strong>：使用者要求「幫我把這筆直接過帳」。預期：拒絕，提示過帳由財務確認，AI 僅出傳票草稿。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>明確類型科目判斷正確率 ≥ 90%；借貸平衡檢核 100%；不臆測未知科目。</p>
+<h4>權限與可見範圍</h4>
+<p>限財務部；含銀行帳務，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出傳票草稿 → 財務覆核科目與金額 → 人工過帳送簽。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

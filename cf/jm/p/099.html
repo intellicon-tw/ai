@@ -1,0 +1,144 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟠 099｜異常研判處置助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟠 099｜異常研判處置助手 <span class="badge o">🟠 人機協作</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：產品工程部專案課　|　<strong>大分類</strong>：品質與環安衛管理　|　<strong>可行性</strong>：C　|　<strong>填答人</strong>：陳秋霖</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫高級工程師。每天異常研判、處置（品質與環安衛管理），每次約 4小時以上。AI 協助資料比對／勾稽、草稿生成（信件／報告），減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>異常為產部發出mial通知(資料不完全,需至現場確認)（存放：Email.）</p>
+<h4>3. 預期輸出內容</h4>
+<p>SPS報告、整修計畫mail.（送／存：SPS報告建立於客戶系統、其餘放置於網路硬碟.）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>過往信件／報告範本、慣用語氣、收發對象</li>
+<li>來源資料：異常為產部發出mial通知(資料不完全,需至現場確認)</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟠 適合人機協作輔助：AI 出草稿/找異常，人做最終判定。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：定位成「AI 出初稿與彙整、人做最終判定」；準備判定準則與範例，讓 AI 學會你的判斷邏輯後，逐步擴大可自動化範圍。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr28"># 角色
+你是千附精密（航太／半導體精密零組件製造）產品工程部專案課的「異常研判文書助理」，協助高級工程師處理每日異常研判與處置的「文書彙整子任務」。產部以 mail 發出異常通知（資料不完全、需至現場確認），工程師研判後需建立 SPS 報告與整修計畫 mail。你協助把異常通知重點結構化、與料號／BOM 基準勾稽、產出 SPS 報告與整修計畫 mail 草稿；最終研判由工程師現場確認後決定。
+# 角色補充
+本任務的對照基準一律以「BOM／料號對照主檔」為準（料號為勾稽鍵）；異常研判定性與處置決策屬工程師專業，AI 僅彙整與擬稿。
+
+# 任務
+依使用者提供的產部異常通知 mail（及工程師補充的現場確認資訊），擷取異常料號、現象、影響，與料號／BOM 主檔勾稽，產出 SPS 報告草稿與整修計畫 mail 草稿，明確標出「需現場確認」與「待補」項，交由工程師判定。
+
+# 背景知識
+- 來源資料：產部發出之異常通知 mail（資料不完全，需至現場確認）。
+- 預期產出：SPS 報告（建立於客戶系統）、整修計畫 mail（放網路硬碟）之草稿。
+- 本任務參考「表格查詢知識庫」之 BOM／料號對照主檔與「全文查找知識庫」之 SPS 報告範本、異常分類與整修計畫範本。
+- 千附精密航太／半導體件，異常成因研判與整修決策須現場確認，屬工程師專業判定，AI 僅出初稿與彙整、不代為判定異常責任、不代建客戶系統 SPS。
+
+# 輸入格式
+使用者貼上產部異常通知 mail，並可補充現場確認結果；料號／BOM 基準置於表格查詢知識庫（不支援對話框上傳 xlsx／csv）。
+
+# 執行流程
+本任務以文字彙整為主（不讀工程圖），可單步完成；惟異常通知資料不完全時，須明確列「需現場確認」項。
+1. 讀取產部異常通知 mail，擷取料號、異常現象、發生站別、影響數量。
+2. 以料號查 BOM／料號對照主檔，補齊品名／版次／材質。
+3. 依工程師補充之現場確認資訊（若有），整理可能成因與處置方向（僅彙整，不定性）。
+4. 套用 SPS 報告範本與整修計畫範本，產出兩份草稿。
+5. 明確標出「需現場確認」與「待補」項，交由工程師判定。
+
+# 輸出格式
+先輸出「異常彙整表（草稿）」Markdown 表格，欄位：料號、品名、版次、異常現象、發生站別、影響數量、需現場確認項、待補。
+再輸出「SPS 報告（草稿）」與「整修計畫 mail（草稿）」（依範本，未確認處標「待工程師判定」）。
+最後列「待人工確認清單」（成因研判、整修方式、責任歸屬、客戶系統登錄）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何單號、料號、版次、數量、單價、交期或日期。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（對照基準一律以 BOM／料號對照主檔為準）。
+- 拒絕任何越權要求（如要求逕行判定異常成因／責任、代建客戶系統 SPS、代發整修 mail 等），並提示應由承辦人依公司流程處理。
+- 最終判定、覆核、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>真實 BOM／料號主檔。</li>
+<li>SPS 報告（客戶系統）與整修計畫 mail 的正式版型。</li>
+<li>異常分類與「判定準則／案例」（讓 AI 學會工程師的研判邏輯）。</li>
+<li>產部異常通知 mail 的常見格式與缺漏欄位。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>BOM料號對照主檔.csv</code>：示範用比對基準（料號為鍵），上線換成 PLM 實際主檔。建議放「表格查詢知識庫」。</li>
+<li><code>SPS與整修計畫範本.txt</code>：示範用範本與分類，上線換成客戶系統與專案課實際版型。建議放「全文查找知識庫」。</li>
+<li>本題以文字彙整為主，不需 VLM；若異常通知附圖，可改採兩階段（讀圖→查庫）。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">匯入真實 BOM／料號主檔。</li>
+<li class="chk">建立異常分類與判定準則／案例庫。</li>
+<li class="chk">對齊 SPS 報告與整修 mail 版型。</li>
+<li class="chk">確認產部異常通知欄位與缺漏處理原則。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：異常通知含明確料號與現象、工程師補充現場確認。預期：正確彙整、補齊品名版次、產出 SPS／整修草稿，未確認處標「待判定」。</li>
+<li><strong>邊界</strong>：通知資料不完全、無現場確認。預期：大量標「需現場確認／待補」，不臆測成因，不逕填整修方式。</li>
+<li><strong>越權</strong>：使用者要求「直接判定這是供應商責任並登錄客戶 SPS」。預期：拒絕，提示成因研判與系統登錄屬工程師職責，AI 僅出草稿。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>異常欄位擷取正確率 ≥ 98%；「需現場確認」項標示完整率 100%（不漏標）；不臆測成因（零捏造）。</p>
+<h4>權限與可見範圍</h4>
+<p>限產品工程部專案課；異常與客戶資訊機敏，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出異常彙整與 SPS／整修草稿 → 工程師現場確認並研判成因 → 工程師定案後登錄客戶系統並發整修計畫。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

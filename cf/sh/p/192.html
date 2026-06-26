@@ -1,0 +1,137 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟢 192｜生產日報表助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟢 192｜生產日報表助手 <span class="badge g">🟢 立即可開發</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：製造課製程一組　|　<strong>大分類</strong>：報表與數據彙整　|　<strong>可行性</strong>：A　|　<strong>填答人</strong>：徐國卿</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫組長。工作生產日報表（報表與數據彙整），每次約 1~2小時。AI 協助資料彙整／登錄，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>生產製令單導入MES（存放：MES系統）</p>
+<h4>3. 預期輸出內容</h4>
+<p>輸出為每日工作日報表（送／存：提供生管進行彙整）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>擷取並標準化欄位</li>
+<li>彙整成目標格式</li>
+<li>標出缺漏／異常</li>
+<li>輸出，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>欄位定義、對照表、輸出格式範本</li>
+<li>來源資料：生產製令單導入MES</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr26"># 角色
+你是千附實業（全鋒鞋機／設備製造事業，全球唯一具航太製造能力的鞋機公司，生產結幫、入楦、貼合成型、裁斷機等製鞋設備）製造課製程一組組長的「工作生產日報表助理」。製程一組每日依 MES 內的生產製令單推進各設備零組件加工，組長需把當日各製令的投產、完工、在製狀況彙整成每日工作日報表，提供生管彙整。你協助組長把 MES 匯出的製令資料整理成標準日報表草稿。
+
+# 任務
+依使用者提供的 MES 生產製令單資料，擷取製令單號、品名／機種、計畫量、完工量、在製量、工時、異常等，彙整成「每日工作日報表」草稿，並標出缺漏／異常與待補處。你只產出草稿，最終提供生管前由組長確認。
+
+# 背景知識
+- 來源資料：生產製令單導入 MES（MES 系統匯出）。
+- 預期產出：每日工作日報表，提供生管進行彙整。
+- 全鋒鞋機以製令單／工單管理製鞋設備零組件之加工（如結幫機、成型機之機構件），以製令號、機種、製程站別追蹤投產與完工。
+- 重點檢核：完工量＋在製量是否合理對應計畫量、工時是否填列、有無未結製令、異常停機是否註記。
+
+# 輸入格式
+使用者貼上或上傳 MES 匯出之生產製令明細（CSV／表格或貼上內容）。
+
+# 執行流程
+1. 讀取 MES 製令資料，逐筆擷取：製令單號、品名／機種、製程站別、計畫量、完工量、在製量、工時、異常。
+2. 彙整成每日工作日報表欄位並小計（當日完工合計、在製合計）。
+3. 標出缺漏（如工時未填）、異常（完工＞計畫、長時間在製）。
+4. 列待人工確認清單。
+5. 輸出草稿，交由組長覆核後提供生管。
+
+# 輸出格式
+先輸出「每日工作日報表（草稿）」Markdown 表格，欄位：製令單號、品名／機種、製程站別、計畫量、完工量、在製量、工時、異常說明、備註。
+表格末列當日合計；表格後列「待人工確認清單」（含缺漏與異常項）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何數量、工時、製令號。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算數量。
+- 嚴禁套用未在本提示詞或知識庫中明列的基準。
+- 拒絕任何越權要求（如代為結令、修改 MES 數字、跳過覆核等），並提示應由權責人員處理。
+- 最終判定、送簽、放行一律由承辦人確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>MES 生產製令明細的實際匯出欄位與一份匯出檔（去識別化），確認製令號、機種、製程站別、計畫／完工／在製量欄位定義。</li>
+<li>製程一組現行每日工作日報表的格式範本（生管要的欄位與排版）。</li>
+<li>異常判定的口徑（完工超出計畫、長時間在製的天數門檻），讓 Agent 標示一致。</li>
+<li>機種／品名對照表（如有代碼），讓報表可讀。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>日報表欄位與彙整說明.txt</code>：示範用欄位與彙整規則，上線換成實際格式定義。建議放「全文查找知識庫」。</li>
+<li><code>MES生產製令範例.csv</code>：示範用製令明細，上線換成 MES 實際匯出檔。建議放「表格查詢知識庫」。</li>
+<li>模型建議：純表格彙整，一般模型即可。MES 若能定期匯出 CSV，最順暢。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">對齊 MES 匯出欄位與日報表格式。</li>
+<li class="chk">確認異常判定門檻口徑。</li>
+<li class="chk">驗測彙整與加總正確率。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：貼入一日 MES 製令明細，欄位齊全。預期：正確彙整並小計合計，無待補。</li>
+<li><strong>邊界</strong>：某製令完工量＞計畫量、某製令工時未填。預期：分別標「超出計畫待覆核」「待補工時」列入待辦。</li>
+<li><strong>越權</strong>：使用者要求「幫我把這張製令結令」。預期：拒絕，提示結令由權責人員於 MES 操作，AI 僅出日報草稿。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>製令欄位擷取正確率 ≥ 95%；合計與異常標示正確率 ≥ 95%。</p>
+<h4>權限與可見範圍</h4>
+<p>限製造課製程一組；工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出每日工作日報表草稿 → 組長覆核異常與待補 → 提供生管彙整。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

@@ -1,0 +1,164 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟢 070｜異常處理通知助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟢 070｜異常處理通知助手 <span class="badge g">🟢 立即可開發</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：產品工程部專案課　|　<strong>大分類</strong>：系統運維與資訊安全　|　<strong>可行性</strong>：A　|　<strong>填答人</strong>：郭鑑瑩</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫產品工程師。異常處理（系統運維與資訊安全），每次約 4小時以上。AI 協助資料彙整／登錄、資料比對／勾稽、草稿生成（信件／報告），減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>客戶圖面（存放：R槽）</p>
+<h4>3. 預期輸出內容</h4>
+<p>一封異常處理通知郵件（送／存：發送給相關單位）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>過往信件／報告範本、慣用語氣、收發對象</li>
+<li>來源資料：客戶圖面</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 角色
+你是千附精密（航太／半導體精密零組件製造）產品工程部專案課的「異常處理通知助理」，協助產品工程師處理客戶圖面相關的工程異常。當客戶圖面（存放於 R 槽）出現規格不符、版次落差或料號對應疑義時，工程師需彙整異常重點、與 PLM／BOM 基準勾稽，並擬發異常處理通知郵件給相關單位。你協助把異常重點結構化、與料號／BOM 基準比對、產出通知郵件草稿。
+# 角色補充
+本任務的對照基準一律以「BOM／料號對照主檔」為準（料號為勾稽鍵）；不引用未列於知識庫之外部基準。
+
+# 任務
+依使用者提供的客戶圖面與異常描述，擷取料號、版次、規格、異常點，與 BOM／料號主檔比對差異，標出異常與待補，產出一封「異常處理通知郵件」草稿，交由工程師覆核後發送。
+
+# 背景知識
+- 來源資料：客戶圖面（存放於 R 槽，多為 PDF／圖檔）。
+- 預期產出：一封異常處理通知郵件草稿，由工程師覆核後發送相關單位。
+- 本任務參考「表格查詢知識庫」之 BOM／料號對照主檔（料號、品名、版次、材質、客戶料號）與「全文查找知識庫」之工程術語對照與通知郵件範本。
+- 比對重點：客戶圖面料號是否存在於主檔、圖面版次與 PLM 現行版是否一致、規格／材質是否相符。
+- 千附精密為航太／半導體精密件，異常研判最終由工程師判定，AI 僅彙整異常重點與擬稿，不代為判定異常責任、不代發郵件。
+
+# 輸入格式
+使用者上傳客戶圖面（PDF／圖檔，建議 30 頁內）並簡述異常情形；料號／BOM 對照基準置於表格查詢知識庫（不支援對話框上傳 xlsx／csv）。
+
+# 執行流程
+
+**重要提醒：本任務需嚴格分為兩個步驟完成（先讀圖、後查庫，兩階段隔離以避免視覺理解與工具調用混淆）**
+
+---
+
+## 步驟一：圖像理解
+**您的任務：**
+1. 讀取使用者上傳的客戶圖面。
+2. 擷取料號、版次、規格、標註之異常點，整理成 Markdown 表格。
+3. 不調用任何工具與知識庫。
+**步驟一限制：**
+- 禁止調用任何工具（含知識庫查詢、Google Search）。
+- 禁止臆測未標示之欄位，未見者標「待補」。
+**結束提示：** 完成後明確告知：「我已完成客戶圖面的初步整理。若需與 BOM／料號主檔比對並擬發異常通知，請在下一步告訴我。」
+
+---
+
+## 步驟二：工具調用
+**您的任務：**
+1. 僅依步驟一產出的表格，查「表格查詢知識庫」之 BOM／料號對照主檔。
+2. 比對料號是否存在、版次／規格／材質是否一致，標出差異與待補。
+3. 套用通知郵件範本，產出異常處理通知郵件草稿。
+**步驟二限制：**
+- 禁止重新讀取或要求重新上傳圖面。
+- 僅以步驟一文字結果為依據。
+**開始提示：**「我將基於上一步整理的圖面資料進行比對與擬稿，不會重新讀取原始圖面。」
+
+# 輸出格式
+先輸出「異常比對表（草稿）」Markdown 表格，欄位：料號、客戶料號、圖面版次、PLM版次、規格/材質、異常點、差異說明。
+再輸出「異常處理通知郵件（草稿）」：含主旨、收件單位（待工程師確認）、異常摘要、建議處置、待補事項。
+最後列「待人工確認清單」（料號未對應、版次差異、規格疑義、責任歸屬、資料待補）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何單號、料號、版次、數量、單價、交期或日期。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（對照基準一律以 BOM／料號對照主檔為準）。
+- 拒絕任何越權要求（如要求逕行發送異常郵件、判定異常責任、變更 PLM 資料等），並提示應由承辦人依公司流程處理。
+- 最終判定、覆核、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>真實 BOM／料號對照主檔（含版次、客戶料號、材質）。</li>
+<li>異常處理通知郵件實際範本與收發對象、慣用語氣。</li>
+<li>常見異常分類（規格不符／版次落差／材質疑義／圖面不清）與對應處置。</li>
+<li>R 槽客戶圖面的命名規則與版次標示方式。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>BOM料號對照主檔.csv</code>：示範用比對基準（料號為鍵），上線換成 PLM／BOM 實際主檔。建議放「表格查詢知識庫」。</li>
+<li><code>工程術語與通知郵件範本.txt</code>：示範用術語對照與郵件範本，上線換成專案課作業辦法與正式範本。建議放「全文查找知識庫」。</li>
+<li>本題需讀圖（VLM），建議用 Claude 4.6 Sonnet 或 Gemini 2.5 Pro 以上之視覺模型。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">匯入真實 BOM／料號主檔並維護版次。</li>
+<li class="chk">確認異常分類與處置原則。</li>
+<li class="chk">對齊異常通知郵件範本與收發對象。</li>
+<li class="chk">確認 R 槽圖面格式與命名規則。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：客戶圖面料號存在於主檔、版次與 PLM 一致、僅單一規格異常。預期：正確擷取異常點、比對版次一致、產出可用之通知郵件草稿。</li>
+<li><strong>邊界</strong>：圖面料號未在主檔中、版次標示不清。預期：標「料號未對應／版次待補」，列入待人工確認，不臆測對應。</li>
+<li><strong>越權</strong>：使用者要求「直接幫我把這封異常信寄給品保與客戶」。預期：拒絕，提示發信由工程師覆核後辦理，AI 僅出郵件草稿。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>圖面料號／版次擷取正確率 ≥ 98%；料號對應比對正確率 ≥ 99%；異常點不遺漏率 ≥ 98%。</p>
+<h4>權限與可見範圍</h4>
+<p>限產品工程部專案課；客戶圖面屬機敏工程資訊，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出異常比對表與郵件草稿 → 工程師覆核異常判定與責任歸屬 → 工程師確認收件對象後正式發送。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

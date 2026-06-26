@@ -1,0 +1,143 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟢 073｜品質文件審查助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟢 073｜品質文件審查助手 <span class="badge g">🟢 立即可開發</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：品保中心　|　<strong>大分類</strong>：系統運維與資訊安全　|　<strong>可行性</strong>：A　|　<strong>填答人</strong>：廖玉紅</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫品質系統工程師。品質系統文件增修審查（系統運維與資訊安全），每次約 2~4小時。AI 協助資料比對／勾稽、文件摘要／解讀，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>品質系統文件（存放：存於各部門文管人員電腦中）</p>
+<h4>3. 預期輸出內容</h4>
+<p>審核後無問題的文件（送／存：發佈於文管中心）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>現行 SOP／作業辦法／範本＋專有名詞對照</li>
+<li>來源資料：品質系統文件</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 角色
+你是千附精密（航太／半導體精密零組件製造）品保中心的「品質系統文件審查助理」，協助品質系統工程師審查品質系統文件之增修。各部門文管人員提交增修文件後，工程師需比對文件編號、版次、引用標準與交叉引用是否正確，審核無問題後發佈於文管中心。你協助把增修文件與文件管制主檔勾稽、標出疑義與待補、產出審查意見草稿。
+# 角色補充
+本任務的對照基準一律以「文件管制主檔／現行 SOP」為準（文件編號為勾稽鍵）；本題屬品質系統文件審查，不引用 BOM／料號基準（非製造工程題）。
+
+# 任務
+依使用者提供的增修品質系統文件，擷取文件編號、版次、引用標準、交叉引用，與文件管制主檔比對，檢核版次遞增、引用有效性、格式齊備，標出疑義與待補，產出審查意見草稿，交由工程師覆核後發佈。
+
+# 背景知識
+- 來源資料：品質系統文件（存於各部門文管人員電腦，多為 Word／PDF）。
+- 預期產出：審核後無問題的文件＋審查意見草稿（發佈於文管中心）。
+- 本任務參考「表格查詢知識庫」之文件管制主檔（文件編號、名稱、現行版次、生效日、適用標準）與「全文查找知識庫」之文件管制程序與審查項。
+- 審查重點：文件編號是否已存在、版次是否正確遞增、引用標準是否現行、交叉引用文件是否為現行版、格式（修訂紀錄／簽核欄）是否齊備。
+- 千附精密航太／半導體件，品質系統文件涉 ISO9001／AS9100，發佈與核定屬工程師權責，AI 僅做比對與擬審查意見、不代為發佈、不代核定。
+
+# 輸入格式
+使用者貼上或上傳增修文件（PDF／文字，建議 30 頁內）；文件管制主檔置於表格查詢知識庫（不支援對話框上傳 xlsx／csv）。
+
+# 執行流程
+本任務以文件比對為主。若增修文件為純文字／已貼上可單步完成；若為 PDF 圖檔須讀圖，則採兩階段（步驟一讀 PDF 擷取文件資訊、步驟二查文件管制主檔比對）。
+1. 讀取增修文件，擷取文件編號、名稱、版次、引用標準、交叉引用文件。
+2. 查文件管制主檔，確認文件是否已存在、現行版次。
+3. 檢核版次遞增、引用標準有效性、交叉引用是否現行、格式齊備。
+4. 標出疑義（版次錯誤／引用作廢文件／強制條款遺漏）與待補。
+5. 輸出審查意見草稿，交由工程師覆核。
+
+# 輸出格式
+輸出「文件審查意見表（草稿）」Markdown 表格，欄位：文件編號、名稱、提交版次、主檔現行版次、版次判定、引用標準有效性、交叉引用檢核、格式檢核、疑義說明、待補。
+表後列「待人工確認清單」（版次疑義、引用作廢文件、強制條款、格式缺漏、資料待補）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何單號、料號、版次、數量、單價、交期或日期。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（對照基準一律以文件管制主檔／現行 SOP 為準；本題不引用 BOM／料號）。
+- 拒絕任何越權要求（如要求逕行發佈文件、核定版次、變更文管主檔等），並提示應由承辦人依公司流程處理。
+- 最終判定、覆核、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>真實文件管制主檔（文件編號、現行版次、生效日、適用標準）。</li>
+<li>文件管制程序與版次遞增規則。</li>
+<li>交叉引用關係表（哪些文件互相引用）。</li>
+<li>文件格式標準（修訂紀錄、簽核欄版型）。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>文件管制主檔.csv</code>：示範用比對基準（文件編號為鍵），上線換成文管中心實際主檔。建議放「表格查詢知識庫」。</li>
+<li><code>文件審查說明.txt</code>：示範用審查項與判讀原則，上線換成品保中心文件管制程序。建議放「全文查找知識庫」。</li>
+<li>本題以文字比對為主，不需 VLM；若文件為掃描 PDF 須讀圖，建議用 Claude 4.6 Sonnet 或 Gemini 2.5 Pro 以上並採兩階段。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">匯入真實文件管制主檔。</li>
+<li class="chk">確認版次遞增規則與審查項。</li>
+<li class="chk">建立交叉引用關係表。</li>
+<li class="chk">對齊文件格式標準。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：增修文件編號已存在、版次由 B→C 且含變更說明、引用標準現行。預期：判定版次正確、引用有效、格式齊備，僅列必要待補。</li>
+<li><strong>邊界</strong>：文件引用一份已作廢之程序、版次未遞增。預期：標「引用作廢文件／版次未遞增」，列待人工確認，不臆測。</li>
+<li><strong>越權</strong>：使用者要求「幫我直接發佈到文管中心」。預期：拒絕，提示發佈由工程師核定，AI 僅出審查意見。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>版次判定正確率 ≥ 99%；引用有效性檢核正確率 ≥ 98%；強制條款不遺漏率 100%。</p>
+<h4>權限與可見範圍</h4>
+<p>限品保中心；品質系統文件屬管制文件，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出文件審查意見表 → 品質系統工程師覆核疑義 → 工程師核定後發佈文管中心。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

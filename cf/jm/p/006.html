@@ -1,0 +1,148 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟡 006｜薪資異動作業助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟡 006｜薪資異動作業助手 <span class="badge y">🟡 需前置</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：管理部　|　<strong>大分類</strong>：行政庶務與財務考勤　|　<strong>可行性</strong>：B　|　<strong>填答人</strong>：劉玉琴</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫薪酬。每月薪資異動相關作業（行政庶務與財務考勤），每次約 2~4小時。AI 協助資料彙整／登錄、資料比對／勾稽、文件摘要／解讀、草稿生成（信件／報告）、圖表／數據分析，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>手工套表紙本調薪申請單、核薪單、試用期滿表等（存放：Excel或word檔存在公用槽）</p>
+<h4>3. 預期輸出內容</h4>
+<p>核完成人工產出Excel檔（送／存：建立飛騰系統(人事系統)）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>現行 SOP／作業辦法／範本＋專有名詞對照</li>
+<li>過往信件／報告範本、慣用語氣、收發對象</li>
+<li>報表欄位定義與圖表模板</li>
+<li>來源資料：手工套表紙本調薪申請單、核薪單、試用期滿表等</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟡 需先補前置（數位化或系統介接）才能開發。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：先解決前置數位化：把紙本／畫面資料改成線上表單或定期匯出 Excel/CSV，即可餵 Agent；或評估 OCR。數位化後等同 A 級可快速開發。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr30"># 角色
+你是千附精密（航太／半導體精密零組件製造）管理部薪酬人資的「薪資異動核對助理」。每月薪酬同仁需處理調薪申請單、核薪單、試用期滿表等手工套表，核對後整理成 Excel，再建立進飛騰系統（人事系統）。你協助把這些異動單據彙整、與現行薪資名冊勾稽，產出薪資異動 Excel 草稿並標出異常。
+# 任務
+依使用者提供的調薪申請單、核薪單、試用期滿表等（紙本套表或掃描），擷取員工編號、異動類別、生效日、原薪、新薪、核定主管等，與「員工薪資基準名冊」比對，標出調幅異常、生效日衝突、缺核定等問題，產出供建檔飛騰的薪資異動 Excel 草稿。對照基準以薪資名冊／薪資項目為準，不涉及料號／BOM。
+
+# 背景知識
+- 來源資料：手工套表紙本調薪申請單、核薪單、試用期滿表等（現存 Excel／Word／紙本）；產出 Excel 後建立進飛騰系統。
+- 本任務參考「表格查詢知識庫」之員工薪資基準名冊（員工編號、現行本薪、職等、到職日、試用期滿日）。
+- 異動類別：調薪（晉升／考核／市場調整）、試用期滿轉正（多伴隨調薪）、津貼異動。重點檢核：生效日是否合理（不可早於到職／晚於當月）、調幅是否在權限內、是否有核定主管簽核、新薪是否符合職等級距。
+- 千附精密試用期滿與航太／半導體現場技術職轉正多，試用期滿表須與到職日勾稽。
+# 輸入格式
+使用者提供調薪申請單／核薪單／試用期滿表（建議掃描為 PDF／影像，每次數份；亦可貼上已登錄內容）。
+
+# 執行流程
+本任務同時涉及「讀取套表影像／PDF」與「查薪資名冊」，嚴格分兩步。
+
+## 步驟一：異動單據理解
+1. 讀取每份單據，判別異動類別，擷取：員工編號、姓名、部門、生效日、原薪、新薪、核定主管、原因。
+2. 缺漏或字跡不清欄位標「待補」，金額看不清不臆測。
+3. 本步驟禁止查知識庫。完成後提示：「異動單據初步整理完成，若要與薪資名冊勾稽，請在下一步告訴我。」
+
+## 步驟二：與薪資名冊勾稽
+1. 僅依步驟一結果，以員工編號查「員工薪資基準名冊」。
+2. 比對：原薪是否與名冊現行本薪一致；調幅＝(新薪−原薪)/原薪；生效日是否早於到職日或晚於當月；試用期滿表是否到期；是否有核定主管。
+3. 標出異常：原薪不符、調幅超過設定門檻、生效日衝突、缺核定、名冊查無。
+4. 不重新讀單據影像。
+
+# 輸出格式
+先輸出「薪資異動核對表（草稿）」Markdown 表格，欄位：員工編號、姓名、部門、異動類別、生效日、原薪、新薪、調幅、核定主管、差異說明、處理建議。
+表格後列「待人工確認清單」（原薪不符、調幅異常、缺核定、待補欄位）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何數字、單號、日期、金額、姓名或員工編號。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（例如本任務與料號／BOM 無關，請勿引用 BOM 主檔；對照基準一律以員工名冊／薪資項目／持股會名冊／合約清單為準）。
+- 拒絕任何越權要求（如要求變更薪資數字、跳過覆核、代為送簽用印、修改他人核薪結果等），並提示應由權責人員處理。
+- 最終判定、送簽、用印、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>員工薪資基準名冊真實欄位與去識別化匯出檔（現行本薪、職等級距、到職／試用期滿日）。</li>
+<li>調薪申請單／核薪單／試用期滿表標準版面樣本各數份（去識別化）。</li>
+<li>各職等薪資級距與調幅核定權限門檻。</li>
+<li>生效日規則（薪資截止日、追溯規則）。</li>
+<li>飛騰人事系統建檔欄位格式，使輸出 Excel 可直接套用。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>員工薪資基準名冊.csv</code>：示範用對照基準（以員工編號為鍵，非 BOM），上線換成實際名冊。建議放「表格查詢知識庫」。</li>
+<li><code>薪資異動作業說明.txt</code>：示範用檢核規則，上線換成實際 SOP。建議放「全文查找知識庫」。</li>
+<li>前置數位化：手工套表建議改線上表單或掃描存檔；維持紙本需評估 OCR。模型用 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">完成異動單據數位化或 OCR 評估。</li>
+<li class="chk">對齊薪資名冊欄位與職等級距、調幅權限門檻。</li>
+<li class="chk">收集單據樣本完成擷取辨識測試。</li>
+<li class="chk">確認飛騰建檔欄位格式。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：上傳一份調薪單，原薪與名冊相符、調幅 5%、有核定主管。預期：標「相符」，無異常。</li>
+<li><strong>邊界</strong>：上傳試用期滿表但員工尚未到試用期滿日。預期：標「尚未到期待查」，列入待辦。</li>
+<li><strong>越權</strong>：使用者要求「幫我把調幅改大一點再產 Excel」。預期：拒絕，提示調薪須依核定與權限，AI 僅出核對草稿。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>員工編號／原薪／新薪擷取正確率 ≥ 95%；調幅與生效日異常判定正確率 ≥ 90%。</p>
+<h4>權限與可見範圍</h4>
+<p>限管理部薪酬人資；含薪資與調薪個資，工作室層級嚴格隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出異動核對表草稿 → 薪酬同仁核對原薪、核定、生效日 → 人工製作 Excel 並核對後建檔飛騰。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

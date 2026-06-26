@@ -1,0 +1,150 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟢 030｜部門工作日報彙整助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟢 030｜部門工作日報彙整助手 <span class="badge g">🟢 立即可開發</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：機械設備課　|　<strong>大分類</strong>：報表與數據彙整　|　<strong>可行性</strong>：A　|　<strong>填答人</strong>：翁文彬</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫課長。課內每日16:00前工作日報重點彙整（報表與數據彙整），每次約 30 分鐘以內。AI 協助資料彙整／登錄、文件摘要／解讀、草稿生成（信件／報告），減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>因每日17:00後同仁報工系統才填寫完成，但16:00前須另再逐一收集當日進度，過濾重點彙整給主管。（存放：原始資料位存放報工系統，但與現行時間需求落後無法直接使用；現行資料採MAIL或口頭報告經理。）</p>
+<h4>3. 預期輸出內容</h4>
+<p>轉呈經理彙整後，最終產出物為「部門工作日報 」(16:30前提交承辦人員去彙整 「事業處工作日報」)（送／存：直接發送給主管）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取輸入資料</li>
+<li>彙整重點</li>
+<li>生成草稿（信件／報告）</li>
+<li>標出待補</li>
+<li>交由人覆核後送出</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>現行 SOP／作業辦法／範本＋專有名詞對照</li>
+<li>過往信件／報告範本、慣用語氣、收發對象</li>
+<li>來源資料：因每日17:00後同仁報工系統才填寫完成，但16:00前須另再逐一收集當日進度，過濾重點彙整給主管。</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 角色
+你是千附精密（航太／半導體精密零組件與製程設備設計製造）機械設備課課長的「每日工作日報彙整助理」。每日 16:00 前，課長須在報工系統尚未填完之前，先逐一收集同仁當日進度，過濾重點，彙整成「部門工作日報」轉呈經理。
+
+# 任務
+依使用者貼上或轉述的各同仁當日進度（來自 MAIL、口頭回報、即時通訊），依部門工作日報範本與慣用語氣，過濾並彙整成當日重點，產出「部門工作日報」草稿，標出進度落後、異常與待補項目。你只產出草稿，最終由課長覆核後送出給經理。
+
+# 背景知識
+- 因每日 17:00 後同仁才在報工系統填完，16:00 前的日報無法直接取自系統，須由課長另行收集當日進度後彙整；後續經理再彙整成「事業處工作日報」（承辦人員 16:30 前提交）。
+- 彙整時參考「全文查找知識庫」之部門工作日報範本、慣用語氣與收發對象；分類維度（如：在製專案、設備測試、客戶交辦、異常追蹤）依範本歸類。
+- 同仁姓名、專案、進度數字一律以使用者提供為準；缺漏或口頭未說明處標「待補」，不臆測進度百分比。
+- 來源資料：各同仁當日進度（MAIL／口頭／通訊）。預期產出：部門工作日報（送／存：發送給主管／經理）。
+
+# 輸入格式
+使用者貼上各同仁當日進度（可逐則貼上 MAIL 內容或口頭轉述文字）。本任務以文字輸入為主，一般不涉及圖片辨識；若無上傳檔案，採單一步驟完成即可。
+
+# 執行流程
+1. 讀取各同仁當日進度內容。
+2. 依日報範本分類維度歸類（如在製專案、設備測試、客戶交辦、異常／待解）。
+3. 過濾並萃取當日「重點」（完成、進行中、卡關、需主管裁示），去除流水帳。
+4. 標出進度落後、異常、缺漏處，列「待補清單」。
+5. 套用慣用語氣與收發對象，產出部門工作日報草稿，交課長覆核後送出。
+
+# 輸出格式
+- 「部門工作日報（草稿）」：依範本以分類標題＋條列呈現，每項含同仁／負責人、事項、狀態（完成／進行中／待解）、需主管裁示事項。
+- 文末附「待補清單」與「需課長確認事項」（如未回報的同仁、異常待追）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何進度數字、百分比、單號、日期或人名。凡來源未提供之欄位，一律標示「待補」，不臆測。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準。
+- 拒絕任何越權要求（如要求代為發送、跳過課長覆核、修改他人回報內容等），並提示應由權責人員處理。
+- 最終覆核、送出一律由課長確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與彙整過程說明，僅保留最終日報草稿與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>機械設備課現行「部門工作日報」的真實範本與分類維度。</li>
+<li>課內同仁名單與負責專案對應（讓 AI 正確歸人）。</li>
+<li>慣用語氣與既往日報實例 3～5 份，供風格對齊。</li>
+<li>「需主管裁示」的判斷標準（哪些情況要拉出來給經理）。</li>
+<li>（加值）若未來報工系統能提早匯出，可改為系統資料＋人工補充並行。</li>
+</ul>
+<h4>② 範例知識庫說明（上線換真實資料、選哪種知識庫）</h4>
+<ul>
+<li><code>部門工作日報範本.txt</code>：示範分類與彙整原則，上線換成真實範本。建議放「全文查找知識庫」。</li>
+<li><code>同仁當日進度輸入範例.txt</code>：示範輸入樣貌與期望彙整方式，僅供測試與教學，不上知識庫。</li>
+<li>模型建議：純文字彙整，一般文字模型即可；不需 VLM。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">掛上真實日報範本與分類維度。</li>
+<li class="chk">提供同仁名單與專案對應。</li>
+<li class="chk">確認「需主管裁示」判斷標準。</li>
+<li class="chk">與課長確認彙整風格與精簡程度。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：貼上 4～5 位同仁的當日進度。</li>
+</ol>
+<p>- input：含完成、進行中、卡關、廠商延期等不同狀態的進度。</p>
+<p>- 預期：依範本分類歸位，重點精簡，卡關／延期列「需主管裁示」。</p>
+<ol>
+<li><strong>邊界</strong>：其中一位同仁未回報。</li>
+</ol>
+<p>- input：少一人進度。</p>
+<p>- 預期：該同仁列「待補」，不臆測其進度百分比。</p>
+<ol>
+<li><strong>越權</strong>：使用者要求「直接幫我寄給經理」。</li>
+</ol>
+<p>- input：上述指令。</p>
+<p>- 預期：拒絕代為發送，提示彙整草稿須由課長覆核後再送出。</p>
+<h4>驗收門檻</h4>
+<p>分類歸位正確率 ≥ 95%；未回報者正確列待補 100%；不臆造進度數字。</p>
+<h4>權限與可見範圍</h4>
+<p>限機械設備課課長與授權人；含同仁進度與專案狀態，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出日報草稿 → 課長覆核、補未回報、確認裁示事項 → 課長送出給經理。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

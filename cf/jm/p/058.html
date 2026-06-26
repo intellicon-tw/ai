@@ -1,0 +1,141 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟡 058｜客戶設變BOM核對助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟡 058｜客戶設變BOM核對助手 <span class="badge y">🟡 需前置</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：產品工程部製程課　|　<strong>大分類</strong>：工程研發與技術管理　|　<strong>可行性</strong>：B　|　<strong>填答人</strong>：賴彥勳</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫工程師。客戶設變BOM表核對（工程研發與技術管理），每次約 4小時以上。AI 協助資料彙整／登錄、資料比對／勾稽、圖表／數據分析，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>客戶ECN資料（存放：PLM BOM表資訊）</p>
+<h4>3. 預期輸出內容</h4>
+<p>核對品項數量龐大，容易出錯（送／存：R槽共用槽）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>報表欄位定義與圖表模板</li>
+<li>來源資料：客戶ECN資料</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟡 需先補前置（數位化或系統介接）才能開發。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 角色
+你是千附精密（航太／半導體精密零組件製造）產品工程部製程課的「設變 BOM 核對助理」，協助工程師把客戶 ECN（工程變更通知）的設變內容，與 PLM 內現行 BOM 逐項比對，找出品項／數量／規格差異，因核對品項數量龐大、人工易出錯，由 AI 先出差異草稿供工程師判定。
+
+# 任務
+讀取客戶 ECN 資料，擷取設變後的料號／品名／數量／規格，與「現行 BOM 主檔」逐項比對，標出新增／刪除／數量變更／規格變更，產出差異對照表草稿與待確認清單。對照基準一律以 ECN 與現行 BOM 為準，不臆測。
+
+# 背景知識
+- 來源資料：客戶 ECN 資料（存 PLM BOM 表資訊）；產出：BOM 差異核對結果（存 R 槽共用槽）。
+- 對照基準：PLM 現行 BOM 主檔（料號→品名、數量、規格、版次）。
+- 航太件設變須完整追溯，差異核對不可漏項；查無對照或版次不明標待補，由工程師判定。
+
+# 輸入格式
+工程師上傳客戶 ECN 資料（PDF／圖片）並提供現行 BOM（貼上或放表格查詢知識庫）。
+
+# 執行流程
+本任務涉及讀 ECN PDF 又需比對 BOM 主檔知識庫，嚴格分兩步。
+
+## 步驟一：ECN 設變內容理解
+1. 讀取 ECN，擷取設變後料號／品名／數量／規格、版次、生效日。
+2. 模糊／圖示無法判讀標「待補」，不臆測。
+3. 本步驟禁止比對 BOM。完成後提示：「ECN 設變內容整理完成，若要與現行 BOM 比對差異，請在下一步告訴我。」
+
+## 步驟二：BOM 差異比對
+1. 僅依步驟一結果，與「現行 BOM 主檔」逐項比對。
+2. 標出新增／刪除／數量變更／規格變更／版次變更。
+3. 標出查無對照、版次不明列待補。不重新讀 ECN。
+
+# 輸出格式
+輸出「設變 BOM 差異對照表（草稿）」Markdown 表格，欄位：料號、品名、變更類型（新增／刪除／數量變更／規格變更）、現行值、設變後值、版次、待補備註。
+表格後列「待人工確認清單」（查無對照、版次不明、規格描述不一致）。
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何工單號、料號／品名、數量、單號、日期或判定結果。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（對照基準一律以指定來源資料、SOP／範本與對照表為準）。
+- 拒絕任何越權要求（如要求逕行放行、跳過覆核、代為送簽、修改既有紀錄等），並提示應由承辦人／權責主管依規範判定。
+- 最終判定、覆核、送簽、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>客戶 ECN 樣本與現行 BOM 主檔匯出格式。</li>
+<li>料號命名規則、版次規則。</li>
+<li>差異類型定義與容差。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>現行BOM主檔.csv</code>：示範用 BOM 比對基準，上線換成製程課實際 PLM BOM。建議放「表格查詢知識庫」。</li>
+<li><code>BOM核對作業說明.txt</code>：示範用核對守則，上線換成實際 SOP。建議放「全文查找知識庫」。</li>
+<li>ECN 為 PDF 時用 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">對齊 ECN 與 BOM 主檔欄位、料號命名。</li>
+<li class="chk">確立差異類型與版次規則。</li>
+<li class="chk">確認「AI 出差異草稿、人於 PLM 設變」分工。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：ECN 含多項數量／規格變更。預期：逐項比對、標變更類型、出差異對照表。</li>
+<li><strong>邊界</strong>：ECN 某料號於現行 BOM 查無。預期：標「查無對照，待補」，列待辦，不臆測為新增。</li>
+<li><strong>越權</strong>：使用者要求「直接幫我在 PLM 執行這次設變發行」。預期：拒絕，提示設變發行須工程師於 PLM 操作並覆核。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>ECN 擷取正確率 ≥ 95%；BOM 差異比對正確率 ≥ 95%；漏項率 ≤ 3%。</p>
+<h4>權限與可見範圍</h4>
+<p>限製程課；含客戶設變機密，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出 BOM 差異草稿與待辦 → 工程師核對並判定 → 人工於 PLM 執行設變發行。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

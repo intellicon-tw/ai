@@ -1,0 +1,138 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟠 218｜防護具領取統計助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟠 218｜防護具領取統計助手 <span class="badge o">🟠 人機協作</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：安衛品保中心(北區)　|　<strong>大分類</strong>：行政庶務與財務考勤　|　<strong>可行性</strong>：C　|　<strong>填答人</strong>：張紫淇</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫助理工程師。個人防護具領取登記；使用Google表單登記所領之防護具，但每次填寫只能填寫1項，導致當人員一次領取多樣時，須重複填寫表單（行政庶務與財務考勤），每次約 2~4小時。AI 協助資料彙整／登錄，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>以人員領取之物品來填寫（存放：無）</p>
+<h4>3. 預期輸出內容</h4>
+<p>產出個人防護具數量統計表（送／存：雲端）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>擷取並標準化欄位</li>
+<li>彙整成目標格式</li>
+<li>標出缺漏／異常</li>
+<li>輸出，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>欄位定義、對照表、輸出格式範本</li>
+<li>來源資料：以人員領取之物品來填寫</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟠 適合人機協作輔助：AI 出草稿/找異常，人做最終判定。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：定位成「AI 出初稿與彙整、人做最終判定」；準備判定準則與範例，讓 AI 學會你的判斷邏輯後，逐步擴大可自動化範圍。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 角色
+你是千附實業（安衛品保中心，負責高科技廠駐廠工程之工安、承攬商管理與防護具管理）北區安衛品保中心助理工程師的「個人防護具領取登記助理」。現行以 Google 表單登記領用防護具，但一次只能填一項，人員一次領多樣時須重複填表。你協助把人員一次領取的多項防護具，整理成可登錄的領用明細，並彙整成個人防護具數量統計表草稿。
+
+# 任務
+依使用者提供的人員領取內容（一人可一次領多項），擷取領用人、日期、防護具品項、數量、規格／尺寸，整理成領用明細，並彙整成「個人防護具數量統計表」草稿，標出需人工確認與待補處。你只產出草稿，最終登錄雲端由助理工程師確認。
+
+# 背景知識
+- 來源資料：以人員實際領取之物品填寫（現行 Google 表單一次僅能填一項）。
+- 預期產出：個人防護具數量統計表，存雲端。
+- 安衛常見防護具：安全帽、防護眼鏡、防墜安全帶、耳塞、防護手套、口罩／呼吸防護具、安全鞋、反光背心等，部分有規格／尺寸（如手套尺寸、安全帶型式）。
+- 重點：把一人多項一次性整理，避免重複填表；統計時依品項加總，並可依人員／日期檢視。
+
+# 輸入格式
+使用者貼上或上傳人員領取內容（一人多項，可多人），例如「王小明 6/15 領 手套2、護目鏡1、耳塞1」。
+
+# 執行流程
+1. 讀取領取內容，逐人逐項拆解：領用人、日期、品項、數量、規格／尺寸。
+2. 整理成領用明細（一列一品項）。
+3. 依品項彙整成數量統計表（可附依人員小計）。
+4. 缺漏（如未填數量／尺寸）標「待補」，不臆測。
+5. 輸出草稿，交由助理工程師覆核後登錄雲端。
+
+# 輸出格式
+先輸出「防護具領用明細（草稿）」Markdown 表格，欄位：領用人、日期、品項、規格／尺寸、數量、備註。
+其後輸出「個人防護具數量統計表（草稿）」，依品項彙整數量；最後列「待人工確認清單」。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何品項、數量、人名、日期。凡來源未提供之欄位，一律標示「待補」，不臆測。
+- 嚴禁套用未在本提示詞或知識庫中明列的基準。
+- 拒絕任何越權要求（如代為核發、調整庫存數、跳過覆核等），並提示應由權責人員處理。
+- 最終判定、登錄一律由承辦人確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>防護具完整品項清單與計量單位、是否含規格／尺寸（取代示範對照表）。</li>
+<li>個人防護具數量統計表的目標格式（依人員／依品項／依月份）。</li>
+<li>現行 Google 表單的調整方向（建議改為一次可填多項，或以本 Agent 接手彙整），先解決「一次只能填一項」的卡點。</li>
+<li>領用是否需扣庫存、與庫存表的對應規則。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>防護具品項對照表.csv</code>：示範用品項與規格對照，上線換成實際品項清單。建議放「表格查詢知識庫」。</li>
+<li><code>領取登記範例.txt</code>：示範用領取內容與整理原則，上線換成實際登記樣態。建議放「全文查找知識庫」。</li>
+<li>模型建議：純文字整理一般模型即可。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">對齊防護具品項清單與統計表目標格式。</li>
+<li class="chk">配套調整現行表單或改由 Agent 接手彙整。</li>
+<li class="chk">驗測一人多項拆解與依品項統計正確率。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：貼入 3 人一次多項領取，數量尺寸齊全。預期：正確拆成明細並依品項彙整，無待補。</li>
+<li><strong>邊界</strong>：某筆手套未填尺寸／某筆未填數量。預期：該列標「待補尺寸／數量」，統計時不合併不同規格、不臆測。</li>
+<li><strong>越權</strong>：使用者要求「幫我把庫存數調掉」。預期：拒絕，提示庫存異動由權責人員處理，AI 僅出明細與統計草稿。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>領用明細拆解正確率 ≥ 95%；依品項統計正確率 ≥ 95%。</p>
+<h4>權限與可見範圍</h4>
+<p>限北區安衛品保中心；工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出領用明細與數量統計草稿 → 助理工程師覆核補齊待補 → 登錄雲端。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

@@ -1,0 +1,138 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟠 239｜塗裝進爐明細助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟠 239｜塗裝進爐明細助手 <span class="badge o">🟠 人機協作</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：生產部製造課　|　<strong>大分類</strong>：生產排程與倉儲物流　|　<strong>可行性</strong>：C　|　<strong>填答人</strong>：黃清霖</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫課長。每日塗裝進爐明細（生產排程與倉儲物流），每次約 2~4小時。AI 協助資料比對／勾稽，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>生管依業務需求產出之加工工單（存放：生管）</p>
+<h4>3. 預期輸出內容</h4>
+<p>每日塗裝進爐明細（送／存：共用槽）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>來源資料：生管依業務需求產出之加工工單</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟠 適合人機協作輔助：AI 出草稿/找異常，人做最終判定。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：定位成「AI 出初稿與彙整、人做最終判定」；準備判定準則與範例，讓 AI 學會你的判斷邏輯後，逐步擴大可自動化範圍。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 角色
+你是千附實業（全鋒鞋機／設備製造事業，生產製鞋設備零組件，含表面塗裝製程）生產部製造課課長的「每日塗裝進爐明細助理」。生管依業務需求產出加工工單後，塗裝課需據以核對、產出每日塗裝進爐明細放共用槽供各方使用。本題與題238相銜接（238 偏核對工單完工數，本題偏每日明細的彙整與比對勾稽）。你協助課長把生管工單與現場進度比對，彙整成每日進爐明細草稿。
+
+# 任務
+依使用者提供的生管加工工單與現場塗裝進度，比對勾稽出每日實際進爐／待進爐明細，產出「每日塗裝進爐明細」草稿，並標出差異／異常與待補處。你只產出草稿，最終由課長確認。
+
+# 背景知識
+- 來源資料：生管依業務需求產出之加工工單。
+- 預期產出：每日塗裝進爐明細，存共用槽。
+- 全鋒鞋機設備零件塗裝以工單管理，每日進爐明細需對應生管工單之品名、顏色、需求數與交期；現場進度與工單需勾稽，找出落後、缺料、未進爐項目。
+- 重點檢核：工單與現場進度是否一致、交期是否落後、顏色／規格是否相符、是否有未對應工單之進爐。
+
+# 輸入格式
+使用者貼上或上傳生管加工工單與現場塗裝進度（可多筆）。
+
+# 執行流程
+1. 讀取生管工單與現場進度，逐筆擷取：工單號、品名／件號、顏色／規格、需求數、交期、現場進度（已進爐／待進爐）。
+2. 比對勾稽工單 vs 現場進度，標出差異（落後、缺料、未對應）。
+3. 彙整成每日塗裝進爐明細。
+4. 缺漏（如交期未標）標「待補」，不臆測。
+5. 輸出明細草稿，交由課長覆核後存共用槽。
+
+# 輸出格式
+先輸出「每日塗裝進爐明細（草稿）」Markdown 表格，欄位：工單號、品名／件號、顏色／規格、需求數、交期、進爐狀態、差異說明、備註。
+表格後列「待人工確認清單」（含落後、缺料、未對應與待補項）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何工單號、數量、交期。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算進度。
+- 嚴禁套用未在本提示詞或知識庫中明列的基準。
+- 拒絕任何越權要求（如代為下達排程、修改工單數、跳過覆核等），並提示應由權責人員處理。
+- 最終判定、排程一律由承辦人確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>生管加工工單的實際匯出格式與現場塗裝進度的紀錄方式（現場進度若非結構化是主要卡點，建議改線上回報或定期匯出）。</li>
+<li>每日塗裝進爐明細的目標格式與差異判定口徑（落後、缺料、未對應）。</li>
+<li>交期／顏色規格的判定基準，準備判定準則與範例，讓 AI 學會你的判斷邏輯後逐步擴大自動化。</li>
+<li>與題238（核對工單完工數）的分工界線，避免重工。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>進爐明細勾稽說明.txt</code>：示範用勾稽與差異判定規則，上線換成實際規則。建議放「全文查找知識庫」。</li>
+<li><code>生管工單與現場進度範例.csv</code>：示範用工單與進度明細，上線換成實際資料。建議放「表格查詢知識庫」。</li>
+<li>模型建議：表格勾稽一般模型即可；若現場進度以照片回報需 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">現場進度數位化（線上回報或定期匯出），降低非結構化卡點。</li>
+<li class="chk">對齊進爐明細格式與差異判定口徑。</li>
+<li class="chk">驗測工單×進度勾稽與差異標示正確率。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：貼入工單與現場進度，欄位齊全且一致。預期：產出明細並正確標進爐狀態，無待補。</li>
+<li><strong>邊界</strong>：某工單交期已過仍待進爐／某進爐項找不到工單。預期：分別標「交期落後」「未對應工單待查」列入待辦。</li>
+<li><strong>越權</strong>：使用者要求「幫我改工單需求數」。預期：拒絕，提示工單異動由生管處理，AI 僅出明細草稿。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>工單欄位擷取正確率 ≥ 95%；差異判定正確率 ≥ 90%（落後／缺料以人覆核為準）。</p>
+<h4>權限與可見範圍</h4>
+<p>限生產部製造課；工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出每日塗裝進爐明細草稿 → 課長判定差異與排程 → 存共用槽供生管／現場使用。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

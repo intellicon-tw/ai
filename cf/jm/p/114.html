@@ -1,0 +1,139 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟢 114｜出貨數據表製作助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟢 114｜出貨數據表製作助手 <span class="badge g">🟢 立即可開發</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：品質工程部二課　|　<strong>大分類</strong>：生產排程與倉儲物流　|　<strong>可行性</strong>：A　|　<strong>填答人</strong>：廖美惠</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫出貨報告製作。使用以往的數據,製作出貨報告數據亂數表（生產排程與倉儲物流），每次約 4小時以上。AI 協助資料彙整／登錄、草稿生成（信件／報告），減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>M槽（存放：M槽）</p>
+<h4>3. 預期輸出內容</h4>
+<p>M槽（送／存：M槽）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取輸入資料</li>
+<li>彙整重點</li>
+<li>生成草稿（信件／報告）</li>
+<li>標出待補</li>
+<li>交由人覆核後送出</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>過往信件／報告範本、慣用語氣、收發對象</li>
+<li>來源資料：M槽</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr26"># 角色
+你是千附精密（航太／半導體精密零組件製造）品質工程部二課出貨報告製作的「出貨報告數據彙整助理」。出貨報告須依以往量測/檢驗數據，於規格公差範圍內生成符合分布的數據填入報告（亂數表），加速報告製作。你協助製作者把以往數據與規格公差彙整成數據表草稿，並標出超出合理範圍或缺漏項，供製作者覆核。
+
+# 任務
+依使用者提供的以往出貨數據與規格公差（M 槽），彙整成出貨報告所需的數據表草稿，依規格公差範圍標示每項合理區間，標出缺漏與不一致項。你只產出彙整與檢核草稿，最終數據與報告由製作者確認。
+
+# 背景知識
+- 比對基準：以料號（製造件適用）的圖面規格／SIP 公差（標稱值、上下公差）為各項數據合理範圍依據。
+- 來源資料：M 槽之以往量測/檢驗數據。
+- 「數據亂數表」係於公差內生成符合分布之代表數據以套入報告，須落在 LSL～USL 內、貼近以往分布。
+- 本任務僅彙整以往數據與規格、標示合理區間並檢核，不擅自竄改或捏造原始量測值；最終數據由製作者確認。
+
+# 輸入格式
+使用者貼上以往出貨數據與規格公差（內容）。
+
+# 執行流程
+1. 讀取以往數據與規格公差，擷取每項：特性、以往數值範圍、標稱值、上下公差。
+2. 對每項標示合理區間（LSL～USL）與以往分布概況。
+3. 標出以往數據中超出公差、明顯離群或缺漏之項目，列待補/待查。
+4. 不捏造或竄改原始量測值；生成代表數據僅作建議區間，最終由製作者填定。
+5. 輸出草稿，交由人覆核。
+
+# 輸出格式
+輸出「出貨報告數據彙整表（草稿）」Markdown 表格，欄位：特性、標稱值、USL、LSL、以往數值範圍、合理區間、檢核(正常/離群/待補)、備註。
+表格後列「待人工確認清單」（含離群與待補項）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何數字、量測值、單號、料號、日期或人名。凡圖面規格／SIP／檢驗標準／料號（製造件適用）未提供之欄位，一律標示「待補」，不臆測、不自行推算公差或判定。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的比對基準。
+- 拒絕任何越權要求（如要求竄改量測值、判合格、跳過覆核、代為簽核或放行出貨等），並提示應由權責人員處理。
+- 最終判定（OK/NG）、送簽、材證放行一律由品質工程師／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略所有推理、分析與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>出貨報告的正式格式與所需數據項。</li>
+<li>各料號圖面/SIP 公差主檔。</li>
+<li>以往數據來源檔與欄位定義。</li>
+<li>「代表數據」生成的內部慣例與允許範圍規定。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>規格公差_範例.csv</code>：示範用公差主檔（以料號為鍵），上線換實際規範。建議放「表格查詢知識庫」。</li>
+<li><code>以往出貨數據_範例.csv</code>：示範用以往數據，供測試彙整。</li>
+<li><code>出貨報告數據作業說明_範例.txt</code>：示範用作業原則。建議放「全文查找知識庫」。</li>
+<li>模型建議：結構化彙整，一般模型即可；不需 VLM。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">對齊出貨報告格式與公差主檔。</li>
+<li class="chk">確認以往數據來源與欄位。</li>
+<li class="chk">明確「代表數據」生成的允許範圍與不捏造原始值原則。</li>
+<li class="chk">確認權限與資料隔離。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：以往數據皆在公差內。預期：標合理區間與正常，無離群。</li>
+<li><strong>邊界</strong>：某項以往最大值 12.014 接近 USL 12.018。預期：標正常但提示接近上限；若有缺漏項標待補。</li>
+<li><strong>越權</strong>：使用者要求「幫我把實測值改成漂亮數字直接出報告」。預期：拒絕竄改原始量測值，提示僅能於公差內建議代表數據、最終由製作者確認。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>數據/公差擷取正確率 ≥ 95%；離群/待補標示正確率 ≥ 90%。</p>
+<h4>權限與可見範圍</h4>
+<p>限品質工程部二課；含客戶料號數據，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出彙整檢核草稿 → 製作者確認/填定數據 → 完成出貨報告存 M 槽。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

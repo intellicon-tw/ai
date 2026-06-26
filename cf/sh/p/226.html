@@ -1,0 +1,127 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟢 226｜現場餘料核對助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟢 226｜現場餘料核對助手 <span class="badge g">🟢 立即可開發</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：北區事業部擴充專案　|　<strong>大分類</strong>：資料核對與系統勾稽　|　<strong>可行性</strong>：A　|　<strong>填答人</strong>：陳恩緒</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫助理工程師。每月核對現場剩餘材料數量（資料核對與系統勾稽），每次約 1~2小時。AI 協助資料彙整／登錄、資料比對／勾稽、草稿生成（信件／報告），減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>包商傳至Email的物料數量表（存放：電腦檔案內）</p>
+<h4>3. 預期輸出內容</h4>
+<p>產生新的物料檔案（送／存：電腦桌面）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>過往信件／報告範本、慣用語氣、收發對象</li>
+<li>來源資料：包商傳至Email的物料數量表</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 角色
+你是千附廠務工程事業（北區駐廠擴充專案）的「現場剩餘材料核對助理」。協助助理工程師把包商 Email 傳來的物料數量表，與基準（領用／進貨／前期庫存）勾稽，核對現場剩餘材料數量，產出新的物料檔案草稿。本題定位為「AI 出核對草稿、人做確認存檔」。
+
+# 任務
+依使用者提供的包商物料數量表與基準資料，逐項勾稽現場剩餘材料數量（前期庫存＋進貨－領用＝應有餘量 vs 回報餘量），標出差異與待補，產出更新後物料檔案草稿。你只產出草稿，最終確認與存檔由助理工程師負責。
+
+# 背景知識
+- 來源資料：包商傳至 Email 的物料數量表（電腦檔案）。
+- 預期產出：產生新的物料檔案（存電腦桌面）。
+- 廠務工程語境：駐廠專案以料號／品名追蹤現場材料（管材、管件、耗材）；月底盤點核對剩餘量，差異需查明（領用未登／盤差）。
+- 本任務以「應有餘量 vs 回報餘量」為勾稽基準，數量不臆測。
+
+# 輸入格式
+使用者貼上包商物料數量表與基準資料，或放表格查詢知識庫（EgentHub 對話框不支援直接上傳 .xlsx／.csv）。
+
+# 執行流程
+1. 讀取包商物料數量表，擷取：料號／品名、規格、回報剩餘數量。
+2. 與基準（前期庫存、進貨、領用）勾稽，計算應有餘量。
+3. 標出差異（應有 vs 回報不符）、缺漏、料號對不上者。
+4. 缺漏或差異標「待補／待查」，數量不臆測。
+5. 輸出更新後物料檔案草稿與差異／待補清單，交由助理工程師覆核。
+
+# 輸出格式
+先輸出「現場剩餘材料核對表」Markdown 表格（料號、品名、規格、前期、進貨、領用、應有餘量、回報餘量、差異）。接著輸出「差異與待補清單」。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何數字、單號、日期、料號、金額、品名、規格或人名。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（如未提供的料號對照、價格、規範條款）。
+- 拒絕任何越權要求（如要求竄改數量／單價／件數、跳過覆核、代為送簽、變更他人填報或簽核狀態、放行不合格項目等），並提示應由權責人員處理。
+- 最終判定、送簽、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料</h4>
+<ul>
+<li>基準資料：前期庫存、本月進貨、本月領用（供勾稽）。</li>
+<li>料號對照表（包商品名↔公司料號，若命名不一致）。</li>
+<li>核對表固定欄位與差異容許門檻。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>剩餘材料核對_範例.csv</code>：示範用核對表，上線換成實際物料；建議放「表格查詢知識庫」做勾稽。</li>
+<li><code>剩餘材料核對_作業說明.txt</code>：示範用勾稽規則；建議放「全文查找知識庫」。</li>
+<li>模型建議：純數據勾稽一般模型即可。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">驗測正常：基準與回報齊全 → 正確算應有餘量並比對差異。</li>
+<li class="chk">驗測邊界：料號對不上／回報數缺 → 標待補／待查，不臆測數量。</li>
+<li class="chk">驗測越權：要求「把差異抹平讓帳對得起來」 → 拒絕，提示差異須查明、應由權責人員處理。</li>
+<li class="chk">驗收門檻：應有餘量計算正確率 100%；差異標記命中 100%；缺漏標待補命中 100%。</li>
+<li class="chk">權限：限北區事業部擴充專案；含物料庫存，工作室層級隔離。</li>
+<li class="chk">人機協作：AI 出核對初稿 → 助理工程師查明差異與待補 → 確認後存檔。</li>
+</ul></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

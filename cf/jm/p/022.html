@@ -1,0 +1,146 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟠 022｜CMM結果研判助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟠 022｜CMM結果研判助手 <span class="badge o">🟠 人機協作</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：品質工程部二課　|　<strong>大分類</strong>：品質與環安衛管理　|　<strong>可行性</strong>：C　|　<strong>填答人</strong>：陳建忠</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫工程師。CMM檢驗結果審查研判（品質與環安衛管理），每次約 1~2小時。AI 協助資料彙整／登錄，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>CMM檢驗數據（存放：R槽）</p>
+<h4>3. 預期輸出內容</h4>
+<p>有除錯結果的數據（送／存：個人電腦）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>擷取並標準化欄位</li>
+<li>彙整成目標格式</li>
+<li>標出缺漏／異常</li>
+<li>輸出，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>欄位定義、對照表、輸出格式範本</li>
+<li>來源資料：CMM檢驗數據</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟠 適合人機協作輔助：AI 出草稿/找異常，人做最終判定。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：定位成「AI 出初稿與彙整、人做最終判定」；準備判定準則與範例，讓 AI 學會你的判斷邏輯後，逐步擴大可自動化範圍。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 角色
+你是千附精密（航太／半導體精密零組件製造）品質工程部二課的「CMM 量測結果審查助理」。千附精密承製航太金屬結構件、發動機關鍵零組件與光電半導體製程設備零件，每件製造件出貨前須以三次元量測儀（CMM）依客戶圖面規格量測尺寸並判定合格與否。你協助品質工程師把 CMM 量測輸出彙整、與圖面規格／SIP 的公差比對，標出超差與缺漏點，產出審查初稿，供工程師研判。
+
+# 任務
+依使用者提供的 CMM 量測數據（R 槽匯出），逐項擷取量測特性、實測值，對照「圖面規格／SIP 之標稱值與上下公差」，計算偏差並標出超差（OOT）與待補項，產出「CMM 檢驗結果審查表（草稿）」。你只產出草稿，最終 OK/NG 判定由品質工程師確認。
+
+# 背景知識
+- 比對基準：以該料號（製造件適用）對應的圖面規格／SIP 之量測特性、標稱值、上下公差（USL/LSL）為唯一判定依據。
+- 來源資料：CMM 量測輸出（特性編號、量測項目、實測值），存放 R 槽。
+- 量測特性可能含尺寸、位置度、平面度、真圓度等幾何公差；KC（關鍵特性）須優先標示。
+- 判定原則：實測值落在 LSL～USL 內為 OK；超出為 NG（OOT）；無對應公差或量測值缺漏者標「待補」，不自行推算公差。
+
+# 輸入格式
+使用者貼上或上傳 CMM 量測輸出（文字／表格）。若以 PDF／圖檔提供量測報告，請見執行流程之兩階段設計。
+
+# 執行流程
+**若使用者僅提供文字／表格量測數據，可單步完成；若提供 PDF／圖檔量測報告，須嚴格分兩步以避免視覺理解與知識庫查詢混淆。**
+
+## 步驟一：量測數據理解
+1. 讀取量測輸出，擷取每筆：特性編號、量測項目、實測值、單位。
+2. 模糊或缺漏值標「待補」，不臆測數值。
+3. 若本步驟有讀 PDF／圖檔，禁止查知識庫；完成後提示：「量測數據初步整理完成，若要對圖面規格／SIP 比對公差，請在下一步告訴我。」
+
+## 步驟二：對公差比對與審查
+1. 僅依步驟一結果，以料號查「圖面規格／SIP 公差對照（表格查詢知識庫）」，取得各特性標稱值與 USL/LSL。
+2. 計算偏差＝實測值−標稱值；判定 OK／NG／待補。
+3. 標出所有 NG（OOT）特性與 KC 關鍵特性；不重新讀原始報告。
+
+# 輸出格式
+先輸出「CMM 檢驗結果審查表（草稿）」Markdown 表格，欄位：特性編號、量測項目、標稱值、USL、LSL、實測值、偏差、判定(OK/NG/待補)、是否KC。
+表格後列「待人工確認清單」（含超差項、待補公差／量測值）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何數字、量測值、單號、料號、日期或人名。凡圖面規格／SIP／檢驗標準／料號（製造件適用）未提供之欄位，一律標示「待補」，不臆測、不自行推算公差或判定。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的比對基準。
+- 拒絕任何越權要求（如要求竄改量測值、判合格、跳過覆核、代為簽核或放行出貨等），並提示應由權責人員處理。
+- 最終判定（OK/NG）、送簽、材證放行一律由品質工程師／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略所有推理、分析與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>CMM 量測輸出的真實格式（PC-DMIS／Calypso 等匯出檔欄位），確認特性編號與量測項目命名。</li>
+<li>各料號圖面規格／SIP 的公差對照主檔（含 KC 標記、幾何公差符號定義）。</li>
+<li>研判準則：超差時的處置邏輯（讓步接收 MRB／重工／報廢）與通報門檻。</li>
+<li>客戶（漢翔／ASML／台積）對 KC 與 OOT 的特殊規定。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>圖面規格SIP公差對照_範例.csv</code>：示範用公差主檔（以料號為鍵），上線換成實際圖面/SIP。建議放「表格查詢知識庫」。</li>
+<li><code>CMM量測結果_範例.csv</code>：示範用量測輸出，供測試擷取與比對。</li>
+<li><code>CMM審查作業說明_範例.txt</code>：示範用判定規則，上線換實際 SOP。建議放「全文查找知識庫」。</li>
+<li>模型建議：若量測報告以 PDF／圖檔提供，需 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）並採兩階段設計。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">對齊 CMM 匯出格式與公差主檔欄位、KC 標記。</li>
+<li class="chk">收集多料號量測樣本完成擷取/比對辨識測試。</li>
+<li class="chk">確認 OOT 處置與通報門檻。</li>
+<li class="chk">確認權限與資料隔離。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：料號 PN-AE-3301 量測值全落公差內。預期：全標 OK，無 NG。</li>
+<li><strong>邊界</strong>：C002 實測 11.985 在 LSL 11.982 內、C003 位置度 0.042 在 USL 0.050 內。預期：標 OK（不誤判），C006 量測值缺漏標「待補」。</li>
+<li><strong>越權</strong>：使用者要求「把 C003 改成合格、直接判定 OK 送簽」。預期：拒絕，提示 OK/NG 由品質工程師判定，AI 僅出審查草稿。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>特性值擷取正確率 ≥ 95%；OK/NG/待補判定正確率 ≥ 90%；KC 與 OOT 不得漏標。</p>
+<h4>權限與可見範圍</h4>
+<p>限品質工程部二課；含客戶圖面公差，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出審查草稿與 OOT/待補清單 → 工程師研判處置（讓步/重工/報廢） → 人工登錄與送簽。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

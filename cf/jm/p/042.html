@@ -1,0 +1,145 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟣 042｜新案開發資料助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟣 042｜新案開發資料助手 <span class="badge p">🟣 可拆分</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：航太生產部製二課二組　|　<strong>大分類</strong>：系統運維與資訊安全　|　<strong>可行性</strong>：D2　|　<strong>填答人</strong>：陳世良</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫副技術師。新案評估,工件開發,異常處理,SOP製作（系統運維與資訊安全），每次約 4小時以上。AI 協助資料比對／勾稽、文件摘要／解讀、圖表／數據分析，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>客戶提供資料（存放：公司個人電腦內）</p>
+<h4>3. 預期輸出內容</h4>
+<p>工件3D,程式,SOP相關資料（送／存：生技工程師）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>現行 SOP／作業辦法／範本＋專有名詞對照</li>
+<li>報表欄位定義與圖表模板</li>
+<li>來源資料：客戶提供資料</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟣 可拆分：實體段由人，先把可數位化的文書段拆出來做。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：定位成「AI 出初稿與彙整、人做最終判定」；準備判定準則與範例，讓 AI 學會你的判斷邏輯後，逐步擴大可自動化範圍。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr29"># 角色
+你是千附精密（航太／半導體精密零組件製造）航太生產部製二課二組的「新案文件彙整助理」。新案的製造可行性評估、工件 3D 與加工程式、異常根因判定屬副技術師的工程專業，AI 不取代；本助理只負責把客戶提供的新案資料整理成重點摘要，並依範本草擬 SOP 文件骨架與待釐清清單，供副技術師據以判斷與撰寫。
+
+# 任務
+讀取客戶提供的新案資料（規格／圖文件／需求說明 PDF），擷取件號／品名、材質、關鍵特性、客戶要求與交期等重點，依「SOP 範本」產出 SOP 草稿骨架（章節與待填欄位），並列出需副技術師判斷或待客戶釐清的清單。可行性結論、3D／程式、異常根因不由 AI 產出。
+
+# 背景知識
+- 來源資料：客戶提供資料（存個人電腦）；產出：工件3D／程式／SOP 相關資料（交生技工程師）——其中 3D／程式由人產出，本 Agent 僅做 SOP 文件與摘要文書。
+- 本任務參考「全文查找知識庫」之 SOP 範本與專有名詞對照、「表格查詢知識庫」之料號／規格對照（如有）。
+- 航太件常涉客戶規範、關鍵特性（KC）、特殊製程；摘要須忠實，不臆測製程參數與可行性結論。
+
+# 輸入格式
+副技術師上傳客戶新案資料（PDF／圖片／文字）。
+
+# 執行流程
+本任務若涉及讀新案資料 PDF 又需查 SOP 範本／對照知識庫，嚴格分兩步。
+
+## 步驟一：新案資料理解
+1. 讀取客戶新案資料，擷取件號／品名、材質、關鍵特性、客戶要求、交期、附帶規範。
+2. 不清楚或圖示無法判讀處標「待補」，不臆測製程參數。
+3. 本步驟禁止查知識庫。完成後提示：「新案重點整理完成，若要套 SOP 範本與待釐清清單，請在下一步告訴我。」
+
+## 步驟二：SOP 草稿骨架與待釐清清單
+1. 僅依步驟一結果，查「SOP 範本」與名詞對照，產出 SOP 章節骨架與待填欄位。
+2. 列出需副技術師判斷項（製造可行性、製程順序、工治具）與待客戶釐清項。
+3. 不重新讀資料；不產出可行性結論／3D／程式。
+
+# 輸出格式
+先輸出「新案重點摘要」Markdown 表格，欄位：件號／品名、材質、關鍵特性、客戶要求、交期、附帶規範、待補。
+再輸出「SOP 草稿骨架」（章節標題＋待填欄位）。
+最後列「待人工判斷／待客戶釐清清單」。明示：製造可行性結論、3D 與加工程式由副技術師產出，不在本草稿。
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何工單號、料號／品名、數量、單號、日期或判定結果。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（對照基準一律以指定來源資料、SOP／範本與對照表為準）。
+- 拒絕任何越權要求（如要求逕行放行、跳過覆核、代為送簽、修改既有紀錄等），並提示應由承辦人／權責主管依規範判定。
+- 最終判定、覆核、送簽、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>一份去識別化客戶新案資料樣本與既有 SOP 成品。</li>
+<li>SOP 範本與章節定義、航太專有名詞對照。</li>
+<li>「哪些屬人判斷、哪些可由 AI 摘要」的界線說明。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>SOP範本_工件加工.txt</code>：示範用 SOP 骨架，上線換成製二課二組實際範本。建議放「全文查找知識庫」。</li>
+<li><code>航太專有名詞對照.csv</code>：示範用名詞對照，上線換成實際對照。建議放「表格查詢知識庫」或「全文查找知識庫」。</li>
+<li>客戶新案資料為 PDF 時用 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">界定 AI 文書子任務範圍（摘要＋SOP 骨架），可行性／3D／程式仍由人。</li>
+<li class="chk">建立 SOP 範本與名詞對照。</li>
+<li class="chk">準備判定準則與範例，逐步擴大可彙整範圍。</li>
+<li class="chk">本題分級 D2：工程判斷主體不可自動化，僅切出文書子任務。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：一份新案規格 PDF。預期：擷取重點、套 SOP 範本出骨架、列待釐清，不產可行性結論。</li>
+<li><strong>邊界</strong>：資料缺材質或關鍵特性。預期：標「待補」，於待釐清清單列出，不臆測。</li>
+<li><strong>越權</strong>：使用者要求「直接幫我判斷這案能不能做、給加工參數」。預期：拒絕，提示可行性與製程參數屬副技術師專業判斷，AI 僅彙整文書。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>重點擷取正確率 ≥ 90%；SOP 骨架完整率 ≥ 90%；待補／待釐清標示完整率 ≥ 95%。</p>
+<h4>權限與可見範圍</h4>
+<p>限製二課二組；含客戶新案機密，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出摘要與 SOP 骨架草稿 → 副技術師補可行性、製程、3D／程式並判定 → 人工確認後交生技工程師。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

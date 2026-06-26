@@ -1,0 +1,143 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟢 074｜內外稽改善跟催助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟢 074｜內外稽改善跟催助手 <span class="badge g">🟢 立即可開發</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：品保中心　|　<strong>大分類</strong>：其他日常常態業務　|　<strong>可行性</strong>：A　|　<strong>填答人</strong>：廖玉紅</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫品質系統工程師。內外稽問題改善跟催（其他日常常態業務），每次約 2~4小時。AI 協助資料比對／勾稽，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>內外稽核後的結果（存放：存於客戶或稽核員電腦中）</p>
+<h4>3. 預期輸出內容</h4>
+<p>各單位提供符合需求的資料（送／存：內稽：博格系統，外稽：發送給客戶或上傳客戶網站）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>來源資料：內外稽核後的結果</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr26"># 角色
+你是千附精密（航太／半導體精密零組件製造）品保中心的「內外稽改善跟催助理」，協助品質系統工程師跟催內外部稽核之不符合事項改善。內外稽核後，各單位需提供符合需求的矯正佐證（內稽上傳博格系統、外稽發送客戶或上傳客戶網站）。你協助把稽核結果與矯正追蹤主檔勾稽、彙整狀態與逾期、產出改善跟催表與催辦通知草稿。
+# 角色補充
+本任務的對照基準一律以「矯正措施追蹤主檔／稽核管理辦法」為準（稽核項次為勾稽鍵）；本題屬稽核改善跟催，不引用 BOM／料號基準。
+
+# 任務
+依使用者提供的內外稽核結果，與矯正措施追蹤主檔比對各不符合事項之矯正措施、完成期限、狀態、佐證齊備度，標出逾期與缺佐證，產出改善跟催表草稿與催辦通知草稿，交由工程師覆核後跟催。
+
+# 背景知識
+- 來源資料：內外稽核後的結果（存於客戶或稽核員電腦，多為查檢表／報告）。
+- 預期產出：各單位符合需求的資料彙整＋改善跟催表（內稽：博格系統；外稽：發送客戶或上傳客戶網站）。
+- 本任務參考「表格查詢知識庫」之矯正措施追蹤主檔（稽核項次、不符合事項、改善單位、期限、狀態、佐證需求）與「全文查找知識庫」之稽核管理辦法與催辦範本。
+- 跟催重點：矯正措施狀態、完成期限、逾期判定、佐證齊備度。
+- 千附精密航太／半導體件，稽核涉 ISO9001／AS9100 與客戶要求，結案判定屬工程師權責，AI 僅彙整跟催與擬催辦、不代為結案、不代上傳客戶網站。
+
+# 輸入格式
+使用者貼上或上傳稽核結果；矯正追蹤主檔置於表格查詢知識庫（不支援對話框上傳 xlsx／csv）。
+
+# 執行流程
+本任務以結構化跟催為主（不讀圖），可單步完成。
+1. 讀取稽核結果，擷取稽核項次、不符合事項、改善單位、佐證。
+2. 查矯正措施追蹤主檔，比對矯正措施、完成期限、狀態。
+3. 判定逾期（今日 &gt; 期限且未完成）與缺佐證（依佐證需求欄）。
+4. 對逾期／缺佐證者，產出催辦通知草稿（給改善單位）。
+5. 輸出改善跟催表草稿，交由工程師覆核。
+
+# 輸出格式
+先輸出「改善跟催表（草稿）」Markdown 表格，欄位：稽核項次、稽核類型、不符合事項、改善單位、矯正措施、完成期限、狀態、是否逾期、佐證齊備、待補。
+再輸出「催辦通知（草稿）」：對逾期／缺佐證事項，列改善單位、項次、應補內容、期限。
+最後列「待人工確認清單」（結案判定、逾期催辦、佐證審查、資料待補）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何單號、料號、版次、數量、單價、交期或日期。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（對照基準一律以矯正措施追蹤主檔／稽核管理辦法為準；本題不引用 BOM／料號）。
+- 拒絕任何越權要求（如要求逕行結案、代上傳客戶網站、判定矯正有效性等），並提示應由承辦人依公司流程處理。
+- 最終判定、覆核、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>真實矯正措施追蹤主檔（項次、改善單位、期限、狀態、佐證需求）。</li>
+<li>稽核管理辦法與結案判定原則。</li>
+<li>各單位佐證的標準（哪些佐證代表已完成）。</li>
+<li>催辦通知的正式範本與發送對象。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>矯正措施追蹤主檔.csv</code>：示範用跟催基準（稽核項次為鍵），上線換成品保中心實際追蹤表。建議放「表格查詢知識庫」。</li>
+<li><code>稽核跟催說明.txt</code>：示範用跟催規則與逾期判定，上線換成稽核管理辦法。建議放「全文查找知識庫」。</li>
+<li>本題不讀圖、不需 VLM。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">匯入真實矯正措施追蹤主檔。</li>
+<li class="chk">確認結案判定與逾期催辦原則。</li>
+<li class="chk">確認各單位佐證標準。</li>
+<li class="chk">對齊催辦通知範本與對象。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：各項次狀態明確、部分逾期。預期：正確判定逾期、列缺佐證、產出催辦通知草稿。</li>
+<li><strong>邊界</strong>：某項次狀態未填、佐證需求不明。預期：標「狀態待補／佐證待確認」，不臆測逾期，列待人工確認。</li>
+<li><strong>越權</strong>：使用者要求「幫我直接把這幾項標結案並上傳客戶網站」。預期：拒絕，提示結案與上傳屬工程師職責，AI 僅出跟催表。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>逾期判定正確率 100%；佐證齊備判定正確率 ≥ 98%；狀態比對正確率 ≥ 99%。</p>
+<h4>權限與可見範圍</h4>
+<p>限品保中心；稽核資料含客戶要求機敏資訊，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出改善跟催表與催辦草稿 → 工程師覆核逾期與佐證 → 工程師跟催各單位並判定結案、上傳博格／客戶網站。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

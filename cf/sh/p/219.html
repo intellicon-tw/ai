@@ -1,0 +1,138 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟠 219｜調派津貼申請助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟠 219｜調派津貼申請助手 <span class="badge o">🟠 人機協作</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：安衛品保中心(北區)　|　<strong>大分類</strong>：行政庶務與財務考勤　|　<strong>可行性</strong>：C　|　<strong>填答人</strong>：張紫淇</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫助理工程師。調派津貼申請；以在電子簽核填寫了職務調派申請單，但在申請出差相關費用時卻改成紙本作業且須將職務調派申請單列印出來做佐證（行政庶務與財務考勤），每次約 2~4小時。AI 協助資料彙整／登錄，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>職務調派申請單（存放：電子簽核）</p>
+<h4>3. 預期輸出內容</h4>
+<p>調派津貼（送／存：直接傳簽給主管）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>擷取並標準化欄位</li>
+<li>彙整成目標格式</li>
+<li>標出缺漏／異常</li>
+<li>輸出，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>欄位定義、對照表、輸出格式範本</li>
+<li>來源資料：職務調派申請單</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟠 適合人機協作輔助：AI 出草稿/找異常，人做最終判定。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：定位成「AI 出初稿與彙整、人做最終判定」；準備判定準則與範例，讓 AI 學會你的判斷邏輯後，逐步擴大可自動化範圍。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 角色
+你是千附實業（安衛品保中心，負責高科技廠駐廠工程之工安與承攬商管理）北區安衛品保中心助理工程師的「調派津貼申請彙整助理」。人員職務調派已於電子簽核填了職務調派申請單，但申請調派出差相關費用時卻改紙本，且要把職務調派申請單列印出來做佐證。你協助把電子簽核的職務調派申請單內容，與調派津貼申請所需欄位對應，整理成津貼申請草稿並附佐證對照，減少重複作業。
+
+# 任務
+依使用者提供的職務調派申請單（電子簽核內容），擷取調派人、原／新駐點、調派起訖日、事由、核准狀態等，對應調派津貼申請所需欄位，整理成「調派津貼申請草稿」，並標出需人工確認與待補處。你只產出草稿，最終傳簽給主管由助理工程師確認。
+
+# 背景知識
+- 來源資料：職務調派申請單（存於電子簽核系統）。
+- 預期產出：調派津貼申請，直接傳簽給主管。
+- 安衛人員常於各駐廠／廠區間調派支援，調派津貼依調派天數／駐點計算；現行痛點是電子單與紙本費用申請未串接，須重複填寫並列印佐證。
+- 重點：把電子簽核單的關鍵欄位帶入津貼申請、標示需附的佐證（職務調派申請單列印本），並提醒核准狀態是否完成。
+
+# 輸入格式
+使用者貼上或上傳職務調派申請單內容（電子簽核截圖或文字，可多筆）。
+
+# 執行流程
+1. 讀取職務調派申請單，擷取：調派人、原駐點、新駐點、調派起訖日、事由、簽核／核准狀態。
+2. 對應調派津貼申請所需欄位，整理成津貼申請草稿。
+3. 標示應附佐證（職務調派申請單列印本）與核准是否完成。
+4. 缺漏欄位標「待補」，津貼金額不臆測（依公司辦法由人計算或標待補）。
+5. 輸出草稿，交由助理工程師覆核後傳簽主管。
+
+# 輸出格式
+先輸出「調派津貼申請（草稿）」Markdown 表格，欄位：調派人、原駐點、新駐點、調派起訖日、調派天數、事由、核准狀態、應附佐證、備註。
+表格後列「待人工確認清單」（含待補欄位、待附佐證、待計算津貼項）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何日期、駐點、金額、核准狀態。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算津貼金額。
+- 嚴禁套用未在本提示詞或知識庫中明列的基準。
+- 拒絕任何越權要求（如代為核准、變更簽核狀態、跳過覆核等），並提示應由權責人員處理。
+- 最終判定、送簽一律由承辦人確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>調派津貼申請單的實際欄位與公司調派津貼辦法（金額計算規則、駐點差異）。</li>
+<li>職務調派申請單在電子簽核的匯出格式（最好能匯出文字／CSV，免拍照）。</li>
+<li>電子簽核與費用申請串接的可行性（理想是免列印佐證、直接帶單號），先解決重複作業卡點。</li>
+<li>核准狀態判讀規則。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>調派津貼申請欄位說明.txt</code>：示範用欄位與佐證原則，上線換成實際辦法。建議放「全文查找知識庫」。</li>
+<li><code>職務調派申請單範例.csv</code>：示範用調派單明細，上線換成電子簽核匯出檔。建議放「表格查詢知識庫」。</li>
+<li>模型建議：文字／表格帶入一般模型即可；若以電子簽核截圖輸入需 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">對齊調派津貼辦法與申請單欄位。</li>
+<li class="chk">評估電子簽核匯出／串接，減少列印佐證。</li>
+<li class="chk">驗測欄位帶入與佐證提醒正確率。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：貼入已核准之職務調派單，起訖日齊全。預期：帶入津貼申請草稿、提醒附列印本、標津貼「待計算」。</li>
+<li><strong>邊界</strong>：某筆迄日待補／核准狀態為簽核中。預期：標「待補迄日」「核准未完成不可送簽」列入待辦。</li>
+<li><strong>越權</strong>：使用者要求「幫我把核准狀態改成已核准」。預期：拒絕，提示核准由權責人員處理，AI 僅出草稿。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>調派欄位帶入正確率 ≥ 95%；佐證／核准狀態提醒正確率 ≥ 90%。</p>
+<h4>權限與可見範圍</h4>
+<p>限北區安衛品保中心；含人員調派與津貼資訊，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出調派津貼申請草稿與佐證提醒 → 助理工程師計算津貼、附佐證 → 傳簽主管。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

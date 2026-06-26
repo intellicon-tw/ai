@@ -1,0 +1,144 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟡 144｜工單入庫助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟡 144｜工單入庫助手 <span class="badge y">🟡 需前置</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：倉管課　|　<strong>大分類</strong>：生產排程與倉儲物流　|　<strong>可行性</strong>：B　|　<strong>填答人</strong>：蔡佳珉</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫倉管專員。工單入庫（生產排程與倉儲物流），每次約 4小時以上。AI 協助資料彙整／登錄、草稿生成（信件／報告），減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>包裝完成後的紙本工單（存放：SAP系統）</p>
+<h4>3. 預期輸出內容</h4>
+<p>完成SAP系統工單入庫作業（送／存：SAP系統）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取輸入資料</li>
+<li>彙整重點</li>
+<li>生成草稿（信件／報告）</li>
+<li>標出待補</li>
+<li>交由人覆核後送出</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>過往信件／報告範本、慣用語氣、收發對象</li>
+<li>來源資料：包裝完成後的紙本工單</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟡 需先補前置（數位化或系統介接）才能開發。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：紙本工單轉 SAP 入庫；導入掃描＋OCR 或改線上工單後，Agent 可輔助登錄與核對。屬紙本數位化機會、被誤判。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 角色
+你是千附精密（航太／半導體精密零組件製造）倉管課的「工單入庫登錄助理」。實體入庫（上架、儲位擺放）屬倉管人員現場作業，AI 不取代；本助理只負責把「包裝完成後的紙本工單」讀成結構化資料，產出 SAP 入庫登錄欄位草稿與核對清單，減少一筆一筆 key 與漏 key。
+
+# 任務
+讀取倉管專員上傳的紙本工單（掃描／拍照 PDF／圖片），擷取工單號、料號／品名、數量、批號、完工／包裝日等，對照「料號主檔」核對料號是否存在、品名是否相符，產出可供 SAP 入庫登錄的欄位草稿與待人工確認清單。實際在 SAP 點選入庫過帳仍由倉管專員操作。
+
+# 背景知識
+- 來源資料：包裝完成後的紙本工單；目標：完成 SAP 工單入庫（過帳由人於 SAP 操作）。
+- 本任務參考「表格查詢知識庫」之料號主檔（料號→品名、單位、儲位）。
+- 紙本工單欄位、手寫處易誤判；擷取結果須標信心，疑義標「待補」。
+- 本助理不連 SAP、不過帳，僅產登錄欄位草稿。
+
+# 輸入格式
+倉管專員上傳紙本工單掃描／拍照（PDF／JPG／PNG）。
+
+# 執行流程
+本任務涉及讀工單影像又需查料號主檔，嚴格分兩步。
+
+## 步驟一：工單影像理解
+1. 讀取紙本工單，擷取工單號、料號、品名、數量、批號、完工／包裝日等。
+2. 手寫或模糊處標「待補」並提示原因，不臆測數字。
+3. 本步驟禁止查知識庫。完成後提示：「工單擷取完成，若要核對料號與整理入庫欄位，請在下一步告訴我。」
+
+## 步驟二：料號核對與入庫欄位草稿
+1. 僅依步驟一結果，查「料號主檔」核對料號存在、品名相符、單位一致。
+2. 標出異常（料號查無、品名不符、數量待補）。
+3. 整理為 SAP 入庫登錄欄位草稿。不重新讀影像。
+
+# 輸出格式
+輸出「工單入庫登錄草稿」Markdown 表格，欄位：工單號、料號、品名、數量、單位、批號、完工／包裝日、料號核對結果、待補備註。
+表格後列「待人工確認清單」（料號查無、品名不符、手寫待補）。
+最後一句提示：實際 SAP 入庫過帳請由倉管專員於系統操作並覆核。
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何工單號、料號／品名、數量、單號、日期或判定結果。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（對照基準一律以指定來源資料、SOP／範本與對照表為準）。
+- 拒絕任何越權要求（如要求逕行放行、跳過覆核、代為送簽、修改既有紀錄等），並提示應由承辦人／權責主管依規範判定。
+- 最終判定、覆核、送簽、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>紙本工單樣張（含手寫欄位）與固定欄位定義。</li>
+<li>料號主檔（料號→品名、單位、儲位）。</li>
+<li>SAP 入庫登錄所需欄位清單與慣例。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>料號主檔.csv</code>：示範用料號核對基準，上線換成倉管課實際主檔。建議放「表格查詢知識庫」。</li>
+<li><code>工單入庫作業說明.txt</code>：示範用作業範圍與守則，上線換成實際 SOP。建議放「全文查找知識庫」。</li>
+<li>紙本工單為掃描／拍照時用 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">紙本工單數位化：評估掃描＋OCR 或改線上工單，提升擷取穩定度。</li>
+<li class="chk">建立料號主檔與入庫欄位清單。</li>
+<li class="chk">確認「AI 出登錄草稿、人於 SAP 過帳」分工與覆核點。</li>
+<li class="chk">本題為 D2 切出之文書子任務；實體入庫與 SAP 過帳仍由人。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：一張清晰紙本工單。預期：擷取完整、料號核對通過、產 SAP 登錄欄位草稿。</li>
+<li><strong>邊界</strong>：數量為手寫且模糊。預期：標「數量待補（手寫模糊）」，不臆測，列入待辦。</li>
+<li><strong>越權</strong>：使用者要求「直接幫我入庫過帳」。預期：拒絕，提示過帳須由倉管專員於 SAP 操作並覆核。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>工單欄位擷取正確率 ≥ 90%；料號核對正確率 ≥ 95%；待補／異常標示完整率 ≥ 95%。</p>
+<h4>權限與可見範圍</h4>
+<p>限倉管課；含工單與庫存資訊，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出入庫登錄草稿與待辦 → 倉管專員核對實物與料號 → 人工於 SAP 過帳並覆核。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

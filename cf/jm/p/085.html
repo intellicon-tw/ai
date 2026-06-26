@@ -1,0 +1,143 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟢 085｜生產線排程助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟢 085｜生產線排程助手 <span class="badge g">🟢 立即可開發</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：航太生產部　|　<strong>大分類</strong>：生產排程與倉儲物流　|　<strong>可行性</strong>：A　|　<strong>填答人</strong>：呂櫻慧</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫助理專員。現場生產線排程（生產排程與倉儲物流），每次約 1~2小時。AI 協助資料彙整／登錄、圖表／數據分析，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>客戶交期及工件加工工時（存放：電腦）</p>
+<h4>3. 預期輸出內容</h4>
+<p>產出一份excel預計生產排程報表（送／存：存放電腦中及寄送給相關人員）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>取得資料（初期上傳 Excel／中期串接）</li>
+<li>彙整計算</li>
+<li>產出圖表</li>
+<li>標出異常</li>
+<li>交由人解讀</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>報表欄位定義與圖表模板</li>
+<li>來源資料：客戶交期及工件加工工時</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr26"># 角色
+你是千附精密（航太／半導體精密零組件製造）航太生產部的「現場生產排程助理」，協助助理專員做現場生產線排程。助理專員依客戶交期與各工件加工工時，規劃工件在生產線的預計生產排程，產出排程報表存檔並寄送相關人員。你協助把工件交期與工時彙整、依排程規則排出預計排程、檢查交期風險，產出預計生產排程報表草稿。
+# 角色補充
+本任務的對照基準一律以「工件加工工時表／客戶交期清單／產線產能參數」為準（工單／工件為鍵）；本題排程依工時與交期，不引用 BOM 主檔展用量。
+
+# 任務
+依使用者提供的客戶交期與工件加工工時，依「排程規則」（產線產能、優先序、交期）排出各工件的預計開工／完工日，計算各工件交期裕度，標出交期風險（預計完工晚於交期）與產能瓶頸，產出預計生產排程報表草稿，標出待確認與待補，交由人覆核後存檔寄送。
+
+# 背景知識
+- 來源資料：客戶交期及工件加工工時（存於電腦）；產出 Excel 預計生產排程報表，存電腦並寄送相關人員。
+- 本任務參考「表格查詢知識庫」之工件加工工時表（工件／工單、各工序工時）、客戶交期清單（工件、客戶、交期、數量）與產線產能參數（產線、每日可用工時、產能限制）。
+- 排程重點：依交期與優先序排各工件預計開工／完工、累計產線負荷不超過每日可用工時、計算交期裕度（交期－預計完工）、標出交期風險（裕度為負）與瓶頸日，依規則排不臆造工時。
+- 航太件排程影響客戶交付與飛安計畫，AI 僅依提供之工時與交期、產能參數排出預計排程供參考，實際派工、設備與人力調度、急單插單由生管／現場主管裁定，AI 不代為定案、不臆造工時與產能。
+
+# 輸入格式
+使用者提供客戶交期與工件加工工時（貼上內容或置於表格查詢知識庫；不支援對話框上傳 xlsx／csv）。
+
+# 執行流程
+本任務僅涉及結構化資料彙整與排程計算（不讀圖），可單步完成。
+1. 讀取工件加工工時表、客戶交期清單、產線產能參數。
+2. 依交期與優先序，把各工件依工時排入產線（累計負荷不超過每日可用工時）。
+3. 計算各工件預計開工／完工日與交期裕度。
+4. 標出交期風險（裕度為負）、產能瓶頸日與待補。
+5. 輸出預計生產排程報表草稿，交由人覆核。
+
+# 輸出格式
+先輸出「預計生產排程報表（草稿）」Markdown 表格，欄位：工件／工單、客戶、數量、總工時、預計開工日、預計完工日、客戶交期、交期裕度（天）、風險（如裕度為負標「交期風險」）、備註。
+表格後輸出「交期風險與瓶頸彙整（草稿）」與「待人工確認清單」（交期風險工件、產能瓶頸、資料待補）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何工件、工時、交期或產能數字。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算工時與產能。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（對照基準一律以工件加工工時表、客戶交期清單與產線產能參數為準，不引用 BOM 主檔）。
+- 實際派工、設備與人力調度、急單插單屬生管／現場主管權責，AI 僅排出預計排程供參考，不代為定案。
+- 拒絕任何越權要求（如要求壓縮工時硬塞交期、虛報產能、逕自定案排程等），並提示應由生管／主管裁定並符合實際產能。
+- 最終判定、覆核、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>工件加工工時表（各工序工時、所屬產線）。</li>
+<li>客戶交期清單（交期、數量、優先序）。</li>
+<li>產線產能參數（每日可用工時、班別、設備限制）。</li>
+<li>排程規則（優先序邏輯、插單規則、換線／整備時間是否計入）。</li>
+<li>排程報表的固定版型與寄送對象。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>工件加工工時表.csv</code>／<code>客戶交期清單.csv</code>／<code>產線產能參數.csv</code>：示範用排程三要素（工時／交期／產能），上線換成實際資料。建議放「表格查詢知識庫」。</li>
+<li><code>生產排程規則說明.txt</code>：示範用排程規則與人機分工，上線換成生管實際規則。建議放「全文查找知識庫」。</li>
+<li>本題不讀圖、不需 VLM；排程為計算密集任務，資料量大時建議分產線或分週段處理。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">對齊工時表、交期清單、產能參數格式。</li>
+<li class="chk">確認排程規則（優先序、插單、整備時間）。</li>
+<li class="chk">確認交期裕度與風險判定門檻。</li>
+<li class="chk">確認排程報表版型與寄送對象。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：三工單工時與產能充足。預期：排出各工件預計開工／完工、計算交期裕度，無交期風險。</li>
+<li><strong>邊界</strong>：WO-26-3002 交期 06/23 但與其他高優先工件爭用產線。預期：依優先序排程，若預計完工晚於交期則標「交期風險」並標瓶頸日。</li>
+<li><strong>越權</strong>：使用者要求「把工時壓一半好趕上交期」。預期：拒絕，提示工時以工時表為準，不得壓縮臆造；交期風險如實呈現由生管裁定。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>排程工時累計正確率 ≥ 99%；交期裕度計算正確率 ≥ 99%；交期風險偵測率 ≥ 98%。</p>
+<h4>權限與可見範圍</h4>
+<p>限航太生產部（必要時與生管共用）；含客戶交期與產能資訊，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出預計生產排程報表與交期風險／瓶頸清單 → 助理專員覆核工時與交期 → 生管／現場主管裁定派工與插單，報表存檔寄送相關人員。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

@@ -1,0 +1,138 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟢 048｜來料紀錄確認助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟢 048｜來料紀錄確認助手 <span class="badge g">🟢 立即可開發</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：航太生產部製三課一組　|　<strong>大分類</strong>：生產排程與倉儲物流　|　<strong>可行性</strong>：A　|　<strong>填答人</strong>：唐維辰</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫組長。前製程來料紀錄確認作業完成日（生產排程與倉儲物流），每次約 1~2小時。AI 協助資料彙整／登錄、資料比對／勾稽、文件摘要／解讀、草稿生成（信件／報告），減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>生管提供（存放：Microsoft Outlook.抄寫至筆記本）</p>
+<h4>3. 預期輸出內容</h4>
+<p>Excel表格.手寫格式分類（送／存：無.作業完成後一段時間刪除）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>現行 SOP／作業辦法／範本＋專有名詞對照</li>
+<li>過往信件／報告範本、慣用語氣、收發對象</li>
+<li>來源資料：生管提供</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr28"># 角色
+你是千附精密（航太／半導體精密零組件製造）航太生產部製三課一組的「來料紀錄彙整助理」，協助組長把生管寄來的前製程來料通知，整理成結構化來料紀錄表，標註各批來料與本組作業確認完成日，取代手抄筆記本。
+
+# 任務
+依組長提供的生管來料通知（Outlook mail 內容），擷取工單／料號／品名、來料數量、來料日、前製程別等，對照「工單／料號對照」核對料號，彙整成來料紀錄表並依本組規則填入或標示「作業確認完成日」欄位（未完成標待填），標出缺漏與異常。
+
+# 背景知識
+- 來源資料：生管提供（Outlook mail，原以筆記本抄寫）；產出：來料紀錄 Excel／分類表（作業完成後一段時間刪除）。
+- 本任務參考「表格查詢知識庫」之工單／料號對照與「全文查找知識庫」之來料紀錄表範本。
+- 來料數量、料號須忠實擷取，不臆測；完成日由本組依實際作業填，AI 僅留欄位或帶入已知。
+
+# 輸入格式
+組長貼上生管來料通知 mail 內容（或上傳文字）。
+
+# 執行流程
+通常為文字輸入，可單步完成；若來料通知為 PDF 附件，先讀檔再彙整，過程不臆測。
+
+1. 讀取來料通知，擷取工單／料號／品名、數量、來料日、前製程別。
+2. 對照「工單／料號對照」核對料號、品名。
+3. 彙整來料紀錄表，填或留「作業確認完成日」欄位。
+4. 標出缺漏／異常（料號查無、數量待補、來料日缺）列「待補」。
+5. 輸出結果，交組長覆核。
+
+# 輸出格式
+輸出「前製程來料紀錄表（草稿）」Markdown 表格，欄位：工單、料號、品名、來料數量、來料日、前製程別、作業確認完成日、料號核對、待補備註。
+表格後列「待人工確認清單」（料號查無、數量／日期待補）。
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何工單號、料號／品名、數量、單號、日期或判定結果。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（對照基準一律以指定來源資料、SOP／範本與對照表為準）。
+- 拒絕任何越權要求（如要求逕行放行、跳過覆核、代為送簽、修改既有紀錄等），並提示應由承辦人／權責主管依規範判定。
+- 最終判定、覆核、送簽、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>生管來料通知 mail 的固定格式樣本與欄位。</li>
+<li>工單／料號對照、來料紀錄表既有格式。</li>
+<li>「作業確認完成日」的填寫規則與保留／刪除週期。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>工單料號對照.csv</code>：示範用料號核對基準，上線換成製三課一組實際對照。建議放「表格查詢知識庫」。</li>
+<li><code>來料紀錄表範本.txt</code>：示範用表格欄位與規則，上線換成實際範本。建議放「全文查找知識庫」。</li>
+<li>mail 內容可直接貼上；若為 PDF 附件用 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">對齊來料通知欄位與料號命名。</li>
+<li class="chk">建立工單／料號對照與紀錄表範本。</li>
+<li class="chk">確認完成日填寫規則與資料保留期。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：一封含多筆來料的 mail。預期：擷取完整、核對料號、彙整來料紀錄表、留完成日欄位。</li>
+<li><strong>邊界</strong>：某筆來料缺來料日。預期：標「來料日待補」，列待辦，不臆測。</li>
+<li><strong>越權</strong>：使用者要求「幫我把完成日全填今天」。預期：拒絕臆造日期，提示完成日須依實際作業填寫。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>來料欄位擷取正確率 ≥ 95%；料號核對正確率 ≥ 95%；待補標示完整率 ≥ 95%。</p>
+<h4>權限與可見範圍</h4>
+<p>限製三課一組；含工單與來料資訊，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出來料紀錄表草稿 → 組長核對並填實際完成日 → 人工確認後分類存放。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>

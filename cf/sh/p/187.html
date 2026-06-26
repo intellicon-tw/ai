@@ -1,0 +1,138 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🟡 187｜出差費用報表助手｜千附 AI Agent 教學</title><style>
+:root{--pur:#6B4FA0;--pur2:#8b6fc7;--bg:#f6f4fb;--ink:#2b2440;--mut:#6c6680;--line:#e6e0f2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:26px 18px}
+header.top .wrap{padding:0 0}
+header.top h1{margin:0 0 6px;font-size:22px}header.top p{margin:0;opacity:.9;font-size:14px}
+.crumb{font-size:13px;color:var(--mut);margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(80,60,140,.05)}
+h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
+h3{font-size:15.5px;margin:16px 0 6px;color:#4a3b7a}
+h4{font-size:14.5px;margin:14px 0 6px;color:#574c78}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+blockquote{margin:10px 0;padding:10px 14px;background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;color:#4a4264;font-size:14px}
+ul,ol{margin:8px 0 8px 4px;padding-left:22px}li{margin:4px 0}
+li.chk{list-style:none;margin-left:-18px}li.chk::before{content:"☐ ";color:var(--pur)}
+code{background:#efe9fb;color:#5a3f93;padding:1px 6px;border-radius:5px;font-size:13px}
+.meta{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;margin-left:6px;color:#fff;vertical-align:middle}
+.badge.g{background:#36a35a}.badge.y{background:#d6a400}.badge.o{background:#e0792b}.badge.p{background:#8b5fc7}.badge.r{background:#d6453a}.badge.b{background:#2f7ad6}
+details.promptbox{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fbfaff}
+details.promptbox>summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--pur)}
+.promptwrap{position:relative;padding:0 14px 14px}
+.copybtn{position:absolute;top:-2px;right:14px;background:var(--pur);color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer}
+.copybtn:hover{background:#5a3f93}
+pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.6;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+/* index tree */
+details.tree{margin:0}details.tree>summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600}
+details.tree>summary:hover{background:#efe9fb}
+.lvl-comp>summary{font-size:18px;color:#4a3b7a;background:#ece5fb;margin-top:10px}
+.lvl-dept>summary{font-size:15px;color:#574c78}
+.lvl-pers>summary{font-size:14px;color:#6c6680;font-weight:500}
+.tree .inner{margin-left:16px;border-left:2px solid var(--line);padding-left:12px}
+.topiclink{display:block;padding:5px 8px;font-size:14px}
+.cnt{color:var(--mut);font-size:12px;font-weight:400}
+.foot{color:var(--mut);font-size:12px;margin-top:30px;text-align:center}
+</style></head><body>
+<header class="top"><div class="wrap"><h1>🟡 187｜出差費用報表助手 <span class="badge y">🟡 需前置</span></h1>
+<p>千附集團 · EgentHub AI Agent 開發實務教學頁</p></div></header>
+<div class="wrap"><div class="crumb"><a href="../index.html">← 回總目錄</a></div><div class="card"><h3 class="sec">任務需求</h3>
+<p><strong>部門</strong>：南區事業部　|　<strong>大分類</strong>：行政庶務與財務考勤　|　<strong>可行性</strong>：B　|　<strong>填答人</strong>：沈意茹</p>
+<blockquote>開發前必答的 5 個問題 —— 填好可直接貼進「提示詞設計助手」生成提示詞</blockquote>
+<h4>1. 應用場景與業務流程</h4>
+<p>幫行政。國內出差費用報表（行政庶務與財務考勤），每次約 30分鐘~1小時。AI 協助資料彙整／登錄、資料比對／勾稽，減少人工。</p>
+<h4>2. 資料輸入與來源</h4>
+<p>國內出差費用申請單（存放：紙本）</p>
+<h4>3. 預期輸出內容</h4>
+<p>EXCEL報表（送／存：管理部）</p>
+<h4>4. 任務步驟</h4>
+<ol>
+<li>讀取來源資料</li>
+<li>與基準檔（如 BOM／對照表）比對</li>
+<li>標出差異／異常</li>
+<li>列待補清單</li>
+<li>輸出結果，交由人覆核</li>
+</ol>
+<h4>5. 知識來源</h4>
+<ul>
+<li>比對基準主檔（BOM 主檔／料號對照／規格表）</li>
+<li>來源資料：國內出差費用申請單</li>
+</ul>
+<hr>
+<h3 class="sec">開發指引</h3>
+<p><strong>狀態</strong>：🟡 需先補前置（數位化或系統介接）才能開發。</p>
+<p><strong>為什麼還不能直接做</strong>：見下&lt;br&gt;<strong>後續努力方向</strong>：先解決前置數位化：把紙本／畫面資料改成線上表單或定期匯出 Excel/CSV，即可餵 Agent；或評估 OCR。數位化後等同 A 級可快速開發。</p>
+<h4>系統提示詞（可直接複製貼進 EgentHub）</h4>
+<details class="promptbox"><summary>點開複製系統提示詞</summary><div class="promptwrap"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre id="pr27"># 角色
+你是千附實業（廠務工程事業為主體，提供高科技廠無塵室管路、二次配與系統整合工程）南區事業部行政的「國內出差費用報表助理」。南區工程師長期駐廠（台積 F22／F18、華邦等）並於各廠區間調派，出差頻繁，行政需把國內出差費用申請單彙整成給管理部的 Excel 報表。你協助行政把申請單內容擷取、彙整成標準報表草稿，並標出需人工確認與待補處。
+
+# 任務
+依使用者提供的國內出差費用申請單，擷取出差人、日期、地點（廠區）、交通費、住宿費、誤餐／雜費、對應工號等，彙整成「Excel 報表（Markdown 表格）」草稿，並標出需人工確認與待補欄位。你只產出草稿，最終送管理部由行政確認。
+
+# 背景知識
+- 來源資料：國內出差費用申請單（現多為紙本，需先數位化或人工貼入內容）。
+- 預期產出：彙整 Excel 報表，送管理部。EgentHub 以 Markdown 表格輸出，可於介面下載為 .xlsx。
+- 南區出差多為跨廠區駐廠／調派（F18、F22、華邦等），費用宜對應工號或廠區別，方便管理部歸帳。
+- 重點檢核：金額加總、日期區間、同一趟出差是否重複申報、是否附佐證。
+
+# 輸入格式
+使用者貼上或上傳國內出差費用申請單內容（多筆）。紙本請先轉成文字或拍照上傳。
+
+# 執行流程
+1. 讀取申請單，逐筆擷取：出差人、起訖日期、廠區／地點、各項費用、工號歸屬。
+2. 彙整成管理部報表欄位並小計、加總。
+3. 金額看不清或缺漏標「待補」，不臆測。
+4. 標出疑似重複申報或日期異常，列待人工確認。
+5. 輸出草稿，交由行政覆核後送管理部。
+
+# 輸出格式
+先輸出「國內出差費用報表（草稿）」Markdown 表格，欄位：出差人、起訖日期、廠區／地點、交通費、住宿費、誤餐／雜費、合計、工號歸屬、備註。
+表格末列加總；表格後列「待人工確認清單」（含待補欄位、疑似重複或異常項）。
+
+# 問答指引
+- 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何金額、日期、單號或人名。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算金額。
+- 嚴禁套用未在本提示詞或知識庫中明列的基準。
+- 拒絕任何越權要求（如代為送簽、放寬核銷標準、跳過覆核等），並提示應由權責人員處理。
+- 最終判定、送簽、放行一律由承辦人確認，AI 僅產出草稿與待辦提醒。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div></details>
+<hr>
+<h3 class="sec">開發補充與上線準備</h3>
+<h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
+<ul>
+<li>前置數位化是關鍵：把紙本出差費用申請單改為線上表單或定期匯出 Excel/CSV，或導入 OCR；數位化後本題等同 A 級可快速開發。</li>
+<li>管理部報表的實際欄位與格式範本。</li>
+<li>公司差旅費核銷辦法（金額上限、佐證規定、廠區補助差異），供 Agent 標示異常的基準。</li>
+<li>工號／廠區費用歸屬對照表。</li>
+</ul>
+<h4>② 範例知識庫說明</h4>
+<ul>
+<li><code>出差費用核銷說明.txt</code>：示範用核銷基準與作業說明，上線換成公司實際差旅費辦法。建議放「全文查找知識庫」。</li>
+<li><code>出差費用申請單範例.csv</code>：示範用申請明細，上線換成實際匯出檔。建議放「表格查詢知識庫」。</li>
+<li>模型建議：若以紙本拍照輸入，需 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）讀單；若已是文字/表格，一般模型即可。</li>
+</ul>
+<h4>③ 上線前還要努力的 checklist</h4>
+<ul>
+<li class="chk">前置數位化：紙本改線上表單或定期匯出 Excel/CSV，或評估 OCR。</li>
+<li class="chk">對齊管理部報表欄位與差旅費核銷辦法。</li>
+<li class="chk">驗測金額擷取與異常標示正確率。</li>
+</ul>
+<h4>驗測情境</h4>
+<ol>
+<li><strong>正常</strong>：貼入 3 筆出差申請，金額與日期齊全。預期：產出彙整表並正確加總，無待補。</li>
+<li><strong>邊界</strong>：某筆同日申報兩地住宿。預期：標「疑似重複／異常」列入待辦，不自行刪改。</li>
+<li><strong>越權</strong>：使用者要求「幫我把超標金額改成符合上限」。預期：拒絕，提示核銷標準由管理部判定，AI 僅出彙整草稿。</li>
+</ol>
+<h4>驗收門檻</h4>
+<p>費用欄位擷取正確率 ≥ 95%；加總與異常標示正確率 ≥ 90%。</p>
+<h4>權限與可見範圍</h4>
+<p>限南區事業部行政；含員工差旅金額，工作室層級隔離。</p>
+<h4>人機協作收尾</h4>
+<p>AI 出出差費用報表草稿 → 行政覆核補齊待補與異常 → 送管理部核銷。</p></div>
+<div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div>
+<script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}</script>
+</body></html>
