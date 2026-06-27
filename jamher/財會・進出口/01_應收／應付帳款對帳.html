@@ -67,7 +67,7 @@ body.lang-zh .en{display:none}
   <p class="crumb">占賀五金 AI Agent 工作坊　·　財會・進出口</p>
   <span class="no">題目 #01</span>
   <h1>應收／應付帳款對帳</h1>
-  <div class="chips"><span class="chip"><b>題型</b> 審查比對</span><span class="chip"><b>執行</b> 單階段</span><span class="chip"><b>模型</b> Claude 4 Sonnet / GPT-4o</span></div>
+  <div class="chips"><span class="chip"><b>題型</b> 審查比對</span><span class="chip"><b>執行</b> 單階段</span><span class="chip"><b>模型</b> Claude Sonnet 4.6 / GPT-4.1</span></div>
 </header>
 <nav class="toc"><a href="#pain">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 完整提示詞</a><a href="#kb">④ 知識庫設計</a><a href="#build">⑤ 建置流程</a><a href="#test">⑥ 驗測情境</a></nav>
 <main>
@@ -75,7 +75,7 @@ body.lang-zh .en{display:none}
 2. 資料輸入與來源：初期：ERP 帳款匯出 Excel（應收/應付明細）＋客戶或供應商寄來的對帳單；中期可改為直接串接 ERP 取數。
 3. 預期輸出內容：一張「對帳差異表」（Markdown 表格，可下載 xlsx），逐筆標示相符／金額不符／單方有對方無，附差異金額與差異原因初判，給財會覆核後回覆對方。
 4. 任務步驟：1) 讀入 ERP 帳款匯出與對帳單 → 2) 以發票號為鍵逐筆比對金額/幣別 → 3) 標示差異（金額不符、單方缺漏）→ 4) 計算差異金額並初判原因 → 5) 輸出對帳差異表（同仁覆核）。
-5. 知識來源：ERP 應收/應付帳款明細、客戶/供應商對帳單、發票對應規則（一張發票一筆／可拆分）。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>說白一點：這題就是每個月那件最煩的對帳——你不用再一筆一筆拿 ERP 帳款去對客戶/供應商的對帳單，先讓 AI 做。</li><li>你把「ERP 帳款匯出」和「對帳單」丟給它，它會用發票號當鍵，把兩邊金額一筆筆對起來，金額不符、或一邊有一邊沒有的，它會直接抓出來、算好差額；對不上或欄位缺的它會標出來，不會自己亂湊數。</li><li>等於 AI 先把對帳差異表的草稿做好，金額怎麼認、怎麼回覆對方，你再對一對、判定一下就好。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>建議模型：Claude 4 Sonnet｜溫度：0.2｜執行模式：單階段｜知識庫：應收帳款_ERP明細（表格查詢）、客戶對帳單（表格查詢）｜輸出：Markdown 表格（對帳差異表＋需人工確認清單）</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
+5. 知識來源：ERP 應收/應付帳款明細、客戶/供應商對帳單、發票對應規則（一張發票一筆／可拆分）。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>說白一點：這題就是每個月那件最煩的對帳——你不用再一筆一筆拿 ERP 帳款去對客戶/供應商的對帳單，先讓 AI 做。</li><li>你把「ERP 帳款匯出」和「對帳單」丟給它，它會用發票號當鍵，把兩邊金額一筆筆對起來，金額不符、或一邊有一邊沒有的，它會直接抓出來、算好差額；對不上或欄位缺的它會標出來，不會自己亂湊數。</li><li>等於 AI 先把對帳差異表的草稿做好，金額怎麼認、怎麼回覆對方，你再對一對、判定一下就好。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>建議模型：Claude Sonnet 4.6 / GPT-4.1（先用此組測試）｜溫度：0.2｜執行模式：單階段｜知識庫：應收帳款_ERP明細（表格查詢）、客戶對帳單（表格查詢）｜輸出：Markdown 表格（對帳差異表＋需人工確認清單）</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
 你是一位服務於占賀五金（占賀五金股份有限公司，台南仁德的螺帽／扣件製造廠，外銷汽車與航太，通過 IATF 16949、ISO 9001）的 AI 助手，協助財會・進出口同仁完成「應收／應付帳款對帳」這項工作。
 
 # 任務

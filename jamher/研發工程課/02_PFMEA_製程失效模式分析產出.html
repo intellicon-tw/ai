@@ -67,7 +67,7 @@ body.lang-zh .en{display:none}
   <p class="crumb">占賀五金 AI Agent 工作坊　·　研發工程課</p>
   <span class="no">題目 #02</span>
   <h1>PFMEA 製程失效模式分析產出</h1>
-  <div class="chips"><span class="chip"><b>題型</b> 標準化作業</span><span class="chip"><b>執行</b> 兩階段</span><span class="chip"><b>模型</b> Claude 4 Sonnet / Gemini 2.5 Pro（VLM）</span></div>
+  <div class="chips"><span class="chip"><b>題型</b> 標準化作業</span><span class="chip"><b>執行</b> 兩階段</span><span class="chip"><b>模型</b> Claude Sonnet 4.6 / GPT-4.1（可讀 PDF／圖）</span></div>
 </header>
 <nav class="toc"><a href="#pain">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 完整提示詞</a><a href="#kb">④ 知識庫設計</a><a href="#build">⑤ 建置流程</a><a href="#test">⑥ 驗測情境</a></nav>
 <main>
@@ -75,7 +75,7 @@ body.lang-zh .en{display:none}
 2. 資料輸入與來源：使用者貼上或上傳成品工作令（文字或 PDF），含工作號碼、品名、材質、製程流程、檢查項目表。
 3. 預期輸出內容：Markdown 格式 PFMEA 逐項明細（14 欄），含 S/O/D、SO、RPN 與改善排序，判斷性欄位加註(建議)；由工程師覆核。
 4. 任務步驟：1) 取得工令 2) AI 解析檢查項目（步驟一） 3) 查庫帶 S/O/D、計算 SO/RPN（步驟二） 4) 依 RPN 排序產出 PFMEA 草稿。
-5. 知識來源：特性指標表、量具探測抽樣表、製程詞彙中英對照表、關鍵特性與★判定規則（選用：品保部SIP 全文查找）。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>說白一點：把工令做成 PFMEA 這件每次花一整天的事，你不用再一項項查 S/O/D、自己算 RPN——先讓 AI 做掉大半。</li><li>你把成品工作令貼給它，它會先整理檢查項目，再去查對照表帶出嚴重度、發生度、探測度，用公式算 SO 跟 RPN、照風險高低排改善順序，湊成 PFMEA 草稿；失效模式、原因這種要判斷的欄它會標(建議)、查不到的標「待確認」，不會自己亂給分。</li><li>這題牽涉品保專業判定，所以 AI 分兩步出草稿、RPN 一律用公式算，你只要把 S/O/D 跟建議措施確認過、放行就好。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>Agent 名稱：PFMEA 生成助理｜需求單位：研發工程課｜建議模型：Claude 4 Sonnet / Gemini 2.5 Pro（讀 PDF 工令）｜溫度：0.2｜執行模式：兩階段隔離｜知識庫：特性指標表、量具探測抽樣表、製程詞彙中英對照表、關鍵特性與★判定規則（選用 品保部SIP）｜輸出：Markdown 14 欄表格（含 RPN）</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
+5. 知識來源：特性指標表、量具探測抽樣表、製程詞彙中英對照表、關鍵特性與★判定規則（選用：品保部SIP 全文查找）。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>說白一點：把工令做成 PFMEA 這件每次花一整天的事，你不用再一項項查 S/O/D、自己算 RPN——先讓 AI 做掉大半。</li><li>你把成品工作令貼給它，它會先整理檢查項目，再去查對照表帶出嚴重度、發生度、探測度，用公式算 SO 跟 RPN、照風險高低排改善順序，湊成 PFMEA 草稿；失效模式、原因這種要判斷的欄它會標(建議)、查不到的標「待確認」，不會自己亂給分。</li><li>這題牽涉品保專業判定，所以 AI 分兩步出草稿、RPN 一律用公式算，你只要把 S/O/D 跟建議措施確認過、放行就好。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>Agent 名稱：PFMEA 生成助理｜需求單位：研發工程課｜建議模型：Claude Sonnet 4.6 / GPT-4.1（先用此組測試）｜溫度：0.2｜執行模式：兩階段隔離｜知識庫：特性指標表、量具探測抽樣表、製程詞彙中英對照表、關鍵特性與★判定規則（選用 品保部SIP）｜輸出：Markdown 14 欄表格（含 RPN）</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
 您是「占賀五金 PFMEA（製程失效模式與效應分析）生成助理」，專精於將占賀五金的成品工作令，轉換為符合 IATF 16949 / PPAP 規範的 PFMEA 逐項明細。您是嚴謹的品保文件協作者，嚴重度、發生度、探測度等數值只依據知識庫對照表帶出，RPN 一律由公式計算，絕不憑空捏造。
 
 # 任務
