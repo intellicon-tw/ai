@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>占賀五金 AI Agent 開發實務工作坊｜研發工程課</title>
+<style>
+:root{--ink:#1d1430;--purple:#5a2d8a;--purple2:#7b46b8;--lav:#f3eefb;--line:#e6ddf2;--muted:#7a7290;--bg:#ffffff;--code:#241a36;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.75;font-size:16px}
+a{color:var(--purple)}
+.hero{background:linear-gradient(135deg,#3a1c5e,#5a2d8a 55%,#7b46b8);color:#fff;padding:42px 7vw 34px}
+.hero .crumb{font-size:13px;letter-spacing:.06em;color:#d9c8f0;margin:0 0 10px}
+.hero .no{display:inline-block;font-size:13px;font-weight:700;background:rgba(255,255,255,.16);padding:3px 12px;border-radius:999px;margin-bottom:14px}
+.hero h1{margin:0 0 8px;font-size:32px;line-height:1.25}
+.hero .sub{color:#e7dbf7;font-size:15px;margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12.5px;padding:5px 11px;border-radius:8px}
+.chip b{font-weight:700;color:#fff}
+nav.toc{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:10px 7vw;display:flex;flex-wrap:wrap;gap:6px}
+nav.toc a{font-size:13px;color:var(--purple);text-decoration:none;padding:4px 10px;border-radius:7px;background:var(--lav)}
+main{padding:30px 7vw 70px;max-width:1040px;margin:0 auto}
+section{margin:0 0 34px;scroll-margin-top:64px}
+h2{font-size:21px;border-left:5px solid var(--purple);padding-left:12px;margin:0 0 14px}
+.lead{background:var(--lav);border-radius:12px;padding:16px 20px;margin:0 0 14px}
+ul.flow{padding-left:0;list-style:none;margin:0}
+ul.flow li{position:relative;padding:9px 0 9px 30px;border-bottom:1px dashed var(--line)}
+ul.flow li:last-child{border-bottom:none}
+ul.flow li:before{content:"\25B6";color:var(--purple2);position:absolute;left:4px;top:9px;font-size:12px}
+pre{background:var(--code);color:#ece6f7;border-radius:12px;padding:18px 20px;overflow:auto;font-size:13.5px;line-height:1.65;font-family:"SF Mono",Consolas,"Noto Sans Mono",monospace;white-space:pre-wrap;word-break:break-word}
+details{border:1px solid var(--line);border-radius:12px;margin:0 0 12px;overflow:hidden;background:#fff}
+details>summary{cursor:pointer;padding:13px 18px;font-weight:600;background:var(--lav);list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details>summary:before{content:"\FF0B ";color:var(--purple)}
+details[open]>summary:before{content:"\FF0D "}
+details .inner{padding:14px 18px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;white-space:nowrap}
+th{background:var(--lav);position:sticky;top:0}
+.kbtag{display:inline-block;font-size:11.5px;font-weight:700;color:#fff;background:var(--purple2);border-radius:6px;padding:2px 8px;margin-right:8px}
+.muted{color:var(--muted);font-size:13px}
+.copybtn{float:right;font-size:12px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:5px 12px;cursor:pointer}
+.note{border-left:4px solid #d9a900;background:#fff9e6;padding:10px 14px;border-radius:8px;font-size:14px;margin:12px 0}
+footer{border-top:1px solid var(--line);padding:24px 7vw;color:var(--muted);font-size:13px;text-align:center}
+.backlink{display:inline-block;margin-bottom:10px;font-size:13px;color:#d9c8f0;text-decoration:none}
+.q5{border:1px solid var(--line);border-radius:14px;margin:16px 0 0;overflow:hidden}
+.q5head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:var(--lav);font-weight:700;color:var(--purple);font-size:13.5px;flex-wrap:wrap}
+.q5cta{font-size:12.5px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:6px 13px;cursor:pointer;white-space:nowrap}
+.q5row{display:flex;gap:14px;padding:12px 16px;border-top:1px solid var(--line);align-items:flex-start}
+.q5n{flex:none;width:30px;height:30px;border-radius:999px;background:var(--purple);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:1px}
+.q5body{flex:1;min-width:0}
+.q5lab{font-weight:700;color:var(--ink);font-size:15px;margin-bottom:3px}
+.q5hint{font-weight:400;color:var(--muted);font-size:12px;margin-left:10px}
+.q5ans{color:#3a3450;font-size:14px;line-height:1.65}
+.dlbtn{float:right;font-size:12px;font-weight:600;background:#00A896;color:#fff;text-decoration:none;border-radius:7px;padding:4px 12px;margin-left:10px}
+.dlbtn:hover{filter:brightness(1.08)}
+.hero{position:relative}
+body.lang-en .zh{display:none}
+body.lang-zh .en{display:none}
+.langtoggle{position:absolute;top:16px;right:20px;font-size:13px;z-index:6}
+.langtoggle a{color:#fff;text-decoration:none;opacity:.65;padding:3px 9px;border-radius:6px;cursor:pointer}
+.langtoggle a.on{opacity:1;background:rgba(255,255,255,.2);font-weight:700}
+.langtoggle a.deck{opacity:1;border:1px solid rgba(255,255,255,.55);margin-right:10px;font-weight:700}
+.langtoggle a.deck:hover{background:rgba(255,255,255,.18)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{display:block;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:18px 20px;transition:.15s;background:#fff}
+.card:hover{border-color:var(--purple2);box-shadow:0 8px 24px rgba(90,45,138,.12);transform:translateY(-2px)}
+.cardno{display:inline-block;font-size:12px;font-weight:700;color:#fff;background:var(--purple);border-radius:999px;padding:2px 11px}
+.card h3{margin:10px 0 4px;font-size:18px}
+.ctype{font-size:12.5px;color:var(--purple2);font-weight:600;margin:8px 0 8px}
+.cpain{font-size:13.5px;color:#4a4360;margin:0}
+.card.feat{border:2px solid var(--purple2);background:linear-gradient(180deg,#faf7ff,#ffffff)}
+.card.demo{border-left:4px solid var(--purple2)}
+.tbadge{display:inline-block;font-size:11.5px;font-weight:700;color:#fff;background:var(--purple2);border-radius:999px;padding:2px 10px;margin-left:8px}
+.intro{max-width:820px;margin:0 0 24px;color:#4a4360}
+</style></head><body class="lang-zh">
+<header class="hero"><div data-egbar="1" style="position:fixed;top:14px;right:16px;z-index:9999;display:flex;gap:10px"><a href="https://docs.google.com/presentation/d/1oXxuXUbW3S8pU1Q1LbirRhLw9xrgIs3pXzWcuJm_RfA/" target="_blank" rel="noopener" style="font:700 13px/1 "Microsoft JhengHei",sans-serif;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.6);padding:6px 12px;border-radius:7px;background:rgba(90,45,138,.35);backdrop-filter:blur(4px)">軟體簡介</a><a href="https://intellicon.app/" target="_blank" rel="noopener" style="font:700 13px/1 "Microsoft JhengHei",sans-serif;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.6);padding:6px 12px;border-radius:7px;background:rgba(90,45,138,.35);backdrop-filter:blur(4px)">打開EgentHub</a></div>
+  <a class="backlink" href="../index.html" style="display:inline-block;margin-bottom:10px;font-size:13px;color:#d9c8f0;text-decoration:none">← 回部門總目錄</a>
+  
+  <p class="crumb">智慧方案 × 占賀五金</p>
+  <h1>占賀五金 AI Agent 開發實務工作坊｜研發工程課</h1>
+  <p class="sub">由部門任務盤點轉化的 POC 解題示範（每題一頁：開發思路→提示詞→知識庫→建置→驗測）</p>
+  <div class="chips"><span class="chip"><b>共</b> 6 款 Agent POC</span><span class="chip"><b>部門</b> 研發工程課</span><span class="chip"><b>來源</b> 部門任務盤點</span></div>
+</header>
+<main>
+  <p class="intro">這些題對應研發工程課的真實工作——從製程工令做 Control Plan / PFMEA、工程圖辨識轉檢驗表、新舊圖差異比對、螺帽重量試算，到把資深技師經驗結構化傳承。點進任一題看完整開發流程。</p>
+  <div class="grid"><a class="card feat" href="01_Control_Plan_%E7%AE%A1%E5%88%B6%E8%A8%88%E7%95%AB%E7%94%A2%E5%87%BA.html">
+      <span class="cardno">#01</span><span class="tbadge">主打題</span>
+      <h3>Control Plan 管制計畫產出</h3>
+      <p class="ctype">文件生成型（工令→管制文件）</p>
+      <p class="cpain">工程師把製程工令逐項查 759 筆 key word 對照表、帶抽樣頻率與量具、再排版成 CP，每份要花 1 天以上、每月 20-40 份、3-5 位工程師輪流做。</p>
+    </a><a class="card std" href="02_PFMEA_%E8%A3%BD%E7%A8%8B%E5%A4%B1%E6%95%88%E6%A8%A1%E5%BC%8F%E5%88%86%E6%9E%90%E7%94%A2%E5%87%BA.html">
+      <span class="cardno">#02</span>
+      <h3>PFMEA 製程失效模式分析產出</h3>
+      <p class="ctype">文件生成型（工令→失效分析）</p>
+      <p class="cpain">工程師依製程流程逐項帶嚴重度/發生度/探測度、算 RPN、排改善順序，每份要花 1 天以上、每月 15-30 份、3-5 位工程師。</p>
+    </a><a class="card std" href="03_%E5%B7%A5%E7%A8%8B%E5%9C%96%E5%B0%BA%E5%AF%B8%E8%BE%A8%E8%AD%98%E8%BD%89%E6%AA%A2%E9%A9%97%E7%AE%A1%E5%88%B6%E8%A1%A8.html">
+      <span class="cardno">#03</span>
+      <h3>工程圖尺寸辨識轉檢驗管制表</h3>
+      <p class="ctype">圖面辨識型（工程圖→檢驗表）</p>
+      <p class="cpain">工程師看客戶工程圖、逐一抄尺寸公差再對量具排成檢驗表，每張要花 30-60 分鐘、每月 60-120 張、3-5 位工程師。</p>
+    </a><a class="card std" href="04_%E8%9E%BA%E5%B8%BD%E9%87%8D%E9%87%8F%E8%88%87%E6%9D%90%E6%96%99%E7%94%A8%E9%87%8F%E8%A9%A6%E7%AE%97.html">
+      <span class="cardno">#04</span>
+      <h3>螺帽重量與材料用量試算</h3>
+      <p class="ctype">計算試算型（規格→重量/用量）</p>
+      <p class="cpain">工程/業務依規格材質手算單顆重量、千顆重量與線材用量供報價備料，每件 10-15 分鐘、每月 100-200 件、3-5 位工程/業務。</p>
+    </a><a class="card std" href="05_%E6%96%B0%E8%88%8A%E5%B7%A5%E7%A8%8B%E5%9C%96%E5%B7%AE%E7%95%B0%E6%AF%94%E5%B0%8D.html">
+      <span class="cardno">#05</span>
+      <h3>新舊工程圖差異比對</h3>
+      <p class="ctype">圖面審查型（新舊圖→差異清單）</p>
+      <p class="cpain">工程師人工比對客戶新舊版圖面找尺寸/公差/註記變更點，每組 30-60 分鐘、每月 40-80 組、3-5 位工程師，漏看變更易造成後段量產風險。</p>
+    </a><a class="card std" href="06_%E8%B3%87%E6%B7%B1%E6%8A%80%E5%B8%AB%E7%B6%93%E9%A9%97%E5%82%B3%E6%89%BF%E7%9F%A5%E8%AD%98%E5%BA%AB%EF%BC%88%E6%A8%A1%E5%85%B7_%E6%94%BB%E7%89%99_know-how%EF%BC%89.html">
+      <span class="cardno">#06</span>
+      <h3>資深技師經驗傳承知識庫（模具/攻牙 know-how）</h3>
+      <p class="ctype">知識問答型（情境→經驗建議）</p>
+      <p class="cpain">資深技師的成型模具、攻牙參數與異常排除經驗多在腦中，新人遇問題只能反覆請教，傳承斷層風險高（長期戰略專案，3-5 位工程/技師）。</p>
+    </a></div>
+</main>
+<footer>智慧方案股份有限公司　Intellicon Solutions　·　占賀五金 AI Agent 開發實務工作坊</footer>
+<script>
+function setLang(l){document.body.className='lang-'+l;try{localStorage.setItem('tecoLang',l);}catch(e){}document.querySelectorAll('.langtoggle a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-l')===l);});}
+(function(){var l='zh';try{l=localStorage.getItem('tecoLang')||'zh';}catch(e){}setLang(l);})();
+
+</script>
+</body></html>
