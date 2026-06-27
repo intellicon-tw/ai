@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>豐群水產 AI Agent 開發實務工作坊 · 永續發展部</title>
+<style>
+:root{--ink:#1d1430;--purple:#5a2d8a;--purple2:#7b46b8;--lav:#f3eefb;--line:#e6ddf2;--muted:#7a7290;--bg:#ffffff;--code:#241a36;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.75;font-size:16px}
+a{color:var(--purple)}
+.hero{background:linear-gradient(135deg,#3a1c5e,#5a2d8a 55%,#7b46b8);color:#fff;padding:42px 7vw 34px}
+.hero .crumb{font-size:13px;letter-spacing:.06em;color:#d9c8f0;margin:0 0 10px}
+.hero .no{display:inline-block;font-size:13px;font-weight:700;background:rgba(255,255,255,.16);padding:3px 12px;border-radius:999px;margin-bottom:14px}
+.hero h1{margin:0 0 8px;font-size:32px;line-height:1.25}
+.hero .sub{color:#e7dbf7;font-size:15px;margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12.5px;padding:5px 11px;border-radius:8px}
+.chip b{font-weight:700;color:#fff}
+nav.toc{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:10px 7vw;display:flex;flex-wrap:wrap;gap:6px}
+nav.toc a{font-size:13px;color:var(--purple);text-decoration:none;padding:4px 10px;border-radius:7px;background:var(--lav)}
+main{padding:30px 7vw 70px;max-width:1040px;margin:0 auto}
+section{margin:0 0 34px;scroll-margin-top:64px}
+h2{font-size:21px;border-left:5px solid var(--purple);padding-left:12px;margin:0 0 14px}
+.lead{background:var(--lav);border-radius:12px;padding:16px 20px;margin:0 0 14px}
+ul.flow{padding-left:0;list-style:none;margin:0}
+ul.flow li{position:relative;padding:9px 0 9px 30px;border-bottom:1px dashed var(--line)}
+ul.flow li:last-child{border-bottom:none}
+ul.flow li:before{content:"\25B6";color:var(--purple2);position:absolute;left:4px;top:9px;font-size:12px}
+pre{background:var(--code);color:#ece6f7;border-radius:12px;padding:18px 20px;overflow:auto;font-size:13.5px;line-height:1.65;font-family:"SF Mono",Consolas,"Noto Sans Mono",monospace;white-space:pre-wrap;word-break:break-word}
+details{border:1px solid var(--line);border-radius:12px;margin:0 0 12px;overflow:hidden;background:#fff}
+details>summary{cursor:pointer;padding:13px 18px;font-weight:600;background:var(--lav);list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details>summary:before{content:"\FF0B ";color:var(--purple)}
+details[open]>summary:before{content:"\FF0D "}
+details .inner{padding:14px 18px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;white-space:nowrap}
+th{background:var(--lav);position:sticky;top:0}
+.kbtag{display:inline-block;font-size:11.5px;font-weight:700;color:#fff;background:var(--purple2);border-radius:6px;padding:2px 8px;margin-right:8px}
+.muted{color:var(--muted);font-size:13px}
+.copybtn{float:right;font-size:12px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:5px 12px;cursor:pointer}
+.note{border-left:4px solid #d9a900;background:#fff9e6;padding:10px 14px;border-radius:8px;font-size:14px;margin:12px 0}
+footer{border-top:1px solid var(--line);padding:24px 7vw;color:var(--muted);font-size:13px;text-align:center}
+.backlink{display:inline-block;margin-bottom:10px;font-size:13px;color:#d9c8f0;text-decoration:none}
+.q5{border:1px solid var(--line);border-radius:14px;margin:16px 0 0;overflow:hidden}
+.q5head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:var(--lav);font-weight:700;color:var(--purple);font-size:13.5px;flex-wrap:wrap}
+.q5cta{font-size:12.5px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:6px 13px;cursor:pointer;white-space:nowrap}
+.q5row{display:flex;gap:14px;padding:12px 16px;border-top:1px solid var(--line);align-items:flex-start}
+.q5n{flex:none;width:30px;height:30px;border-radius:999px;background:var(--purple);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:1px}
+.q5body{flex:1;min-width:0}
+.q5lab{font-weight:700;color:var(--ink);font-size:15px;margin-bottom:3px}
+.q5hint{font-weight:400;color:var(--muted);font-size:12px;margin-left:10px}
+.q5ans{color:#3a3450;font-size:14px;line-height:1.65}
+.dlbtn{float:right;font-size:12px;font-weight:600;background:#00A896;color:#fff;text-decoration:none;border-radius:7px;padding:4px 12px;margin-left:10px}
+.dlbtn:hover{filter:brightness(1.08)}
+.hero{position:relative}
+body.lang-en .zh{display:none}
+body.lang-zh .en{display:none}
+.langtoggle{position:absolute;top:16px;right:20px;font-size:13px;z-index:6}
+.langtoggle a{color:#fff;text-decoration:none;opacity:.65;padding:3px 9px;border-radius:6px;cursor:pointer}
+.langtoggle a.on{opacity:1;background:rgba(255,255,255,.2);font-weight:700}
+.langtoggle a.deck{opacity:1;border:1px solid rgba(255,255,255,.55);margin-right:10px;font-weight:700}
+.langtoggle a.deck:hover{background:rgba(255,255,255,.18)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{display:block;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:18px 20px;transition:.15s;background:#fff}
+.card:hover{border-color:var(--purple2);box-shadow:0 8px 24px rgba(90,45,138,.12);transform:translateY(-2px)}
+.cardno{display:inline-block;font-size:12px;font-weight:700;color:#fff;background:var(--purple);border-radius:999px;padding:2px 11px}
+.card h3{margin:10px 0 4px;font-size:18px}
+.ctype{font-size:12.5px;color:var(--purple2);font-weight:600;margin:8px 0 8px}
+.cpain{font-size:13.5px;color:#4a4360;margin:0}
+.card.feat{border:2px solid var(--purple2);background:linear-gradient(180deg,#faf7ff,#ffffff)}
+.card.demo{border-left:4px solid var(--purple2)}
+.tbadge{display:inline-block;font-size:11.5px;font-weight:700;color:#fff;background:var(--purple2);border-radius:999px;padding:2px 10px;margin-left:8px}
+.intro{max-width:820px;margin:0 0 24px;color:#4a4360}
+</style></head><body class="lang-zh">
+<header class="hero">
+  <div class="langtoggle"><a class="deck" href="https://docs.google.com/presentation/d/1oXxuXUbW3S8pU1Q1LbirRhLw9xrgIs3pXzWcuJm_RfA/edit" target="_blank" rel="noopener">軟體簡介</a><a class="deck" href="https://intellicon.app/" target="_blank" rel="noopener">打開 EgentHub</a></div>
+  <a class="backlink" href="../index.html" style="display:inline-block;margin-bottom:10px;font-size:13px;color:#d9c8f0;text-decoration:none">← 回部門總目錄</a>
+  
+  <p class="crumb">智慧方案 × 豐群水產</p>
+  <h1>豐群水產 AI Agent 開發實務工作坊 · 永續發展部</h1>
+  <p class="sub">永續發展部任務盤點轉化的 POC 解題示範（共 5 題）</p>
+  <div class="chips"><span class="chip"><b>共</b> 5 款 Agent POC</span><span class="chip"><b>定位</b> 內部人機協作 · 非全自動</span></div>
+</header>
+<main>
+  <p class="intro">永續是豐群的核心定位與市場通行證，認證查詢與可追溯文件高頻又對外，槓桿高；IUU 風險追溯屬長期戰略（ROF）。建議補上：公司持有認證證書、漁船與航次來源資料、社會責任標準與 RFMO／IUU 名單。以下每一頁對應一個需求，點進去可看到：需求與痛點 → 開發思路 → 完整提示詞 → 知識庫設計 → 建置流程 → 驗測情境。</p>
+  <div class="grid"><a class="card feat" href="01_%E6%B0%B8%E7%BA%8C%E6%BC%81%E6%A5%AD%E8%AA%8D%E8%AD%89%E6%9F%A5%E8%A9%A2%E5%8A%A9%E7%90%86.html">
+      <span class="cardno">#01</span><span class="tbadge">高</span>
+      <h3>永續漁業認證查詢助理</h3>
+      <p class="ctype">知識庫問答型（查詢）</p>
+      <p class="cpain">永續與業務同仁常被客戶問各項永續認證的適用範圍、效期與所需文件，要翻文件查找，回覆慢。</p>
+    </a><a class="card feat" href="02_%E6%BC%81%E7%8D%B2%E5%8F%AF%E8%BF%BD%E6%BA%AF%E6%80%A7%E6%96%87%E4%BB%B6%E5%BD%99%E6%95%B4%E5%8A%A9%E7%90%86.html">
+      <span class="cardno">#02</span><span class="tbadge">高</span>
+      <h3>漁獲可追溯性文件彙整助理</h3>
+      <p class="ctype">標準化作業型（文件生成）</p>
+      <p class="cpain">永續與品保同仁每批次需串接漁船、航次、認證多份文件，手動逐欄填入追溯範本，量大且格式不一致。</p>
+    </a><a class="card demo" href="03_ESG_%E6%B0%B8%E7%BA%8C%E5%A0%B1%E5%91%8A%E6%9B%B8%E6%AE%B5%E8%90%BD%E8%8D%89%E7%A8%BF%E5%8A%A9%E7%90%86.html">
+      <span class="cardno">#03</span><span class="tbadge">中</span>
+      <h3>ESG 永續報告書段落草稿助理</h3>
+      <p class="ctype">內容生成型（草稿）</p>
+      <p class="cpain">永續同仁每年撰寫 ESG 報告書，需依 GRI／SASB 框架逐段撰寫，耗時且格式不易掌握。</p>
+    </a><a class="card demo" href="04_%E6%BC%81%E5%B7%A5%E6%AC%8A%E7%9B%8A%E5%90%88%E8%A6%8F%E6%9F%A5%E6%AA%A2%E8%A1%A8%E5%8A%A9%E7%90%86.html">
+      <span class="cardno">#04</span><span class="tbadge">中</span>
+      <h3>漁工權益合規查檢表助理</h3>
+      <p class="ctype">審查比對型（對帳）</p>
+      <p class="cpain">永續與法遵同仁每批次查核漁工待遇，需逐項比對 ILO／MLC 標準，手動填查檢表耗時且標準繁多。</p>
+    </a><a class="card demo" href="05_%E6%BC%81%E7%8D%B2%E4%BE%86%E6%BA%90_IUU_%E9%A2%A8%E9%9A%AA%E6%99%BA%E8%83%BD%E8%BF%BD%E6%BA%AF%E5%8A%A9%E7%90%86.html">
+      <span class="cardno">#05</span><span class="tbadge">戰略性</span>
+      <h3>漁獲來源 IUU 風險智能追溯助理</h3>
+      <p class="ctype">審查比對型（對帳）</p>
+      <p class="cpain">永續與法遵同仁需人工比對漁船名單與國際 IUU 黑名單，缺乏系統性追溯機制，高風險來源難以及早預警。</p>
+    </a></div>
+</main>
+<footer>智慧方案股份有限公司　Intellicon Solutions　·　豐群水產 AI Agent 工作坊 · 永續發展部</footer>
+<script>
+function setLang(l){document.body.className='lang-'+l;try{localStorage.setItem('tecoLang',l);}catch(e){}document.querySelectorAll('.langtoggle a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-l')===l);});}
+(function(){var l='zh';try{l=localStorage.getItem('tecoLang')||'zh';}catch(e){}setLang(l);})();
+
+</script>
+</body></html>
