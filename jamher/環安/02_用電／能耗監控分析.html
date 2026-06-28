@@ -67,7 +67,7 @@ body.lang-zh .en{display:none}
   <p class="crumb">占賀五金 AI Agent 工作坊　·　環安</p>
   <span class="no">題目 #02</span>
   <h1>用電／能耗監控分析</h1>
-  <div class="chips"><span class="chip"><b>題型</b> 數據解讀</span><span class="chip"><b>執行</b> 單階段</span><span class="chip"><b>模型</b> Claude Sonnet 4.6 / GPT-4.1</span></div>
+  <div class="chips"><span class="chip"><b>題型</b> 數據解讀</span><span class="chip"><b>執行</b> 單階段</span><span class="chip"><b>模型</b> Claude 4.6 Sonnet / Gemini 3.1 Pro</span></div>
 </header>
 <nav class="toc"><a href="#pain">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 完整提示詞</a><a href="#kb">④ 知識庫設計</a><a href="#build">⑤ 建置流程</a><a href="#test">⑥ 驗測情境</a></nav>
 <main>
@@ -75,7 +75,7 @@ body.lang-zh .en{display:none}
 2. 資料輸入與來源：初期上傳電錶／能耗匯出 Excel（含月份、區域、設備類別、用電度數、產量），來源為各區電錶抄表；中期可串接 SCADA。
 3. 預期輸出內容：Markdown 能耗報表：各區用電趨勢、單位耗能(kWh/千顆)、月對月變化、異常標示與節能機會摘要；給環安與廠務主管。
 4. 任務步驟：1) 上傳電錶／能耗匯出；2) 彙整各區趨勢並以產量計算單位耗能；3) 比對月對月變化、標示異常（如單耗明顯偏高）；4) 產出能耗報表與節能機會摘要。
-5. 知識來源：歷史能耗基準與各區單位耗能合理帶寬（若無，先以當期月對月與全廠平均為比較基準），不另需外部資料。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>說白一點：要看各廠區用電和能耗，你不用再每次拉 Excel 比對一兩個小時——先讓 AI 整理。</li><li>你把電錶／能耗匯出丟給它，它會自動把各區用電彙整起來、用產量算出單位耗能、比月對月的變化，再湊成一份『能耗報表＋節能機會摘要』的草稿；產量或用量缺的、算不出單耗的，它會標出來，不會硬湊一個數字。</li><li>等於 AI 先把報表和異常抓出來，到底是不是真的浪費、要不要動手節能，你研判決定就好。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>建議模型：Claude Sonnet 4.6 / GPT-4.1（先用此組測試）｜溫度：0.2｜執行模式：單階段｜知識庫：廠區用電能耗（表格查詢，含歷史基準）｜輸出：Markdown 能耗報表＋節能摘要｜可行性：A（資料已數位化）｜POC 優先度：P3</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
+5. 知識來源：歷史能耗基準與各區單位耗能合理帶寬（若無，先以當期月對月與全廠平均為比較基準），不另需外部資料。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>說白一點：要看各廠區用電和能耗，你不用再每次拉 Excel 比對一兩個小時——先讓 AI 整理。</li><li>你把電錶／能耗匯出丟給它，它會自動把各區用電彙整起來、用產量算出單位耗能、比月對月的變化，再湊成一份『能耗報表＋節能機會摘要』的草稿；產量或用量缺的、算不出單耗的，它會標出來，不會硬湊一個數字。</li><li>等於 AI 先把報表和異常抓出來，到底是不是真的浪費、要不要動手節能，你研判決定就好。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>建議模型：Claude 4.6 Sonnet / Gemini 3.1 Pro（先用此組測試）｜溫度：0.2｜執行模式：單階段｜知識庫：廠區用電能耗（表格查詢，含歷史基準）｜輸出：Markdown 能耗報表＋節能摘要｜可行性：A（資料已數位化）｜POC 優先度：P3</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
 你是一位服務於占賀五金（台南仁德螺帽／扣件廠，製程含冷鍛成型、攻牙、電鍍表面處理）的 AI 助手，協助環安人員完成「廠區用電／能耗監控分析」這項工作。
 
 # 任務

@@ -67,7 +67,7 @@ body.lang-zh .en{display:none}
   <p class="crumb">占賀五金 AI Agent 工作坊　·　品保部</p>
   <span class="no">題目 #05</span>
   <h1>IATF/ISO 稽核文件符合性檢核</h1>
-  <div class="chips"><span class="chip"><b>題型</b> 審查比對</span><span class="chip"><b>執行</b> 兩階段</span><span class="chip"><b>模型</b> Claude Sonnet 4.6 / GPT-4.1（可讀 PDF／圖）</span></div>
+  <div class="chips"><span class="chip"><b>題型</b> 審查比對</span><span class="chip"><b>執行</b> 兩階段</span><span class="chip"><b>模型</b> Claude 4.6 Sonnet / Gemini 3.1 Pro（可讀 PDF／圖）</span></div>
 </header>
 <nav class="toc"><a href="#pain">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 完整提示詞</a><a href="#kb">④ 知識庫設計</a><a href="#build">⑤ 建置流程</a><a href="#test">⑥ 驗測情境</a></nav>
 <main>
@@ -75,7 +75,7 @@ body.lang-zh .en{display:none}
 2. 資料輸入與來源：品保上傳待稽核文件（程序書、記錄、報告，PDF）；系統備有 IATF/ISO 條文要求與稽核檢查表。
 3. 預期輸出內容：逐條符合/缺漏檢核清單、缺漏項佐證需求、改善建議，供品保覆核後補件。
 4. 任務步驟：1) 上傳待稽核文件 2) 對應條文要求 3) 檢核符合性 4) 輸出符合/缺漏清單與改善建議。
-5. 知識來源：IATF/ISO 條文要求表（含佐證文件）、稽核檢查表、內部程序文件。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>說白一點：稽核前要把內部文件對著 IATF/ISO 條文逐條核、抓缺件，你不用再一條條翻——先讓 AI 對一遍。</li><li>它會先讀你上傳的內部文件，再去比對條文要求，逐條看有沒有對應佐證、列出缺漏跟待補項，湊成符合性檢核清單草稿；判斷不出來的條文它會直接標出來，不會替你蓋章說符合。</li><li>符不符合最終要稽核員跟品保認定，所以 AI 分兩步先讀檔再查條文、只出檢核草稿跟缺漏提醒，你只要判定就好。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>建議模型：Claude Sonnet 4.6 / GPT-4.1（先用此組測試）｜溫度：0.2｜知識庫：IATF 條文檢核表（表格查詢）、稽核檢查表（全文查找）｜輸出：Markdown 表格</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
+5. 知識來源：IATF/ISO 條文要求表（含佐證文件）、稽核檢查表、內部程序文件。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>說白一點：稽核前要把內部文件對著 IATF/ISO 條文逐條核、抓缺件，你不用再一條條翻——先讓 AI 對一遍。</li><li>它會先讀你上傳的內部文件，再去比對條文要求，逐條看有沒有對應佐證、列出缺漏跟待補項，湊成符合性檢核清單草稿；判斷不出來的條文它會直接標出來，不會替你蓋章說符合。</li><li>符不符合最終要稽核員跟品保認定，所以 AI 分兩步先讀檔再查條文、只出檢核草稿跟缺漏提醒，你只要判定就好。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>建議模型：Claude 4.6 Sonnet / Gemini 3.1 Pro（先用此組測試）｜溫度：0.2｜知識庫：IATF 條文檢核表（表格查詢）、稽核檢查表（全文查找）｜輸出：Markdown 表格</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
 你是一位服務於占賀五金（IATF 16949／ISO 9001 認證之螺帽、扣件製造廠）的 AI 助手，協助品保完成「IATF/ISO 稽核文件符合性檢核」這項工作。
 
 # 任務

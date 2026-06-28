@@ -67,7 +67,7 @@ body.lang-zh .en{display:none}
   <p class="crumb">占賀五金 AI Agent 工作坊　·　財會・進出口</p>
   <span class="no">題目 #03</span>
   <h1>訂單損益與毛利異常分析</h1>
-  <div class="chips"><span class="chip"><b>題型</b> 數據解讀</span><span class="chip"><b>執行</b> 單階段</span><span class="chip"><b>模型</b> Claude Sonnet 4.6 / GPT-4.1</span></div>
+  <div class="chips"><span class="chip"><b>題型</b> 數據解讀</span><span class="chip"><b>執行</b> 單階段</span><span class="chip"><b>模型</b> Claude 4.6 Sonnet / Gemini 3.1 Pro</span></div>
 </header>
 <nav class="toc"><a href="#pain">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 完整提示詞</a><a href="#kb">④ 知識庫設計</a><a href="#build">⑤ 建置流程</a><a href="#test">⑥ 驗測情境</a></nav>
 <main>
@@ -75,7 +75,7 @@ body.lang-zh .en{display:none}
 2. 資料輸入與來源：初期：ERP 損益匯出 Excel（含銷貨金額、材料/加工/運費成本）；中期可改串接 ERP。
 3. 預期輸出內容：一份「訂單損益摘要」（Markdown 表格），列各訂單毛利與毛利率、依毛利率排序、標示低於門檻或異常波動的訂單，並附成本結構觀察，給財會/業務主管覆核。
 4. 任務步驟：1) 讀入 ERP 損益匯出 → 2) 逐筆計算毛利＝銷貨金額−各項成本、毛利率 → 3) 依毛利率排序並標示低於門檻者 → 4) 標示異常波動訂單 → 5) 輸出損益摘要（同仁覆核）。
-5. 知識來源：ERP 訂單損益明細、毛利率警示門檻（由公司設定）、成本科目分類。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>說白一點：這題就是每次都要花一兩小時的那件事——你不用再自己一筆筆算各訂單毛利、再用眼睛挑出哪張毛利怪怪的，先讓 AI 做。</li><li>你把「ERP 損益匯出」丟給它，它會一筆筆把毛利和毛利率算出來、依高低排好，把低於門檻或忽然掉下來的單抓出來標示；門檻或成本欄位你沒給的地方它會標出來，不會自己訂規則。</li><li>等於 AI 先把損益摘要的草稿做好，毛利為什麼偏低、後面要怎麼處理，你再對一對、判定就好。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>建議模型：Claude Sonnet 4.6 / GPT-4.1（先用此組測試）｜溫度：0.2｜執行模式：單階段｜知識庫：訂單損益明細（表格查詢）、毛利率門檻與成本科目分類｜輸出：Markdown 表格（訂單損益摘要＋需人工確認清單）</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
+5. 知識來源：ERP 訂單損益明細、毛利率警示門檻（由公司設定）、成本科目分類。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>說白一點：這題就是每次都要花一兩小時的那件事——你不用再自己一筆筆算各訂單毛利、再用眼睛挑出哪張毛利怪怪的，先讓 AI 做。</li><li>你把「ERP 損益匯出」丟給它，它會一筆筆把毛利和毛利率算出來、依高低排好，把低於門檻或忽然掉下來的單抓出來標示；門檻或成本欄位你沒給的地方它會標出來，不會自己訂規則。</li><li>等於 AI 先把損益摘要的草稿做好，毛利為什麼偏低、後面要怎麼處理，你再對一對、判定就好。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>建議模型：Claude 4.6 Sonnet / Gemini 3.1 Pro（先用此組測試）｜溫度：0.2｜執行模式：單階段｜知識庫：訂單損益明細（表格查詢）、毛利率門檻與成本科目分類｜輸出：Markdown 表格（訂單損益摘要＋需人工確認清單）</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
 你是一位服務於占賀五金（台南仁德的螺帽／扣件製造廠，外銷汽車與航太）的 AI 助手，協助財會・進出口同仁完成「訂單損益與毛利異常分析」這項工作。
 
 # 任務
