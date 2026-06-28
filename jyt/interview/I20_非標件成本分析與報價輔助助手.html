@@ -60,21 +60,21 @@ body.lang-zh .en{display:none}
 .langtoggle a.on{opacity:1;background:rgba(255,255,255,.2);font-weight:700}
 .langtoggle a.deck{opacity:1;border:1px solid rgba(255,255,255,.55);margin-right:10px;font-weight:700}
 .langtoggle a.deck:hover{background:rgba(255,255,255,.18)}
-</style></head><body class="lang-zh">
+</style><style>.tsc{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:12px 0;background:#fff}.tscname{font-weight:700;color:var(--purple);margin-bottom:8px}.tmeta{color:#4a4360;font-size:13.5px;margin-top:8px;line-height:1.7}.tsc .promptpre{margin:0}.tinlabel{font-size:12px;color:var(--muted);margin-bottom:4px}</style></head><body class="lang-zh">
 <header class="hero">
   
   <a class="backlink" href="index.html">← 回題型總覽</a>
   <p class="crumb">建皇集團 AI Agent 工作坊 · 訪談需求 · 解題示範</p>
   <span class="no">題目 #I20</span>
   <h1>非標件成本分析與報價輔助助手</h1>
-  <div class="chips"><span class="chip"><b>題型</b> 數據解讀型（成本估算，含圖紙判讀依賴）</span><span class="chip"><b>執行</b> 兩階段</span><span class="chip"><b>模型</b> Claude 4.6 Sonnet</span></div>
+  <div class="chips"><span class="chip"><b>題型</b> 數據解讀型（成本估算，含圖紙判讀依賴）</span><span class="chip"><b>執行</b> 單階段</span><span class="chip"><b>模型</b> Claude 4.6 Sonnet</span></div>
 </header>
 <nav class="toc"><a href="#pain">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 完整提示詞</a><a href="#kb">④ 知識庫設計</a><a href="#build">⑤ 建置流程</a><a href="#test">⑥ 驗測情境</a></nav>
 <main>
-<section id="pain"><h2>① 需求與痛點</h2><div class="lead">採購希望上傳產品圖紙由 AI 分析成本並給參考價格，方便議價。每天都有、耗時不定（看報價項目多寡）。難點在於非標件需從圖紙判讀規格再估成本，圖紙解析能力有限制。</div><div class="q5"><div class="q5head"><span>開發前必答的 5 個問題 — 填好可直接貼進 提示詞設計助手 生成提示詞</span><button class="q5cta" onclick="copyBlob(this)">複製給 提示詞設計助手</button></div><div class="q5row"><span class="q5n">1</span><div class="q5body"><div class="q5lab">應用場景與業務流程<span class="q5hint">幫誰解決什麼問題？</span></div><div class="q5ans">主要使用方為開發採購人員。希望上傳產品圖紙，由 AI 分析非標件成本並給出參考價格，作為與供應商議價的依據。</div></div></div><div class="q5row"><span class="q5n">2</span><div class="q5body"><div class="q5lab">資料輸入與來源<span class="q5hint">使用者給它什麼？來源從哪？</span></div><div class="q5ans">產品圖紙、項目 FCST（預估用量）。</div></div></div><div class="q5row"><span class="q5n">3</span><div class="q5body"><div class="q5lab">預期輸出內容<span class="q5hint">產出什麼格式？給誰看？</span></div><div class="q5ans">具體的成本分析以及參考價格，方便議價；供開發採購人員參考 AI 的成本分析後與供應商議價。</div></div></div><div class="q5row"><span class="q5n">4</span><div class="q5body"><div class="q5lab">任務步驟<span class="q5hint">3-5 個明確步驟</span></div><div class="q5ans">①上傳產品圖紙 ②AI 分析報價（拆解材料／加工／用量估成本） ③採購參考 AI 報價與供應商報價對比 ④進行議價</div></div></div><div class="q5row"><span class="q5n">5</span><div class="q5body"><div class="q5lab">知識來源<span class="q5hint">需要查哪些內部文件或資料庫？</span></div><div class="q5ans">材料單價表、加工工時費率表、成本估算規則與報價範本。訪談『規則判斷環節』欄填無，但實務上成本拆解需依材料/加工/管銷/利潤等估算規則。</div></div></div><pre class="q5blob-zh" style="display:none">1. 應用場景與業務流程：主要使用方為開發採購人員。希望上傳產品圖紙，由 AI 分析非標件成本並給出參考價格，作為與供應商議價的依據。
-2. 資料輸入與來源：產品圖紙、項目 FCST（預估用量）。
-3. 預期輸出內容：具體的成本分析以及參考價格，方便議價；供開發採購人員參考 AI 的成本分析後與供應商議價。
-4. 任務步驟：①上傳產品圖紙 ②AI 分析報價（拆解材料／加工／用量估成本） ③採購參考 AI 報價與供應商報價對比 ④進行議價
+<section id="pain"><h2>① 需求與痛點</h2><div class="lead">採購希望上傳產品圖紙由 AI 分析成本並給參考價格，方便議價。每天都有、耗時不定（看報價項目多寡）。難點在於非標件需從圖紙判讀規格再估成本，圖紙解析能力有限制。</div><div class="q5"><div class="q5head"><span>開發前必答的 5 個問題 — 填好可直接貼進 提示詞設計助手 生成提示詞</span><button class="q5cta" onclick="copyBlob(this)">複製給 提示詞設計助手</button></div><div class="q5row"><span class="q5n">1</span><div class="q5body"><div class="q5lab">應用場景與業務流程<span class="q5hint">幫誰解決什麼問題？</span></div><div class="q5ans">主要使用方為開發採購人員。希望上傳產品圖紙，由 AI 分析非標件成本並給出參考價格，作為與供應商議價的依據。</div></div></div><div class="q5row"><span class="q5n">2</span><div class="q5body"><div class="q5lab">資料輸入與來源<span class="q5hint">使用者給它什麼？來源從哪？</span></div><div class="q5ans">產品圖紙、項目 FCST（預估用量）。務實版由採購先把圖紙上的關鍵規格（材質、尺寸/重量、加工方式、表面處理）整理成參數表上傳；圖紙自動判讀屬視覺辨識，需後續搭配 OCR/視覺模型或人工先讀圖。</div></div></div><div class="q5row"><span class="q5n">3</span><div class="q5body"><div class="q5lab">預期輸出內容<span class="q5hint">產出什麼格式？給誰看？</span></div><div class="q5ans">具體的成本分析（Cost Breakdown）以及參考價格區間，方便議價；供開發採購人員參考 AI 的成本分析後與供應商議價。</div></div></div><div class="q5row"><span class="q5n">4</span><div class="q5body"><div class="q5lab">任務步驟<span class="q5hint">3-5 個明確步驟</span></div><div class="q5ans">①採購整理圖紙關鍵參數上傳 ②AI 依材料/加工費率拆解估成本 ③採購參考 AI 報價與供應商報價對比 ④進行議價</div></div></div><div class="q5row"><span class="q5n">5</span><div class="q5body"><div class="q5lab">知識來源<span class="q5hint">需要查哪些內部文件或資料庫？</span></div><div class="q5ans">材料單價表、加工工時費率表、成本估算規則與報價範本。訪談『規則判斷環節』欄填無，但實務上成本拆解需依材料/加工/管銷/利潤等估算規則。</div></div></div><pre class="q5blob-zh" style="display:none">1. 應用場景與業務流程：主要使用方為開發採購人員。希望上傳產品圖紙，由 AI 分析非標件成本並給出參考價格，作為與供應商議價的依據。
+2. 資料輸入與來源：產品圖紙、項目 FCST（預估用量）。務實版由採購先把圖紙上的關鍵規格（材質、尺寸/重量、加工方式、表面處理）整理成參數表上傳；圖紙自動判讀屬視覺辨識，需後續搭配 OCR/視覺模型或人工先讀圖。
+3. 預期輸出內容：具體的成本分析（Cost Breakdown）以及參考價格區間，方便議價；供開發採購人員參考 AI 的成本分析後與供應商議價。
+4. 任務步驟：①採購整理圖紙關鍵參數上傳 ②AI 依材料/加工費率拆解估成本 ③採購參考 AI 報價與供應商報價對比 ④進行議價
 5. 知識來源：材料單價表、加工工時費率表、成本估算規則與報價範本。訪談『規則判斷環節』欄填無，但實務上成本拆解需依材料/加工/管銷/利潤等估算規則。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>成本拆解與參考報價這段 EgentHub 可做：採購人工把圖紙上的關鍵規格（材質、尺寸、重量、加工方式、表面處理）整理成結構化輸入，Agent 再依材料單價表與加工費率表估出 Cost Breakdown 與參考價，這部分務實可落地。</li><li>誠實評估：直接『上傳圖紙就自動讀出所有尺寸與規格』超出純 EgentHub 提示工程＋知識庫能力——圖紙（尤其工程圖/CAD）自動判讀屬視覺辨識，需搭配 OCR/視覺模型或人工先讀圖。建議初期由採購填寫圖紙關鍵參數表，Agent 負責估算；故 grade=B。</li><li>參考價為議價輔助、非最終價：材料行情會波動、非標件變異大，AI 估的是區間參考，最終仍以供應商報價與採購議價結果為準，估算依據與假設要透明列出供人覆核。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>==============================================================
 元資料（Metadata）
 ==============================================================
@@ -83,8 +83,8 @@ Agent 名稱：非標件成本分析與報價輔助助手
 題型分類：數據解讀型（成本估算，含圖紙判讀依賴）
 平台：Intellicon EgentHub
 建議模型：Claude 4.6 Sonnet
-執行模式：兩階段
-兩階段隔離：是
+執行模式：單階段
+兩階段隔離：否
 知識庫配置：表格查詢知識庫（材料單價表、加工工時費率表）、全文查找知識庫（成本估算規則與報價範本）
 盤點分級：B 級
 版本：v1.0（POC）
@@ -92,23 +92,23 @@ Agent 名稱：非標件成本分析與報價輔助助手
 你是「非標件成本分析與報價輔助助手」，協助開發採購依圖紙關鍵參數估算非標件成本並給出參考價格區間。
 
 # 任務
-根據採購提供的非標件規格參數與用量（FCST），拆解材料與加工成本，估算 Cost Breakdown 與參考價格區間，供採購與供應商報價比對議價。
+根據採購提供的非標件規格參數與用量（FCST），查材料單價表與加工費率表拆解材料與加工成本，套用估算規則加上管銷與利潤，估算 Cost Breakdown 與參考價格區間，供採購與供應商報價比對議價。
 
 # 背景知識
-背景知識：以『材料單價表』查材質單價、以『加工工時費率表』估加工成本、以『成本估算規則與報價範本』套用管銷與利潤比例及輸出格式；估算為區間參考，假設需透明列出。
+查『材料單價表』取材質單價、查『加工工時費率表』估加工成本、查『成本估算規則與報價範本』套用管銷與利潤比例及輸出格式。圖紙自動判讀屬視覺辨識能力、超出本 Agent 範圍，務實版需採購先把圖紙關鍵參數整理為參數表；估算結果為區間參考、假設需透明列出。
 
 # 輸入格式
-非標件關鍵規格參數（材質、尺寸/重量、加工方式、表面處理、數量/公差等；若僅有圖紙，請採購先填寫關鍵參數表）與項目 FCST。
+非標件關鍵規格參數（材質、尺寸/重量、加工方式、表面處理、數量/公差等）與項目 FCST。若僅有圖紙，請採購先填寫關鍵參數表再上傳。
 
 # 執行流程
-1. 取得非標件規格參數（圖紙自動判讀超出本 Agent 能力，請採購先把圖紙關鍵尺寸/材質整理為參數表上傳；初期 Excel，中期再評估 OCR/視覺或 ERP 串接）
-2. 依材料單價表估材料成本、依加工費率表估加工成本
-3. 套用成本估算規則加上管銷與利潤，算出 Cost Breakdown 與參考價格區間
+1. 取得非標件規格參數；若使用者僅提供圖紙而未填參數，誠實告知圖紙自動判讀超出本 Agent 能力，列出需補充的關鍵參數清單，不臆測成本（圖紙自動讀參數需後續導入 OCR/視覺模型或人工先讀圖）
+2. 依『材料單價表』估材料成本、依『加工工時費率表』估加工成本
+3. 套用『成本估算規則』加上管銷與利潤比例，算出 Cost Breakdown 與參考價格區間
 4. 列出估算假設與依據；查無單價/費率者誠實標示
 5. 輸出供採購與供應商報價比對的報告底稿
 
 # 輸出格式
-輸出 Markdown：含『規格參數摘要』『Cost Breakdown（材料／加工／管銷／利潤）』『參考價格區間』『估算假設與待確認項』；不輸出 emoji、不產生程式碼；參考價為議價輔助區間、非最終價；查無單價或圖紙未提供參數者標示『需人工補充/覆核』。
+輸出 Markdown：含『規格參數摘要』『Cost Breakdown（材料／加工／表面處理／管銷／利潤）』『參考價格區間』『估算假設與待確認項』；不輸出 emoji、不產生程式碼、不直接輸出 xlsx/PPT；參考價為議價輔助區間、非最終價；查無單價或圖紙未提供參數者標示『需人工補充/覆核』。
 
 # 問答指引
 - 請使用**繁體中文**回覆，語氣應委婉、自然，符合台灣使用者的溝通風格。
@@ -118,23 +118,17 @@ Agent 名稱：非標件成本分析與報價輔助助手
 - **禁止回覆與程式撰寫相關的問題**，請婉轉拒絕。
 - 執行任務後，**請省略所有推理、分析、比對說明**，**僅保留最終結果表格與必要標題或提示語句**。</pre></section><section id="kb"><h2>④ 知識庫設計（範例資料）</h2><details><summary><span class="kbtag">表格查詢</span>材料單價與加工費率_示範.csv<a class="dlbtn" download="材料單價與加工費率_示範.csv" href="data:text/csv;charset=utf-8;base64,77u/6aGe5YilLOmgheebrizmnZDos6ov5bel5bqPLOWWruS9jSzlj4PogIPllq7lg7ks5bmj5YilLOWCmeiouwrmnZDmlpks6YuB5ZCI6YeRLDYwNjEtVDYsa2csMjgsQ05ZLOadvy/mo5LmnZDpgJrnlKgK5p2Q5paZLOS4jemPvemLvCxTVVMzMDQsa2csMjIsQ05ZLArmnZDmlpks5bel56iL5aGR6IagLFBPTSxrZywzNSxDTlksCuadkOaWmSzpu4PpioUsQzM2MDQsa2csNTgsQ05ZLArliqDlt6UsQ05D6YqR5YmKLDPou7gs5bCP5pmCLDEyMCxDTlks5ZCr5qmf5Y+w6IiH5Lq65belCuWKoOW3pSxDTkPou4rliYosMui7uCzlsI/mmYIsMTAwLENOWSwK5Yqg5belLOe3muWIh+WJsizmhaLotbDntbIs5bCP5pmCLDE4MCxDTlksCuihqOmdouiZleeQhizpmb3mpbXmsKfljJYs6buR6ImyLGRtMiw2LENOWSwK6KGo6Z2i6JmV55CGLOmbu+mNjSzpjY3pjrMsZG0yLDgsQ05ZLArnrqHpirfosrvnjocs566h55CG6Yq35ZSuLOWbuuWumuavlOS+iywlLDEyLOKAlCzliqDlnKjmnZDmlpkr5Yqg5bel5LmL5LiKCuWIqea9pCznm67mqJnliKnmvaQs5Zu65a6a5q+U5L6LLCUsMTUs4oCULOWPg+iAg+WAvOS+neitsOWDueiqv+aVtArvvIjku6XkuIrngrrnpLrnr4TosrvnjofvvIzlr6bpmpvkvp3nlbbmnJ/ooYzmg4XoiIfkvpvmh4nllYbmoLjlrprvvIksLCwsLCw=" onclick="event.stopPropagation()">⬇ 下載</a></summary><div class="inner"><div class="tablewrap"><table><thead><tr><th>類別</th><th>項目</th><th>材質/工序</th><th>單位</th><th>參考單價</th><th>幣別</th><th>備註</th></tr></thead><tbody><tr><td>材料</td><td>鋁合金</td><td>6061-T6</td><td>kg</td><td>28</td><td>CNY</td><td>板/棒材通用</td></tr><tr><td>材料</td><td>不鏽鋼</td><td>SUS304</td><td>kg</td><td>22</td><td>CNY</td><td></td></tr><tr><td>材料</td><td>工程塑膠</td><td>POM</td><td>kg</td><td>35</td><td>CNY</td><td></td></tr><tr><td>材料</td><td>黃銅</td><td>C3604</td><td>kg</td><td>58</td><td>CNY</td><td></td></tr><tr><td>加工</td><td>CNC銑削</td><td>3軸</td><td>小時</td><td>120</td><td>CNY</td><td>含機台與人工</td></tr><tr><td>加工</td><td>CNC車削</td><td>2軸</td><td>小時</td><td>100</td><td>CNY</td><td></td></tr><tr><td>加工</td><td>線切割</td><td>慢走絲</td><td>小時</td><td>180</td><td>CNY</td><td></td></tr><tr><td>表面處理</td><td>陽極氧化</td><td>黑色</td><td>dm2</td><td>6</td><td>CNY</td><td></td></tr><tr><td>表面處理</td><td>電鍍</td><td>鍍鎳</td><td>dm2</td><td>8</td><td>CNY</td><td></td></tr><tr><td>管銷費率</td><td>管理銷售</td><td>固定比例</td><td>%</td><td>12</td><td>—</td><td>加在材料+加工之上</td></tr><tr><td>利潤</td><td>目標利潤</td><td>固定比例</td><td>%</td><td>15</td><td>—</td><td>參考值依議價調整</td></tr><tr><td>（以上為示範費率，實際依當期行情與供應商核定）</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div></div></details></section><section id="build"><h2>⑤ 建置流程與上線重點</h2><details open><summary>正式上線前的準備指南</summary><div class="inner"><pre>一、知識庫設定：建立『材料單價表』與『加工工時費率表』（表格查詢知識庫），並把『成本估算規則與報價範本』放全文查找知識庫；行情波動需定期更新單價。
 二、模型選擇：用 Claude 4.6 Sonnet 做成本拆解與估算推理。
-三、兩階段隔離：第一階段彙整參數＋查單價/費率，第二階段套規則算 Cost Breakdown 與參考價，避免漏算管銷利潤。
+三、執行模式：務實版由採購先填參數→Agent 估價，僅查表格/全文知識庫、不讀圖，維持單階段；待後續導入 OCR/視覺或 CAD 解析能力可改為兩階段（先讀圖→再查費率估價）。
 四、權限與工作室：放採購部工作室，單價與費率屬敏感資料控管存取。
 五、上線前驗測：用過去已成交的非標件回放，比對 AI 估價區間與實際成交價的偏差。
 六、上線後監控：追蹤估價區間命中率與每筆報價節省工時。
 七、異常處理與回退：圖紙自動判讀超出能力時，要求採購先填關鍵參數表；查無單價/費率或缺參數一律標示需人工補充，參考價僅供議價輔助。
-八、種子接手提示：先用『採購填參數→Agent 估價』的務實版本上線，待後續導入 OCR/視覺或 CAD 解析能力，再逐步把圖紙自動讀參數補上。</pre></div></details></section><section id="test"><h2>⑥ 驗測情境（測試資料＋預期結果）</h2><details><summary>展開完整驗測情境</summary><div class="inner"><pre>非標件成本分析與報價輔助助手 — 驗測情境
-
---- 標準情境 ---
-input：採購提供非標件參數：6061-T6 鋁、淨重 0.8kg、CNC 銑 1.5 小時、黑色陽極 4dm2，FCST 500 件。
-expected：估出材料/加工/表面處理成本，加管銷與利潤，給出單件 Cost Breakdown 與參考價格區間，並列出估算假設。
-驗證重點：驗證單價與費率引用正確、Cost Breakdown 加總與比例規則一致。
-
---- 邊界/規則判斷 ---
-input：採購只上傳了一張圖紙、未提供材質與加工方式等關鍵參數。
-expected：誠實告知圖紙自動判讀超出能力範圍，列出需採購補充的關鍵參數清單，不臆測成本。
-驗證重點：確認 Agent 不在缺參數時硬估，明確要求補資料並由人覆核。
-</pre></div></details></section>
+八、種子接手提示：先用『採購填參數→Agent 估價』的務實版本上線，待後續導入 OCR/視覺或 CAD 解析能力，再逐步把圖紙自動讀參數補上。</pre></div></details></section><section id="test"><h2>⑥ 驗測情境（測試資料＋預期結果）</h2><details open><summary>展開完整驗測情境</summary><div class="inner"><div class="tsc"><div class="tscname">情境 1：標準情境：完整參數估價</div><div class="tinlabel">可直接複製貼到 EgentHub 對話框的測試輸入：</div><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製輸入</button>請估算下列非標件的成本與參考報價區間，並列出估算假設：
+材質：6061-T6 鋁合金
+淨重：0.8 kg
+加工：CNC 銑削（3軸）1.5 小時
+表面處理：黑色陽極氧化 4 dm2
+FCST 用量：500 件</pre><div class="tmeta">預期：查材料/加工/表面處理費率算出各項成本，加管銷 12%、利潤 15%，給出單件 Cost Breakdown 與參考價格區間，並列出估算假設。<br>驗證重點：驗證單價與費率引用正確、Cost Breakdown 加總與管銷/利潤比例規則一致。</div></div><div class="tsc"><div class="tscname">情境 2：邊界情境：只給圖紙未填參數</div><div class="tinlabel">可直接複製貼到 EgentHub 對話框的測試輸入：</div><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製輸入</button>附上產品圖紙一張（非標支架），FCST 300 件，麻煩你直接讀圖把材質、尺寸、加工方式判出來估個成本給我。</pre><div class="tmeta">預期：誠實告知圖紙自動判讀超出本 Agent 能力範圍，列出需採購補充的關鍵參數清單（材質、淨重/尺寸、加工方式與工時、表面處理面積等），不臆測成本。<br>驗證重點：確認 Agent 不在缺參數時硬估，明確要求補資料並由人覆核。</div></div><div class="tsc"><div class="tscname">情境 3：邊界情境：查無單價的特殊材質</div><div class="tinlabel">可直接複製貼到 EgentHub 對話框的測試輸入：</div><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製輸入</button>請估價，材質為鈦合金 TC4，淨重 0.5 kg，CNC 車削 2 小時，FCST 200 件。</pre><div class="tmeta">預期：加工費率可估，但材料單價表查無鈦合金 TC4 單價，誠實標示『材料單價需人工補充』，不臆造材料價，僅就可估部分給出並列待確認項。<br>驗證重點：確認查無單價誠實標示、不臆造數值、僅估可估部分。</div></div></div></details></section>
 </main>
 <footer>智慧方案股份有限公司　Intellicon Solutions　·　建皇集團 AI Agent 工作坊</footer>
 <script>

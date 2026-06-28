@@ -60,14 +60,14 @@ body.lang-zh .en{display:none}
 .langtoggle a.on{opacity:1;background:rgba(255,255,255,.2);font-weight:700}
 .langtoggle a.deck{opacity:1;border:1px solid rgba(255,255,255,.55);margin-right:10px;font-weight:700}
 .langtoggle a.deck:hover{background:rgba(255,255,255,.18)}
-</style></head><body class="lang-zh">
+</style><style>.tsc{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:12px 0;background:#fff}.tscname{font-weight:700;color:var(--purple);margin-bottom:8px}.tmeta{color:#4a4360;font-size:13.5px;margin-top:8px;line-height:1.7}.tsc .promptpre{margin:0}.tinlabel{font-size:12px;color:var(--muted);margin-bottom:4px}</style></head><body class="lang-zh">
 <header class="hero">
   
   <a class="backlink" href="index.html">← 回題型總覽</a>
   <p class="crumb">建皇集團 AI Agent 工作坊 · 訪談需求 · 解題示範</p>
   <span class="no">題目 #I18</span>
   <h1>採購月報數據彙整助手</h1>
-  <div class="chips"><span class="chip"><b>題型</b> 數據解讀型（兼內容生成型）</span><span class="chip"><b>執行</b> 兩階段</span><span class="chip"><b>模型</b> Claude 4.6 Sonnet</span></div>
+  <div class="chips"><span class="chip"><b>題型</b> 數據解讀型（兼內容生成型）</span><span class="chip"><b>執行</b> 單階段</span><span class="chip"><b>模型</b> Claude 4.6 Sonnet</span></div>
 </header>
 <nav class="toc"><a href="#pain">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 完整提示詞</a><a href="#kb">④ 知識庫設計</a><a href="#build">⑤ 建置流程</a><a href="#test">⑥ 驗測情境</a></nav>
 <main>
@@ -83,8 +83,8 @@ Agent 名稱：採購月報數據彙整助手
 題型分類：數據解讀型（兼內容生成型）
 平台：Intellicon EgentHub
 建議模型：Claude 4.6 Sonnet
-執行模式：兩階段
-兩階段隔離：是
+執行模式：單階段
+兩階段隔離：否
 知識庫配置：表格查詢知識庫（採購類別對照表）、全文查找知識庫（月報版面範本）
 盤點分級：A 級
 版本：v1.0（POC）
@@ -92,23 +92,23 @@ Agent 名稱：採購月報數據彙整助手
 你是「採購月報數據彙整助手」，協助採購人員把每月採購明細自動分類彙總並產出月報底稿。
 
 # 任務
-讀取當月採購明細，依類別與部門彙總數量與金額、計算分類占比，產出月報版面所需的彙總表與摘要底稿。
+讀取當月採購明細，依『採購類別對照表』統一歸類，按類別與部門彙總數量與金額、計算分類占比，對照『月報版面範本』產出月報所需的彙總表與摘要底稿。
 
 # 背景知識
-背景知識：依『採購類別對照表』統一類別歸類口徑；依『月報版面範本』決定要呈現的版塊與彙總維度。
+查詢『採購類別對照表』統一類別歸類口徑；查詢『月報版面範本』決定要呈現的版塊與彙總維度。占比計算須以總額為分母、各類別加總應為 100%。
 
 # 輸入格式
-使用者上傳當月採購明細（Excel/CSV），含數量、金額、部門、類別等欄位。
+使用者上傳當月採購明細（Excel/CSV），含數量、金額、部門、類別等欄位。初期由人工上傳 ERP 匯出檔，中期再以 MCP/API 與 ERP 串接自動取數。
 
 # 執行流程
-1. 讀取當月採購明細（初期由人工上傳 ERP 匯出 Excel，中期再以 MCP/API 與 ERP 串接自動取數）
-2. 依採購類別對照表統一歸類
-3. 按類別與部門彙總數量、金額並計算各分類占比
-4. 對照月報版面範本，產出彙總表與重點摘要底稿
-5. 數據缺漏或類別無法歸類者誠實標示，待人工確認
+1. 讀取當月採購明細，整理成逐筆清單
+2. 依『採購類別對照表』統一歸類；無法歸類者列入『未分類』並標示需人工確認
+3. 按類別與部門彙總數量、金額並計算各分類占比（占比＝該類金額÷總金額）
+4. 對照『月報版面範本』，產出類別彙總表、部門彙總表與重點摘要底稿
+5. 數據缺漏、疑似異常金額或類別無法歸類者誠實標示『需人工覆核』，不自動更正
 
 # 輸出格式
-輸出 Markdown：含『類別彙總表（數量／金額／占比）』『部門彙總表』與『月報重點摘要』；不輸出 emoji、不產生程式碼、不輸出最終美化版 PPT（排版由人完成）；數字異常或無法歸類者標示『需人工覆核』。
+輸出 Markdown：含『類別彙總表（數量／金額／占比）』『部門彙總表』與『月報重點摘要』；占比加總應為 100% 並附總額校驗。不輸出 emoji、不產生程式碼、不輸出最終美化版 PPT（排版由人完成）；數字異常或無法歸類者標示『需人工覆核』。
 
 # 問答指引
 - 請使用**繁體中文**回覆，語氣應委婉、自然，符合台灣使用者的溝通風格。
@@ -118,23 +118,24 @@ Agent 名稱：採購月報數據彙整助手
 - **禁止回覆與程式撰寫相關的問題**，請婉轉拒絕。
 - 執行任務後，**請省略所有推理、分析、比對說明**，**僅保留最終結果表格與必要標題或提示語句**。</pre></section><section id="kb"><h2>④ 知識庫設計（範例資料）</h2><details><summary><span class="kbtag">表格查詢</span>採購月度明細_示範.csv<a class="dlbtn" download="採購月度明細_示範.csv" href="data:text/csv;charset=utf-8;base64,77u/5pel5pyfLOmDqOmWgCzmjqHos7zpoZ7liKUs5ZOB6aCFLOaVuOmHjyzllq7kvY0s6YeR6aGNCjIwMjYtMDUtMDMs55Sf55Si5LiA6YOoLOWOn+eJqeaWmSzlhYnlrbjohpwsMTIwMCzljbcsMzYwMDAwCjIwMjYtMDUtMDUs55Sf55Si5LqM6YOoLOWOn+eJqeaWmSzohqDluLYsODAwLOWNtyw5NjAwMAoyMDI2LTA1LTA3LOioreWCmemDqCzmqZ/lmajoqK3lgpks5qih5YiH5YiA5qihLDYs5aWXLDE4MDAwMAoyMDI2LTA1LTA5LOWTgeS/nemDqCzph4/muKzogJfmnZAs5o6i6YedLDMwMCzmlK8sNDUwMDAKMjAyNi0wNS0xMSznlJ/nlKLkuIDpg6gs5Y6f54mp5paZLOmbouWei+iGnCw5NTAs5Y23LDIyODAwMAoyMDI2LTA1LTE0LOihjOaUv+mDqCzovqblhaznlKjlk4Es5paH5YW3LDEs5om5LDgwMDAKMjAyNi0wNS0xNizoqK3lgpnpg6gs57at5L+u5YKZ5Lu2LOi7uOaJvyw0MCzlgIssMzIwMDAKMjAyNi0wNS0xOCznlJ/nlKLkuozpg6gs5Y6f54mp5paZLOS/neitt+iGnCwxMTAwLOWNtywyNzUwMDAKMjAyNi0wNS0yMCzlk4Hkv53pg6gs6YeP5ris6ICX5p2QLOaomea6lueJhywyMCzniYcsNjAwMDAKMjAyNi0wNS0yMiznlJ/nlKLkuIDpg6gs5aeU5aSW5Yqg5belLOaooeWIh+S7o+W3pSwxLOaJuSwxNTAwMDAKMjAyNi0wNS0yNSzoqK3lgpnpg6gs5qmf5Zmo6Kit5YKZLOWjk+WQiOayu+WFtyw0LOWllyw5NjAwMAoyMDI2LTA1LTI4LOihjOaUv+mDqCzovqblhaznlKjlk4Es5Y2w6KGo6ICX5p2QLDEs5om5LDEyMDAwCu+8iOS7peS4iueCuuekuuevhOizh+aWme+8jOWvpumam+S7pSBFUlAg5Yyv5Ye654K65rqW77yJLCwsLCws" onclick="event.stopPropagation()">⬇ 下載</a></summary><div class="inner"><div class="tablewrap"><table><thead><tr><th>日期</th><th>部門</th><th>採購類別</th><th>品項</th><th>數量</th><th>單位</th><th>金額</th></tr></thead><tbody><tr><td>2026-05-03</td><td>生產一部</td><td>原物料</td><td>光學膜</td><td>1200</td><td>卷</td><td>360000</td></tr><tr><td>2026-05-05</td><td>生產二部</td><td>原物料</td><td>膠帶</td><td>800</td><td>卷</td><td>96000</td></tr><tr><td>2026-05-07</td><td>設備部</td><td>機器設備</td><td>模切刀模</td><td>6</td><td>套</td><td>180000</td></tr><tr><td>2026-05-09</td><td>品保部</td><td>量測耗材</td><td>探針</td><td>300</td><td>支</td><td>45000</td></tr><tr><td>2026-05-11</td><td>生產一部</td><td>原物料</td><td>離型膜</td><td>950</td><td>卷</td><td>228000</td></tr><tr><td>2026-05-14</td><td>行政部</td><td>辦公用品</td><td>文具</td><td>1</td><td>批</td><td>8000</td></tr><tr><td>2026-05-16</td><td>設備部</td><td>維修備件</td><td>軸承</td><td>40</td><td>個</td><td>32000</td></tr><tr><td>2026-05-18</td><td>生產二部</td><td>原物料</td><td>保護膜</td><td>1100</td><td>卷</td><td>275000</td></tr><tr><td>2026-05-20</td><td>品保部</td><td>量測耗材</td><td>標準片</td><td>20</td><td>片</td><td>60000</td></tr><tr><td>2026-05-22</td><td>生產一部</td><td>委外加工</td><td>模切代工</td><td>1</td><td>批</td><td>150000</td></tr><tr><td>2026-05-25</td><td>設備部</td><td>機器設備</td><td>壓合治具</td><td>4</td><td>套</td><td>96000</td></tr><tr><td>2026-05-28</td><td>行政部</td><td>辦公用品</td><td>印表耗材</td><td>1</td><td>批</td><td>12000</td></tr><tr><td>（以上為示範資料，實際以 ERP 匯出為準）</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div></div></details></section><section id="build"><h2>⑤ 建置流程與上線重點</h2><details open><summary>正式上線前的準備指南</summary><div class="inner"><pre>一、知識庫設定：建立『採購類別對照表』（表格查詢知識庫）統一歸類口徑、『月報版面範本』（全文查找知識庫）規範版塊。
 二、模型選擇：用 Claude 4.6 Sonnet，數據彙總與摘要兼顧。
-三、兩階段隔離：第一階段讀數據＋歸類＋彙總計算，第二階段組月報摘要底稿，避免一次過長出錯。
+三、執行模式：本題僅讀數據檔並查知識庫、不讀圖，維持單階段；提示詞已把『歸類→彙總→占比→總額校驗』寫進流程。
 四、權限與工作室：放採購部工作室；強調在企業自有平台處理、可私有雲/地端部署，解決原本充值外部工具的資安顧慮。
 五、上線前驗測：用過去幾個月真實月報數據回放，比對人工版彙總與占比。
 六、上線後監控：追蹤每月製作工時由 3 小時下降幅度與數字正確率。
 七、異常處理與回退：缺漏/異常一律標示需人工覆核，不自動更正。
-八、種子接手提示：本題規則單純（分類占比彙總），適合作採購部第一隻數據型 Agent 示範，後續可延伸到季報、年報同口徑彙整。</pre></div></details></section><section id="test"><h2>⑥ 驗測情境（測試資料＋預期結果）</h2><details><summary>展開完整驗測情境</summary><div class="inner"><pre>採購月報數據彙整助手 — 驗測情境
-
---- 標準情境 ---
-input：上傳當月完整採購明細，類別齊全。
-expected：產出類別彙總表與部門彙總表，含各分類金額占比與月報重點摘要。
-驗證重點：驗證占比計算正確、合計與明細總額一致。
-
---- 邊界/規則判斷 ---
-input：明細中有品項類別欄位空白、且一筆金額疑似多一個零。
-expected：將空白類別列入『未分類』並標示需人工確認；對疑似異常金額標示『需人工覆核』不逕自修改。
-驗證重點：確認缺漏不臆測、異常值不自動更正而交由人判定。
-</pre></div></details></section>
+八、種子接手提示：本題規則單純（分類占比彙總），適合作採購部第一隻數據型 Agent 示範，後續可延伸到季報、年報同口徑彙整。</pre></div></details></section><section id="test"><h2>⑥ 驗測情境（測試資料＋預期結果）</h2><details open><summary>展開完整驗測情境</summary><div class="inner"><div class="tsc"><div class="tscname">情境 1：標準情境：完整月報彙整</div><div class="tinlabel">可直接複製貼到 EgentHub 對話框的測試輸入：</div><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製輸入</button>請依附件當月採購明細產出採購月報底稿。
+月份：2026/05
+明細（日期,部門,採購類別,品項,數量,單位,金額）：
+2026-05-03,生產一部,原物料,光學膜,1200,卷,360000
+2026-05-07,設備部,機器設備,模切刀模,6,套,180000
+2026-05-09,品保部,量測耗材,探針,300,支,45000
+2026-05-22,生產一部,委外加工,模切代工,1,批,150000
+2026-05-25,設備部,機器設備,壓合治具,4,套,96000</pre><div class="tmeta">預期：產出類別彙總表與部門彙總表，含各分類金額占比、總額校驗與月報重點摘要。<br>驗證重點：驗證占比計算正確、占比加總=100%、合計與明細總額一致。</div></div><div class="tsc"><div class="tscname">情境 2：邊界情境：類別空白＋疑似異常金額</div><div class="tinlabel">可直接複製貼到 EgentHub 對話框的測試輸入：</div><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製輸入</button>請彙整本月採購明細產出月報。
+月份：2026/05
+明細（日期,部門,採購類別,品項,數量,單位,金額）：
+2026-05-05,生產二部,原物料,膠帶,800,卷,96000
+2026-05-14,行政部,,文具,1,批,8000
+2026-05-18,生產二部,原物料,保護膜,1100,卷,2750000</pre><div class="tmeta">預期：將類別空白的文具列入『未分類』並標示需人工確認；對保護膜 2750000（疑似多一個零）標示『需人工覆核』，不逕自修改。<br>驗證重點：確認缺漏不臆測、異常值不自動更正而交由人判定。</div></div><div class="tsc"><div class="tscname">情境 3：越權情境：要求直接產出 PPT 檔</div><div class="tinlabel">可直接複製貼到 EgentHub 對話框的測試輸入：</div><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製輸入</button>幫我把月報直接做成一份美化好的 PPT 檔丟給我，我要直接拿去開會。</pre><div class="tmeta">預期：說明對話框不支援直接輸出 PPT 檔，將提供可貼進簡報的 Markdown 彙總表與摘要底稿，最終美化排版由使用者於 PPT 完成。<br>驗證重點：確認誠實說明平台輸出限制、提供可用底稿替代。</div></div></div></details></section>
 </main>
 <footer>智慧方案股份有限公司　Intellicon Solutions　·　建皇集團 AI Agent 工作坊</footer>
 <script>
