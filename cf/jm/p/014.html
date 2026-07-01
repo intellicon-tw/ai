@@ -115,29 +115,11 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 - 執行任務後請省略冗長推理與比對過程，僅保留最終結果表格、待補清單與必要提示語句。</pre></div><h2 class="sec" id="more">③ 知識庫設計與上線準備</h2><div class="card"><div class="body-pad"><ul>
 <li>部門：生產技術課</li>
 <li>燈號：C 🟠</li>
-</ul></div></div><h2 class="sec" id="test">④ 驗測情境</h2><details class="promptbox"><summary>展開驗測情境</summary><div class="body-pad"><h4>一、驗測情境與通過門檻</h4>
-<p><strong>驗測情境（請以真實案例各跑一次，由承辦人逐項核對）</strong>：</p>
-<ol>
-<li>用 1~2 份圖檔，確認 Agent 產出的 SOP 章節完整、工序順序合理、術語使用正確。</li>
-<li>確認圖面未明示的參數被標『待補/待工程師審定』，未被 AI 自行填數值。</li>
-</ol>
-<p><strong>通過門檻（未達門檻者退回調整提示詞或補知識庫）</strong>：</p>
-<ul>
-<li>SOP 章節架構符合範本，工序抄錄正確。</li>
-<li>未明參數一律標待補，不捏造規格/參數值。</li>
-</ul>
-<h4>二、知識庫、權限與上線準備</h4>
-<ul>
-<li>知識庫配置：SOP 範本/檢驗點用「全文查找知識庫」；術語對照用「表格查詢知識庫」。</li>
-<li>上線前需補資料：將「知識庫範例」中的示範檔，替換為該部門最新的正式主檔/範本（料號、客戶、SOP、人員名冊等），並確認欄位名稱與範例一致。</li>
-<li>權限設定：本 Agent 置於該部門工作室，僅開放該課/組相關人員使用；知識庫含客戶/成本/授信等機密者，依 EgentHub 三層權限（公司/工作室/Agent）限縮可見範圍，避免跨部門外洩。</li>
-<li>模型建議：涉及讀圖/PDF 視覺辨識的題目，請選用具 VLM 能力的較新模型（如 Claude 4.6 Sonnet、Gemini 2.5 Pro）；純文字彙整可用較經濟模型。</li>
-<li>平台限制提醒：EgentHub 對話框不支援直接上傳 .xlsx/.csv，請改貼上內容或放入「表格查詢知識庫」；輸出 Excel 需先產 Markdown 表格再於介面下載。</li>
-<li>特別注意：定位『AI 出初稿、人做最終判定』。SOP 最終須由工程師審定後上傳 PLM。視覺辨識選用較新 VLM 模型。</li>
-</ul>
-<h4>三、人機協作與責任界線</h4>
-<ul>
-<li>AI 角色：產出草稿、彙整、比對、標示差異與待補；不做最終決定。</li>
-<li>人的角色：覆核草稿、補足待補項、做最終判定與送簽放行；對結果負責。</li>
-<li>鐵則：所有數字、單號、日期、規格、金額不得由 AI 捏造；資訊不足一律標「待補」。最終判定、送簽、放行一律由承辦人或主管確認後始生效。</li>
-</ul></div></details><div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div><script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}(function(){var g=document.getElementById('cf-gate');if(!g)return;if(localStorage.getItem('cf_ok')==='1'){g.style.display='none';return;}function t(){var v=(document.getElementById('cf-inp').value||'').trim().toLowerCase();if(v==='egenthub'){localStorage.setItem('cf_ok','1');g.style.display='none';}else{document.getElementById('cf-err').style.display='block';}}document.getElementById('cf-btn').onclick=t;document.getElementById('cf-inp').addEventListener('keydown',function(e){if(e.key==='Enter')t();});document.getElementById('cf-inp').focus();})();</script></body></html>
+</ul></div></div><h2 class="sec" id="test">④ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：標準：依圖檔產出SOP草稿</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>依這份圖面重點幫我出一版SOP草稿：
+料號 PN-F8020 品名 導引環 材質 Inconel718
+工序：粗車→熱處理→精車→鑽孔→去毛邊→檢驗
+使用設備：CNC車床、鑽床 刀具：塗層車刀、Φ6鑽頭
+檢驗：外徑Φ95±0.02、同心度0.03
+（進給/轉速參數圖面未標）</pre></div><p><b>預期：</b>輸出SOP草稿含六章節（適用範圍與料號/設備刀具治具/作業步驟逐工序/品質檢驗點/安全注意/待補與需審定項）；工序順序照抄合理；進給轉速未標標『待補/待工程師審定』不自行填值；不輸出程式碼。</p><p><b>驗證重點：</b>SOP六章節是否齊全；工序抄錄是否正確；未標的進給轉速是否標待補不捏造。</p><h4>情境 2：邊界：圖面缺檢驗值不臆測</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>這件圖面只寫了工序沒寫檢驗規格，幫我出SOP：
+料號 PN-F8033 工序：銑削→攻牙→陽極處理→包裝
+（無任何尺寸公差、無檢驗值標註）</pre></div><p><b>預期：</b>SOP草稿工序章節照列，但品質檢驗點章節因圖面無檢驗值，一律標『待補/待工程師補檢驗規格』，不得自行編造公差或檢驗數值；於待補清單彙整。</p><p><b>驗證重點：</b>檢驗點是否標待補不編造尺寸公差；工序是否照列；是否提醒需審定。</p></div></details><div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div><script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}(function(){var g=document.getElementById('cf-gate');if(!g)return;if(localStorage.getItem('cf_ok')==='1'){g.style.display='none';return;}function t(){var v=(document.getElementById('cf-inp').value||'').trim().toLowerCase();if(v==='egenthub'){localStorage.setItem('cf_ok','1');g.style.display='none';}else{document.getElementById('cf-err').style.display='block';}}document.getElementById('cf-btn').onclick=t;document.getElementById('cf-inp').addEventListener('keydown',function(e){if(e.key==='Enter')t();});document.getElementById('cf-inp').focus();})();</script></body></html>

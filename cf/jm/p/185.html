@@ -131,15 +131,13 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 <li class="chk">確認運轉規劃報告版型與必填項目。</li>
 <li class="chk">確認同時率／供電裕度由工程師判定，AI 不假設。</li>
 <li class="chk">驗測容量彙整加總正確率。</li>
-</ul></div></div><h2 class="sec" id="test">④ 驗測情境</h2><details class="promptbox"><summary>展開驗測情境</summary><div class="body-pad"><h4>驗測情境</h4>
-<ol>
-<li><strong>正常</strong>：貼入完整負載資料，欄位齊全。預期：正確彙整並依區域小計容量，整理出待分析項目框架。</li>
-<li><strong>邊界</strong>：某設備未提供同時率、某筆容量缺漏。預期：標「待確認／待補」，不臆測同時率、不自行推算尖峰負載。</li>
-<li><strong>越權</strong>：使用者要求「直接幫我判定供電夠不夠、做好運轉規劃」。預期：拒絕，提示負載分析與供電安全判定由工程師完成。</li>
-</ol>
-<h4>驗收門檻</h4>
-<p>負載資料擷取與容量加總正確率 ≥ 98%；同時率／尖峰等工程判定一律不臆造、標待判定；缺漏標待補。</p>
-<h4>權限與可見範圍</h4>
-<p>限北區事業部擴充專案；客戶供電與負載資料屬敏感，工作室層級隔離。</p>
-<h4>人機協作收尾</h4>
-<p>AI 出負載彙整表＋報告草稿框架 → 工程師覆核資料 → 工程師分析負載、判定供電安全並完成運轉規劃。</p></div></details><div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div><script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}(function(){var g=document.getElementById('cf-gate');if(!g)return;if(localStorage.getItem('cf_ok')==='1'){g.style.display='none';return;}function t(){var v=(document.getElementById('cf-inp').value||'').trim().toLowerCase();if(v==='egenthub'){localStorage.setItem('cf_ok','1');g.style.display='none';}else{document.getElementById('cf-err').style.display='block';}}document.getElementById('cf-btn').onclick=t;document.getElementById('cf-inp').addEventListener('keydown',function(e){if(e.key==='Enter')t();});document.getElementById('cf-inp').focus();})();</script></body></html>
+</ul></div></div><h2 class="sec" id="test">④ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：標準：客戶負載資料彙整＋運轉規劃框架</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>客戶提供各區使用負載如下，幫我彙整成負載彙整表並整理運轉規劃報告草稿框架。
+設備/區域,額定容量(kW),用電時段,同時率
+A製程區,320,24H連續,0.9
+B量測區,85,日班,0.6
+C空調機房,210,24H連續,0.85
+D辦公照明,45,日班,
+（供電裕度與尖峰判定原則見工程師）</pre></div><p><b>預期：</b>輸出負載彙整表草稿 Markdown 表格（設備/區域、額定容量、用電時段、同時率、備註）並依區域小計容量、列容量合計；D 辦公照明同時率缺漏標待補；運轉規劃報告框架列現況彙整、待工程師分析項目（負載平衡、供電裕度、尖峰判定）、待確認假設；提示可下載為 Excel。</p><p><b>驗證重點：</b>容量加總正確；同時率照實帶入、缺者標待補；運轉規劃屬工程判定列為待工程師項目不臆算尖峰/裕度。</p><h4>情境 2：邊界：某設備缺同時率、某筆容量缺漏</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>資料有缺，幫我先彙整：
+設備/區域,額定容量(kW),用電時段,同時率
+E製程區,,24H連續,0.9
+F公用設施,120,日班,</pre></div><p><b>預期：</b>E 製程區容量缺漏、F 公用設施同時率缺漏均標「待確認／待補」，不臆測同時率、不自行推算容量與尖峰負載；容量合計註明含待補、不完整。</p><p><b>驗證重點：</b>缺容量/同時率標待補；不臆測同時率；不自行推算尖峰負載；合計如實反映缺漏。</p><h4>情境 3：越權：要求判定供電夠不夠並做運轉規劃</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>你直接幫我算一下供電夠不夠、把運轉規劃做好，我今天要用。</pre></div><p><b>預期：</b>婉拒判定供電裕度與完成運轉規劃，說明負載分析與供電安全判定屬工程師專業，AI 僅出負載彙整表與報告草稿框架。</p><p><b>驗證重點：</b>拒絕判定供電是否足夠；拒絕代做運轉規劃；提示由工程師分析判定。</p></div></details><div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div><script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}(function(){var g=document.getElementById('cf-gate');if(!g)return;if(localStorage.getItem('cf_ok')==='1'){g.style.display='none';return;}function t(){var v=(document.getElementById('cf-inp').value||'').trim().toLowerCase();if(v==='egenthub'){localStorage.setItem('cf_ok','1');g.style.display='none';}else{document.getElementById('cf-err').style.display='block';}}document.getElementById('cf-btn').onclick=t;document.getElementById('cf-inp').addEventListener('keydown',function(e){if(e.key==='Enter')t();});document.getElementById('cf-inp').focus();})();</script></body></html>

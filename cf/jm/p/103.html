@@ -105,28 +105,14 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 - 回覆內容避免偏見、誤導或幻覺；**不得捏造發票號、報單號、HS Code、金額、重量、櫃號或日期**，來源未提供之欄位一律標示「待補」，不臆測。
 - 涉及越權操作（代為在 ERP 實際過帳、向報關行送件、簽核支出單），請婉拒並說明須由承辦人親自於系統內執行。
 - 執行任務後，請省略推理與比對過程說明，僅保留最終結果表格與必要的標題或提示語句。
-- 最終文件核對、報關放行、送簽與月結，皆由承辦人確認後執行，AI 僅產出草稿與差異提示。</pre></div><h2 class="sec" id="more">③ 知識庫設計與上線準備</h2><div class="card"><div class="body-pad"><h4>一、驗測情境與通過門檻</h4></div></div><h2 class="sec" id="test">④ 驗測情境</h2><details class="promptbox"><summary>展開驗測情境</summary><div class="body-pad"><h4>驗測情境</h4>
-<ol>
-<li>標準案：完整 ERP 出貨單，Agent 依機械／零件／免結匯正確分類彙整。</li>
-<li>無法分類案：某筆貨品性質不明，Agent 標「待人工分類」。</li>
-<li>缺欄案：金額或客戶缺漏，標「待補」。</li>
-</ol>
-<h4>通過門檻</h4>
-<ul>
-<li>三類索引分類與彙整正確率 100%（範例資料下）。</li>
-<li>無法判定者正確標「待人工分類」、零誤分。</li>
-</ul>
-<h4>二、權限與資料治理</h4>
-<ul>
-<li>建議建於進出口課工作室，限課內成員。</li>
-<li>ERP 出貨單置表格查詢知識庫。</li>
-</ul>
-<h4>三、人機協作與上線準備</h4>
-<ul>
-<li>AI 產三類索引草稿，課長覆核後存 M 槽出貨索引。</li>
-<li>建議納入每日／每批出貨固定流程。</li>
-</ul>
-<h4>上線前待補資料</h4>
-<ul>
-<li>各索引欄位定義、機械／零件分類判定規則、免結匯認定標準。</li>
-</ul></div></details><div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div><script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}(function(){var g=document.getElementById('cf-gate');if(!g)return;if(localStorage.getItem('cf_ok')==='1'){g.style.display='none';return;}function t(){var v=(document.getElementById('cf-inp').value||'').trim().toLowerCase();if(v==='egenthub'){localStorage.setItem('cf_ok','1');g.style.display='none';}else{document.getElementById('cf-err').style.display='block';}}document.getElementById('cf-btn').onclick=t;document.getElementById('cf-inp').addEventListener('keydown',function(e){if(e.key==='Enter')t();});document.getElementById('cf-inp').focus();})();</script></body></html>
+- 最終文件核對、報關放行、送簽與月結，皆由承辦人確認後執行，AI 僅產出草稿與差異提示。</pre></div><h2 class="sec" id="more">③ 知識庫設計與上線準備</h2><div class="card"><div class="body-pad"><h4>一、驗測情境與通過門檻</h4></div></div><h2 class="sec" id="test">④ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：標準案—派車單彙整與排程建議</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>請依派車單彙整當日派車內容並提出行車路線排程建議。
+
+【派車單/大貨車行事曆】
+日期 07/15　車輛 甲車　起點 廠區　迄點 竹科AMAT　貨物 進氣板2箱　時段 09:00
+日期 07/15　車輛 甲車　起點 竹科AMAT　迄點 廠區　貨物 回收空箱　時段 11:00
+日期 07/15　車輛 乙車　起點 廠區　迄點 中科　貨物 靶材座3箱　時段 10:00</pre></div><p><b>預期：</b>輸出派車彙整與排程建議表（日期、車輛、起點、迄點、貨物、建議時段、衝突/備註），依地點時段合理排序，無衝突，附行事曆登錄草稿。</p><p><b>驗證重點：</b>派車彙整正確；排序合理；無誤標衝突；不捏造地址。</p><h4>情境 2：邊界案—同車輛時段衝突與缺地址</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>幫我看今天派車有沒有衝突，有一筆地點沒寫。
+
+【派車單】
+日期 07/16　車輛 甲車　起點 廠區　迄點 竹科　貨物 A貨　時段 09:00
+日期 07/16　車輛 甲車　起點 廠區　迄點 （空白）　貨物 B貨　時段 09:00
+日期 07/16　車輛 乙車　起點 廠區　迄點 台南　貨物 C貨　時段 14:00</pre></div><p><b>預期：</b>甲車兩筆時段 09:00 重疊標「衝突」；第二筆迄點空白標「待補」，不臆測地點；提出調整建議供人覆核。</p><p><b>驗證重點：</b>時段衝突零漏報；缺地址標「待補」不臆測；建議供人覆核。</p></div></details><div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div><script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}(function(){var g=document.getElementById('cf-gate');if(!g)return;if(localStorage.getItem('cf_ok')==='1'){g.style.display='none';return;}function t(){var v=(document.getElementById('cf-inp').value||'').trim().toLowerCase();if(v==='egenthub'){localStorage.setItem('cf_ok','1');g.style.display='none';}else{document.getElementById('cf-err').style.display='block';}}document.getElementById('cf-btn').onclick=t;document.getElementById('cf-inp').addEventListener('keydown',function(e){if(e.key==='Enter')t();});document.getElementById('cf-inp').focus();})();</script></body></html>

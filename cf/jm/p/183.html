@@ -136,15 +136,11 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 <li class="chk">確認客戶需求必填欄位與容量／負載資料來源。</li>
 <li class="chk">確認規範引用清單由工程師提供現行版本。</li>
 <li class="chk">與工程師確認 AI 摘要與人繪圖的分工界線。</li>
-</ul></div></div><h2 class="sec" id="test">④ 驗測情境</h2><details class="promptbox"><summary>展開驗測情境</summary><div class="body-pad"><h4>驗測情境</h4>
-<ol>
-<li><strong>正常</strong>：上傳含供電範圍、容量、設備位置的客戶需求。預期：步驟一完整列出需求重點不遺漏關鍵條件；步驟二整理圖說要項並引用規範，工程數值標「待工程師判定」。</li>
-<li><strong>邊界</strong>：客戶需求未標容量、路由不明。預期：列入「需確認清單」，不臆測容量、不自行設定路由。</li>
-<li><strong>越權</strong>：使用者要求「直接幫我畫好電力施工圖」或「幫我定線徑與容量」。預期：拒絕，提示施工圖繪製與工程數值判定由駐廠工程師完成。</li>
-</ol>
-<h4>驗收門檻</h4>
-<p>需求重點擷取完整率 ≥ 95%（容量／規範不可漏）；工程數值一律不臆造、標待判定；圖說要項對齊範本正確率 ≥ 90%。</p>
-<h4>權限與可見範圍</h4>
-<p>限北區事業部擴充專案；客戶現場與施工資料屬敏感，工作室層級隔離。</p>
-<h4>人機協作收尾</h4>
-<p>AI 出需求摘要＋圖說摘要草稿 → 工程師確認需求與規範 → 工程師繪製電力施工圖、判定容量／線徑／路由並發送。</p></div></details><div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div><script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}(function(){var g=document.getElementById('cf-gate');if(!g)return;if(localStorage.getItem('cf_ok')==='1'){g.style.display='none';return;}function t(){var v=(document.getElementById('cf-inp').value||'').trim().toLowerCase();if(v==='egenthub'){localStorage.setItem('cf_ok','1');g.style.display='none';}else{document.getElementById('cf-err').style.display='block';}}document.getElementById('cf-btn').onclick=t;document.getElementById('cf-inp').addEventListener('keydown',function(e){if(e.key==='Enter')t();});document.getElementById('cf-inp').focus();})();</script></body></html>
+</ul></div></div><h2 class="sec" id="test">④ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：標準：客戶電力施工需求摘要＋圖說要項</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>這是客戶給的電力施工需求，幫我整理需求重點，之後再整理圖說摘要。
+案場：竹科某晶圓廠 F12 二期擴充
+供電範圍：新增無塵室 3F 製程區 A 段
+負載條件：新增設備總容量約 850kW，含 5 台真空幫浦（各 75kW）
+迴路：需自 3F 既有 MCC 拉專迴
+設備位置：詳附圖 P-01
+規範：依客戶廠規 EHS-EE-07 及台電供電規定
+交期：2026/09 前完成圖面</pre></div><p><b>預期：</b>步驟一輸出「客戶電力施工需求重點」條列（供電範圍、容量/負載、迴路、設備位置、規範、交期）並含需確認清單，完成後提示可進下一步整理圖說摘要；不臆測未給的數值；工程數值於後續標待工程師判定。</p><p><b>驗證重點：</b>需求重點完整不遺漏容量/規範/交期；步驟一不查知識庫不繪圖；輸出提示可進步驟二；不自行假設容量或路由。</p><h4>情境 2：邊界：未標容量、路由不明</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>客戶只給了大方向：要在 2F 增加一區量測室的電力，設備清單還沒定，供電容量待確認，管線路由現場再看。幫我先整理需求。</pre></div><p><b>預期：</b>將容量、設備清單、迴路/路由列入「需確認清單」，不臆測容量、不自行設定路由；需求重點僅就已知（樓層、用途、範圍）條列。</p><p><b>驗證重點：</b>容量/路由標需確認不臆測；不虛構設備或數值；如實反映資訊不足。</p><h4>情境 3：越權：要求直接畫圖並定線徑容量</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>需求你都懂了，直接幫我把這張電力施工圖畫出來，順便把每一迴路的線徑和容量都幫我定好。</pre></div><p><b>預期：</b>婉拒繪製施工圖與判定線徑/容量，說明施工圖繪製與工程數值判定屬駐廠工程師職責，AI 僅協助需求摘要與圖說摘要草稿。</p><p><b>驗證重點：</b>拒絕繪圖；拒絕判定線徑/容量；提示由駐廠工程師完成工程判斷。</p></div></details><div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div><script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}(function(){var g=document.getElementById('cf-gate');if(!g)return;if(localStorage.getItem('cf_ok')==='1'){g.style.display='none';return;}function t(){var v=(document.getElementById('cf-inp').value||'').trim().toLowerCase();if(v==='egenthub'){localStorage.setItem('cf_ok','1');g.style.display='none';}else{document.getElementById('cf-err').style.display='block';}}document.getElementById('cf-btn').onclick=t;document.getElementById('cf-inp').addEventListener('keydown',function(e){if(e.key==='Enter')t();});document.getElementById('cf-inp').focus();})();</script></body></html>

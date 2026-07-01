@@ -103,27 +103,12 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 - 執行任務後請省略冗長推理與比對過程，僅保留最終結果表格、待補清單與必要提示語句。</pre></div><h2 class="sec" id="more">③ 知識庫設計與上線準備</h2><div class="card"><div class="body-pad"><ul>
 <li>部門：航太生產部製三課</li>
 <li>燈號：A 🟢</li>
-</ul></div></div><h2 class="sec" id="test">④ 驗測情境</h2><details class="promptbox"><summary>展開驗測情境</summary><div class="body-pad"><h4>一、驗測情境與通過門檻</h4>
-<p><strong>驗測情境（請以真實案例各跑一次，由承辦人逐項核對）</strong>：</p>
-<ol>
-<li>用 1~2 份作業流程文件，確認 Agent 流程步驟、權責、檢核點整理完整且不竄改。</li>
-</ol>
-<p><strong>通過門檻（未達門檻者退回調整提示詞或補知識庫）</strong>：</p>
-<ul>
-<li>流程步驟與權責整理正確、不遺漏關鍵檢核點。</li>
-<li>不得新增原文沒有的步驟。</li>
-</ul>
-<h4>二、知識庫、權限與上線準備</h4>
-<ul>
-<li>知識庫配置：整理架構用「全文查找知識庫」；術語對照用「表格查詢知識庫」。</li>
-<li>上線前需補資料：將「知識庫範例」中的示範檔，替換為該部門最新的正式主檔/範本（料號、客戶、SOP、人員名冊等），並確認欄位名稱與範例一致。</li>
-<li>權限設定：本 Agent 置於該部門工作室，僅開放該課/組相關人員使用；知識庫含客戶/成本/授信等機密者，依 EgentHub 三層權限（公司/工作室/Agent）限縮可見範圍，避免跨部門外洩。</li>
-<li>模型建議：涉及讀圖/PDF 視覺辨識的題目，請選用具 VLM 能力的較新模型（如 Claude 4.6 Sonnet、Gemini 2.5 Pro）；純文字彙整可用較經濟模型。</li>
-<li>平台限制提醒：EgentHub 對話框不支援直接上傳 .xlsx/.csv，請改貼上內容或放入「表格查詢知識庫」；輸出 Excel 需先產 Markdown 表格再於介面下載。</li>
-</ul>
-<h4>三、人機協作與責任界線</h4>
-<ul>
-<li>AI 角色：產出草稿、彙整、比對、標示差異與待補；不做最終決定。</li>
-<li>人的角色：覆核草稿、補足待補項、做最終判定與送簽放行；對結果負責。</li>
-<li>鐵則：所有數字、單號、日期、規格、金額不得由 AI 捏造；資訊不足一律標「待補」。最終判定、送簽、放行一律由承辦人或主管確認後始生效。</li>
-</ul></div></details><div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div><script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}(function(){var g=document.getElementById('cf-gate');if(!g)return;if(localStorage.getItem('cf_ok')==='1'){g.style.display='none';return;}function t(){var v=(document.getElementById('cf-inp').value||'').trim().toLowerCase();if(v==='egenthub'){localStorage.setItem('cf_ok','1');g.style.display='none';}else{document.getElementById('cf-err').style.display='block';}}document.getElementById('cf-btn').onclick=t;document.getElementById('cf-inp').addEventListener('keydown',function(e){if(e.key==='Enter')t();});document.getElementById('cf-inp').focus();})();</script></body></html>
+</ul></div></div><h2 class="sec" id="test">④ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：標準：作業流程結構化摘要</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>把這份作業流程整理成結構化摘要（步驟/權責/輸入輸出/檢核點）：
+《來料進廠檢驗流程》
+1. 倉管收料點數並核對送貨單（權責:倉管）
+2. IQC依抽樣計畫檢驗（權責:品保）
+3. 合格入庫、不合格開退貨單（權責:品保/採購）
+4. 系統登錄進料明細（權責:倉管）</pre></div><p><b>預期：</b>輸出作業流程摘要表（步驟序/作業內容/權責/輸入輸出/檢核點/備註待確認）：收料點數(倉管)、IQC抽樣檢驗(品保)、合格入庫或退貨(品保/採購)、系統登錄(倉管)；權責與檢核點照抄不遺漏；不新增原文沒有步驟。</p><p><b>驗證重點：</b>四步驟權責是否正確對應；檢核點是否不遺漏；是否不新增原文外步驟。</p><h4>情境 2：邊界：流程缺權責標待確認</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>這份流程有幾步沒寫是誰負責，幫我整理：
+1. 領料備料（權責未載）
+2. 上線生產（權責:作業員）
+3. 完工報工（權責未載）</pre></div><p><b>預期：</b>整理流程摘要，步驟1與步驟3權責原文未載，標『待確認』不自行指派單位；步驟2權責作業員照列；不臆測權責歸屬。</p><p><b>驗證重點：</b>未載權責是否標待確認不臆測；有載的是否照列；不新增內容。</p></div></details><div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div><script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}(function(){var g=document.getElementById('cf-gate');if(!g)return;if(localStorage.getItem('cf_ok')==='1'){g.style.display='none';return;}function t(){var v=(document.getElementById('cf-inp').value||'').trim().toLowerCase();if(v==='egenthub'){localStorage.setItem('cf_ok','1');g.style.display='none';}else{document.getElementById('cf-err').style.display='block';}}document.getElementById('cf-btn').onclick=t;document.getElementById('cf-inp').addEventListener('keydown',function(e){if(e.key==='Enter')t();});document.getElementById('cf-inp').focus();})();</script></body></html>

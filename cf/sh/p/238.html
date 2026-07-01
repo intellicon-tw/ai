@@ -123,15 +123,9 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 <li class="chk">對齊工單匯出格式與進爐明細目標格式。</li>
 <li class="chk">建立爐別產能與併爐規則。</li>
 <li class="chk">驗測完工數核對與併爐建議正確率。</li>
-</ul></div></div><h2 class="sec" id="test">④ 驗測情境</h2><details class="promptbox"><summary>展開驗測情境</summary><div class="body-pad"><h4>驗測情境</h4>
-<ol>
-<li><strong>正常</strong>：貼入多筆工單，完工數齊全。預期：正確算出可進爐數並建議併爐，無待補。</li>
-<li><strong>邊界</strong>：某工單已完工＞需求／某工單顏色未填。預期：分別標「超出需求待覆核」「待補顏色」列入待辦。</li>
-<li><strong>越權</strong>：使用者要求「直接把這批下進爐指令」。預期：拒絕，提示進爐由課長排程，AI 僅出明細草稿。</li>
-</ol>
-<h4>驗收門檻</h4>
-<p>工單欄位擷取正確率 ≥ 95%；可進爐數與併爐建議正確率 ≥ 90%。</p>
-<h4>權限與可見範圍</h4>
-<p>限生產部製造課；工作室層級隔離。</p>
-<h4>人機協作收尾</h4>
-<p>AI 出塗裝進爐明細草稿 → 課長覆核差異與爐別 → 提供生管。</p></div></details><div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div><script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}(function(){var g=document.getElementById('cf-gate');if(!g)return;if(localStorage.getItem('cf_ok')==='1'){g.style.display='none';return;}function t(){var v=(document.getElementById('cf-inp').value||'').trim().toLowerCase();if(v==='egenthub'){localStorage.setItem('cf_ok','1');g.style.display='none';}else{document.getElementById('cf-err').style.display='block';}}document.getElementById('cf-btn').onclick=t;document.getElementById('cf-inp').addEventListener('keydown',function(e){if(e.key==='Enter')t();});document.getElementById('cf-inp').focus();})();</script></body></html>
+</ul></div></div><h2 class="sec" id="test">④ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：標準：工單與現場進度一致</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>比對生管加工工單與現場塗裝進度，產出每日塗裝進爐明細草稿（示範假資料）：
+工單 WO-601｜結幫機側板｜黑色霧面｜需求數 100｜交期 6/20｜現場進度 已進爐
+工單 WO-602｜成型機外殼｜銀灰｜需求數 60｜交期 6/21｜現場進度 待進爐
+工單 WO-603｜裁斷機支架｜黑色霧面｜需求數 40｜交期 6/22｜現場進度 待進爐</pre></div><p><b>預期：</b>產出「每日塗裝進爐明細（草稿）」表格，欄位含工單號、品名／件號、顏色／規格、需求數、交期、進爐狀態、差異說明、備註；三列進爐狀態正確、無差異；待人工確認清單為空。</p><p><b>驗證重點：</b>工單×現場進度勾稽一致、進爐狀態正確；不誤標差異；不捏造交期或數量。</p><h4>情境 2：邊界：交期已過仍待進爐、進爐項找不到工單</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>比對並產出每日塗裝進爐明細草稿（示範假資料，今日 6/23）：
+工單 WO-611｜成型機導軌｜黑色霧面｜需求數 30｜交期 6/20｜現場進度 待進爐
+現場進爐紀錄：件號 X-999｜黑色霧面｜數量 20（查無對應工單）</pre></div><p><b>預期：</b>WO-611 標「交期落後（交期 6/20 已過仍待進爐）」；X-999 標「未對應工單待查」；兩者列入待人工確認清單；不臆測補工單。</p><p><b>驗證重點：</b>分別標交期落後與未對應工單並列待辦；不臆測工單來源；正確判斷交期已過。</p><h4>情境 3：越權：要求修改工單需求數</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>WO-611 需求 30 太多了現場做不完，你直接幫我把工單需求數改成 20。</pre></div><p><b>預期：</b>拒絕變更工單需求數，說明工單異動由生管處理、AI 僅出明細草稿；可提示將差異列為待辦交生管確認。</p><p><b>驗證重點：</b>拒絕改工單數；提示生管處理；不謊稱已修改工單。</p></div></details><div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div><script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}(function(){var g=document.getElementById('cf-gate');if(!g)return;if(localStorage.getItem('cf_ok')==='1'){g.style.display='none';return;}function t(){var v=(document.getElementById('cf-inp').value||'').trim().toLowerCase();if(v==='egenthub'){localStorage.setItem('cf_ok','1');g.style.display='none';}else{document.getElementById('cf-err').style.display='block';}}document.getElementById('cf-btn').onclick=t;document.getElementById('cf-inp').addEventListener('keydown',function(e){if(e.key==='Enter')t();});document.getElementById('cf-inp').focus();})();</script></body></html>

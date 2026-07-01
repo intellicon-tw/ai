@@ -108,28 +108,9 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 - 執行任務後請省略冗長推理與比對過程，僅保留最終結果表格、待補清單與必要提示語句。</pre></div><h2 class="sec" id="more">③ 知識庫設計與上線準備</h2><div class="card"><div class="body-pad"><ul>
 <li>部門：精密生產二部</li>
 <li>燈號：A 🟢</li>
-</ul></div></div><h2 class="sec" id="test">④ 驗測情境</h2><details class="promptbox"><summary>展開驗測情境</summary><div class="body-pad"><h4>一、驗測情境與通過門檻</h4>
-<p><strong>驗測情境（請以真實案例各跑一次，由承辦人逐項核對）</strong>：</p>
-<ol>
-<li>用一份含重工的資料，確認占比計算與門檻判定正確，原因碼正確對應分類。</li>
-<li>刻意留一筆缺原因碼，確認被標待補。</li>
-</ol>
-<p><strong>通過門檻（未達門檻者退回調整提示詞或補知識庫）</strong>：</p>
-<ul>
-<li>重工占比計算正確率 100%。</li>
-<li>偏高項與缺原因碼項 100% 標出。</li>
-</ul>
-<h4>二、知識庫、權限與上線準備</h4>
-<ul>
-<li>知識庫配置：工時資料用「表格查詢知識庫」；原因/門檻用「全文查找知識庫」。</li>
-<li>上線前需補資料：將「知識庫範例」中的示範檔，替換為該部門最新的正式主檔/範本（料號、客戶、SOP、人員名冊等），並確認欄位名稱與範例一致。</li>
-<li>權限設定：本 Agent 置於該部門工作室，僅開放該課/組相關人員使用；知識庫含客戶/成本/授信等機密者，依 EgentHub 三層權限（公司/工作室/Agent）限縮可見範圍，避免跨部門外洩。</li>
-<li>模型建議：涉及讀圖/PDF 視覺辨識的題目，請選用具 VLM 能力的較新模型（如 Claude 4.6 Sonnet、Gemini 2.5 Pro）；純文字彙整可用較經濟模型。</li>
-<li>平台限制提醒：EgentHub 對話框不支援直接上傳 .xlsx/.csv，請改貼上內容或放入「表格查詢知識庫」；輸出 Excel 需先產 Markdown 表格再於介面下載。</li>
-</ul>
-<h4>三、人機協作與責任界線</h4>
-<ul>
-<li>AI 角色：產出草稿、彙整、比對、標示差異與待補；不做最終決定。</li>
-<li>人的角色：覆核草稿、補足待補項、做最終判定與送簽放行；對結果負責。</li>
-<li>鐵則：所有數字、單號、日期、規格、金額不得由 AI 捏造；資訊不足一律標「待補」。最終判定、送簽、放行一律由承辦人或主管確認後始生效。</li>
-</ul></div></details><div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div><script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}(function(){var g=document.getElementById('cf-gate');if(!g)return;if(localStorage.getItem('cf_ok')==='1'){g.style.display='none';return;}function t(){var v=(document.getElementById('cf-inp').value||'').trim().toLowerCase();if(v==='egenthub'){localStorage.setItem('cf_ok','1');g.style.display='none';}else{document.getElementById('cf-err').style.display='block';}}document.getElementById('cf-btn').onclick=t;document.getElementById('cf-inp').addEventListener('keydown',function(e){if(e.key==='Enter')t();});document.getElementById('cf-inp').focus();})();</script></body></html>
+</ul></div></div><h2 class="sec" id="test">④ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：標準：重工工時占比分析</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>幫我算重工占比並標偏高項（重工占比=重工工時/總工時，&gt;10%為偏高）：
+WO-7001 料號PN-M500 正常工時 90 重工工時 20 重工原因 尺寸超差
+WO-7002 料號PN-M510 正常工時 95 重工工時 5 重工原因 刀傷
+WO-7003 料號PN-M520 正常工時 100 重工工時 0</pre></div><p><b>預期：</b>計算總工時與重工占比：WO-7001 20/110=18.2%（&gt;10%偏高，原因尺寸超差）、WO-7002 5/100=5%（正常）、WO-7003 0/100=0%（正常）；輸出重工占比彙整表+重點檢討待補清單；占比計算100%正確。</p><p><b>驗證重點：</b>18.2%、5%、0%計算是否正確；偏高項WO-7001是否標出且原因對應；數值照抄。</p><h4>情境 2：邊界：缺重工原因碼標待補</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>這幾筆算一下，有一筆沒填原因：
+WO-7010 料號PN-M600 正常工時 80 重工工時 15 重工原因（空白）
+WO-7011 料號PN-M610 正常工時 88 重工工時 12 重工原因 程式問題</pre></div><p><b>預期：</b>WO-7010占比15/95=15.8%偏高，但重工原因空白，標『待補：缺原因碼』不自行推測原因；WO-7011占比12/100=12%偏高，原因程式問題照列；占比照算，原因缺漏標待補。</p><p><b>驗證重點：</b>缺原因碼是否標待補不推測原因；占比15.8%/12%是否算對；偏高判定是否正確。</p></div></details><div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div><script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}(function(){var g=document.getElementById('cf-gate');if(!g)return;if(localStorage.getItem('cf_ok')==='1'){g.style.display='none';return;}function t(){var v=(document.getElementById('cf-inp').value||'').trim().toLowerCase();if(v==='egenthub'){localStorage.setItem('cf_ok','1');g.style.display='none';}else{document.getElementById('cf-err').style.display='block';}}document.getElementById('cf-btn').onclick=t;document.getElementById('cf-inp').addEventListener('keydown',function(e){if(e.key==='Enter')t();});document.getElementById('cf-inp').focus();})();</script></body></html>
