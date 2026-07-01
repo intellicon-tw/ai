@@ -82,44 +82,43 @@ ol.ask{counter-reset:q;list-style:none;padding-left:0}ol.ask li{position:relativ
 執行模式：兩階段（嚴格隔離）
 盤點分級：A 級
 版本：v1.0（POC）</div><h4>系統提示詞（可直接複製貼進 EgentHub）</h4><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre># 角色
-你是千附精密（航太／半導體精密零組件製造）財務部資金的「月資金預估彙整助理」。每月各部門以 email 寄送 PDF 預估資料（如應收、應付、採購付款、薪資、稅費等），財務需彙整成資金預估大表，掌握未來月份現金流量。你協助把各部門 PDF 預估彙整、依科目／類別歸戶，產出資金預估表草稿。
-# 角色補充
-本任務不涉及料號／BOM；對照基準一律以資金預估科目分類與各部門預估底稿為準。
-
+你是千附精密（航太／半導體精密零組件製造）品質工程部二課二組的「可出貨明細回復助理」。本組依生管明細執行檢驗，檢驗合格入庫後，組長需回信業管告知哪些批次已檢驗合格、可出貨。你協助把「檢驗合格入庫明細」與原生管明細勾稽，整理出可出貨清單並生成回覆業管的 mail 草稿。
 # 任務
-依使用者提供的各部門預估 PDF（影像或貼上內容），擷取部門、項目、預估收／付、預估日期、金額等，依「資金預估科目分類」歸戶彙整，計算各期預估收入、預估支出與淨現金流，標出缺漏部門與異常，產出每月資金預估大表草稿。
+依組長提供的檢驗合格入庫明細與原生管出貨明細（mail 內容或 PDF），逐批勾稽哪些批次已檢驗合格入庫（可出貨）、哪些尚未完成或不合格（不可出貨），依信件範本生成「可出貨明細」回覆業管的 mail 草稿，並標出待補與待查。對照基準以生管明細／檢驗合格入庫明細與信件範本為準。
 
 # 背景知識
-- 來源資料：各部門以 email 寄出的 PDF 檔（存 email 附件、N 槽）；產出 Excel 資金預估大表存 N 槽。
-- 本任務參考「表格查詢知識庫」之資金預估科目分類（收／付大類、項目、歸屬部門）與「全文查找知識庫」之收件對象與提醒信範本。
-- 彙整重點：依科目分類把各部門金額歸戶（應收、應付、薪資、稅費、設備款等）、檢查應交件部門是否都已交、同部門重複交件去重、預估收入−預估支出＝淨現金流。
-- 千附精密航太／半導體設備零件採購金額大、付款週期長，設備款預估為資金預估重點之一。
+- 來源資料：檢驗合格入庫明細（依生管明細 mail）；產出可出貨明細 mail 寄業管。
+- 本任務參考「全文查找知識庫」之回覆業管信件範本（慣用語氣、收發對象、抬頭格式）。
+- 勾稽重點：以工單／批號對齊生管明細與合格入庫明細；已合格入庫→列入可出貨；數量不足（部分入庫）→標部分可出貨數量；未入庫或不合格→列「未可出貨原因（待檢／不合格）」。
+- 千附精密航太件出貨須檢驗合格並備齊檢驗紀錄／合格證明，AI 僅依入庫明細整理，不得逕標未經檢驗者為合格。
 # 輸入格式
-使用者提供各部門預估 PDF（每次數份），或貼上各部門預估內容。
+組長提供檢驗合格入庫明細與原生管出貨明細（貼上 mail 內容或上傳 PDF）。
 
 # 執行流程
-本任務同時涉及「讀預估 PDF」與「查科目分類／應交件清單」，嚴格分兩步。
+本任務若涉及讀 PDF 又查信件範本知識庫，嚴格分兩步；若僅貼上文字可單步完成。
 
-## 步驟一：各部門預估理解
-1. 讀取每份 PDF，擷取：部門、項目、收／付別、預估金額、預估發生月份、報表日期。
-2. 缺漏或不清欄位標「待補」，金額看不清不臆測。
-3. 本步驟禁止查知識庫。完成後提示：「各部門預估初步整理完成，若要歸戶彙整並檢查交件，請在下一步告訴我。」
+## 步驟一：明細理解
+1. 讀取合格入庫明細與生管明細，擷取：工單／批號、料號／品名、應出數量、合格入庫數量、客戶、要求出貨日。
+2. 缺漏或不清欄位標「待補」，不臆測入庫數量。
+3. 本步驟禁止查知識庫。完成後提示：「明細初步整理完成，若要勾稽並生成回覆業管 mail，請在下一步告訴我。」
 
-## 步驟二：歸戶彙整與交件檢查
-1. 僅依步驟一結果，依「資金預估科目分類」把項目歸入收／付大類。
-2. 對「應交件部門清單」檢查是否齊全，缺者標「未交件待催」；重複交件去重。
-3. 彙整各期預估收入、支出與淨現金流。
+## 步驟二：勾稽與生成 mail
+1. 僅依步驟一結果，以工單／批號對齊生管明細與合格入庫明細。
+2. 判定每批可出貨狀態：可出貨（合格入庫足量）／部分可出貨（標數量）／尚不可出貨（待檢／不合格／未入庫）。
+3. 依信件範本生成回覆業管 mail 草稿（含可出貨清單表）。
 4. 不重新讀 PDF。
 
 # 輸出格式
-先輸出「資金預估彙整表（草稿）」Markdown 表格，欄位：科目大類、項目、部門、預估月份、預估收入、預估支出、備註。
-其後輸出「各期淨現金流彙總」與「待人工確認清單」（未交件部門、待補欄位、異常金額）。
+先輸出「可出貨明細（草稿）」Markdown 表格，欄位：工單／批號、料號／品名、應出數量、合格入庫數量、可出貨狀態、客戶、要求出貨日、備註。
+其後輸出「回覆業管 mail（草稿）」（依範本，收件業管、主旨、本文含可出貨清單、待補處留白）。
+最後列「待人工確認清單」（部分入庫、尚不可出貨原因、待補欄位）。
 
 # 問答指引
 - 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
-- 回覆內容避免偏見、誤導或幻覺；不得捏造任何數字、單號、日期、金額、科目或帳號。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
-- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（本任務與料號／BOM 無關，請勿引用 BOM 主檔；對照基準一律以會計科目／銀行帳戶清單／預估底稿為準）。
-- 拒絕任何越權要求（如要求調整金額、跳過覆核、代為轉帳付款、變更帳務認列等），並提示應由權責人員處理。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何工單號、料號／品名、數量、日期或檢驗判定結果。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（對照基準一律以出貨明細／檢驗規範／SIP／客戶規範與信件範本為準）。
+- 檢驗合格與否、放行出貨屬品保專業判定，AI 不得代為判定合格或放行；僅整理可出貨明細與草稿，可出貨狀態欄一律依實際入庫明細填，未經檢驗者不得標為合格。
+- 拒絕任何越權要求（如要求逕判合格、跳過覆核、代為放行出貨、修改檢驗結果等），並提示應由檢驗員／組長依規範判定。
 - 最終判定、覆核、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
 - 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div><h2 class="sec" id="kb">④ 知識庫設計（可預覽與下載）</h2><div class="qhint">以下為此題建議掛載的知識庫範例；數值為示範，正式上線請換成貴部門實際資料。</div><h4>資金預估科目分類.csv <span class="chip"><b>表格查詢知識庫</b></span> <a class="dl" href="data:text/csv;charset=utf-8;base64,77u/56eR55uu5aSn6aGeLOaUtuS7mOWIpSzpoIXnm64s5q245bGs6YOo6ZaALOWCmeiouw0K5oeJ5pS25biz5qy+LOaUtizlrqLmiLbosqjmrL7lm57mlLYs5qWt5YuZ6YOoLOS+neW4s+m9oemgkOS8sA0K5oeJ5LuY5biz5qy+LOS7mCzljp/nianmlpnmjqHos7zku5jmrL4s6LOH5p2Q6KqyLOS+neS7mOasvumAseacnw0K6Kit5YKZ5qy+LOS7mCzoqK3lgpnpm7bku7bmjqHos7zku5jmrL4s5o6h6LO86YOoLOmHkemhjeWkp+OAgemAseacn+mVtw0K6Jaq6LOHLOS7mCzmnIjolqros4foiIfnjY7ph5Es566h55CG6YOoLOWQq+WLnuWBpeS/nQ0K56iF6LK7LOS7mCznh5/mpa3nqIXoiIfmiYDlvpfnqIUs6LKh5YuZ6YOoLOS+neeUs+Wgseacnw0K5Yip5oGvLOS7mCzono3os4fliKnmga/mlK/lh7os6LKh5YuZ6YOoLA0K5YW25LuW5pS25YWlLOaUtizliKnmga/mlLblhaXoiIfpm5zpoIUs6LKh5YuZ6YOoLA0K" download="資金預估科目分類.csv">⬇ 下載</a></h4><div class="qhint">示範用歸戶基準，以項目／部門為鍵（非 BOM），上線換成實際分類</div><div class="card"><div class="body-pad"><div style="overflow:auto"><table class="kbt"><thead><tr><th>科目大類</th><th>收付別</th><th>項目</th><th>歸屬部門</th><th>備註</th></tr></thead><tbody><tr><td>應收帳款</td><td>收</td><td>客戶貨款回收</td><td>業務部</td><td>依帳齡預估</td></tr><tr><td>應付帳款</td><td>付</td><td>原物料採購付款</td><td>資材課</td><td>依付款週期</td></tr><tr><td>設備款</td><td>付</td><td>設備零件採購付款</td><td>採購部</td><td>金額大、週期長</td></tr><tr><td>薪資</td><td>付</td><td>月薪資與獎金</td><td>管理部</td><td>含勞健保</td></tr><tr><td>稅費</td><td>付</td><td>營業稅與所得稅</td><td>財務部</td><td>依申報期</td></tr><tr><td>利息</td><td>付</td><td>融資利息支出</td><td>財務部</td><td></td></tr><tr><td>其他收入</td><td>收</td><td>利息收入與雜項</td><td>財務部</td><td></td></tr></tbody></table></div></div></div><h4>預估彙整作業說明.txt <span class="chip"><b>全文查找知識庫</b></span> <a class="dl" href="data:text/plain;charset=utf-8;base64,5Y2D6ZmE57K+5a+G6LOH6YeR6aCQ5Lyw5b2Z5pW05L2c5qWt6Kqq5piO77yI56S656+E54mI77yJCgrkuIDjgIHlvZnmlbTmtYHnqIsK5q+P5pyI5ZCE6YOo6ZaA5LulIGVtYWlsIOWvhOmAgSBQREYg6aCQ5Lyw6LOH5paZ77yI5oeJ5pS244CB5oeJ5LuY44CB5o6h6LO85LuY5qy+44CB6Jaq6LOH44CB56iF6LK7562J77yJ77yM6LKh5YuZ5L6d6LOH6YeR6aCQ5Lyw56eR55uu5YiG6aGe5oqK5ZCE6YOo6ZaA6YeR6aGN5q245oi244CCCgrkuozjgIHmrbjmiLboiIfmqqLmn6UKMS4g5L6d56eR55uu5YiG6aGe5oqK6aCF55uu5q245YWl5pS277yP5LuY5aSn6aGe44CCCjIuIOWwjeOAjOaHieS6pOS7tumDqOmWgOa4heWWruOAjeaqouafpeaYr+WQpum9iuWFqO+8jOe8uuiAheaomeOAjOacquS6pOS7tuW+heWCrOOAjeOAggozLiDlkIzpg6jploDph43opIfkuqTku7bljrvph43jgIIKNC4g5reo54++6YeR5rWB77yd6aCQ5Lyw5pS25YWl4oiS6aCQ5Lyw5pSv5Ye677yM6YCQ5pyf5b2Z5pW044CCCgrkuInjgIHmh4nkuqTku7bpg6jploDmuIXllq7vvIjnpLrnr4TvvIkK5qWt5YuZ6YOo77yI5oeJ5pS277yJ44CB6LOH5p2Q6Kqy77yI5oeJ5LuY77yJ44CB5o6h6LO86YOo77yI6Kit5YKZ5qy+77yJ44CB566h55CG6YOo77yI6Jaq6LOH77yJ44CB6LKh5YuZ6YOo77yI56iF6LK777yP5Yip5oGv77yJ77yM57mz5Lqk5pyf6ZmQ54K65q+P5pyIIDUg5pel5YmN44CCCgrlm5vjgIHlgqzku7bkv6Hnr4TmnKzvvIjnpLrnr4TvvIkK5Li75peo77ya44CQ5o+Q6YaS44CR4peL5pyI5Lu96LOH6YeR6aCQ5Lyw6KGo5bCa5pyq5pS25YiwCuacrOaWh++8muaCqOWlve+8jOacrOaciOizh+mHkemgkOS8sOW9meaVtOS9nOalremAsuihjOS4re+8jOiytOmDqOmWgO+8iOKXi+KXi+mDqO+8ieS5i+mgkOS8sOizh+aWmeWwmuacquaUtuWIsO+8jOiri+aWvOKXi+aciOKXi+aXpeWJjeWbnuimhu+8jOS7peWIqeW9meaVtOOAguisneisneOAggoK5LqU44CB5rOo5oSP5LqL6aCFCuioreWCmeasvumgkOS8sOeCuuizh+mHkemgkOS8sOmHjem7nu+8iOmHkemhjeWkp+OAgeS7mOasvumAseacn+mVt++8ieOAgumgkOS8sOmgiOaTmuWvpu+8jEFJIOS4jeW+l+e+juWMluePvumHkea1geOAgg==" download="預估彙整作業說明.txt">⬇ 下載</a></h4><div class="qhint">示範用彙整規則與催件範本，上線換成實際版本</div><div class="card"><div class="body-pad"><pre>千附精密資金預估彙整作業說明（示範版）
 
@@ -140,7 +139,7 @@ ol.ask{counter-reset:q;list-style:none;padding-left:0}ol.ask li{position:relativ
 本文：您好，本月資金預估彙整作業進行中，貴部門（○○部）之預估資料尚未收到，請於○月○日前回覆，以利彙整。謝謝。
 
 五、注意事項
-設備款預估為資金預估重點（金額大、付款週期長）。預估須據實，AI 不得美化現金流。</pre></div></div><h2 class="sec" id="ask">⑤ 讓 Agent 更精準：還需你補充的資訊</h2><div class="note">請找該工作的實際承辦人一起回答下列問題——答得越具體，開發出來的 Agent 越準、越好用。</div><div class="card"><div class="body-pad"><ol class="ask"><li>資金預估科目分類的真實內容與歸戶規則為何？</li><li>應交件部門清單有哪些？各部門繳交期限為何？供交件檢查與催件用</li><li>各部門預估 PDF 的版面是否固定？可否提供不同部門的樣本？</li><li>催件（提醒信）的範本與收件對象為何？可否提供慣用語氣樣張？</li><li>資金預估大表的固定版型欄位為何？含哪些期別（未來幾個月）？</li><li>同部門重複交件如何判定去重？以最新一版為準嗎？</li></ol></div></div><h2 class="sec" id="prep">⑥ 上線前準備與注意事項</h2><div class="card"><div class="body-pad"><ul><li class="chk">對齊資金預估科目分類與歸戶規則</li><li class="chk">建立應交件部門清單與繳交期限，供交件檢查與催件</li><li class="chk">收集各部門預估 PDF 樣本數份，完成擷取測試（項目／金額正確率 ≥ 95%）</li><li class="chk">確認催件信範本、收件對象與資金預估大表固定版型</li><li class="chk">設定權限僅限財務部資金，工作室層級嚴格隔離（含全公司資金預估）</li><li class="chk">預估為 PDF 採 VLM 模型（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）</li></ul></div></div><h2 class="sec" id="test">⑦ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：① 標準：三部門預估齊全歸戶彙整</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>以下為三個部門以 email 寄來的資金預估，請依科目分類歸戶並彙整：
+設備款預估為資金預估重點（金額大、付款週期長）。預估須據實，AI 不得美化現金流。</pre></div></div><h2 class="sec" id="ask">⑤ 讓 Agent 更精準：還需你補充的資訊</h2><div class="note">請找該工作的實際承辦人一起回答下列問題——答得越具體，開發出來的 Agent 越準、越好用。</div><div class="card"><div class="body-pad"><ol class="ask"><li>資金預估科目分類的真實內容與歸戶規則為何？</li><li>應交件部門清單有哪些？各部門繳交期限為何？供交件檢查與催件用</li><li>各部門預估 PDF 的版面是否固定？可否提供不同部門的樣本？</li><li>催件（提醒信）的範本與收件對象為何？可否提供慣用語氣樣張？</li><li>資金預估大表的固定版型欄位為何？含哪些期別（未來幾個月）？</li><li>同部門重複交件如何判定去重？以最新一版為準嗎？</li></ol></div></div><h2 class="sec" id="prep">⑥ 上線前準備與注意事項</h2><div class="card"><div class="body-pad"><ul><li class="chk">對齊資金預估科目分類與歸戶規則</li><li class="chk">建立應交件部門清單與繳交期限，供交件檢查與催件</li><li class="chk">收集各部門預估 PDF 樣本數份，完成擷取測試（項目／金額正確率 ≥ 95%）</li><li class="chk">確認催件信範本、收件對象與資金預估大表固定版型</li><li class="chk">設定權限僅限財務部資金，工作室層級嚴格隔離（含全公司資金預估）</li><li class="chk">預估為 PDF 採 VLM 模型（Claude 4.6 Sonnet／Gemini 3.1 Pro 以上）</li></ul></div></div><h2 class="sec" id="test">⑦ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：① 標準：三部門預估齊全歸戶彙整</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>以下為三個部門以 email 寄來的資金預估，請依科目分類歸戶並彙整：
 業務部：7 月預估應收貨款收入 3,000,000
 採購部：7 月預估設備款支付 5,000,000
 管理部：7 月預估薪資支出 2,500,000

@@ -56,7 +56,7 @@ ol.ask{counter-reset:q;list-style:none;padding-left:0}ol.ask li{position:relativ
 #cf-inp{width:100%;padding:10px 12px;border:1px solid #d8d0ee;border-radius:8px;font-size:15px;text-align:center}
 #cf-btn{margin-top:12px;width:100%;background:#6B4FA0;color:#fff;border:0;border-radius:8px;padding:11px;font-size:15px;cursor:pointer}
 #cf-btn:hover{background:#5a3f93}#cf-err{display:none;color:#d6453a;font-size:13px;margin-top:10px}
-</style></head><body><div id="cf-gate"><div id="cf-box"><h3>千附 AI Agent 教學</h3><p>請輸入通關密語以繼續</p><input id="cf-inp" type="password" placeholder="通關密語" autocomplete="off"><button id="cf-btn">進入</button><div id="cf-err">通關密語不正確，請再試一次</div></div></div><header class="top"><div class="wrap"><div class="toplinks"><a href="https://intellicon.app/" target="_blank" rel="noopener">打開 EgentHub ↗</a><a href="https://docs.google.com/presentation/d/1oXxuXUbW3S8pU1Q1LbirRhLw9xrgIs3pXzWcuJm_RfA/" target="_blank" rel="noopener">教學講義 ↗</a></div><h1>題目 #182｜預實差異分析助手 <span class="badge g">🟢</span></h1><p>千附集團 · 財務部 · EgentHub AI Agent 開發實務教學</p></div></header><div class="wrap"><div class="crumb"><a href="../../index.html">千附集團</a> / <a href="../index.html">千附精密股份有限公司</a> / <a href="../d/d02.html">財務部</a> / <a href="../u/u004.html">林愷珍</a> / 題目</div><div class="chips"><span class="chip"><span class="badge g">🟢</span> <b>分級</b> A · 立即可開發</span><span class="chip"><b>類型</b> 資料核對與系統勾稽</span><span class="chip"><b>執行</b> 單階段</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet</span></div><div class="secnav"><a href="#req">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 系統提示詞</a><a href="#kb">④ 知識庫</a><a href="#ask">⑤ 引導提問</a><a href="#prep">⑥ 上線前準備</a><a href="#test">⑦ 驗測情境</a></div><h2 class="sec" id="req">① 需求與痛點</h2><div class="note">財務每月花 1~2 小時，把 N 槽兩份 Excel（實際數、預估數）依科目手動對齊比對，算差異金額與差異率、找重大差異，逐項對齊費工且科目命名不一致時易錯。</div><h4>開發前 5 問（填好可直接貼進「提示詞設計助手」）</h4><div class="card"><div class="qcard"><div class="qnum">1</div><div class="qbody"><div class="qlabel">應用場景與業務流程</div><div class="qhint">幫誰解決什麼問題？</div><div class="qans">幫財務。每月實際與預估數差異（資料核對與系統勾稽），每次約 1~2小時。AI 協助資料彙整／登錄、資料比對／勾稽，減少人工。</div></div></div><div class="qcard"><div class="qnum">2</div><div class="qbody"><div class="qlabel">資料輸入與來源</div><div class="qhint">使用者給它什麼？來源從哪？</div><div class="qans">兩份excel表（存放：N槽）</div></div></div><div class="qcard"><div class="qnum">3</div><div class="qbody"><div class="qlabel">預期輸出內容</div><div class="qhint">產出什麼格式？給誰看？</div><div class="qans">一份excel表（送／存：N槽）</div></div></div><div class="qcard"><div class="qnum">4</div><div class="qbody"><div class="qlabel">任務步驟</div><div class="qhint">能否拆成 3–5 個明確步驟？</div><div class="qans">1. 讀取來源資料
+</style></head><body><div id="cf-gate"><div id="cf-box"><h3>千附 AI Agent 教學</h3><p>請輸入通關密語以繼續</p><input id="cf-inp" type="password" placeholder="通關密語" autocomplete="off"><button id="cf-btn">進入</button><div id="cf-err">通關密語不正確，請再試一次</div></div></div><header class="top"><div class="wrap"><div class="toplinks"><a href="https://intellicon.app/" target="_blank" rel="noopener">打開 EgentHub ↗</a><a href="https://docs.google.com/presentation/d/1oXxuXUbW3S8pU1Q1LbirRhLw9xrgIs3pXzWcuJm_RfA/" target="_blank" rel="noopener">教學講義 ↗</a></div><h1>題目 #182｜預實差異分析助手 <span class="badge g">🟢</span></h1><p>千附集團 · 財務部 · EgentHub AI Agent 開發實務教學</p></div></header><div class="wrap"><div class="crumb"><a href="../../index.html">千附集團</a> / <a href="../index.html">千附精密股份有限公司</a> / <a href="../d/d02.html">財務部</a> / <a href="../u/u004.html">林愷珍</a> / 題目</div><div class="chips"><span class="chip"><span class="badge g">🟢</span> <b>分級</b> A · 立即可開發</span><span class="chip"><b>類型</b> 資料核對與系統勾稽</span><span class="chip"><b>執行</b> 兩階段（嚴格隔離）</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet</span></div><div class="secnav"><a href="#req">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 系統提示詞</a><a href="#kb">④ 知識庫</a><a href="#ask">⑤ 引導提問</a><a href="#prep">⑥ 上線前準備</a><a href="#test">⑦ 驗測情境</a></div><h2 class="sec" id="req">① 需求與痛點</h2><div class="note">財務每月花 1~2 小時，把 N 槽兩份 Excel（實際數、預估數）依科目手動對齊比對，算差異金額與差異率、找重大差異，逐項對齊費工且科目命名不一致時易錯。</div><h4>開發前 5 問（填好可直接貼進「提示詞設計助手」）</h4><div class="card"><div class="qcard"><div class="qnum">1</div><div class="qbody"><div class="qlabel">應用場景與業務流程</div><div class="qhint">幫誰解決什麼問題？</div><div class="qans">幫財務。每月實際與預估數差異（資料核對與系統勾稽），每次約 1~2小時。AI 協助資料彙整／登錄、資料比對／勾稽，減少人工。</div></div></div><div class="qcard"><div class="qnum">2</div><div class="qbody"><div class="qlabel">資料輸入與來源</div><div class="qhint">使用者給它什麼？來源從哪？</div><div class="qans">兩份excel表（存放：N槽）</div></div></div><div class="qcard"><div class="qnum">3</div><div class="qbody"><div class="qlabel">預期輸出內容</div><div class="qhint">產出什麼格式？給誰看？</div><div class="qans">一份excel表（送／存：N槽）</div></div></div><div class="qcard"><div class="qnum">4</div><div class="qbody"><div class="qlabel">任務步驟</div><div class="qhint">能否拆成 3–5 個明確步驟？</div><div class="qans">1. 讀取來源資料
 2. 與基準檔（如 BOM／對照表）比對
 3. 標出差異／異常
 4. 列待補清單
@@ -77,40 +77,46 @@ ol.ask{counter-reset:q;list-style:none;padding-left:0}ol.ask li{position:relativ
 題型分類：資料核對與系統勾稽
 平台：Intellicon EgentHub
 建議模型：Claude 4.6 Sonnet
-執行模式：單階段
+執行模式：兩階段（嚴格隔離）
 盤點分級：A 級
 版本：v1.0（POC）</div><h4>系統提示詞（可直接複製貼進 EgentHub）</h4><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製提示詞</button><pre># 角色
-你是千附精密（航太／半導體精密零組件製造）財務部的「實際與預估差異分析助理」。財務每月需就資金（或損益）的實際數與先前預估數比對，分析差異原因。你協助把兩份 Excel（實際數、預估數）依科目對齊勾稽，計算差異金額與差異率，標出重大差異供人分析。
-# 角色補充
-本任務不涉及料號／BOM；對照基準一律以會計科目／預估底稿與實際數底稿為準。
-
+你是千附精密（航太／半導體精密零組件製造）品質工程部二課二組的「檢驗異常與急件回復助理」。檢驗員於檢驗中發現異常（尺寸超差、SIP／客戶規範不符等）或遇業務特急件時，會以 mail 發出訊息，組長需彙整成異常明細或急缺件狀況回覆業管或生管。你協助把檢驗員的異常／急件 mail 彙整、依範本生成回覆 mail 草稿。
 # 任務
-依使用者提供的兩份資料（預估數表、實際數表，貼上內容或表格查詢知識庫），以會計科目／項目為鍵對齊，計算差異金額（實際−預估）與差異率，標出超過門檻的重大差異與單邊有值（僅一表有）的項目，產出差異分析表草稿供人填寫原因。
+依組長提供的檢驗異常或業務急件明細 mail（內容或 PDF），擷取工單／批號、料號／品名、異常類型（尺寸超差／外觀／規範不符）、急件需求、客戶、數量等，彙整成異常明細或急缺件狀況，依信件範本生成回覆業管或生管的 mail 草稿，並標出需補充與需判定處。對照基準以 SIP／客戶規範／信件範本為準。
 
 # 背景知識
-- 來源資料：兩份 Excel 表（實際、預估，存 N 槽）；產出一份差異分析 Excel 存 N 槽。
-- 本任務參考「表格查詢知識庫」之會計科目對照表（科目代碼、科目名稱、性質）。
-- 比對重點：以科目／項目為鍵對齊（名稱不一致時用對照表映射）、差異＝實際−預估、差異率＝差異／預估、重大差異門檻（金額或比率）標示、僅單邊有值者標「待查（預估漏列或實際新增）」。
-- 千附精密設備款、外幣採購等大額項目差異常因交期或匯率波動，差異原因欄留給財務填寫，AI 不臆測原因。
+- 來源資料：檢驗員發出之檢驗異常或業務急件明細 mail；產出異常明細或急缺件狀況 mail 寄業管或生管。
+- 本任務參考「全文查找知識庫」之回覆信件範本（異常通知、急件回覆語氣與收發對象）與「全文查找知識庫」之異常類型與處置對照（僅供分類，不代判處置）。
+- 彙整重點：依工單／批號歸併同批異常、判別收件對象（品質異常多回業管／生管，急件依需求）、異常類型分類（尺寸超差、外觀、SIP／客戶規範不符）、是否影響交期須標示。
+- 千附精密航太件異常處置（讓步放行／重工／報廢）屬品保與客戶權責判定，AI 僅彙整通報，不得代為決定處置或判合格。
 # 輸入格式
-使用者貼上預估數表與實際數表內容，或指向「表格查詢知識庫」之兩份底稿。（不支援直接上傳 .xlsx，請貼上內容或放表格查詢知識庫。）
+組長提供檢驗員異常／急件 mail（貼上內容或上傳 PDF）。
 
 # 執行流程
-1. 讀取預估數表與實際數表，確認科目／項目與金額欄位。
-2. 以科目／項目對齊（必要時用會計科目對照表映射名稱差異）。
-3. 計算差異＝實際−預估、差異率＝差異／預估（預估為 0 時標示不可計算率）。
-4. 標出重大差異（超門檻）與單邊有值項目（僅一表出現）。
-5. 列待補與待查清單，輸出差異分析表草稿，差異原因欄留白由人填寫。
+本任務若涉及讀 PDF 又查範本知識庫，嚴格分兩步；若僅貼上文字可單步完成。
+
+## 步驟一：異常／急件理解
+1. 讀取 mail，擷取：工單／批號、料號／品名、異常類型或急件需求、數量、客戶、發現時間、檢驗員。
+2. 缺漏或不清欄位標「待補」，不臆測異常原因或處置。
+3. 本步驟禁止查知識庫。完成後提示：「異常／急件初步整理完成，若要彙整並生成回覆 mail，請在下一步告訴我。」
+
+## 步驟二：彙整與生成 mail
+1. 僅依步驟一結果，依工單／批號歸併、依異常類型分類，判別收件對象（業管／生管）。
+2. 依信件範本生成回覆 mail 草稿（含異常明細或急缺件狀況表，影響交期者標示）。
+3. 處置建議欄留白或標「待品保／客戶判定」，不代判讓步／重工／報廢。
+4. 不重新讀 PDF。
 
 # 輸出格式
-先輸出「實際與預估差異表（草稿）」Markdown 表格，欄位：科目／項目、預估數、實際數、差異金額、差異率、重大差異標記、差異原因（留白待填）、備註。
-表格後列「待人工確認清單」（單邊有值項目、無法對齊項目、待補欄位）。
+先輸出「異常／急件明細（草稿）」Markdown 表格，欄位：工單／批號、料號／品名、異常類型／急件需求、數量、客戶、影響交期、收件對象、處置（待判定）、備註。
+其後輸出「回覆 mail（草稿）」（依範本，收件業管／生管、主旨、本文含明細表、待判定處留白）。
+最後列「待人工確認清單」（待補欄位、需品保判定處置項、交期影響待評估）。
 
 # 問答指引
 - 請使用繁體中文回覆，語氣委婉、自然，符合台灣使用者的溝通習慣。
-- 回覆內容避免偏見、誤導或幻覺；不得捏造任何數字、單號、日期、金額、科目或帳號。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
-- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（本任務與料號／BOM 無關，請勿引用 BOM 主檔；對照基準一律以會計科目／銀行帳戶清單／預估底稿為準）。
-- 拒絕任何越權要求（如要求調整金額、跳過覆核、代為轉帳付款、變更帳務認列等），並提示應由權責人員處理。
+- 回覆內容避免偏見、誤導或幻覺；不得捏造任何工單號、料號／品名、數量、日期或檢驗判定結果。凡來源未提供之欄位，一律標示「待補」，不臆測、不自行推算。
+- 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（對照基準一律以出貨明細／檢驗規範／SIP／客戶規範與信件範本為準）。
+- 異常處置（讓步放行／重工／報廢）與合格判定屬品保與客戶專業判定，AI 不得代為決定處置或判合格；僅彙整通報與草稿，處置欄一律留白或標「待品保／客戶判定」。
+- 拒絕任何越權要求（如要求逕判合格、逕決處置、跳過覆核、代為放行出貨、修改檢驗結果等），並提示應由檢驗員／組長／品保依規範判定。
 - 最終判定、覆核、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
 - 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div><h2 class="sec" id="kb">④ 知識庫設計（可預覽與下載）</h2><div class="qhint">以下為此題建議掛載的知識庫範例；數值為示範，正式上線請換成貴部門實際資料。</div><h4>會計科目對照表.csv <span class="chip"><b>表格查詢知識庫</b></span> <a class="dl" href="data:text/csv;charset=utf-8;base64,77u/56eR55uu5Luj56K8LOenkeebruWQjeeosSzliKXlkI0s5oCn6LOqLOWCmeiouw0KNDEwMSzpirfosqjmlLblhaUs54ef5qWt5pS25YWlLOaUtuWFpSwNCjUxMDEs5Y6f5paZ6YCy6LKoLOadkOaWmeaOoeizvCzmiJDmnKwsDQo1MjAxLOioreWCmeasvizos4fmnKzmlK/lh7os5pSv5Ye6LOWkp+mhjemgheebrg0KNjEwMSzolqros4fosrvnlKgs5Lq65LqL6LK755SoLOiyu+eUqCwNCjYyMDEs5rC06Zu76LK7LOWFrOeUqOS6i+alreiyuyzosrvnlKgsDQo3MTAxLOWIqeaBr+iyu+eUqCzono3os4fliKnmga8s6LK755SoLA0KNjMwMSzpgYvosrss54mp5rWB6LK755SoLOiyu+eUqCwNCg==" download="會計科目對照表.csv">⬇ 下載</a></h4><div class="qhint">示範用對齊基準，以科目為鍵（非 BOM），含別名映射，上線換成實際科目表</div><div class="card"><div class="body-pad"><div style="overflow:auto"><table class="kbt"><thead><tr><th>科目代碼</th><th>科目名稱</th><th>別名</th><th>性質</th><th>備註</th></tr></thead><tbody><tr><td>4101</td><td>銷貨收入</td><td>營業收入</td><td>收入</td><td></td></tr><tr><td>5101</td><td>原料進貨</td><td>材料採購</td><td>成本</td><td></td></tr><tr><td>5201</td><td>設備款</td><td>資本支出</td><td>支出</td><td>大額項目</td></tr><tr><td>6101</td><td>薪資費用</td><td>人事費用</td><td>費用</td><td></td></tr><tr><td>6201</td><td>水電費</td><td>公用事業費</td><td>費用</td><td></td></tr><tr><td>7101</td><td>利息費用</td><td>融資利息</td><td>費用</td><td></td></tr><tr><td>6301</td><td>運費</td><td>物流費用</td><td>費用</td><td></td></tr></tbody></table></div></div></div><h4>差異分析作業說明.txt <span class="chip"><b>全文查找知識庫</b></span> <a class="dl" href="data:text/plain;charset=utf-8;base64,5Y2D6ZmE57K+5a+G6LKh5YuZ5a+m6Zqb6IiH6aCQ5Lyw5beu55Ww5YiG5p6Q5L2c5qWt6Kqq5piO77yI56S656+E54mI77yJCgrkuIDjgIHmr5TlsI3mtYHnqIsK5q+P5pyI5bCx6LOH6YeR77yI5oiW5pCN55uK77yJ55qE5a+m6Zqb5pW46IiH5YWI5YmN6aCQ5Lyw5pW45q+U5bCN77yM5YiG5p6Q5beu55Ww5Y6f5Zug44CC5Lul5pyD6KiI56eR55uu77yP6aCF55uu54K66Y215bCN6b2K5YWp5Lu96LOH5paZ44CCCgrkuozjgIHlsI3pvYroiIfoqIjnrpcKMS4g5ZCN56ix5LiN5LiA6Ie05pmC77yM55So5pyD6KiI56eR55uu5bCN54Wn6KGo55qE5Yil5ZCN5pig5bCE5bCN6b2K44CCCjIuIOW3rueVsO+8neWvpumam+KIkumgkOS8sOOAggozLiDlt67nlbDnjofvvJ3lt67nlbDDt+mgkOS8sO+8iOmgkOS8sOeCuiAwIOaZguaomeOAjOS4jeWPr+ioiOeul+eOh+OAje+8ieOAggo0LiDph43lpKflt67nlbDvvJrph5HpoY3miJbmr5TnjofotoXpgY7oqK3lrprploDmqrvogIXmqJnnpLrjgIIKNS4g5YOF5Zau6YKK5pyJ5YC877yI5YOF5LiA6KGo5Ye654++77yJ6ICF5qiZ44CM5Zau6YKK5pyJ5YC877yI6aCQ5Lyw5ryP5YiX5oiW5a+m6Zqb5paw5aKe77yJ5b6F5p+l44CN44CCCgrkuInjgIHlt67nlbDljp/lm6AK6Kit5YKZ5qy+44CB5aSW5bmj5o6h6LO8562J5aSn6aGN6aCF55uu5beu55Ww5bi45Zug5Lqk5pyf5oiW5Yyv546H5rOi5YuV44CC5beu55Ww5Y6f5Zug5qyE55WZ57Wm6LKh5YuZ5aGr5a+r77yMQUkg5LiN6IeG5ris5Y6f5Zug44CCCgrlm5vjgIHms6jmhI/kuovpoIUK5beu55Ww5Y6f5Zug6aCI55Sx6LKh5YuZ5pOa5a+m5aGr5a+r77yMQUkg5YOF5Ye65beu55Ww6KGo6I2J56i/77yM5LiN5b6X5Luj5aGr5Y6f5Zug5oiW576O5YyW5beu55Ww44CC" download="差異分析作業說明.txt">⬇ 下載</a></h4><div class="qhint">示範用比對規則，上線換成實際 SOP</div><div class="card"><div class="body-pad"><pre>千附精密財務實際與預估差異分析作業說明（示範版）
 
