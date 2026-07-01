@@ -5,6 +5,9 @@ a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
 .wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
 header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:24px 18px}
 header.top h1{margin:0 0 6px;font-size:21px}header.top p{margin:0;opacity:.92;font-size:14px}
+.toplinks{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-bottom:10px}
+.toplinks a{background:rgba(255,255,255,.18);color:#fff;padding:5px 13px;border-radius:20px;font-size:12.5px;font-weight:600}
+.toplinks a:hover{background:rgba(255,255,255,.32);text-decoration:none}
 .crumb{font-size:13px;color:var(--mut);margin:14px 0}.crumb a{color:var(--pur)}
 .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px 4px;margin:16px 0;overflow:hidden}
 h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
@@ -44,19 +47,22 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 .calloutbox{background:#fff7e6;border:1px solid #f0d9a8;border-left:4px solid #e0a13b;border-radius:0 8px 8px 0;padding:10px 14px;margin:10px;font-size:14px;color:#7a5a1e}
 .note{background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;padding:8px 14px;margin:10px;font-size:14px;color:#4a4264}
 .copyrow{position:relative}.copyrow .copybtn{position:absolute;top:6px;right:10px}
+.kbt{border-collapse:collapse;font-size:13px;width:100%}.kbt th,.kbt td{border:1px solid var(--line);padding:5px 8px;text-align:left;white-space:nowrap}.kbt th{background:#f0ebff;color:#4a3b7a}
+a.dl{font-size:12.5px;background:#efe9fb;padding:2px 10px;border-radius:20px;font-weight:600}a.dl:hover{background:#e0d6f5;text-decoration:none}
+ol.ask{counter-reset:q;list-style:none;padding-left:0}ol.ask li{position:relative;padding:8px 8px 8px 34px;border-bottom:1px solid var(--line)}ol.ask li:last-child{border-bottom:0}ol.ask li::before{counter-increment:q;content:counter(q);position:absolute;left:8px;top:8px;width:20px;height:20px;background:var(--pur);color:#fff;border-radius:50%;font-size:12px;display:flex;align-items:center;justify-content:center}
 #cf-gate{position:fixed;inset:0;background:linear-gradient(120deg,#5a3f93,#8b6fc7);display:flex;align-items:center;justify-content:center;z-index:99999}
 #cf-box{background:#fff;border-radius:16px;padding:30px 28px;max-width:340px;width:86%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.25)}
 #cf-box h3{margin:0 0 6px;color:#4a3b7a}#cf-box p{margin:0 0 16px;color:#6c6680;font-size:14px}
 #cf-inp{width:100%;padding:10px 12px;border:1px solid #d8d0ee;border-radius:8px;font-size:15px;text-align:center}
 #cf-btn{margin-top:12px;width:100%;background:#6B4FA0;color:#fff;border:0;border-radius:8px;padding:11px;font-size:15px;cursor:pointer}
 #cf-btn:hover{background:#5a3f93}#cf-err{display:none;color:#d6453a;font-size:13px;margin-top:10px}
-</style></head><body><div id="cf-gate"><div id="cf-box"><h3>千附 AI Agent 教學</h3><p>請輸入通關密語以繼續</p><input id="cf-inp" type="password" placeholder="通關密語" autocomplete="off"><button id="cf-btn">進入</button><div id="cf-err">通關密語不正確，請再試一次</div></div></div><header class="top"><div class="wrap"><h1>題目 #162｜防火牆黑名單設定助手 <span class="badge o">🟠</span></h1><p>千附集團 · 資訊部 · EgentHub AI Agent 開發實務教學</p></div></header><div class="wrap"><div class="crumb"><a href="../../index.html">千附集團</a> / <a href="../index.html">千附精密股份有限公司</a> / <a href="../d/d10.html">資訊部</a> / <a href="../u/u026.html">詹彬弘</a> / 題目</div><div class="chips"><span class="chip"><span class="badge o">🟠</span> <b>分級</b> C · 人機協作</span><span class="chip"><b>類型</b> 系統運維與資訊安全</span><span class="chip"><b>執行</b> 兩階段（嚴格隔離）</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet</span></div><div class="secnav"><a href="#req">① 需求與 5 問</a><a href="#prompt">② 系統提示詞</a><a href="#more">③ 知識庫與上線</a><a href="#test">④ 驗測情境</a></div><h2 class="sec" id="req">① 需求與開發前 5 問</h2><div class="card"><div class="qcard"><div class="qnum">1</div><div class="qbody"><div class="qlabel">應用場景與業務流程</div><div class="qhint">幫誰解決什麼問題？</div><div class="qans">幫副課長。於集團防火牆設備新增指定惡意公網IP永久黑名單，阻擋該公網IP訪問公司服務（系統運維與資訊安全），每次約 30分鐘~1小時。AI 協助資料比對／勾稽，減少人工。</div></div></div><div class="qcard"><div class="qnum">2</div><div class="qbody"><div class="qlabel">資料輸入與來源</div><div class="qhint">使用者給它什麼？來源從哪？</div><div class="qans">TWCERT/CC台灣電腦網路危機處理暨協調中心（存放：集團File Server特定路徑）</div></div></div><div class="qcard"><div class="qnum">3</div><div class="qbody"><div class="qlabel">預期輸出內容</div><div class="qhint">產出什麼格式？給誰看？</div><div class="qans">集團防火牆設備上新增阻擋惡意公網IP的設定值（送／存：集團防火牆設備上）</div></div></div><div class="qcard"><div class="qnum">4</div><div class="qbody"><div class="qlabel">任務步驟</div><div class="qhint">能否拆成 3–5 個明確步驟？</div><div class="qans">1. 讀取來源資料
+</style></head><body><div id="cf-gate"><div id="cf-box"><h3>千附 AI Agent 教學</h3><p>請輸入通關密語以繼續</p><input id="cf-inp" type="password" placeholder="通關密語" autocomplete="off"><button id="cf-btn">進入</button><div id="cf-err">通關密語不正確，請再試一次</div></div></div><header class="top"><div class="wrap"><div class="toplinks"><a href="https://intellicon.app/" target="_blank" rel="noopener">打開 EgentHub ↗</a><a href="https://docs.google.com/presentation/d/1oXxuXUbW3S8pU1Q1LbirRhLw9xrgIs3pXzWcuJm_RfA/" target="_blank" rel="noopener">教學講義 ↗</a></div><h1>題目 #162｜防火牆黑名單設定助手 <span class="badge o">🟠</span></h1><p>千附集團 · 資訊部 · EgentHub AI Agent 開發實務教學</p></div></header><div class="wrap"><div class="crumb"><a href="../../index.html">千附集團</a> / <a href="../index.html">千附精密股份有限公司</a> / <a href="../d/d10.html">資訊部</a> / <a href="../u/u026.html">詹彬弘</a> / 題目</div><div class="chips"><span class="chip"><span class="badge o">🟠</span> <b>分級</b> C · 人機協作</span><span class="chip"><b>類型</b> 系統運維與資訊安全</span><span class="chip"><b>執行</b> 兩階段（嚴格隔離）</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet</span></div><div class="secnav"><a href="#req">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 系統提示詞</a><a href="#kb">④ 知識庫</a><a href="#ask">⑤ 引導提問</a><a href="#prep">⑥ 上線前準備</a><a href="#test">⑦ 驗測情境</a></div><h2 class="sec" id="req">① 需求與痛點</h2><div class="note">資安副課長每次 30 分~1 小時把 TWCERT/CC 通報的惡意 IP 加進防火牆永久黑名單，需驗格式、排除自有網段、去重，誤封風險高。</div><h4>開發前 5 問（填好可直接貼進「提示詞設計助手」）</h4><div class="card"><div class="qcard"><div class="qnum">1</div><div class="qbody"><div class="qlabel">應用場景與業務流程</div><div class="qhint">幫誰解決什麼問題？</div><div class="qans">幫副課長。於集團防火牆設備新增指定惡意公網IP永久黑名單，阻擋該公網IP訪問公司服務（系統運維與資訊安全），每次約 30分鐘~1小時。AI 協助資料比對／勾稽，減少人工。</div></div></div><div class="qcard"><div class="qnum">2</div><div class="qbody"><div class="qlabel">資料輸入與來源</div><div class="qhint">使用者給它什麼？來源從哪？</div><div class="qans">TWCERT/CC台灣電腦網路危機處理暨協調中心（存放：集團File Server特定路徑）</div></div></div><div class="qcard"><div class="qnum">3</div><div class="qbody"><div class="qlabel">預期輸出內容</div><div class="qhint">產出什麼格式？給誰看？</div><div class="qans">集團防火牆設備上新增阻擋惡意公網IP的設定值（送／存：集團防火牆設備上）</div></div></div><div class="qcard"><div class="qnum">4</div><div class="qbody"><div class="qlabel">任務步驟</div><div class="qhint">能否拆成 3–5 個明確步驟？</div><div class="qans">1. 讀取來源資料
 2. 與基準檔（如 BOM／對照表）比對
 3. 標出差異／異常
 4. 列待補清單
 5. 輸出結果，交由人覆核</div></div></div><div class="qcard"><div class="qnum">5</div><div class="qbody"><div class="qlabel">知識來源</div><div class="qhint">需要查哪些內部文件或資料庫？</div><div class="qans">- 比對基準主檔（BOM 主檔／料號對照／規格表）
 - 來源資料：TWCERT/CC台灣電腦網路危機處理暨協調中心
----</div></div></div></div><h4>把 5 問一次複製給「提示詞設計助手」</h4><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製 5 問</button><pre>1. 應用場景與業務流程：幫副課長。於集團防火牆設備新增指定惡意公網IP永久黑名單，阻擋該公網IP訪問公司服務（系統運維與資訊安全），每次約 30分鐘~1小時。AI 協助資料比對／勾稽，減少人工。
+---</div></div></div></div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製 5 問</button><pre>1. 應用場景與業務流程：幫副課長。於集團防火牆設備新增指定惡意公網IP永久黑名單，阻擋該公網IP訪問公司服務（系統運維與資訊安全），每次約 30分鐘~1小時。AI 協助資料比對／勾稽，減少人工。
 2. 資料輸入與來源：TWCERT/CC台灣電腦網路危機處理暨協調中心（存放：集團File Server特定路徑）
 3. 預期輸出內容：集團防火牆設備上新增阻擋惡意公網IP的設定值（送／存：集團防火牆設備上）
 4. 任務步驟：1. 讀取來源資料
@@ -66,7 +72,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 5. 輸出結果，交由人覆核
 5. 知識來源：- 比對基準主檔（BOM 主檔／料號對照／規格表）
 - 來源資料：TWCERT/CC台灣電腦網路危機處理暨協調中心
----</pre></div><h2 class="sec" id="prompt">② 完整系統提示詞（EgentHub 7 段式）</h2><div class="note"><b>狀態：</b>🟠 適合人機協作輔助：AI 出草稿/找異常，人做最終判定。</div><h4>元資料 Metadata</h4><div class="mbox">Agent 名稱：防火牆黑名單設定助手
+---</pre></div><h2 class="sec" id="idea">② 開發思路</h2><div class="note"><b>可行性狀態：</b>🟠 適合人機協作輔助：AI 出草稿/找異常，人做最終判定。</div><div class="card"><div class="body-pad"><ul><li>IP 彙整去重型 Agent，覆蓋通報惡意 IP 擷取＋格式驗證/私網自有網段排除＋與現行黑名單去重，可行性 C（定位人機協作、高風險人做最終判定）。</li><li>通報 PDF 走兩階段、文字可單步：驗 IP/CIDR 格式、排除私網（10/8、172.16/12、192.168/16）與公司自有網段、與現行黑名單去重，產出待新增/已封鎖/待人工確認清單；AI 不代登入設備新增刪除規則，疑似自有網段一律待人工確認。</li><li>誠實可行但屬高風險資安作業：誤封自有網段零容忍、規則變更須人於設備依變更管理操作，故列 C；務必先備妥完整公司自有/保留網段清單。</li></ul></div></div><h2 class="sec" id="prompt">③ 完整系統提示詞（EgentHub 7 段式）</h2><h4>元資料 Metadata</h4><div class="mbox">Agent 名稱：防火牆黑名單設定助手
 需求來源：資訊部／詹彬弘
 題型分類：系統運維與資訊安全
 平台：Intellicon EgentHub
@@ -115,28 +121,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 - 防火牆規則變更屬高風險操作與資安權責，AI 不得代為登入設備、新增或刪除規則，僅產出待設定清單與風險提示。
 - 拒絕任何越權要求（如要求代為封鎖／解封、跳過確認逕加自有網段、直接套用設備等），並提示應由副課長依變更管理流程於設備操作。
 - 最終判定、覆核、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
-- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div><h2 class="sec" id="more">③ 知識庫設計與上線準備</h2><div class="card"><div class="body-pad"><h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
-<ul>
-<li>TWCERT/CC 通報的實際格式樣本（PDF／郵件／清單）。</li>
-<li>現行防火牆黑名單的匯出清單（含既有 CIDR 涵蓋範圍）。</li>
-<li>公司自有對外網段與保留網段的完整清單（避免誤封）。</li>
-<li>資安變更管理規範（封鎖規則新增的核決與留痕流程）。</li>
-<li>IP 永久封鎖 vs 暫時封鎖的判定準則。</li>
-</ul>
-<h4>② 範例知識庫說明</h4>
-<ul>
-<li><code>現行防火牆黑名單清單.csv</code>：示範用去重基準（IP／CIDR 為鍵），上線換成防火牆實際匯出。建議放「表格查詢知識庫」。</li>
-<li><code>公司自有與保留網段.csv</code>：示範用排除基準，務必以實際自有網段替換（誤封風險最高）。建議放「表格查詢知識庫」。</li>
-<li><code>惡意IP處理規則.txt</code>：示範用驗證、排除、去重與人機分工規則，上線換成資安變更管理規範。建議放「全文查找知識庫」。</li>
-<li>通報若為 PDF／影像，建議用 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上），並走兩階段隔離。</li>
-</ul>
-<h4>③ 上線前還要努力的 checklist</h4>
-<ul>
-<li class="chk">對齊 TWCERT/CC 通報格式與現行黑名單匯出。</li>
-<li class="chk">維護完整的公司自有／保留網段清單。</li>
-<li class="chk">確認封鎖規則變更的變更管理與留痕流程。</li>
-<li class="chk">與資安確認永久／暫時封鎖判定準則。</li>
-</ul></div></div><h2 class="sec" id="test">④ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：① 標準：三個公網惡意IP待新增黑名單</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>以下是 TWCERT/CC 通報的惡意 IP，請驗證格式、與現行黑名單去重後產出待新增清單。
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div><h2 class="sec" id="kb">④ 知識庫設計（可預覽與下載）</h2><div class="qhint">以下為此題建議掛載的知識庫範例；數值為示範，正式上線請換成貴部門實際資料。</div><h4>現行防火牆黑名單清單.csv <span class="chip"><b>表格查詢知識庫</b></span> <a class="dl" href="data:text/csv;charset=utf-8;base64,77u/SVAvQ0lEUizliqDlhaXml6Us5L6G5rqQLOWwgemOluWOn+WboCzni4DmhYsNCjQ1LjE0Ni4xNjQuMTEwLDIwMjYtMDUtMTIsVFdDRVJUL0NDLEMyIOS4ree5vCzmsLjkuYXlsIHpjpYNCjE4NS4yMjAuMTAxLjAvMjQsMjAyNi0wNC0zMCxUV0NFUlQvQ0MsVG9yIOWHuuWPo+evgOm7nue+pCzmsLjkuYXlsIHpjpYNCjEwMy4yMjQuMTgyLjI0NSwyMDI2LTA2LTAxLOWFp+mDqOWBtea4rCzmmrTlipvnoLTop6MgU1NILOawuOS5heWwgemOlg0KOTEuMjE5LjIzNi4xOCwyMDI2LTAzLTIwLFRXQ0VSVC9DQyzph6PprZrntrLnq5nkuLvmqZ8s5rC45LmF5bCB6Y6WDQoxOTQuNTUuMTg2LjU1LDIwMjYtMDUtMjgsVFdDRVJUL0NDLOaDoeaEj+aOg+aPjyzmsLjkuYXlsIHpjpYNCg==" download="現行防火牆黑名單清單.csv">⬇ 下載</a></h4><div class="qhint">示範用去重基準（IP/CIDR 為鍵），上線換成防火牆實際匯出。</div><div class="card"><div class="body-pad"><div style="overflow:auto"><table class="kbt"><thead><tr><th>IP/CIDR</th><th>加入日</th><th>來源</th><th>封鎖原因</th><th>狀態</th></tr></thead><tbody><tr><td>45.146.164.110</td><td>2026-05-12</td><td>TWCERT/CC</td><td>C2 中繼</td><td>永久封鎖</td></tr><tr><td>185.220.101.0/24</td><td>2026-04-30</td><td>TWCERT/CC</td><td>Tor 出口節點群</td><td>永久封鎖</td></tr><tr><td>103.224.182.245</td><td>2026-06-01</td><td>內部偵測</td><td>暴力破解 SSH</td><td>永久封鎖</td></tr><tr><td>91.219.236.18</td><td>2026-03-20</td><td>TWCERT/CC</td><td>釣魚網站主機</td><td>永久封鎖</td></tr><tr><td>194.55.186.55</td><td>2026-05-28</td><td>TWCERT/CC</td><td>惡意掃描</td><td>永久封鎖</td></tr></tbody></table></div></div></div><h4>公司自有與保留網段.csv <span class="chip"><b>表格查詢知識庫</b></span> <a class="dl" href="data:text/csv;charset=utf-8;base64,77u/57ay5q61L0NJRFIs6aGe5YilLOiqquaYjg0KMTAuMC4wLjAvOCznp4HntrLkv53nlZksUkZDMTkxOCDkuI3lj6/lsIENCjE3Mi4xNi4wLjAvMTIs56eB57ay5L+d55WZLFJGQzE5MTgg5LiN5Y+v5bCBDQoxOTIuMTY4LjAuMC8xNiznp4HntrLkv53nlZksUkZDMTkxOCDkuI3lj6/lsIENCjIwMy42Ni44OC4wLzI0LOWFrOWPuOiHquacieWFrOe2sizljYPpmYTpm4blnJjlsI3lpJbmnI3li5nntrLmrrXvvIzlmrTnpoHlsIHpjpYNCjIxMS43Mi4xMDAuMC8yNCzlkIjkvZzlpKXkvLQs5a6i5oi2VlBO5L6G5rqQ77yM5Yu/5bCBDQo=" download="公司自有與保留網段.csv">⬇ 下載</a></h4><div class="qhint">示範用排除基準（誤封風險最高，務必以實際自有網段替換）。</div><div class="card"><div class="body-pad"><div style="overflow:auto"><table class="kbt"><thead><tr><th>網段/CIDR</th><th>類別</th><th>說明</th></tr></thead><tbody><tr><td>10.0.0.0/8</td><td>私網保留</td><td>RFC1918 不可封</td></tr><tr><td>172.16.0.0/12</td><td>私網保留</td><td>RFC1918 不可封</td></tr><tr><td>192.168.0.0/16</td><td>私網保留</td><td>RFC1918 不可封</td></tr><tr><td>203.66.88.0/24</td><td>公司自有公網</td><td>千附集團對外服務網段，嚴禁封鎖</td></tr><tr><td>211.72.100.0/24</td><td>合作夥伴</td><td>客戶VPN來源，勿封</td></tr></tbody></table></div></div></div><h2 class="sec" id="ask">⑤ 讓 Agent 更精準：還需你補充的資訊</h2><div class="note">請找該工作的實際承辦人一起回答下列問題——答得越具體，開發出來的 Agent 越準、越好用。</div><div class="card"><div class="body-pad"><ol class="ask"><li>TWCERT/CC 的惡意 IP 通報怎麼進來——固定路徑檔案、公告、還是 email？格式一致嗎？</li><li>現行防火牆黑名單能匯出成清單供去重嗎？欄位（IP/CIDR、加入日、來源）齊全嗎？</li><li>公司自有公網段、合作夥伴/客戶 VPN 來源有沒有完整清單（誤封後果最嚴重）？</li><li>IP 格式驗證與私網/保留段排除的規則要多嚴（例如拒收私網、拒收 0.0.0.0/0）？</li><li>產出的是「待新增設定值清單」，實際在防火牆上設定由人操作，這個分工確認嗎？</li><li>永久封鎖的規範是什麼——要不要記錄來源/日期/事由供日後稽核？</li></ol></div></div><h2 class="sec" id="prep">⑥ 上線前準備與注意事項</h2><div class="card"><div class="body-pad"><ul><li class="chk">整理現行防火牆黑名單匯出成清單，放入表格查詢知識庫作為去重基準。</li><li class="chk">務必備妥並反覆確認「公司自有與保留網段」排除清單，這是誤封風險最高的關鍵資料。</li><li class="chk">把 IP 格式驗證、私網/保留/自有段排除、去重與人機分工規則寫成規範放入全文查找知識庫。</li><li class="chk">驗測：混入私網 IP、公司自有段、已在黑名單的 IP，確認 AI 正確排除與去重。</li><li class="chk">明確 AI 只出「待新增設定值清單」，實際登入防火牆設定與變更由副課長操作。</li><li class="chk">確認永久封鎖需保留來源/日期/事由紀錄，符合資安變更管理與稽核要求。</li></ul></div></div><h2 class="sec" id="test">⑦ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：① 標準：三個公網惡意IP待新增黑名單</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>以下是 TWCERT/CC 通報的惡意 IP，請驗證格式、與現行黑名單去重後產出待新增清單。
 
 通報來源：TWCERT/CC　通報日期：2026/07/01
 1. 45.83.12.7　威脅類型：C2 中繼

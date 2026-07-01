@@ -5,6 +5,9 @@ a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
 .wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
 header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:24px 18px}
 header.top h1{margin:0 0 6px;font-size:21px}header.top p{margin:0;opacity:.92;font-size:14px}
+.toplinks{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-bottom:10px}
+.toplinks a{background:rgba(255,255,255,.18);color:#fff;padding:5px 13px;border-radius:20px;font-size:12.5px;font-weight:600}
+.toplinks a:hover{background:rgba(255,255,255,.32);text-decoration:none}
 .crumb{font-size:13px;color:var(--mut);margin:14px 0}.crumb a{color:var(--pur)}
 .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px 4px;margin:16px 0;overflow:hidden}
 h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
@@ -44,19 +47,22 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 .calloutbox{background:#fff7e6;border:1px solid #f0d9a8;border-left:4px solid #e0a13b;border-radius:0 8px 8px 0;padding:10px 14px;margin:10px;font-size:14px;color:#7a5a1e}
 .note{background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;padding:8px 14px;margin:10px;font-size:14px;color:#4a4264}
 .copyrow{position:relative}.copyrow .copybtn{position:absolute;top:6px;right:10px}
+.kbt{border-collapse:collapse;font-size:13px;width:100%}.kbt th,.kbt td{border:1px solid var(--line);padding:5px 8px;text-align:left;white-space:nowrap}.kbt th{background:#f0ebff;color:#4a3b7a}
+a.dl{font-size:12.5px;background:#efe9fb;padding:2px 10px;border-radius:20px;font-weight:600}a.dl:hover{background:#e0d6f5;text-decoration:none}
+ol.ask{counter-reset:q;list-style:none;padding-left:0}ol.ask li{position:relative;padding:8px 8px 8px 34px;border-bottom:1px solid var(--line)}ol.ask li:last-child{border-bottom:0}ol.ask li::before{counter-increment:q;content:counter(q);position:absolute;left:8px;top:8px;width:20px;height:20px;background:var(--pur);color:#fff;border-radius:50%;font-size:12px;display:flex;align-items:center;justify-content:center}
 #cf-gate{position:fixed;inset:0;background:linear-gradient(120deg,#5a3f93,#8b6fc7);display:flex;align-items:center;justify-content:center;z-index:99999}
 #cf-box{background:#fff;border-radius:16px;padding:30px 28px;max-width:340px;width:86%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.25)}
 #cf-box h3{margin:0 0 6px;color:#4a3b7a}#cf-box p{margin:0 0 16px;color:#6c6680;font-size:14px}
 #cf-inp{width:100%;padding:10px 12px;border:1px solid #d8d0ee;border-radius:8px;font-size:15px;text-align:center}
 #cf-btn{margin-top:12px;width:100%;background:#6B4FA0;color:#fff;border:0;border-radius:8px;padding:11px;font-size:15px;cursor:pointer}
 #cf-btn:hover{background:#5a3f93}#cf-err{display:none;color:#d6453a;font-size:13px;margin-top:10px}
-</style></head><body><div id="cf-gate"><div id="cf-box"><h3>千附 AI Agent 教學</h3><p>請輸入通關密語以繼續</p><input id="cf-inp" type="password" placeholder="通關密語" autocomplete="off"><button id="cf-btn">進入</button><div id="cf-err">通關密語不正確，請再試一次</div></div></div><header class="top"><div class="wrap"><h1>題目 #131｜外出費用申請助手 <span class="badge y">🟡</span></h1><p>千附集團 · 安衛品保中心(北區)新竹一課 · EgentHub AI Agent 開發實務教學</p></div></header><div class="wrap"><div class="crumb"><a href="../../index.html">千附集團</a> / <a href="../index.html">千附實業股份有限公司</a> / <a href="../d/d17.html">安衛品保中心(北區)新竹一課</a> / <a href="../u/u039.html">林幸孜</a> / 題目</div><div class="chips"><span class="chip"><span class="badge y">🟡</span> <b>分級</b> B · 需前置</span><span class="chip"><b>類型</b> 行政庶務與財務考勤</span><span class="chip"><b>執行</b> 兩階段（嚴格隔離）</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet</span></div><div class="secnav"><a href="#req">① 需求與 5 問</a><a href="#prompt">② 系統提示詞</a><a href="#more">③ 知識庫與上線</a><a href="#test">④ 驗測情境</a></div><h2 class="sec" id="req">① 需求與開發前 5 問</h2><div class="card"><div class="qcard"><div class="qnum">1</div><div class="qbody"><div class="qlabel">應用場景與業務流程</div><div class="qhint">幫誰解決什麼問題？</div><div class="qans">幫副課長。紙本外出暨費用申請單/不定時外圍廠域支援出差交通單據（行政庶務與財務考勤），每次約 30分鐘~1小時。AI 協助資料彙整／登錄、資料比對／勾稽，減少人工。</div></div></div><div class="qcard"><div class="qnum">2</div><div class="qbody"><div class="qlabel">資料輸入與來源</div><div class="qhint">使用者給它什麼？來源從哪？</div><div class="qans">交通費+停車費+EPI系統簽核完成外出暨費用申請單（存放：(分成電子+紙本)EPI系統+匯出紙本申請送簽管理部）</div></div></div><div class="qcard"><div class="qnum">3</div><div class="qbody"><div class="qlabel">預期輸出內容</div><div class="qhint">產出什麼格式？給誰看？</div><div class="qans">費用支出申請單+各式費用支出單據（送／存：EPI系統+紙本申請送簽管理部）</div></div></div><div class="qcard"><div class="qnum">4</div><div class="qbody"><div class="qlabel">任務步驟</div><div class="qhint">能否拆成 3–5 個明確步驟？</div><div class="qans">1. 讀取來源資料
+</style></head><body><div id="cf-gate"><div id="cf-box"><h3>千附 AI Agent 教學</h3><p>請輸入通關密語以繼續</p><input id="cf-inp" type="password" placeholder="通關密語" autocomplete="off"><button id="cf-btn">進入</button><div id="cf-err">通關密語不正確，請再試一次</div></div></div><header class="top"><div class="wrap"><div class="toplinks"><a href="https://intellicon.app/" target="_blank" rel="noopener">打開 EgentHub ↗</a><a href="https://docs.google.com/presentation/d/1oXxuXUbW3S8pU1Q1LbirRhLw9xrgIs3pXzWcuJm_RfA/" target="_blank" rel="noopener">教學講義 ↗</a></div><h1>題目 #131｜外出費用申請助手 <span class="badge y">🟡</span></h1><p>千附集團 · 安衛品保中心(北區)新竹一課 · EgentHub AI Agent 開發實務教學</p></div></header><div class="wrap"><div class="crumb"><a href="../../index.html">千附集團</a> / <a href="../index.html">千附實業股份有限公司</a> / <a href="../d/d17.html">安衛品保中心(北區)新竹一課</a> / <a href="../u/u039.html">林幸孜</a> / 題目</div><div class="chips"><span class="chip"><span class="badge y">🟡</span> <b>分級</b> B · 需前置</span><span class="chip"><b>類型</b> 行政庶務與財務考勤</span><span class="chip"><b>執行</b> 兩階段（嚴格隔離）</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet</span></div><div class="secnav"><a href="#req">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 系統提示詞</a><a href="#kb">④ 知識庫</a><a href="#ask">⑤ 引導提問</a><a href="#prep">⑥ 上線前準備</a><a href="#test">⑦ 驗測情境</a></div><h2 class="sec" id="req">① 需求與痛點</h2><div class="note">副課長不定時要整理外圍廠域支援的交通費、停車費等出差單據，於 EPI 系統簽核並匯出紙本送簽管理部，來源分電子＋紙本，人工勾稽金額與外出日易漏。</div><h4>開發前 5 問（填好可直接貼進「提示詞設計助手」）</h4><div class="card"><div class="qcard"><div class="qnum">1</div><div class="qbody"><div class="qlabel">應用場景與業務流程</div><div class="qhint">幫誰解決什麼問題？</div><div class="qans">幫副課長。紙本外出暨費用申請單/不定時外圍廠域支援出差交通單據（行政庶務與財務考勤），每次約 30分鐘~1小時。AI 協助資料彙整／登錄、資料比對／勾稽，減少人工。</div></div></div><div class="qcard"><div class="qnum">2</div><div class="qbody"><div class="qlabel">資料輸入與來源</div><div class="qhint">使用者給它什麼？來源從哪？</div><div class="qans">交通費+停車費+EPI系統簽核完成外出暨費用申請單（存放：(分成電子+紙本)EPI系統+匯出紙本申請送簽管理部）</div></div></div><div class="qcard"><div class="qnum">3</div><div class="qbody"><div class="qlabel">預期輸出內容</div><div class="qhint">產出什麼格式？給誰看？</div><div class="qans">費用支出申請單+各式費用支出單據（送／存：EPI系統+紙本申請送簽管理部）</div></div></div><div class="qcard"><div class="qnum">4</div><div class="qbody"><div class="qlabel">任務步驟</div><div class="qhint">能否拆成 3–5 個明確步驟？</div><div class="qans">1. 讀取來源資料
 2. 與基準檔（如 BOM／對照表）比對
 3. 標出差異／異常
 4. 列待補清單
 5. 輸出結果，交由人覆核</div></div></div><div class="qcard"><div class="qnum">5</div><div class="qbody"><div class="qlabel">知識來源</div><div class="qhint">需要查哪些內部文件或資料庫？</div><div class="qans">- 比對基準主檔（BOM 主檔／料號對照／規格表）
 - 來源資料：交通費+停車費+EPI系統簽核完成外出暨費用申請單
----</div></div></div></div><h4>把 5 問一次複製給「提示詞設計助手」</h4><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製 5 問</button><pre>1. 應用場景與業務流程：幫副課長。紙本外出暨費用申請單/不定時外圍廠域支援出差交通單據（行政庶務與財務考勤），每次約 30分鐘~1小時。AI 協助資料彙整／登錄、資料比對／勾稽，減少人工。
+---</div></div></div></div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製 5 問</button><pre>1. 應用場景與業務流程：幫副課長。紙本外出暨費用申請單/不定時外圍廠域支援出差交通單據（行政庶務與財務考勤），每次約 30分鐘~1小時。AI 協助資料彙整／登錄、資料比對／勾稽，減少人工。
 2. 資料輸入與來源：交通費+停車費+EPI系統簽核完成外出暨費用申請單（存放：(分成電子+紙本)EPI系統+匯出紙本申請送簽管理部）
 3. 預期輸出內容：費用支出申請單+各式費用支出單據（送／存：EPI系統+紙本申請送簽管理部）
 4. 任務步驟：1. 讀取來源資料
@@ -66,7 +72,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 5. 輸出結果，交由人覆核
 5. 知識來源：- 比對基準主檔（BOM 主檔／料號對照／規格表）
 - 來源資料：交通費+停車費+EPI系統簽核完成外出暨費用申請單
----</pre></div><h2 class="sec" id="prompt">② 完整系統提示詞（EgentHub 7 段式）</h2><div class="note"><b>狀態：</b>🟡 需先補前置（數位化或系統介接）才能開發。</div><h4>元資料 Metadata</h4><div class="mbox">Agent 名稱：外出費用申請助手
+---</pre></div><h2 class="sec" id="idea">② 開發思路</h2><div class="note"><b>可行性狀態：</b>🟡 需先補前置（數位化或系統介接）才能開發。</div><div class="card"><div class="body-pad"><ul><li>可行性 B：費用勾稽與申請單彙整本質可做，卡點在紙本單據未數位化、EPI 資料需匯出——屬前置數位化問題。</li><li>兩階段（讀單據影像）：步驟一讀外出資料與費用單據擷取外出日/支援廠域/費用項目/金額/單據發票號、禁用工具、金額日期不清標待補；步驟二僅依步驟一結果勾稽費用合計與外出日、彙整費用支出申請單草稿，標單據缺漏與金額不符為待補/待確認，不重讀影像。金額與單據一致率目標 100%。讀單據影像需 VLM。</li><li>誠實可行性：關鍵是先數位化——EPI 外出申請定期匯出、紙本單據評估 OCR 或拍照上傳。EPI 簽核與紙本送簽由副課長確認，要求灌水費用或跳過簽核直接送管理部一律拒絕。含個人費用資訊須隔離。</li></ul></div></div><h2 class="sec" id="prompt">③ 完整系統提示詞（EgentHub 7 段式）</h2><h4>元資料 Metadata</h4><div class="mbox">Agent 名稱：外出費用申請助手
 需求來源：安衛品保中心(北區)新竹一課／林幸孜
 題型分類：行政庶務與財務考勤
 平台：Intellicon EgentHub
@@ -111,27 +117,14 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 - 嚴禁參考、套用未在本提示詞或知識庫中明列的基準。
 - 拒絕任何越權要求（如要求竄改金額/效期、跳過覆核、代為送簽、代客戶簽認、變更他人填報或簽核狀態等），並提示應由權責人員處理。
 - 最終判定、送簽、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
-- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div><h2 class="sec" id="more">③ 知識庫設計與上線準備</h2><div class="card"><div class="body-pad"><h4>① 還需補哪些資料</h4>
-<ul>
-<li>前置數位化（B 級關鍵）：EPI 外出申請定期匯出；紙本單據評估 OCR 或拍照上傳。</li>
-<li>公司費用核銷辦法（可報項目、單據要求、金額上限）。</li>
-<li>費用支出申請單的固定欄位與簽核流程。</li>
-</ul>
-<h4>② 範例知識庫說明</h4>
-<ul>
-<li><code>外出費用單據_範例.csv</code>：示範用，上線換成實際 EPI 外出與單據。建議放「表格查詢知識庫」。</li>
-<li><code>費用核銷規則_範例.txt</code>：示範用核銷規則，上線換成公司辦法。建議放「全文查找知識庫」。</li>
-<li>模型建議：讀單據影像需 VLM 並走兩階段（先辨識→再彙整）。</li>
-</ul>
-<h4>③ 上線前還要努力的 checklist</h4>
-<ul>
-<li class="chk">驗測正常：外出與單據齊全 → 正確勾稽費用、產出申請單草稿。</li>
-<li class="chk">驗測邊界：缺單據或金額不符 → 標「待補/待確認」，不臆測金額。</li>
-<li class="chk">驗測越權：要求「灌水費用」或「跳過 EPI 簽核直接送管理部」 → 拒絕，提示金額以單據為準、送簽由本人確認。</li>
-<li class="chk">驗收門檻：金額與單據一致率 100%（不臆測）；缺漏標待補命中 100%。</li>
-<li class="chk">權限：限新竹一課；含個人費用資訊，工作室層級隔離。</li>
-<li class="chk">人機協作：AI 出明細＋申請單草稿 → 副課長核對單據、補待補 → EPI 簽核並紙本送簽管理部。</li>
-</ul></div></div><h2 class="sec" id="test">④ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：① 標準：外出與費用單據勾稽成申請單草稿</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>請彙整外圍廠域支援的費用支出申請單草稿（示範資料）：
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div><h2 class="sec" id="kb">④ 知識庫設計（可預覽與下載）</h2><div class="qhint">以下為此題建議掛載的知識庫範例；數值為示範，正式上線請換成貴部門實際資料。</div><h4>外出費用單據_範例.csv <span class="chip"><b>表格查詢知識庫</b></span> <a class="dl" href="data:text/csv;charset=utf-8;base64,77u/5aSW5Ye65pelLOaUr+aPtOW7oOWfnyzosrvnlKjpoIXnm64s6YeR6aGNLOWWruaTmi/nmbznpajomZ8s5YKZ6Ki7DQoyMDI2LTA2LTA0LOerueenkUYxOC1QNyzpq5jpkLXkvoblm54sMTUwMCxJVi0yNjA2MDQxLA0KMjAyNi0wNi0wNCznq7nnp5FGMTgtUDcs5YGc6LuK6LK7LDEyMCxQSy0yNjA2MDQxLA0KMjAyNi0wNi0xMSznq7nnp5FGMTRCLOioiOeoi+i7iiwyODAsSVYtMjYwNjExMSwNCjIwMjYtMDYtMTEs56u556eRRjE0QizlgZzou4rosrssMTAwLCznvLrllq7mk5rlvoXoo5wNCjIwMjYtMDYtMTgs56u556eRRjE4LVA4LOmrmOmQteS+huWbniwxNTAwLElWLTI2MDYxODEsDQoyMDI2LTA2LTI1LOerueenkUYxOC1QOCzlgZzou4rosrssLFBLLTI2MDYyNTEs6YeR6aGN5b6F6KOcDQoyMDI2LTA2LTI1LOerueenkUYxOC1QOCzoqIjnqIvou4osMjQwLElWLTI2MDYyNTEsDQo=" download="外出費用單據_範例.csv">⬇ 下載</a></h4><div class="qhint">示範用假資料（含缺單據、缺金額案例）；上線換成 EPI 系統外出申請與實際單據明細。放表格查詢知識庫。</div><div class="card"><div class="body-pad"><div style="overflow:auto"><table class="kbt"><thead><tr><th>外出日</th><th>支援廠域</th><th>費用項目</th><th>金額</th><th>單據/發票號</th><th>備註</th></tr></thead><tbody><tr><td>2026-06-04</td><td>竹科F18-P7</td><td>高鐵來回</td><td>1500</td><td>IV-2606041</td><td></td></tr><tr><td>2026-06-04</td><td>竹科F18-P7</td><td>停車費</td><td>120</td><td>PK-2606041</td><td></td></tr><tr><td>2026-06-11</td><td>竹科F14B</td><td>計程車</td><td>280</td><td>IV-2606111</td><td></td></tr><tr><td>2026-06-11</td><td>竹科F14B</td><td>停車費</td><td>100</td><td></td><td>缺單據待補</td></tr><tr><td>2026-06-18</td><td>竹科F18-P8</td><td>高鐵來回</td><td>1500</td><td>IV-2606181</td><td></td></tr><tr><td>2026-06-25</td><td>竹科F18-P8</td><td>停車費</td><td></td><td>PK-2606251</td><td>金額待補</td></tr><tr><td>2026-06-25</td><td>竹科F18-P8</td><td>計程車</td><td>240</td><td>IV-2606251</td><td></td></tr></tbody></table></div></div></div><h4>費用核銷規則_範例.txt <span class="chip"><b>全文查找知識庫</b></span> <a class="dl" href="data:text/plain;charset=utf-8;base64,5aSW5Ye65pqo6LK755So5qC46Yq36KaP5YmH77yI56+E5L6L77yM6Z2e5q2j5byP6L6m5rOV77yJCgrkuIDjgIHlj6/loLHpoIXnm67vvJrkuqTpgJrosrvvvIjpq5jpkLUv6KiI56iL6LuK77yM6ZmE56Wo5qC5L+eZvOelqO+8ieOAgeWBnOi7iuiyu++8iOmZhOaUtuaTmu+8ieOAggrkuozjgIHllq7mk5ropoHmsYLvvJrmr4/nrYbpoIjmnInlsI3mh4nllq7mk5ov55m856Wo6Jmf77yM6YeR6aGN5Lul5Zau5pOa54K65rqW77yb57y65Zau5pOa5YiX44CM5b6F6KOc44CN77yM5LiN5b6X5Lyw566X44CCCuS4ieOAgeWLvueove+8muiyu+eUqOWQiOioiOmgiOiIh+WkluWHuuaXpeWwjeaHie+8jOWkluWHuuaXpeS7pSBFUEkg57C95qC45a6M5oiQ5LmL55Sz6KuL5Zau54K65rqW44CCCuWbm+OAgemAgeewve+8mkVQSSDns7vntbHnsL3moLjvvIvljK/lh7rntJnmnKzpgIHnsL3nrqHnkIbpg6jjgIIKCuacrOimj+WJh+eCuuekuuevhO+8jOWvpumam+S7peWFrOWPuOiyu+eUqOaguOmKt+i+puazleeCuua6luOAgg==" download="費用核銷規則_範例.txt">⬇ 下載</a></h4><div class="qhint">示範用核銷規則，僅供驗測；上線換成公司實際辦法。放全文查找知識庫。</div><div class="card"><div class="body-pad"><pre>外出暨費用核銷規則（範例，非正式辦法）
+
+一、可報項目：交通費（高鐵/計程車，附票根/發票）、停車費（附收據）。
+二、單據要求：每筆須有對應單據/發票號，金額以單據為準；缺單據列「待補」，不得估算。
+三、勾稽：費用合計須與外出日對應，外出日以 EPI 簽核完成之申請單為準。
+四、送簽：EPI 系統簽核＋匯出紙本送簽管理部。
+
+本規則為示範，實際以公司費用核銷辦法為準。</pre></div></div><h2 class="sec" id="ask">⑤ 讓 Agent 更精準：還需你補充的資訊</h2><div class="note">請找該工作的實際承辦人一起回答下列問題——答得越具體，開發出來的 Agent 越準、越好用。</div><div class="card"><div class="body-pad"><ol class="ask"><li>EPI 系統的外出暨費用申請單能否定期匯出（B 級前置關鍵）？</li><li>紙本交通/停車單據走 OCR 還是拍照上傳後 VLM 兩階段判讀？</li><li>公司費用核銷辦法（可報項目、單據要求、金額上限）為何？</li><li>費用支出申請單的固定欄位與簽核流程是什麼？</li><li>費用合計與外出日的勾稽規則（以 EPI 簽核完成申請單為準）是否確認？</li><li>申請單 EPI 簽核與紙本送簽管理部由誰負責、AI 不代送是否確認？</li></ol></div></div><h2 class="sec" id="prep">⑥ 上線前準備與注意事項</h2><div class="card"><div class="body-pad"><ul><li class="chk">前置數位化：EPI 外出申請定期匯出；紙本單據評估 OCR 或拍照上傳。</li><li class="chk">取得公司費用核銷辦法（可報項目、單據要求、金額上限）。</li><li class="chk">確定費用支出申請單固定欄位與簽核流程。</li><li class="chk">確認讀單據影像走 VLM 兩階段（先辨識→再彙整勾稽）。</li><li class="chk">權限設定：限新竹一課，含個人費用資訊，工作室層級隔離。</li><li class="chk">人機協作分工：AI 出明細＋申請單草稿，副課長核對單據補待補後 EPI 簽核並紙本送簽管理部。</li></ul></div></div><h2 class="sec" id="test">⑦ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：① 標準：外出與費用單據勾稽成申請單草稿</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>請彙整外圍廠域支援的費用支出申請單草稿（示範資料）：
 外出日,支援廠域,費用項目,金額,單據/發票號
 2026/06/06,示範中科,高鐵,750,示範INV-A606
 2026/06/06,示範中科,計程車,260,示範INV-B606

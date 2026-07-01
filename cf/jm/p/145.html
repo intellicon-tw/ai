@@ -5,6 +5,9 @@ a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
 .wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
 header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:24px 18px}
 header.top h1{margin:0 0 6px;font-size:21px}header.top p{margin:0;opacity:.92;font-size:14px}
+.toplinks{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-bottom:10px}
+.toplinks a{background:rgba(255,255,255,.18);color:#fff;padding:5px 13px;border-radius:20px;font-size:12.5px;font-weight:600}
+.toplinks a:hover{background:rgba(255,255,255,.32);text-decoration:none}
 .crumb{font-size:13px;color:var(--mut);margin:14px 0}.crumb a{color:var(--pur)}
 .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px 4px;margin:16px 0;overflow:hidden}
 h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
@@ -44,19 +47,22 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 .calloutbox{background:#fff7e6;border:1px solid #f0d9a8;border-left:4px solid #e0a13b;border-radius:0 8px 8px 0;padding:10px 14px;margin:10px;font-size:14px;color:#7a5a1e}
 .note{background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;padding:8px 14px;margin:10px;font-size:14px;color:#4a4264}
 .copyrow{position:relative}.copyrow .copybtn{position:absolute;top:6px;right:10px}
+.kbt{border-collapse:collapse;font-size:13px;width:100%}.kbt th,.kbt td{border:1px solid var(--line);padding:5px 8px;text-align:left;white-space:nowrap}.kbt th{background:#f0ebff;color:#4a3b7a}
+a.dl{font-size:12.5px;background:#efe9fb;padding:2px 10px;border-radius:20px;font-weight:600}a.dl:hover{background:#e0d6f5;text-decoration:none}
+ol.ask{counter-reset:q;list-style:none;padding-left:0}ol.ask li{position:relative;padding:8px 8px 8px 34px;border-bottom:1px solid var(--line)}ol.ask li:last-child{border-bottom:0}ol.ask li::before{counter-increment:q;content:counter(q);position:absolute;left:8px;top:8px;width:20px;height:20px;background:var(--pur);color:#fff;border-radius:50%;font-size:12px;display:flex;align-items:center;justify-content:center}
 #cf-gate{position:fixed;inset:0;background:linear-gradient(120deg,#5a3f93,#8b6fc7);display:flex;align-items:center;justify-content:center;z-index:99999}
 #cf-box{background:#fff;border-radius:16px;padding:30px 28px;max-width:340px;width:86%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.25)}
 #cf-box h3{margin:0 0 6px;color:#4a3b7a}#cf-box p{margin:0 0 16px;color:#6c6680;font-size:14px}
 #cf-inp{width:100%;padding:10px 12px;border:1px solid #d8d0ee;border-radius:8px;font-size:15px;text-align:center}
 #cf-btn{margin-top:12px;width:100%;background:#6B4FA0;color:#fff;border:0;border-radius:8px;padding:11px;font-size:15px;cursor:pointer}
 #cf-btn:hover{background:#5a3f93}#cf-err{display:none;color:#d6453a;font-size:13px;margin-top:10px}
-</style></head><body><div id="cf-gate"><div id="cf-box"><h3>千附 AI Agent 教學</h3><p>請輸入通關密語以繼續</p><input id="cf-inp" type="password" placeholder="通關密語" autocomplete="off"><button id="cf-btn">進入</button><div id="cf-err">通關密語不正確，請再試一次</div></div></div><header class="top"><div class="wrap"><h1>題目 #145｜收料對點助手 <span class="badge y">🟡</span></h1><p>千附集團 · 倉管課 · EgentHub AI Agent 開發實務教學</p></div></header><div class="wrap"><div class="crumb"><a href="../../index.html">千附集團</a> / <a href="../index.html">千附精密股份有限公司</a> / <a href="../d/d20.html">倉管課</a> / <a href="../u/u046.html">蔡佳珉</a> / 題目</div><div class="chips"><span class="chip"><span class="badge y">🟡</span> <b>分級</b> B · 需前置</span><span class="chip"><b>類型</b> 採購詢比與供應商管理</span><span class="chip"><b>執行</b> 兩階段（嚴格隔離）</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet</span></div><div class="secnav"><a href="#req">① 需求與 5 問</a><a href="#prompt">② 系統提示詞</a><a href="#more">③ 知識庫與上線</a><a href="#test">④ 驗測情境</a></div><h2 class="sec" id="req">① 需求與開發前 5 問</h2><div class="card"><div class="qcard"><div class="qnum">1</div><div class="qbody"><div class="qlabel">應用場景與業務流程</div><div class="qhint">幫誰解決什麼問題？</div><div class="qans">幫倉管專員。收料作業-每天與廠商對點物料（採購詢比與供應商管理），每次約 4小時以上。AI 協助資料彙整／登錄、草稿生成（信件／報告），減少人工。</div></div></div><div class="qcard"><div class="qnum">2</div><div class="qbody"><div class="qlabel">資料輸入與來源</div><div class="qhint">使用者給它什麼？來源從哪？</div><div class="qans">廠商提供的出貨單（存放：從SAP 系統抓取的採單資料）</div></div></div><div class="qcard"><div class="qnum">3</div><div class="qbody"><div class="qlabel">預期輸出內容</div><div class="qhint">產出什麼格式？給誰看？</div><div class="qans">對點完成後，完成SAP系統收料作業，並每日抓取一份收料明細表Excel檔以及無法收料明細(需要一筆一筆KEY)（送／存：SAP系統、個人檔案資料夾）</div></div></div><div class="qcard"><div class="qnum">4</div><div class="qbody"><div class="qlabel">任務步驟</div><div class="qhint">能否拆成 3–5 個明確步驟？</div><div class="qans">1. 讀取輸入資料
+</style></head><body><div id="cf-gate"><div id="cf-box"><h3>千附 AI Agent 教學</h3><p>請輸入通關密語以繼續</p><input id="cf-inp" type="password" placeholder="通關密語" autocomplete="off"><button id="cf-btn">進入</button><div id="cf-err">通關密語不正確，請再試一次</div></div></div><header class="top"><div class="wrap"><div class="toplinks"><a href="https://intellicon.app/" target="_blank" rel="noopener">打開 EgentHub ↗</a><a href="https://docs.google.com/presentation/d/1oXxuXUbW3S8pU1Q1LbirRhLw9xrgIs3pXzWcuJm_RfA/" target="_blank" rel="noopener">教學講義 ↗</a></div><h1>題目 #145｜收料對點助手 <span class="badge y">🟡</span></h1><p>千附集團 · 倉管課 · EgentHub AI Agent 開發實務教學</p></div></header><div class="wrap"><div class="crumb"><a href="../../index.html">千附集團</a> / <a href="../index.html">千附精密股份有限公司</a> / <a href="../d/d20.html">倉管課</a> / <a href="../u/u046.html">蔡佳珉</a> / 題目</div><div class="chips"><span class="chip"><span class="badge y">🟡</span> <b>分級</b> B · 需前置</span><span class="chip"><b>類型</b> 採購詢比與供應商管理</span><span class="chip"><b>執行</b> 兩階段（嚴格隔離）</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet</span></div><div class="secnav"><a href="#req">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 系統提示詞</a><a href="#kb">④ 知識庫</a><a href="#ask">⑤ 引導提問</a><a href="#prep">⑥ 上線前準備</a><a href="#test">⑦ 驗測情境</a></div><h2 class="sec" id="req">① 需求與痛點</h2><div class="note">倉管專員每天收料要與廠商當面對點，再把出貨單與 SAP 採購單一筆筆比對，無法收料的還要逐筆 key，靠人核對耗時 4 小時以上、易漏。</div><h4>開發前 5 問（填好可直接貼進「提示詞設計助手」）</h4><div class="card"><div class="qcard"><div class="qnum">1</div><div class="qbody"><div class="qlabel">應用場景與業務流程</div><div class="qhint">幫誰解決什麼問題？</div><div class="qans">幫倉管專員。收料作業-每天與廠商對點物料（採購詢比與供應商管理），每次約 4小時以上。AI 協助資料彙整／登錄、草稿生成（信件／報告），減少人工。</div></div></div><div class="qcard"><div class="qnum">2</div><div class="qbody"><div class="qlabel">資料輸入與來源</div><div class="qhint">使用者給它什麼？來源從哪？</div><div class="qans">廠商提供的出貨單（存放：從SAP 系統抓取的採單資料）</div></div></div><div class="qcard"><div class="qnum">3</div><div class="qbody"><div class="qlabel">預期輸出內容</div><div class="qhint">產出什麼格式？給誰看？</div><div class="qans">對點完成後，完成SAP系統收料作業，並每日抓取一份收料明細表Excel檔以及無法收料明細(需要一筆一筆KEY)（送／存：SAP系統、個人檔案資料夾）</div></div></div><div class="qcard"><div class="qnum">4</div><div class="qbody"><div class="qlabel">任務步驟</div><div class="qhint">能否拆成 3–5 個明確步驟？</div><div class="qans">1. 讀取輸入資料
 2. 彙整重點
 3. 生成草稿（信件／報告）
 4. 標出待補
 5. 交由人覆核後送出</div></div></div><div class="qcard"><div class="qnum">5</div><div class="qbody"><div class="qlabel">知識來源</div><div class="qhint">需要查哪些內部文件或資料庫？</div><div class="qans">- 過往信件／報告範本、慣用語氣、收發對象
 - 來源資料：廠商提供的出貨單
----</div></div></div></div><h4>把 5 問一次複製給「提示詞設計助手」</h4><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製 5 問</button><pre>1. 應用場景與業務流程：幫倉管專員。收料作業-每天與廠商對點物料（採購詢比與供應商管理），每次約 4小時以上。AI 協助資料彙整／登錄、草稿生成（信件／報告），減少人工。
+---</div></div></div></div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製 5 問</button><pre>1. 應用場景與業務流程：幫倉管專員。收料作業-每天與廠商對點物料（採購詢比與供應商管理），每次約 4小時以上。AI 協助資料彙整／登錄、草稿生成（信件／報告），減少人工。
 2. 資料輸入與來源：廠商提供的出貨單（存放：從SAP 系統抓取的採單資料）
 3. 預期輸出內容：對點完成後，完成SAP系統收料作業，並每日抓取一份收料明細表Excel檔以及無法收料明細(需要一筆一筆KEY)（送／存：SAP系統、個人檔案資料夾）
 4. 任務步驟：1. 讀取輸入資料
@@ -66,7 +72,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 5. 交由人覆核後送出
 5. 知識來源：- 過往信件／報告範本、慣用語氣、收發對象
 - 來源資料：廠商提供的出貨單
----</pre></div><h2 class="sec" id="prompt">② 完整系統提示詞（EgentHub 7 段式）</h2><div class="note"><b>狀態：</b>🟡 需先補前置（數位化或系統介接）才能開發。</div><h4>元資料 Metadata</h4><div class="mbox">Agent 名稱：收料對點助手
+---</pre></div><h2 class="sec" id="idea">② 開發思路</h2><div class="note"><b>可行性狀態：</b>🟡 需先補前置（數位化或系統介接）才能開發。</div><div class="card"><div class="body-pad"><ul><li>題型＝影像擷取＋採購單比對＋收料明細／無法收料清單草稿；覆蓋度為 D2 切出之文書子任務，實物對點與收料過帳不涵蓋；分級 B。</li><li>兩階段（出貨單為文字時可單步）：步驟一讀廠商出貨單擷取採購單號、料號、品名、數量、供應商（手寫標待補不臆測）；步驟二與 SAP 採購單資料比對採購單號＋料號＋數量，判定可收料／數量不符／查無對應，出收料明細與無法收料清單。校驗＝數量不符不自動收料、越權（直接過帳）須拒絕。</li><li>誠實可行性：本 Agent 不連 SAP、不過帳，實物點數仍以現場為準；需備出貨單樣張、SAP 採購單匯出格式、判定規則與數量容差，影像需 VLM。</li></ul></div></div><h2 class="sec" id="prompt">③ 完整系統提示詞（EgentHub 7 段式）</h2><h4>元資料 Metadata</h4><div class="mbox">Agent 名稱：收料對點助手
 需求來源：倉管課／蔡佳珉
 題型分類：採購詢比與供應商管理
 平台：Intellicon EgentHub
@@ -112,25 +118,27 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 - 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（對照基準一律以指定來源資料、SOP／範本與對照表為準）。
 - 拒絕任何越權要求（如要求逕行放行、跳過覆核、代為送簽、修改既有紀錄等），並提示應由承辦人／權責主管依規範判定。
 - 最終判定、覆核、送簽、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
-- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div><h2 class="sec" id="more">③ 知識庫設計與上線準備</h2><div class="card"><div class="body-pad"><h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
-<ul>
-<li>廠商出貨單樣張與 SAP 採購單資料匯出格式（欄位）。</li>
-<li>可收料／數量不符／查無對應的判定規則與容差。</li>
-<li>收料明細表與無法收料明細的固定欄位。</li>
-</ul>
-<h4>② 範例知識庫說明</h4>
-<ul>
-<li><code>採購單對照範例.csv</code>：示範用採購單比對基準，上線換成 SAP 實際匯出。建議放「表格查詢知識庫」。</li>
-<li><code>收料對點作業說明.txt</code>：示範用判定規則與範圍界定，上線換成實際 SOP。建議放「全文查找知識庫」。</li>
-<li>出貨單為 PDF／圖片時用 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）。</li>
-</ul>
-<h4>③ 上線前還要努力的 checklist</h4>
-<ul>
-<li class="chk">對齊出貨單與 SAP 採購單欄位。</li>
-<li class="chk">確立比對判定規則與數量容差。</li>
-<li class="chk">確認「AI 出明細草稿、人於 SAP 過帳」分工。</li>
-<li class="chk">本題為 D2 切出之文書子任務；實物對點與收料過帳仍由人。</li>
-</ul></div></div><h2 class="sec" id="test">④ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：標準：出貨單對採購單產收料明細</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>廠商出貨單（擷取文字）＋ SAP 採購單資料如下，幫我逐筆比對、產收料明細與無法收料明細草稿：
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div><h2 class="sec" id="kb">④ 知識庫設計（可預覽與下載）</h2><div class="qhint">以下為此題建議掛載的知識庫範例；數值為示範，正式上線請換成貴部門實際資料。</div><h4>採購單資料對照.csv <span class="chip"><b>表格查詢知識庫</b></span> <a class="dl" href="data:text/csv;charset=utf-8;base64,77u/5o6h6LO85Zau6JmfLOaWmeiZnyzlk4HlkI0s5oeJ5pS25pW46YePLOWWruS9jSzkvpvmh4nllYYs6KaB5rGC5Lqk5pyfDQpQTy1BMjUzMDEsUk0tQUw3MDc1LTMwLEFMNzA3NeajkuadkM6mMzAsNTAs5pSvLOawuOaWsOmHkeWxrCwyMDI2LTA3LTA1DQpQTy1BMjUzMDEsUk0tVEM0LTI1LOmIpuWQiOmHkeajkuadkM6mMjUsMjAs5pSvLOawuOaWsOmHkeWxrCwyMDI2LTA3LTA1DQpQTy1BMjUzMDIsUk0tU1VTMzE2LVA4LFNVUzMxNuadv+adkHQ4LDMwLOeJhyzlpKfoiIjpi7zmnZAsMjAyNi0wNy0wOA0KUE8tQTI1MzAzLFRMLUVORC0wNiznq6/pipHliIDOpjYsNDAs5pSvLOeyvuW3peWIgOWFtywyMDI2LTA3LTA2DQpQTy1BMjUzMDMsVEwtRFJMLTA4LOmRvemgrc6mOCw2MCzmlK8s57K+5bel5YiA5YW3LDIwMjYtMDctMDYNClBPLUEyNTMwNSxQSy1WQ0ktTSxWQ0npmLLpj73oooso5LitKSw1MDAs5YCLLOWuj+mBlOmYsuittywyMDI2LTA3LTEwDQpQTy1BMjUzMDYsUk0tSU5DNzE4LTIwLEluY29uZWw3MTjmo5LmnZDOpjIwLDEwLOaUryzmsLjmlrDph5HlsawsMjAyNi0wNy0xMg0K" download="採購單資料對照.csv">⬇ 下載</a></h4><div class="qhint">示範用採購單對照基準（模擬 SAP 撈出之採購單資料），上線請換成實際 SAP 匯出資料</div><div class="card"><div class="body-pad"><div style="overflow:auto"><table class="kbt"><thead><tr><th>採購單號</th><th>料號</th><th>品名</th><th>應收數量</th><th>單位</th><th>供應商</th><th>要求交期</th></tr></thead><tbody><tr><td>PO-A25301</td><td>RM-AL7075-30</td><td>AL7075棒材Φ30</td><td>50</td><td>支</td><td>永新金屬</td><td>2026-07-05</td></tr><tr><td>PO-A25301</td><td>RM-TC4-25</td><td>鈦合金棒材Φ25</td><td>20</td><td>支</td><td>永新金屬</td><td>2026-07-05</td></tr><tr><td>PO-A25302</td><td>RM-SUS316-P8</td><td>SUS316板材t8</td><td>30</td><td>片</td><td>大興鋼材</td><td>2026-07-08</td></tr><tr><td>PO-A25303</td><td>TL-END-06</td><td>端銑刀Φ6</td><td>40</td><td>支</td><td>精工刀具</td><td>2026-07-06</td></tr><tr><td>PO-A25303</td><td>TL-DRL-08</td><td>鑽頭Φ8</td><td>60</td><td>支</td><td>精工刀具</td><td>2026-07-06</td></tr><tr><td>PO-A25305</td><td>PK-VCI-M</td><td>VCI防鏽袋(中)</td><td>500</td><td>個</td><td>宏達防護</td><td>2026-07-10</td></tr><tr><td>PO-A25306</td><td>RM-INC718-20</td><td>Inconel718棒材Φ20</td><td>10</td><td>支</td><td>永新金屬</td><td>2026-07-12</td></tr></tbody></table></div></div></div><h4>收料對點判定規則.txt <span class="chip"><b>全文查找知識庫</b></span> <a class="dl" href="data:text/plain;charset=utf-8;base64,44CQ5pS25paZ5bCN6bue5Yik5a6a6KaP5YmHIC0g56S656+E44CRCgrkuIDjgIHnr4TlnI0KICDmnKzliqnnkIblsIflu6DllYblh7rosqjllq7oiIcgU0FQIOaOoeizvOWWruizh+aWmeWwjei1t+S+hu+8jOeUouWHuuOAjOaUtuaWmeaYjue0sOihqOOAjeiIh+OAjOeEoeazleaUtuaWmeaYjue0sOOAjeiNieeov++8mwogIOeVtumdoum7nuaVuOOAgempl+WvpueJqeeUseWAieeuoeWwiOWToeePvuWgtOS9nOalre+8jFNBUCDmlLbmlpnpgY7luLPnlLHkurrmk43kvZzvvIxBSSDkuI3pgKMgU0FQ44CB5LiN6YGO5biz44CCCgrkuozjgIHmr5TlsI3pjbUKICDku6XjgIzmjqHos7zllq7omZ8g77yLIOaWmeiZn+OAjeeCuuS4u+mNteavlOWwjeWHuuiyqOWWruiIh+aOoeizvOWWruizh+aWmeOAggoK5LiJ44CB5Yik5a6a6KaP5YmHCiAgMS4g5o6h6LO85Zau6Jmf77yL5paZ6Jmf77yL5pW46YeP6IiH5o6h6LO85Zau5LiA6Ie0IOKGkiDmqJnjgIzlj6/mlLbmlpnjgI3jgIIKICAyLiDmjqHos7zllq7omZ/jgIHmlpnomZ/nm7jnrKbkvYbmlbjph4/kuI3nrKYg4oaSIOaomeOAjOaVuOmHj+S4jeespuOAje+8jOWIl+WHuuW3rueVsOaVuOOAggogIDMuIOWHuuiyqOWWruS5i+aOoeizvOWWruiZny/mlpnomZ/lnKjmjqHos7zllq7os4fmlpnmn6XnhKHlsI3mh4kg4oaSIOWIl+OAjOeEoeazleaUtuaWmeaYjue0sOOAjeOAggogIDQuIOWHuuiyqOWWrue8uuashOS9je+8iOeEoeaOoeizvOWWruiZn+OAgeaWmeiZn+aooeeziu+8ieKGkiDmqJnjgIzlvoXoo5zjgI3jgIIKCuWbm+OAgei8uOWHugogIOeVtuaXpeaUtuaWmeaYjue0sOihqOiNieeov++8iOWPr+aUtuaWmea4heWWru+8ie+8iyDnhKHms5XmlLbmlpnmmI7ntLDmuIXllq7jgIIKICDmnKvlsL7mj5DnpLrjgIzlr6bpmpsgU0FQIOaUtuaWmemBjuW4s+iIh+WvpueJqem7nuaVuOeUseWAieeuoeWwiOWToeaTjeS9nOS4puimhuaguOOAjeOAggoK5LqU44CB5rOo5oSPCiAg5pW46YeP5Lul5Ye66LKo5Zau6IiH5a+m54mp6bue5pW454K65rqW77yMQUkg5LiN6IeG6YCg77yb5beu55Ww5LiA5b6L5qiZ56S65Lqk55Sx5Lq65Yik5a6a44CC" download="收料對點判定規則.txt">⬇ 下載</a></h4><div class="qhint">示範用收料判定規則，上線請換成倉管課實際 SOP</div><div class="card"><div class="body-pad"><pre>【收料對點判定規則 - 示範】
+
+一、範圍
+  本助理將廠商出貨單與 SAP 採購單資料對起來，產出「收料明細表」與「無法收料明細」草稿；
+  當面點數、驗實物由倉管專員現場作業，SAP 收料過帳由人操作，AI 不連 SAP、不過帳。
+
+二、比對鍵
+  以「採購單號 ＋ 料號」為主鍵比對出貨單與採購單資料。
+
+三、判定規則
+  1. 採購單號＋料號＋數量與採購單一致 → 標「可收料」。
+  2. 採購單號、料號相符但數量不符 → 標「數量不符」，列出差異數。
+  3. 出貨單之採購單號/料號在採購單資料查無對應 → 列「無法收料明細」。
+  4. 出貨單缺欄位（無採購單號、料號模糊）→ 標「待補」。
+
+四、輸出
+  當日收料明細表草稿（可收料清單）＋ 無法收料明細清單。
+  末尾提示「實際 SAP 收料過帳與實物點數由倉管專員操作並覆核」。
+
+五、注意
+  數量以出貨單與實物點數為準，AI 不臆造；差異一律標示交由人判定。</pre></div></div><h2 class="sec" id="ask">⑤ 讓 Agent 更精準：還需你補充的資訊</h2><div class="note">請找該工作的實際承辦人一起回答下列問題——答得越具體，開發出來的 Agent 越準、越好用。</div><div class="card"><div class="body-pad"><ol class="ask"><li>廠商出貨單是紙本、PDF 還是拍照？格式各廠商是否不一致？</li><li>從 SAP 撈出的採購單資料匯出格式與欄位是什麼？（採購單號、料號、應收數量、供應商）</li><li>比對主鍵用「採購單號＋料號」是否足夠？會不會有一單多批分次到貨？</li><li>數量不符時的容差如何處理？多收/少收各要怎麼標？</li><li>收料明細表與無法收料明細的輸出欄位與格式，倉管專員習慣怎麼看？</li><li>SAP 收料過帳一定由人操作，AI 只出草稿——這個分界是否確認？</li></ol></div></div><h2 class="sec" id="prep">⑥ 上線前準備與注意事項</h2><div class="card"><div class="body-pad"><ul><li class="chk">蒐集各廠商出貨單樣本與一份 SAP 採購單資料匯出檔，對齊欄位與命名。</li><li class="chk">建立採購單資料對照（表格查詢知識庫）與收料對點判定規則（全文查找知識庫）。</li><li class="chk">確認比對主鍵與數量不符/查無對應的判定與標示方式。</li><li class="chk">明確分工：AI 出收料明細與無法收料明細草稿，實物點數與 SAP 過帳由倉管專員操作。</li><li class="chk">出貨單為紙本/拍照時選用具視覺能力的模型（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）。</li><li class="chk">以完全相符/數量不符/採單查無對應三情境驗收，比對正確率達 95% 再上線。</li></ul></div></div><h2 class="sec" id="test">⑦ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：標準：出貨單對採購單產收料明細</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>廠商出貨單（擷取文字）＋ SAP 採購單資料如下，幫我逐筆比對、產收料明細與無法收料明細草稿：
 【出貨單】
 採購單號 PO-5501 料號 R-2201 品名 鋼材 數量 100 供應商 大同鋼鐵 出貨日 2026/07/08
 採購單號 PO-5502 料號 R-2205 品名 螺栓 數量 500 供應商 永固

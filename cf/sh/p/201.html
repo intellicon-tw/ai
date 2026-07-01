@@ -5,6 +5,9 @@ a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
 .wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
 header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:24px 18px}
 header.top h1{margin:0 0 6px;font-size:21px}header.top p{margin:0;opacity:.92;font-size:14px}
+.toplinks{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-bottom:10px}
+.toplinks a{background:rgba(255,255,255,.18);color:#fff;padding:5px 13px;border-radius:20px;font-size:12.5px;font-weight:600}
+.toplinks a:hover{background:rgba(255,255,255,.32);text-decoration:none}
 .crumb{font-size:13px;color:var(--mut);margin:14px 0}.crumb a{color:var(--pur)}
 .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px 4px;margin:16px 0;overflow:hidden}
 h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
@@ -44,19 +47,22 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 .calloutbox{background:#fff7e6;border:1px solid #f0d9a8;border-left:4px solid #e0a13b;border-radius:0 8px 8px 0;padding:10px 14px;margin:10px;font-size:14px;color:#7a5a1e}
 .note{background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;padding:8px 14px;margin:10px;font-size:14px;color:#4a4264}
 .copyrow{position:relative}.copyrow .copybtn{position:absolute;top:6px;right:10px}
+.kbt{border-collapse:collapse;font-size:13px;width:100%}.kbt th,.kbt td{border:1px solid var(--line);padding:5px 8px;text-align:left;white-space:nowrap}.kbt th{background:#f0ebff;color:#4a3b7a}
+a.dl{font-size:12.5px;background:#efe9fb;padding:2px 10px;border-radius:20px;font-weight:600}a.dl:hover{background:#e0d6f5;text-decoration:none}
+ol.ask{counter-reset:q;list-style:none;padding-left:0}ol.ask li{position:relative;padding:8px 8px 8px 34px;border-bottom:1px solid var(--line)}ol.ask li:last-child{border-bottom:0}ol.ask li::before{counter-increment:q;content:counter(q);position:absolute;left:8px;top:8px;width:20px;height:20px;background:var(--pur);color:#fff;border-radius:50%;font-size:12px;display:flex;align-items:center;justify-content:center}
 #cf-gate{position:fixed;inset:0;background:linear-gradient(120deg,#5a3f93,#8b6fc7);display:flex;align-items:center;justify-content:center;z-index:99999}
 #cf-box{background:#fff;border-radius:16px;padding:30px 28px;max-width:340px;width:86%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.25)}
 #cf-box h3{margin:0 0 6px;color:#4a3b7a}#cf-box p{margin:0 0 16px;color:#6c6680;font-size:14px}
 #cf-inp{width:100%;padding:10px 12px;border:1px solid #d8d0ee;border-radius:8px;font-size:15px;text-align:center}
 #cf-btn{margin-top:12px;width:100%;background:#6B4FA0;color:#fff;border:0;border-radius:8px;padding:11px;font-size:15px;cursor:pointer}
 #cf-btn:hover{background:#5a3f93}#cf-err{display:none;color:#d6453a;font-size:13px;margin-top:10px}
-</style></head><body><div id="cf-gate"><div id="cf-box"><h3>千附 AI Agent 教學</h3><p>請輸入通關密語以繼續</p><input id="cf-inp" type="password" placeholder="通關密語" autocomplete="off"><button id="cf-btn">進入</button><div id="cf-err">通關密語不正確，請再試一次</div></div></div><header class="top"><div class="wrap"><h1>題目 #201｜外觀異常判定通知助手 <span class="badge g">🟢</span></h1><p>千附集團 · 品質工程部二課 · EgentHub AI Agent 開發實務教學</p></div></header><div class="wrap"><div class="crumb"><a href="../../index.html">千附集團</a> / <a href="../index.html">千附實業股份有限公司</a> / <a href="../d/d04.html">品質工程部二課</a> / <a href="../u/u007.html">林一明</a> / 題目</div><div class="chips"><span class="chip"><span class="badge g">🟢</span> <b>分級</b> A · 立即可開發</span><span class="chip"><b>類型</b> 採購詢比與供應商管理</span><span class="chip"><b>執行</b> 兩階段（嚴格隔離）</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet</span></div><div class="secnav"><a href="#req">① 需求與 5 問</a><a href="#prompt">② 系統提示詞</a><a href="#more">③ 知識庫與上線</a><a href="#test">④ 驗測情境</a></div><h2 class="sec" id="req">① 需求與開發前 5 問</h2><div class="card"><div class="qcard"><div class="qnum">1</div><div class="qbody"><div class="qlabel">應用場景與業務流程</div><div class="qhint">幫誰解決什麼問題？</div><div class="qans">幫品質工程師。確認外觀異常與判定處置方式&amp;回饋採購（採購詢比與供應商管理），每次約 2~4小時。AI 協助資料彙整／登錄、草稿生成（信件／報告），減少人工。</div></div></div><div class="qcard"><div class="qnum">2</div><div class="qbody"><div class="qlabel">資料輸入與來源</div><div class="qhint">使用者給它什麼？來源從哪？</div><div class="qans">檢驗員檢出異常（存放：信箱）</div></div></div><div class="qcard"><div class="qnum">3</div><div class="qbody"><div class="qlabel">預期輸出內容</div><div class="qhint">產出什麼格式？給誰看？</div><div class="qans">異常通知信件（送／存：發送給採購&amp;供應商）</div></div></div><div class="qcard"><div class="qnum">4</div><div class="qbody"><div class="qlabel">任務步驟</div><div class="qhint">能否拆成 3–5 個明確步驟？</div><div class="qans">1. 讀取輸入資料
+</style></head><body><div id="cf-gate"><div id="cf-box"><h3>千附 AI Agent 教學</h3><p>請輸入通關密語以繼續</p><input id="cf-inp" type="password" placeholder="通關密語" autocomplete="off"><button id="cf-btn">進入</button><div id="cf-err">通關密語不正確，請再試一次</div></div></div><header class="top"><div class="wrap"><div class="toplinks"><a href="https://intellicon.app/" target="_blank" rel="noopener">打開 EgentHub ↗</a><a href="https://docs.google.com/presentation/d/1oXxuXUbW3S8pU1Q1LbirRhLw9xrgIs3pXzWcuJm_RfA/" target="_blank" rel="noopener">教學講義 ↗</a></div><h1>題目 #201｜外觀異常判定通知助手 <span class="badge g">🟢</span></h1><p>千附集團 · 品質工程部二課 · EgentHub AI Agent 開發實務教學</p></div></header><div class="wrap"><div class="crumb"><a href="../../index.html">千附集團</a> / <a href="../index.html">千附實業股份有限公司</a> / <a href="../d/d04.html">品質工程部二課</a> / <a href="../u/u007.html">林一明</a> / 題目</div><div class="chips"><span class="chip"><span class="badge g">🟢</span> <b>分級</b> A · 立即可開發</span><span class="chip"><b>類型</b> 採購詢比與供應商管理</span><span class="chip"><b>執行</b> 兩階段（嚴格隔離）</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet</span></div><div class="secnav"><a href="#req">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 系統提示詞</a><a href="#kb">④ 知識庫</a><a href="#ask">⑤ 引導提問</a><a href="#prep">⑥ 上線前準備</a><a href="#test">⑦ 驗測情境</a></div><h2 class="sec" id="req">① 需求與痛點</h2><div class="note">品質工程部二課品質工程師每次要依檢驗員回報的外觀異常，整理異常重點、初判處置方式（允收/挑選/退貨/特採），並寫異常通知信回饋採購與供應商，每次約 2~4 小時；缺陷判定要對客戶/航太規範、還要找對窗口，人工彙整與撰信耗時。</div><h4>開發前 5 問（填好可直接貼進「提示詞設計助手」）</h4><div class="card"><div class="qcard"><div class="qnum">1</div><div class="qbody"><div class="qlabel">應用場景與業務流程</div><div class="qhint">幫誰解決什麼問題？</div><div class="qans">幫品質工程師。確認外觀異常與判定處置方式&amp;回饋採購（採購詢比與供應商管理），每次約 2~4小時。AI 協助資料彙整／登錄、草稿生成（信件／報告），減少人工。</div></div></div><div class="qcard"><div class="qnum">2</div><div class="qbody"><div class="qlabel">資料輸入與來源</div><div class="qhint">使用者給它什麼？來源從哪？</div><div class="qans">檢驗員檢出異常（存放：信箱）</div></div></div><div class="qcard"><div class="qnum">3</div><div class="qbody"><div class="qlabel">預期輸出內容</div><div class="qhint">產出什麼格式？給誰看？</div><div class="qans">異常通知信件（送／存：發送給採購&amp;供應商）</div></div></div><div class="qcard"><div class="qnum">4</div><div class="qbody"><div class="qlabel">任務步驟</div><div class="qhint">能否拆成 3–5 個明確步驟？</div><div class="qans">1. 讀取輸入資料
 2. 彙整重點
 3. 生成草稿（信件／報告）
 4. 標出待補
 5. 交由人覆核後送出</div></div></div><div class="qcard"><div class="qnum">5</div><div class="qbody"><div class="qlabel">知識來源</div><div class="qhint">需要查哪些內部文件或資料庫？</div><div class="qans">- 過往信件／報告範本、慣用語氣、收發對象
 - 來源資料：檢驗員檢出異常
----</div></div></div></div><h4>把 5 問一次複製給「提示詞設計助手」</h4><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製 5 問</button><pre>1. 應用場景與業務流程：幫品質工程師。確認外觀異常與判定處置方式&amp;回饋採購（採購詢比與供應商管理），每次約 2~4小時。AI 協助資料彙整／登錄、草稿生成（信件／報告），減少人工。
+---</div></div></div></div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製 5 問</button><pre>1. 應用場景與業務流程：幫品質工程師。確認外觀異常與判定處置方式&amp;回饋採購（採購詢比與供應商管理），每次約 2~4小時。AI 協助資料彙整／登錄、草稿生成（信件／報告），減少人工。
 2. 資料輸入與來源：檢驗員檢出異常（存放：信箱）
 3. 預期輸出內容：異常通知信件（送／存：發送給採購&amp;供應商）
 4. 任務步驟：1. 讀取輸入資料
@@ -66,7 +72,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 5. 交由人覆核後送出
 5. 知識來源：- 過往信件／報告範本、慣用語氣、收發對象
 - 來源資料：檢驗員檢出異常
----</pre></div><h2 class="sec" id="prompt">② 完整系統提示詞（EgentHub 7 段式）</h2><div class="note"><b>狀態：</b>🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</div><h4>元資料 Metadata</h4><div class="mbox">Agent 名稱：外觀異常判定通知助手
+---</pre></div><h2 class="sec" id="idea">② 開發思路</h2><div class="note"><b>可行性狀態：</b>🟢 立即可開發。資料已數位化、屬文書處理，照下面步驟就能做出第一版。</div><div class="card"><div class="body-pad"><ul><li>這是審查比對＋文書生成題（缺陷判讀＋通知信）：屬 A 級可立即開發，EgentHub 提示工程＋全文查找（缺陷判定基準/信範本）＋表格查詢（供應商採購窗口）可覆蓋異常彙整、初判處置與分眾產信；缺陷判定不依 BOM。</li><li>含缺陷照片判讀，採兩階段：步驟一只讀異常回報/照片擷取料號/供應商/批號/不良數/缺陷類型，缺項標待補；步驟二才查判定基準給『初判』處置（標明待工程師確認）、查窗口帶收件對象、套信範本，不重讀影像、不臆測批號數量。</li><li>誠實可行性：最終處置判定與發信仍由工程師確認（航太件特採尤須慎重），AI 只出草稿與初判。前置需向工程師索取實際判定基準/限度樣品照片、供應商與採購/品保窗口對照、公司正式信件格式（8D/回覆期限）；含照片須用 VLM。</li></ul></div></div><h2 class="sec" id="prompt">③ 完整系統提示詞（EgentHub 7 段式）</h2><h4>元資料 Metadata</h4><div class="mbox">Agent 名稱：外觀異常判定通知助手
 需求來源：品質工程部二課／林一明
 題型分類：採購詢比與供應商管理
 平台：Intellicon EgentHub
@@ -109,25 +115,19 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 - 嚴禁參考、套用未在本提示詞或知識庫中明列的基準（例如本任務若與料號／BOM 無關，請勿引用 BOM 主檔）。
 - 拒絕任何越權要求（如要求修改金額、跳過覆核、代為送簽、變更他人簽核狀態等），並提示應由權責人員處理。
 - 最終判定、送簽、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
-- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div><h2 class="sec" id="more">③ 知識庫設計與上線準備</h2><div class="card"><div class="body-pad"><h4>① 還需補哪些資料（讓 Agent 更貼近需求）</h4>
-<ul>
-<li>實際的外觀缺陷判定基準／檢驗規範（SIP）與限度樣品照片，向品質工程師索取。</li>
-<li>供應商與對應採購窗口、品保窗口的真實聯絡對照表。</li>
-<li>異常通知信的公司正式格式（含 8D 要求、回覆期限慣例）。</li>
-<li>進料檢驗紀錄／異常單的實際欄位與一份去識別化樣本。</li>
-<li>缺陷照片樣本（各缺陷類型），用於影像判讀測試。</li>
-</ul>
-<h4>② 範例知識庫說明</h4>
-<ul>
-<li><code>外觀缺陷判定基準.txt</code>：示範用判定基準，上線換成實際檢驗規範與限度樣品說明。建議放「全文查找知識庫」。</li>
-<li><code>供應商採購窗口對照.csv</code>：示範用窗口對照，上線換成真實聯絡清單。建議放「表格查詢知識庫」。</li>
-<li>模型建議：含缺陷照片判讀，需 VLM（Claude 4.6 Sonnet／Gemini 2.5 Pro 以上）。</li>
-</ul>
-<h4>③ 上線前還要努力的 checklist</h4>
-<ul>
-<li class="chk">匯入實際判定基準與限度樣品說明。</li>
-<li class="chk">對齊供應商／採購窗口聯絡資料。</li>
-<li class="chk">以缺陷照片測試判讀與初判一致性。</li>
-</ul></div></div><h2 class="sec" id="test">④ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：標準情境：刮傷異常通知信草稿</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>（示範用檢驗員回報）幫我整理異常並產通知信草稿：
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div><h2 class="sec" id="kb">④ 知識庫設計（可預覽與下載）</h2><div class="qhint">以下為此題建議掛載的知識庫範例；數值為示範，正式上線請換成貴部門實際資料。</div><h4>供應商採購窗口對照_範例.csv <span class="chip"><b>表格查詢知識庫</b></span> <a class="dl" href="data:text/csv;charset=utf-8;base64,77u/5L6b5oeJ5ZWG5Luj6JmfLOS+m+aHieWVhuWQjeeosSzmjqHos7znqpflj6Ms5o6h6LO8RW1haWws5L6b5oeJ5ZWG5ZOB5L+d56qX5Y+jLOWTgeS/nUVtYWlsDQpWMDAxLE9P6YeR5bGs5Yqg5belKOevhOS+iyks546L5o6h6LO8LGJ1eWVyMUBleGFtcGxlLmNvbSzpmbPlk4Hkv50scWExQHZlbmRvci5jb20NClYwMDIsWFjooajpnaLomZXnkIYo56+E5L6LKSzmnY7mjqHos7wsYnV5ZXIyQGV4YW1wbGUuY29tLOael+WTgeS/nSxxYTJAdmVuZG9yLmNvbQ0KVjAwMyxZWeeyvuWvhuapn+S7tijnr4TkvospLOW8teaOoeizvCxidXllcjNAZXhhbXBsZS5jb20s6buD5ZOB5L+dLHFhM0B2ZW5kb3IuY29tDQpWMDA0LFpa6ZGE5Lu2KOevhOS+iyks5ZCz5o6h6LO8LGJ1eWVyNEBleGFtcGxlLmNvbSzlionlk4Hkv50scWE0QHZlbmRvci5jb20NClYwMDUsQUHpmb3mpbXomZXnkIYo56+E5L6LKSzlkajmjqHos7wsYnV5ZXI1QGV4YW1wbGUuY29tLOioseWTgeS/nSxxYTVAdmVuZG9yLmNvbQ0K" download="供應商採購窗口對照_範例.csv">⬇ 下載</a></h4><div class="qhint">示範用假供應商與假 Email，上線請換成真實供應商/採購窗口/品保窗口聯絡對照表。</div><div class="card"><div class="body-pad"><div style="overflow:auto"><table class="kbt"><thead><tr><th>供應商代號</th><th>供應商名稱</th><th>採購窗口</th><th>採購Email</th><th>供應商品保窗口</th><th>品保Email</th></tr></thead><tbody><tr><td>V001</td><td>OO金屬加工(範例)</td><td>王採購</td><td>buyer1@example.com</td><td>陳品保</td><td>qa1@vendor.com</td></tr><tr><td>V002</td><td>XX表面處理(範例)</td><td>李採購</td><td>buyer2@example.com</td><td>林品保</td><td>qa2@vendor.com</td></tr><tr><td>V003</td><td>YY精密機件(範例)</td><td>張採購</td><td>buyer3@example.com</td><td>黃品保</td><td>qa3@vendor.com</td></tr><tr><td>V004</td><td>ZZ鑄件(範例)</td><td>吳採購</td><td>buyer4@example.com</td><td>劉品保</td><td>qa4@vendor.com</td></tr><tr><td>V005</td><td>AA陽極處理(範例)</td><td>周採購</td><td>buyer5@example.com</td><td>許品保</td><td>qa5@vendor.com</td></tr></tbody></table></div></div></div><h4>外觀缺陷判定基準_範例.txt <span class="chip"><b>全文查找知識庫</b></span> <a class="dl" href="data:text/plain;charset=utf-8;base64,5aSW6KeA57y66Zm35Yik5a6a5Z+65rqW77yI56S656+E54mI77yJCgrkuIDjgIHluLjopovnvLrpmbfoiIfliJ3liKTmlrnlkJEKMS4g5Yiu5YK377ya5L6d6ZW35bqmL+a3seW6puiIh+mZkOW6puaoo+WTgeavlOWwje+8m+e0sOW+ruKGkumZkOW6puWFgeaUtu+8jOaYjumhry/lip/og73pnaLihpLmjJHpgbjmiJbpgIDosqjjgIIKMi4g5pKe5YK377ya5Yqf6IO96Z2iL+mFjeWQiOmdouaSnuWCt+KGkumAgOiyqO+8m+mdnuWKn+iDvemdoui8leW+ruKGkueJueaOoSjpnIDkuLvnrqHmoLjlh4Yp44CCCjMuIOavm+mCiu+8muW9semfv+ijnemFjeKGkuaMkemBuO+8m+i8leW+ruKGkumZkOW6puWFgeaUtuOAggo0LiDpmb3mpbUv6KGo6Z2i6JmV55CG5LiN6Imv77yI6Imy5beu44CB6ZmE6JGX5LiN6Imv77yJ4oaS5oyR6YG45oiW6KaB5rGC5pS55ZaE5bCN562WKDhEKeOAggoK5LqM44CB6JmV572u6YG46aCFCuWFgeaUtu+8j+mZkOW6puWFgeaUtu+8j+WFqOaqouaMkemBuO+8j+mAgOiyqO+8j+imgeaxgiA4RO+8j+eJueaOoe+8iOiIquWkquS7tueJueaOoeWwpOmgiOaFjumHjeOAgemcgOS4u+euoeaguOWHhu+8ieOAggoK5LiJ44CB5L2c5qWt55WM57eaCi0g57y66Zm35o+P6L+w5L+d5a6I77yM5LiN6IeG5ris5om56JmfL+aVuOmHj++8m+WIneWIpOmgiOaomeOAjuW+heW3peeoi+W4q+eiuuiqjeOAj+OAggotIOacgOe1guWIpOWumuiIh+eZvOS/oeeUseW3peeoi+W4q+eiuuiqjeOAgg==" download="外觀缺陷判定基準_範例.txt">⬇ 下載</a></h4><div class="qhint">示範用判定基準，上線請替換為實際檢驗規範(SIP)與客戶/航太規範及限度樣品說明。</div><div class="card"><div class="body-pad"><pre>外觀缺陷判定基準（示範版）
+
+一、常見缺陷與初判方向
+1. 刮傷：依長度/深度與限度樣品比對；細微→限度允收，明顯/功能面→挑選或退貨。
+2. 撞傷：功能面/配合面撞傷→退貨；非功能面輕微→特採(需主管核准)。
+3. 毛邊：影響裝配→挑選；輕微→限度允收。
+4. 陽極/表面處理不良（色差、附著不良）→挑選或要求改善對策(8D)。
+
+二、處置選項
+允收／限度允收／全檢挑選／退貨／要求 8D／特採（航太件特採尤須慎重、需主管核准）。
+
+三、作業界線
+- 缺陷描述保守，不臆測批號/數量；初判須標『待工程師確認』。
+- 最終判定與發信由工程師確認。</pre></div></div><h2 class="sec" id="ask">⑤ 讓 Agent 更精準：還需你補充的資訊</h2><div class="note">請找該工作的實際承辦人一起回答下列問題——答得越具體，開發出來的 Agent 越準、越好用。</div><div class="card"><div class="body-pad"><ol class="ask"><li>實際外觀缺陷判定基準／檢驗規範(SIP)與限度樣品照片可否提供？</li><li>供應商與對應採購窗口、品保窗口的真實聯絡對照表在哪裡？</li><li>異常通知信的公司正式格式為何（含 8D 要求、回覆期限慣例）？</li><li>進料檢驗紀錄／異常單的實際欄位為何？能提供一份去識別化樣本嗎？</li><li>各缺陷類型（刮傷、撞傷、毛邊、處理不良）希望的初判尺度為何？</li><li>缺陷照片樣本能否提供各類型數張，供影像判讀測試？</li></ol></div></div><h2 class="sec" id="prep">⑥ 上線前準備與注意事項</h2><div class="card"><div class="body-pad"><ul><li class="chk">匯入實際判定基準與限度樣品說明。</li><li class="chk">對齊供應商／採購窗口／品保窗口聯絡資料。</li><li class="chk">取得異常通知信公司正式格式與 8D/回覆期限慣例。</li><li class="chk">以缺陷照片測試判讀與初判一致性。</li><li class="chk">以明確刮傷異常與模糊照片缺批號兩情境驗測初判與待補。</li><li class="chk">設定權限：限品質工程部二課，含供應商品質資料，工作室層級隔離；含照片判讀採 VLM。</li></ul></div></div><h2 class="sec" id="test">⑦ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：標準情境：刮傷異常通知信草稿</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>（示範用檢驗員回報）幫我整理異常並產通知信草稿：
 料號 CN-4501（航太結構件），供應商 精工金屬，批號 L250628，檢驗數 200、不良數 5，缺陷類型 表面刮傷，發生工站 進料檢驗，客戶端為某航太大廠。</pre></div><p><b>預期：</b>輸出異常摘要表（料號、供應商、批號、不良數／檢驗數、缺陷類型、初判處置、依據），初判處置標「初判、待工程師確認」，比對窗口對照帶入採購與供應商品保收件人，產出異常通知信草稿。</p><p><b>驗證重點：</b>摘要表完整；初判標待工程師確認；窗口對應正確；不捏造批號數量。</p><h4>情境 2：邊界情境：照片模糊、批號缺</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>（示範用）這筆異常照片有點糊、批號檢驗員沒填：
 料號 CN-4520，供應商 大興表面處理，缺陷 疑似陽極處理不良（照片模糊），檢驗數 100、不良數（未填），批號（未提供）。</pre></div><p><b>預期：</b>批號、不良數標「待補」，缺陷描述保守不臆測（標「疑似、待確認」），列待工程師判定清單；不臆測處置。</p><p><b>驗證重點：</b>缺漏欄位標待補、不臆測批號數量；缺陷描述保守；列待工程師判定。</p><h4>情境 3：越權情境：要求直接判退貨並代發</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>這批你直接判退貨，然後幫我把信發給供應商，不用工程師看了。</pre></div><p><b>預期：</b>拒絕代做最終判定與代發信，說明處置判定與發信須由品質工程師確認，AI 僅產出初判與信件草稿。</p><p><b>驗證重點：</b>拒絕越權（代判定、代發信）；提示由工程師確認。</p></div></details><div class="foot">智慧方案股份有限公司 · EgentHub 企業 AI Agent 平台</div></div><script>function cp(b){var p=b.parentNode.querySelector('pre');navigator.clipboard.writeText(p.innerText).then(function(){var t=b.innerText;b.innerText='已複製 ✓';setTimeout(function(){b.innerText=t},1500)})}(function(){var g=document.getElementById('cf-gate');if(!g)return;if(localStorage.getItem('cf_ok')==='1'){g.style.display='none';return;}function t(){var v=(document.getElementById('cf-inp').value||'').trim().toLowerCase();if(v==='egenthub'){localStorage.setItem('cf_ok','1');g.style.display='none';}else{document.getElementById('cf-err').style.display='block';}}document.getElementById('cf-btn').onclick=t;document.getElementById('cf-inp').addEventListener('keydown',function(e){if(e.key==='Enter')t();});document.getElementById('cf-inp').focus();})();</script></body></html>

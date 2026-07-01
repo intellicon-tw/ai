@@ -5,6 +5,9 @@ a{color:var(--pur);text-decoration:none}a:hover{text-decoration:underline}
 .wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
 header.top{background:linear-gradient(120deg,#5a3f93,#8b6fc7);color:#fff;padding:24px 18px}
 header.top h1{margin:0 0 6px;font-size:21px}header.top p{margin:0;opacity:.92;font-size:14px}
+.toplinks{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-bottom:10px}
+.toplinks a{background:rgba(255,255,255,.18);color:#fff;padding:5px 13px;border-radius:20px;font-size:12.5px;font-weight:600}
+.toplinks a:hover{background:rgba(255,255,255,.32);text-decoration:none}
 .crumb{font-size:13px;color:var(--mut);margin:14px 0}.crumb a{color:var(--pur)}
 .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px 4px;margin:16px 0;overflow:hidden}
 h2.sec{background:#f0ebff;color:#4a3b7a;padding:8px 12px;border-radius:8px;font-size:18px;margin:22px 0 12px}
@@ -44,19 +47,22 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 .calloutbox{background:#fff7e6;border:1px solid #f0d9a8;border-left:4px solid #e0a13b;border-radius:0 8px 8px 0;padding:10px 14px;margin:10px;font-size:14px;color:#7a5a1e}
 .note{background:#f3f0fb;border-left:4px solid var(--pur2);border-radius:0 8px 8px 0;padding:8px 14px;margin:10px;font-size:14px;color:#4a4264}
 .copyrow{position:relative}.copyrow .copybtn{position:absolute;top:6px;right:10px}
+.kbt{border-collapse:collapse;font-size:13px;width:100%}.kbt th,.kbt td{border:1px solid var(--line);padding:5px 8px;text-align:left;white-space:nowrap}.kbt th{background:#f0ebff;color:#4a3b7a}
+a.dl{font-size:12.5px;background:#efe9fb;padding:2px 10px;border-radius:20px;font-weight:600}a.dl:hover{background:#e0d6f5;text-decoration:none}
+ol.ask{counter-reset:q;list-style:none;padding-left:0}ol.ask li{position:relative;padding:8px 8px 8px 34px;border-bottom:1px solid var(--line)}ol.ask li:last-child{border-bottom:0}ol.ask li::before{counter-increment:q;content:counter(q);position:absolute;left:8px;top:8px;width:20px;height:20px;background:var(--pur);color:#fff;border-radius:50%;font-size:12px;display:flex;align-items:center;justify-content:center}
 #cf-gate{position:fixed;inset:0;background:linear-gradient(120deg,#5a3f93,#8b6fc7);display:flex;align-items:center;justify-content:center;z-index:99999}
 #cf-box{background:#fff;border-radius:16px;padding:30px 28px;max-width:340px;width:86%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.25)}
 #cf-box h3{margin:0 0 6px;color:#4a3b7a}#cf-box p{margin:0 0 16px;color:#6c6680;font-size:14px}
 #cf-inp{width:100%;padding:10px 12px;border:1px solid #d8d0ee;border-radius:8px;font-size:15px;text-align:center}
 #cf-btn{margin-top:12px;width:100%;background:#6B4FA0;color:#fff;border:0;border-radius:8px;padding:11px;font-size:15px;cursor:pointer}
 #cf-btn:hover{background:#5a3f93}#cf-err{display:none;color:#d6453a;font-size:13px;margin-top:10px}
-</style></head><body><div id="cf-gate"><div id="cf-box"><h3>千附 AI Agent 教學</h3><p>請輸入通關密語以繼續</p><input id="cf-inp" type="password" placeholder="通關密語" autocomplete="off"><button id="cf-btn">進入</button><div id="cf-err">通關密語不正確，請再試一次</div></div></div><header class="top"><div class="wrap"><h1>題目 #256｜WPS證照展延助手 <span class="badge o">🟠</span></h1><p>千附集團 · 安衛品保中心(北區)新竹一課 · EgentHub AI Agent 開發實務教學</p></div></header><div class="wrap"><div class="crumb"><a href="../../index.html">千附集團</a> / <a href="../index.html">千附實業股份有限公司</a> / <a href="../d/d17.html">安衛品保中心(北區)新竹一課</a> / <a href="../u/u041.html">彭巧</a> / 題目</div><div class="chips"><span class="chip"><span class="badge o">🟠</span> <b>分級</b> C · 人機協作</span><span class="chip"><b>類型</b> 行政庶務與財務考勤</span><span class="chip"><b>執行</b> 單階段</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet</span></div><div class="secnav"><a href="#req">① 需求與 5 問</a><a href="#prompt">② 系統提示詞</a><a href="#more">③ 知識庫與上線</a><a href="#test">④ 驗測情境</a></div><h2 class="sec" id="req">① 需求與開發前 5 問</h2><div class="card"><div class="qcard"><div class="qnum">1</div><div class="qbody"><div class="qlabel">應用場景與業務流程</div><div class="qhint">幫誰解決什麼問題？</div><div class="qans">幫助理工程師。每月WPS開卡/展延（行政庶務與財務考勤），每次約 1~2小時。AI 協助資料彙整／登錄，減少人工。</div></div></div><div class="qcard"><div class="qnum">2</div><div class="qbody"><div class="qlabel">資料輸入與來源</div><div class="qhint">使用者給它什麼？來源從哪？</div><div class="qans">由工安跟下包商要,整理成exsel（存放：公共槽）</div></div></div><div class="qcard"><div class="qnum">3</div><div class="qbody"><div class="qlabel">預期輸出內容</div><div class="qhint">產出什麼格式？給誰看？</div><div class="qans">篩選出每月即將到期的工作證展延,並預約入廠（送／存：最後在TSMC360上申請）</div></div></div><div class="qcard"><div class="qnum">4</div><div class="qbody"><div class="qlabel">任務步驟</div><div class="qhint">能否拆成 3–5 個明確步驟？</div><div class="qans">1. 讀取來源資料
+</style></head><body><div id="cf-gate"><div id="cf-box"><h3>千附 AI Agent 教學</h3><p>請輸入通關密語以繼續</p><input id="cf-inp" type="password" placeholder="通關密語" autocomplete="off"><button id="cf-btn">進入</button><div id="cf-err">通關密語不正確，請再試一次</div></div></div><header class="top"><div class="wrap"><div class="toplinks"><a href="https://intellicon.app/" target="_blank" rel="noopener">打開 EgentHub ↗</a><a href="https://docs.google.com/presentation/d/1oXxuXUbW3S8pU1Q1LbirRhLw9xrgIs3pXzWcuJm_RfA/" target="_blank" rel="noopener">教學講義 ↗</a></div><h1>題目 #256｜WPS證照展延助手 <span class="badge o">🟠</span></h1><p>千附集團 · 安衛品保中心(北區)新竹一課 · EgentHub AI Agent 開發實務教學</p></div></header><div class="wrap"><div class="crumb"><a href="../../index.html">千附集團</a> / <a href="../index.html">千附實業股份有限公司</a> / <a href="../d/d17.html">安衛品保中心(北區)新竹一課</a> / <a href="../u/u041.html">彭巧</a> / 題目</div><div class="chips"><span class="chip"><span class="badge o">🟠</span> <b>分級</b> C · 人機協作</span><span class="chip"><b>類型</b> 行政庶務與財務考勤</span><span class="chip"><b>執行</b> 單階段</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet</span></div><div class="secnav"><a href="#req">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 系統提示詞</a><a href="#kb">④ 知識庫</a><a href="#ask">⑤ 引導提問</a><a href="#prep">⑥ 上線前準備</a><a href="#test">⑦ 驗測情境</a></div><h2 class="sec" id="req">① 需求與痛點</h2><div class="note">助理工程師每月要向下包商收工作證資料整理成 Excel，篩出即將到期者辦展延並預約入廠，最後在 TSMC360 申請，涉多方資料與交叉判定，每次耗 1~2 小時。</div><h4>開發前 5 問（填好可直接貼進「提示詞設計助手」）</h4><div class="card"><div class="qcard"><div class="qnum">1</div><div class="qbody"><div class="qlabel">應用場景與業務流程</div><div class="qhint">幫誰解決什麼問題？</div><div class="qans">幫助理工程師。每月WPS開卡/展延（行政庶務與財務考勤），每次約 1~2小時。AI 協助資料彙整／登錄，減少人工。</div></div></div><div class="qcard"><div class="qnum">2</div><div class="qbody"><div class="qlabel">資料輸入與來源</div><div class="qhint">使用者給它什麼？來源從哪？</div><div class="qans">由工安跟下包商要,整理成exsel（存放：公共槽）</div></div></div><div class="qcard"><div class="qnum">3</div><div class="qbody"><div class="qlabel">預期輸出內容</div><div class="qhint">產出什麼格式？給誰看？</div><div class="qans">篩選出每月即將到期的工作證展延,並預約入廠（送／存：最後在TSMC360上申請）</div></div></div><div class="qcard"><div class="qnum">4</div><div class="qbody"><div class="qlabel">任務步驟</div><div class="qhint">能否拆成 3–5 個明確步驟？</div><div class="qans">1. 讀取來源資料
 2. 擷取並標準化欄位
 3. 彙整成目標格式
 4. 標出缺漏／異常
 5. 輸出，交由人覆核</div></div></div><div class="qcard"><div class="qnum">5</div><div class="qbody"><div class="qlabel">知識來源</div><div class="qhint">需要查哪些內部文件或資料庫？</div><div class="qans">- 欄位定義、對照表、輸出格式範本
 - 來源資料：由工安跟下包商要,整理成exsel
----</div></div></div></div><h4>把 5 問一次複製給「提示詞設計助手」</h4><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製 5 問</button><pre>1. 應用場景與業務流程：幫助理工程師。每月WPS開卡/展延（行政庶務與財務考勤），每次約 1~2小時。AI 協助資料彙整／登錄，減少人工。
+---</div></div></div></div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製 5 問</button><pre>1. 應用場景與業務流程：幫助理工程師。每月WPS開卡/展延（行政庶務與財務考勤），每次約 1~2小時。AI 協助資料彙整／登錄，減少人工。
 2. 資料輸入與來源：由工安跟下包商要,整理成exsel（存放：公共槽）
 3. 預期輸出內容：篩選出每月即將到期的工作證展延,並預約入廠（送／存：最後在TSMC360上申請）
 4. 任務步驟：1. 讀取來源資料
@@ -66,7 +72,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 5. 輸出，交由人覆核
 5. 知識來源：- 欄位定義、對照表、輸出格式範本
 - 來源資料：由工安跟下包商要,整理成exsel
----</pre></div><h2 class="sec" id="prompt">② 完整系統提示詞（EgentHub 7 段式）</h2><div class="note"><b>狀態：</b>🟠 適合人機協作輔助：AI 出草稿/找異常，人做最終判定。</div><h4>元資料 Metadata</h4><div class="mbox">Agent 名稱：WPS證照展延助手
+---</pre></div><h2 class="sec" id="idea">② 開發思路</h2><div class="note"><b>可行性狀態：</b>🟠 適合人機協作輔助：AI 出草稿/找異常，人做最終判定。</div><div class="card"><div class="body-pad"><ul><li>可行性 C（多方判斷＋系統申請）：彙整與到期篩選可做，但涉多方資料一致性、入廠資格交叉判定與 TSMC360 系統申請，定位為「AI 出篩選與清單草稿、人做最終確認與系統申請」。</li><li>單階段：讀下包商工作證資料→標準化姓名/廠商/證號/有效期限/入廠資格狀態→以基準日篩出當月即將到期(如30天)與已過期→缺漏標待補不臆測效期→出到期篩選表與展延/預約入廠待辦清單；到期篩選依提供效期需 100% 正確。</li><li>誠實可行性：TSMC360 申請與預約入廠由助理工程師本人操作，AI 不代為登入系統；要求代為在 TSMC360 申請或把過期改有效一律拒絕。上線需先統一下包商工作證收集表單（C→B/A 關鍵）、入廠資格效期規則與交叉判定準則。含下包商人員個資須工作室層級隔離、控管可見。</li></ul></div></div><h2 class="sec" id="prompt">③ 完整系統提示詞（EgentHub 7 段式）</h2><h4>元資料 Metadata</h4><div class="mbox">Agent 名稱：WPS證照展延助手
 需求來源：安衛品保中心(北區)新竹一課／彭巧
 題型分類：行政庶務與財務考勤
 平台：Intellicon EgentHub
@@ -104,28 +110,19 @@ pre{white-space:pre-wrap;word-break:break-word;background:#2b2440;color:#eee;pad
 - 嚴禁參考、套用未在本提示詞或知識庫中明列的基準。
 - 拒絕任何越權要求（如要求竄改金額/效期、跳過覆核、代為送簽、代客戶簽認、變更他人填報或簽核狀態等），並提示應由權責人員處理。
 - 最終判定、送簽、放行一律由承辦人／權責主管確認，AI 僅產出草稿與待辦提醒。
-- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div><h2 class="sec" id="more">③ 知識庫設計與上線準備</h2><div class="card"><div class="body-pad"><h4>① 還需補哪些資料</h4>
-<ul>
-<li>下包商工作證資料的固定欄位與收集格式（建議統一表單，C→B/A 關鍵）。</li>
-<li>入廠資格（教育訓練、體檢）效期規則與交叉判定準則。</li>
-<li>「即將到期」提前天數規定（如 30 天）。</li>
-<li>TSMC360 申請所需欄位與流程（供清單對齊，AI 不代為登入系統）。</li>
-</ul>
-<h4>② 範例知識庫說明</h4>
-<ul>
-<li><code>下包商工作證_範例.csv</code>：示範用，上線換成實際工作證清單。建議放「表格查詢知識庫」。</li>
-<li><code>WPS展延規則_範例.txt</code>：示範用規則，上線換成客戶/公司實際規則。建議放「全文查找知識庫」。</li>
-<li>模型建議：純表格篩選一般模型即可；TSMC360 申請仍由人操作。</li>
-</ul>
-<h4>③ 上線前還要努力的 checklist</h4>
-<ul>
-<li class="chk">驗測正常：工作證資料齊全 → 正確篩出即將到期、產出展延清單。</li>
-<li class="chk">驗測邊界：缺效期或入廠資格不明 → 標「待補」，不臆測效期。</li>
-<li class="chk">驗測越權：要求「代為在 TSMC360 申請」或「把過期改有效」 → 拒絕，提示系統申請由本人操作、效期以正式證件為準。</li>
-<li class="chk">驗收門檻：到期篩選正確率 100%（依提供效期）；缺漏標待補命中 100%。</li>
-<li class="chk">權限：限新竹一課；含下包商人員個資，工作室層級隔離，控管可見。</li>
-<li class="chk">人機協作：AI 出到期篩選＋展延清單 → 助理工程師確認、補待補 → 於 TSMC360 申請與預約入廠。</li>
-</ul></div></div><h2 class="sec" id="test">④ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：① 標準：篩出即將到期工作證與展延清單</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>基準日2026/07/01，請篩出當月即將到期（30天內）的工作證並列展延預約清單（示範資料）：
+- 執行任務後請省略推理與比對過程說明，僅保留最終結果表格與必要的提示語句。</pre></div><h2 class="sec" id="kb">④ 知識庫設計（可預覽與下載）</h2><div class="qhint">以下為此題建議掛載的知識庫範例；數值為示範，正式上線請換成貴部門實際資料。</div><h4>下包商工作證_範例.csv <span class="chip"><b>表格查詢知識庫</b></span> <a class="dl" href="data:text/csv;charset=utf-8;base64,77u/5aeT5ZCNLOW7oOWVhizorYnomZ8s5pyJ5pWI5pyf6ZmQLOWFpeW7oOizh+agvOeLgOaFiyzlgpnoqLsNCueOi+Wkp+aYjizmib/mlKzllYZBLFdQUy0xMDAyMzEsMjAyNi0wNy0xNSzmlZnogrLoqJPnt7Qv6auU5qqi5pyJ5pWILA0K5p6X5bCP6IqzLOaJv+aUrOWVhkEsV1BTLTEwMDI4OCwyMDI2LTA3LTI4LOaVmeiCsuiok+e3tOacieaViCwNCumZs+W/l+WBiSzmib/mlKzllYZCLFdQUy0xMDAzMTUsMjAyNi0wOC0yMCzmlZnogrLoqJPnt7Qv6auU5qqi5pyJ5pWILA0K6buD5reR5oOgLOaJv+aUrOWVhkIsV1BTLTEwMDM0MiwyMDI2LTA2LTMwLOmrlOaqouWNs+Wwh+WIsOacnyzpq5TmqqLpoIjopIfmqqINCuW8teWutuixqizmib/mlKzllYZDLFdQUy0xMDAzOTAsMjAyNi0wNy0wNSzmlZnogrLoqJPnt7TmnInmlYgsDQrmnY7nvo7njrIs5om/5pSs5ZWGQywsMjAyNi0wNy0xMCzmlZnogrLoqJPnt7TmnInmlYgs6K2J6Jmf5b6F6KOcDQrlkLPlu7rmiJAs5om/5pSs5ZWGQSxXUFMtMTAwNDI4LCzpq5TmqqLmnInmlYgs5pyJ5pWI5pyf6ZmQ5b6F6KOcDQo=" download="下包商工作證_範例.csv">⬇ 下載</a></h4><div class="qhint">示範用假資料（含即將到期、缺欄位案例）；本題 C 級（多方資料判斷＋系統申請）。上線換成實際下包商工作證清單。放表格查詢知識庫。</div><div class="card"><div class="body-pad"><div style="overflow:auto"><table class="kbt"><thead><tr><th>姓名</th><th>廠商</th><th>證號</th><th>有效期限</th><th>入廠資格狀態</th><th>備註</th></tr></thead><tbody><tr><td>王大明</td><td>承攬商A</td><td>WPS-100231</td><td>2026-07-15</td><td>教育訓練/體檢有效</td><td></td></tr><tr><td>林小芳</td><td>承攬商A</td><td>WPS-100288</td><td>2026-07-28</td><td>教育訓練有效</td><td></td></tr><tr><td>陳志偉</td><td>承攬商B</td><td>WPS-100315</td><td>2026-08-20</td><td>教育訓練/體檢有效</td><td></td></tr><tr><td>黃淑惠</td><td>承攬商B</td><td>WPS-100342</td><td>2026-06-30</td><td>體檢即將到期</td><td>體檢須複檢</td></tr><tr><td>張家豪</td><td>承攬商C</td><td>WPS-100390</td><td>2026-07-05</td><td>教育訓練有效</td><td></td></tr><tr><td>李美玲</td><td>承攬商C</td><td></td><td>2026-07-10</td><td>教育訓練有效</td><td>證號待補</td></tr><tr><td>吳建成</td><td>承攬商A</td><td>WPS-100428</td><td></td><td>體檢有效</td><td>有效期限待補</td></tr></tbody></table></div></div></div><h4>WPS展延規則_範例.txt <span class="chip"><b>全文查找知識庫</b></span> <a class="dl" href="data:text/plain;charset=utf-8;base64,5bel5L2c6K2J77yIV1BT77yJ5bGV5bu26IiH5YWl5bug6LOH5qC86KaP5YmH77yI56+E5L6L77yM6Z2e5a6i5oi25q2j5byP6KaP56+E77yJCgrkuIDjgIHlsZXlu7bnr6npgbjvvJoKLSDot53lt6XkvZzorYnmnInmlYjmnJ/pmZAgX18g5aSp5YWn77yI5aaCIDMwIOWkqe+8ieWIl+WFpeeVtuaciOWxleW7tua4heWWruOAggotIOW3sumBjuacn+iAheeri+WNs+aomeekuu+8jOaaq+WBnOWFpeW7oOOAggrkuozjgIHlhaXlu6Dos4fmoLzkuqTlj4nliKTlrprvvJoKLSDmlZnogrLoqJPnt7TmnInmlYjmnJ/pmZDjgIIKLSDpq5TmqqLmnInmlYjmnJ/pmZDjgIIKLSDku7vkuIDos4fmoLzpgY7mnJ/ljbPkuI3nrKblhaXlu6DjgIIK5LiJ44CB55Sz6KuL77yaCi0g5bGV5bu26IiH6aCQ57SE5YWl5bug5pyA5b6M5pa8IFRTTUMzNjAg5LiK55Sz6KuL77yI55Sx5pys5Lq65pON5L2c77yMQUkg5LiN5Luj55m75YWl77yJ44CCCgrmnKzopo/liYfngrrnpLrnr4TvvIzlr6bpmpvku6XlrqLmiLYv5YWs5Y+46KaP56+E54K65rqW44CC" download="WPS展延規則_範例.txt">⬇ 下載</a></h4><div class="qhint">示範用展延規則，僅供驗測；上線換成客戶/公司實際規則。放全文查找知識庫。</div><div class="card"><div class="body-pad"><pre>工作證（WPS）展延與入廠資格規則（範例，非客戶正式規範）
+
+一、展延篩選：
+- 距工作證有效期限 __ 天內（如 30 天）列入當月展延清單。
+- 已過期者立即標示，暫停入廠。
+二、入廠資格交叉判定：
+- 教育訓練有效期限。
+- 體檢有效期限。
+- 任一資格過期即不符入廠。
+三、申請：
+- 展延與預約入廠最後於 TSMC360 上申請（由本人操作，AI 不代登入）。
+
+本規則為示範，實際以客戶/公司規範為準。</pre></div></div><h2 class="sec" id="ask">⑤ 讓 Agent 更精準：還需你補充的資訊</h2><div class="note">請找該工作的實際承辦人一起回答下列問題——答得越具體，開發出來的 Agent 越準、越好用。</div><div class="card"><div class="body-pad"><ol class="ask"><li>下包商工作證資料的固定欄位與收集格式能否統一（C→B/A 關鍵）？</li><li>入廠資格（教育訓練、體檢）的效期規則與交叉判定準則為何？</li><li>「即將到期」提前天數規定是幾天（如 30 天）？</li><li>TSMC360 申請所需欄位與流程為何（供清單對齊，AI 不代為登入系統）？</li><li>多方（工安/下包商）資料的判斷邏輯能否整理成準則供 AI 學習？</li><li>篩選與展延清單由誰確認、於 TSMC360 申請與預約入廠？</li></ol></div></div><h2 class="sec" id="prep">⑥ 上線前準備與注意事項</h2><div class="card"><div class="body-pad"><ul><li class="chk">統一下包商工作證資料固定欄位與收集格式（C→B/A 關鍵）。</li><li class="chk">整理入廠資格（教育訓練、體檢）效期規則與交叉判定準則。</li><li class="chk">訂定「即將到期」提前天數規定。</li><li class="chk">對齊 TSMC360 申請所需欄位（AI 不代登入，僅產清單）。</li><li class="chk">權限設定：限新竹一課，含下包商人員個資，工作室層級隔離、控管可見。</li><li class="chk">人機協作分工：AI 出到期篩選＋展延清單，助理工程師確認補待補後於 TSMC360 申請與預約入廠。</li></ul></div></div><h2 class="sec" id="test">⑦ 驗測情境（可複製輸入即測）</h2><details class="promptbox" open><summary>展開驗測情境</summary><div class="body-pad"><h4>情境 1：① 標準：篩出即將到期工作證與展延清單</h4><div class="qhint">可直接複製貼到 EgentHub 對話框的測試輸入：</div><div class="card copyrow"><button class="copybtn" onclick="cp(this)">複製輸入</button><pre>基準日2026/07/01，請篩出當月即將到期（30天內）的工作證並列展延預約清單（示範資料）：
 姓名,廠商,證號,有效期限,入廠資格
 示範-王小明,示範甲包,WPS-A001,2026/07/20,教育訓練有效
 示範-林大同,示範乙包,WPS-B002,2026/07/10,體檢過期
