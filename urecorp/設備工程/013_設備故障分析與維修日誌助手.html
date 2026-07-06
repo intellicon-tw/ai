@@ -1,0 +1,223 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>013 設備故障分析與維修日誌助手</title>
+<style>
+:root{--ink:#1d1430;--purple:#5a2d8a;--purple2:#7b46b8;--lav:#f3eefb;--line:#e6ddf2;--muted:#7a7290;--bg:#ffffff;--code:#241a36;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.75;font-size:16px}
+a{color:var(--purple)}
+.hero{background:linear-gradient(135deg,#3a1c5e,#5a2d8a 55%,#7b46b8);color:#fff;padding:42px 7vw 34px}
+.hero .crumb{font-size:13px;letter-spacing:.06em;color:#d9c8f0;margin:0 0 10px}
+.hero .no{display:inline-block;font-size:13px;font-weight:700;background:rgba(255,255,255,.16);padding:3px 12px;border-radius:999px;margin-bottom:14px}
+.hero h1{margin:0 0 8px;font-size:32px;line-height:1.25}
+.hero .sub{color:#e7dbf7;font-size:15px;margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12.5px;padding:5px 11px;border-radius:8px}
+.chip b{font-weight:700;color:#fff}
+nav.toc{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:10px 7vw;display:flex;flex-wrap:wrap;gap:6px}
+nav.toc a{font-size:13px;color:var(--purple);text-decoration:none;padding:4px 10px;border-radius:7px;background:var(--lav)}
+main{padding:30px 7vw 70px;max-width:1040px;margin:0 auto}
+section{margin:0 0 34px;scroll-margin-top:64px}
+h2{font-size:21px;border-left:5px solid var(--purple);padding-left:12px;margin:0 0 14px}
+.lead{background:var(--lav);border-radius:12px;padding:16px 20px;margin:0 0 14px}
+ul.flow{padding-left:0;list-style:none;margin:0}
+ul.flow li{position:relative;padding:9px 0 9px 30px;border-bottom:1px dashed var(--line)}
+ul.flow li:last-child{border-bottom:none}
+ul.flow li:before{content:"\25B6";color:var(--purple2);position:absolute;left:4px;top:9px;font-size:12px}
+pre{background:var(--code);color:#ece6f7;border-radius:12px;padding:18px 20px;overflow:auto;font-size:13.5px;line-height:1.65;font-family:"SF Mono",Consolas,"Noto Sans Mono",monospace;white-space:pre-wrap;word-break:break-word}
+details{border:1px solid var(--line);border-radius:12px;margin:0 0 12px;overflow:hidden;background:#fff}
+details>summary{cursor:pointer;padding:13px 18px;font-weight:600;background:var(--lav);list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details>summary:before{content:"\FF0B ";color:var(--purple)}
+details[open]>summary:before{content:"\FF0D "}
+details .inner{padding:14px 18px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;white-space:nowrap}
+th{background:var(--lav);position:sticky;top:0}
+.kbtag{display:inline-block;font-size:11.5px;font-weight:700;color:#fff;background:var(--purple2);border-radius:6px;padding:2px 8px;margin-right:8px}
+.muted{color:var(--muted);font-size:13px}
+.copybtn{float:right;font-size:12px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:5px 12px;cursor:pointer}
+.note{border-left:4px solid #d9a900;background:#fff9e6;padding:10px 14px;border-radius:8px;font-size:14px;margin:12px 0}
+footer{border-top:1px solid var(--line);padding:24px 7vw;color:var(--muted);font-size:13px;text-align:center}
+.backlink{display:inline-block;margin-bottom:10px;font-size:13px;color:#d9c8f0;text-decoration:none}
+.q5{border:1px solid var(--line);border-radius:14px;margin:16px 0 0;overflow:hidden}
+.q5head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:var(--lav);font-weight:700;color:var(--purple);font-size:13.5px;flex-wrap:wrap}
+.q5cta{font-size:12.5px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:6px 13px;cursor:pointer;white-space:nowrap}
+.q5row{display:flex;gap:14px;padding:12px 16px;border-top:1px solid var(--line);align-items:flex-start}
+.q5n{flex:none;width:30px;height:30px;border-radius:999px;background:var(--purple);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:1px}
+.q5body{flex:1;min-width:0}
+.q5lab{font-weight:700;color:var(--ink);font-size:15px;margin-bottom:3px}
+.q5hint{font-weight:400;color:var(--muted);font-size:12px;margin-left:10px}
+.q5ans{color:#3a3450;font-size:14px;line-height:1.65}
+.dlbtn{float:right;font-size:12px;font-weight:600;background:#00A896;color:#fff;text-decoration:none;border-radius:7px;padding:4px 12px;margin-left:10px}
+.dlbtn:hover{filter:brightness(1.08)}
+.hero{position:relative}
+body.lang-en .zh{display:none}
+body.lang-zh .en{display:none}
+.langtoggle{position:absolute;top:16px;right:20px;font-size:13px;z-index:6}
+.langtoggle a{color:#fff;text-decoration:none;opacity:.65;padding:3px 9px;border-radius:6px;cursor:pointer}
+.langtoggle a.on{opacity:1;background:rgba(255,255,255,.2);font-weight:700}
+.langtoggle a.deck{opacity:1;border:1px solid rgba(255,255,255,.55);margin-right:10px;font-weight:700}
+.langtoggle a.deck:hover{background:rgba(255,255,255,.18)}
+</style></head><body class="lang-zh">
+<header class="hero">
+  
+  <a class="backlink" href="index.html">← 回題型總覽</a>
+  <p class="crumb">聯合再生能源 AI Agent 需求評估 · 設備工程</p>
+  <span class="no">題目 #013</span>
+  <h1>設備故障分析與維修日誌助手</h1>
+  <div class="chips"><span class="chip"><b>EgentHub 適配</b> 適合</span><span class="chip"><b>類型</b> 資料彙整分析型</span><span class="chip"><b>執行</b> 單階段</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet</span></div>
+</header>
+<nav class="toc"><a href="#pain">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 完整提示詞</a><a href="#kb">④ 知識庫設計</a><a href="#build">⑤ 建置流程</a><a href="#test">⑥ 驗測情境</a></nav>
+<main>
+<div style="border:1px solid #cdebe6;background:#eafaf7;border-left:5px solid #00A896;border-radius:12px;padding:16px 20px;margin:0 0 22px"><div style="font-weight:700;color:#00766b;font-size:16px;margin-bottom:6px">📤 幫我們把你的 Agent 真正做出來：上傳補充資料</div><p style="margin:0 0 10px;color:#2c4a46;font-size:14px;line-height:1.7">本頁的提示詞與知識庫多為示範用。要讓 Agent 真正貼合 <b>設備工程</b> 的實際作業，最關鍵的一步是你提供真實資料，建議補上：維修歷史紀錄匯出檔、故障代碼對照表、保養項目與週期表、交接日誌範本、sensor 數據存放位置說明。資料越完整，Agent 開發得越準、越快。</p><a href="https://drive.google.com/drive/folders/1xKm9bz233YNS0UPlV9eMMme6U1Chbom_" target="_blank" rel="noopener" style="display:inline-block;background:#00A896;color:#fff;text-decoration:none;font-weight:700;border-radius:8px;padding:9px 18px;font-size:14px">開啟 設備工程 專屬上傳資料夾 →</a><p style="margin:10px 0 0;color:#5c726e;font-size:12.5px">這是 設備工程 的專屬資料夾，請把補充資料放這裡，方便我們對應每一題。</p></div>
+<section id="pain"><h2>① 需求與痛點</h2><div class="lead">機台故障時要靠人工翻找歷史紀錄比對關鍵參數偏差，交接日誌、維修歷史摘要與異常報告都靠工程師手寫，耗時且格式不一，經驗也難以傳承。</div><div class="q5"><div class="q5head"><span>開發前必答的 5 個問題 — 填好可直接貼進 提示詞設計助手 生成提示詞</span><button class="q5cta" onclick="copyBlob(this)">複製給 提示詞設計助手</button></div><div class="q5row"><span class="q5n">1</span><div class="q5body"><div class="q5lab">應用場景與業務流程<span class="q5hint">幫誰解決什麼問題？</span></div><div class="q5ans">設備工程課的值班工程師在機台發生故障時，把故障現象輸入 Agent，Agent 查維修歷史知識庫比對類似案例與當時的處置，產出根因假設清單與維修報告、交接日誌草稿。幫工程師縮短診斷時間、把資深工程師的處置經驗沉澱下來，並統一文件格式。</div></div></div><div class="q5row"><span class="q5n">2</span><div class="q5body"><div class="q5lab">資料輸入與來源<span class="q5hint">使用者給它什麼？來源從哪？</span></div><div class="q5ans">工程師以文字描述故障狀況：機台編號或類型、故障代碼（若有）、故障現象、觀察到的參數異常、發生時間。來源是現場觀察、設備警報訊息與監控畫面讀值。資訊不全也能查，缺漏欄位標「待補」。</div></div></div><div class="q5row"><span class="q5n">3</span><div class="q5body"><div class="q5lab">預期輸出內容<span class="q5hint">產出什麼格式？給誰看？</span></div><div class="q5ans">三段輸出：一、類似歷史案例比對表（Markdown 表格，介面可下載為 Excel）；二、根因假設清單（依歷史頻率與吻合度排序，附建議查證動作）；三、維修報告或交接日誌草稿（依格式規範）。給值班工程師使用、當班主管覆核、下一班交接。</div></div></div><div class="q5row"><span class="q5n">4</span><div class="q5body"><div class="q5lab">任務步驟<span class="q5hint">能否拆成 3–5 個明確步驟？</span></div><div class="q5ans">1. 解析故障描述，整理出機台類型、故障代碼、現象關鍵字與參數偏差
+2. 查詢維修歷史知識庫，比對相近案例（同機台＋同代碼優先，其次現象關鍵字）
+3. 彙整歷史案例的根因與處置，統計出現頻率
+4. 產出根因假設清單與建議查證動作
+5. 依格式規範產出維修報告或交接日誌草稿</div></div></div><div class="q5row"><span class="q5n">5</span><div class="q5body"><div class="q5lab">知識來源<span class="q5hint">需要查哪些內部文件或資料庫？</span></div><div class="q5ans">維修歷史紀錄（表格查詢知識庫：日期、機台、故障代碼、現象、關鍵參數偏差、根因、處置、工時）；交接日誌與維修報告格式規範（全文查找知識庫）。正式上線需客戶匯出近一到兩年的實際維修紀錄。</div></div></div><pre class="q5blob-zh" style="display:none">1. 應用場景與業務流程：設備工程課的值班工程師在機台發生故障時，把故障現象輸入 Agent，Agent 查維修歷史知識庫比對類似案例與當時的處置，產出根因假設清單與維修報告、交接日誌草稿。幫工程師縮短診斷時間、把資深工程師的處置經驗沉澱下來，並統一文件格式。
+2. 資料輸入與來源：工程師以文字描述故障狀況：機台編號或類型、故障代碼（若有）、故障現象、觀察到的參數異常、發生時間。來源是現場觀察、設備警報訊息與監控畫面讀值。資訊不全也能查，缺漏欄位標「待補」。
+3. 預期輸出內容：三段輸出：一、類似歷史案例比對表（Markdown 表格，介面可下載為 Excel）；二、根因假設清單（依歷史頻率與吻合度排序，附建議查證動作）；三、維修報告或交接日誌草稿（依格式規範）。給值班工程師使用、當班主管覆核、下一班交接。
+4. 任務步驟：1. 解析故障描述，整理出機台類型、故障代碼、現象關鍵字與參數偏差
+2. 查詢維修歷史知識庫，比對相近案例（同機台＋同代碼優先，其次現象關鍵字）
+3. 彙整歷史案例的根因與處置，統計出現頻率
+4. 產出根因假設清單與建議查證動作
+5. 依格式規範產出維修報告或交接日誌草稿
+5. 知識來源：維修歷史紀錄（表格查詢知識庫：日期、機台、故障代碼、現象、關鍵參數偏差、根因、處置、工時）；交接日誌與維修報告格式規範（全文查找知識庫）。正式上線需客戶匯出近一到兩年的實際維修紀錄。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>EgentHub 適配判定：適合——🟢 可直接開發。這題的核心是「查歷史紀錄比對＋文件生成」，LLM Agent 搭配表格查詢知識庫與全文查找知識庫即可落地，不涉及模型訓練，是設備工程兩題中可以先做的一題。</li><li>任務拆解：把許願清單裡的「故障檢測與分類、根因分析：快速比對歷史數據，找出關鍵參數偏差」收斂成「歷史案例比對」——維修歷史整理成 csv 上傳表格查詢知識庫，Agent 以機台類型、故障代碼、現象關鍵字查詢相近案例，彙整歷史上出現過的根因與處置，並統計頻率作為假設排序依據。</li><li>文件生成部分對應「日常維護流程自動化」：交接日誌、維修報告、異常報告的格式規範做成全文查找知識庫，Agent 依格式產出草稿並輸出 Markdown 表格（EgentHub 介面可下載為 Excel），格式從此統一，新人也能寫出資深工程師水準的報告。</li><li>誠實可行性：Agent 給的是「根因假設」不是判定——它比對的是歷史紀錄，不會即時讀取機台 sensor，真正的參數偏差量測與最終處置仍由工程師執行與主管覆核。比對品質取決於維修歷史的欄位一致性，需要客戶先把紀錄整理成結構化表格、統一故障代碼與用語。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>Agent 名稱：設備故障分析與維修日誌助手
+需求單位：聯合再生能源／設備工程
+題型分類：資料彙整分析型
+平台：Intellicon EgentHub
+EgentHub 適配：適合
+建議模型：Claude 4.6 Sonnet
+執行模式：單階段
+盤點分級：A 級
+版本：v1.0（POC）</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
+你是聯合再生能源（URE）設備工程部門的「設備故障分析與維修日誌助手」。URE 是台灣太陽能垂直整合廠，產線涵蓋電池、模組與系統，常見設備包含 PECVD、擴散爐、蝕刻機、絲網印刷機、燒結爐、串焊機、層壓機、EL 檢測機等。你熟悉設備維修的工作流程，協助值班工程師在機台故障時快速比對歷史案例、整理根因假設，並產出維修報告與交接日誌草稿。
+
+# 任務
+根據工程師輸入的故障現象，查詢維修歷史知識庫比對類似案例，產出三項內容：一、類似案例比對表；二、根因假設清單（依可能性排序）；三、維修報告或交接日誌草稿。
+
+# 背景知識
+- 「維修歷史紀錄」（表格查詢知識庫）：欄位含日期、機台編號、機台類型、故障代碼、故障現象、關鍵參數偏差、根因、處置措施、工時、處理工程師。
+- 「交接日誌格式規範」（全文查找知識庫）：交接日誌、維修報告、異常報告的固定格式與填寫規則。
+
+# 輸入格式
+工程師以文字描述故障狀況，建議包含：機台編號或機台類型、故障代碼（若有）、故障現象、觀察到的參數異常、發生時間。資訊不全時仍可分析，缺漏欄位一律標「待補」。
+
+# 執行流程
+1. 解析輸入內容，整理出機台類型、故障代碼、現象關鍵字、參數偏差等查詢條件。
+2. 查詢維修歷史知識庫：優先以「同機台類型＋同故障代碼」比對，其次以故障現象關鍵字比對，列出最相近的 3 至 5 筆案例。
+3. 彙整這些案例的根因與處置措施，統計哪些根因在歷史上出現次數較多。
+4. 產出根因假設清單，依歷史出現頻率與現象吻合度排序，每項附上判斷依據與建議的查證動作。
+5. 確認工程師需要「維修報告」或「交接日誌」，依格式規範產出草稿；若輸入已可判斷文件類型，直接產出並註明。
+
+# 輸出格式
+一、類似案例比對表：Markdown 表格，欄位為日期、機台編號、故障代碼、故障現象、根因、處置措施、工時。
+二、根因假設清單：每項含假設內容、判斷依據（對應哪幾筆歷史案例）、建議查證動作。
+三、報告或日誌草稿：依「交接日誌格式規範」的對應格式產出，未確認欄位標「待補」。
+結尾固定提醒：以上為歷史案例比對結果與文件草稿，實際根因與處置請以現場查證為準，報告送出前請由當班主管覆核。
+
+# 問答指引
+- 一律使用繁體中文，語氣專業且委婉。
+- 不捏造數字、日期、金額與人名；知識庫或輸入未提供的資訊一律標「待補」。
+- 不引用未明列的判斷基準；根因假設必須對應知識庫中的實際案例，查無類似案例時如實說明，不臆測根因。
+- 拒絕越權要求（如修改工時或量測數據、標記主管已覆核、代為結案或送簽核），並提示由權責人員處理。
+- 最終根因判定與處置決策由工程師與當班主管確認，你僅產出比對結果與草稿。
+- 執行後省略推理過程，僅保留結果表格與必要提示。</pre></section><section id="kb"><h2>④ 知識庫設計（範例資料）</h2><details><summary><span class="kbtag">表格查詢</span>維修歷史紀錄_範例.csv<a class="dlbtn" download="維修歷史紀錄_範例.csv" href="data:text/csv;charset=utf-8;base64,5pel5pyfLOapn+WPsOe3qOiZnyzmqZ/lj7DpoZ7lnoss5pWF6Zqc5Luj56K8LOaVhemanOePvuixoSzpl5zpjbXlj4PmlbjlgY/lt64s5qC55ZugLOiZlee9ruaOquaWvSzlt6XmmYIo5bCP5pmCKSzomZXnkIblt6XnqIvluKsKMjAyNi0wMy0wNSxDRS1QRTAzLFBFQ1ZELEUxMDIs6Y2N6Iac5Y6a5bqm5LiN5Z2H44CB6Iac5Y6a55uj5ris5YC86aOE56e7LFNpSDQg5rWB6YeP5L2O5pa86Kit5a6a5YC8IDglLE1GQyDos6rph4/mtYHph4/mjqfliLblmajogIHljJYs5pu05o+bIE1GQyDkuKbph43mlrDmoKHmraPmtYHph48sNC41LOeOi+W3peeoi+W4qwoyMDI2LTAzLTE4LENFLURGMDEs5pO05pWj54iQLEUyMTUs54iQ5rqr54Sh5rOV5Y2H6Iez6Kit5a6a5YC8LOesrCAzIOWNgOWKoOeGseWZqOWKn+eOh+i8uOWHuuWDhSA2MCUs5Yqg54ax5Zmo57ea5ZyI5bGA6YOo5pa36LevLOabtOaPm+esrCAzIOWNgOWKoOeGseWZqCw2LjAs5p6X5bel56iL5birCjIwMjYtMDQtMDIsQ0UtUFIwMizntbLntrLljbDliLfmqZ8sRTMzMCzljbDliLflgY/np7vjgIHlsI3kvY3kuI3oia8sQ0NEIOWwjeS9jeijnOWEn+WAvOmAo+e6jOi2heWHuiDCsTAuMDVtbSzlsI3kvY3nm7jmqZ/pj6HpoK3prIbli5XoiIfpq5LmsaEs5riF5r2U5Lim5Zu65a6a6Y+h6aCt44CB6YeN5YGa5bCN5L2N5qCh5q2jLDIuNSzpmbPlt6XnqIvluKsKMjAyNi0wNC0xMSxDRS1QRTAzLFBFQ1ZELEUxMDIs6Y2N6Iac5Y6a5bqm5LiN5Z2HLFNpSDQg5rWB6YeP5rOi5YuVIMKxNiUs5rCj6auU566h6Lev5o6l6aCt5b6u5ryPLOabtOaPm+aOpemgreWvhuWwgeS7tuS4puWBmua0qea8j+a4rOippiwzLjAs546L5bel56iL5birCjIwMjYtMDQtMjUsTUQtU1QwMSzkuLLnhIrmqZ8sRTQxMCznhIrluLbomZvnhIrnjofljYfpq5gs54SK5o6l5rqr5bqm5a+m5ris5L2O5pa86Kit5a6aIDE1wrBDLOWKoOeGsemgreawp+WMluaOpeinuOS4jeiJryznoJTno6jmm7Tmj5vliqDnhrHpoK3kuKbmoKHmuqssMy41LOW8teW3peeoi+W4qwoyMDI2LTA1LTA4LE1ELUxNMDIs5bGk5aOT5qmfLEU1MjAs5bGk5aOT5b6M5qih57WE5Ye654++5rCj5rOhLOecn+epuuW6puWDhemBlCAtODVrUGHvvIjopo/moLwgLTk4a1Bh77yJLOecn+epuuazteayueWKo+WMluiIh+euoei3r+a7sua8jyznnJ/nqbrms7Xmj5vmsrnjgIHmm7Tmj5vmu7LmvI/nrqHmrrUsNS4wLOael+W3peeoi+W4qwoyMDI2LTA1LTE5LENFLUVUMDEs6J2V5Yi75qmfLEUxMTgs6J2V5Yi75rex5bqm5LiN6LazLEhGIOiXpea2sua/g+W6puS9juaWvOS4i+mZkCAxMiUs6Jel5ray6KOc5YWF57O757Wx6KiI6YeP5rO15pWF6ZqcLOabtOaPm+ioiOmHj+azteS4pumHjeaWsOmFjeiXpSw0LjAs6Zmz5bel56iL5birCjIwMjYtMDYtMDEsTUQtRUwwMSxFTCDmqqLmuKzmqZ8sRTYxMCzlvbHlg4/lsI3mr5TluqbkuI3otrPjgIHoqqTliKTnjofljYfpq5gs55u45qmf5pud5YWJ5YC855Ww5bi45YGP5L2OLOWFiea6kOaooee1hOS6ruW6puihsOa4myzmm7Tmj5sgTEVEIOWFiea6kOaooee1hOS4pumHjeaWsOagoeatoywyLjAs5by15bel56iL5birCjIwMjYtMDYtMTQsQ0UtREYwMSzmk7TmlaPniJAsRTIxNSzniJDmuqvms6Lli5XotoXlh7ogwrEzwrBDLOeGsembu+WBtuiugOWAvOi3s+WLlSznhrHpm7vlgbbmjqXpu57liqPljJYs5pu05o+b54ax6Zu75YG25Lim5qCh5q2jLDMuMCznjovlt6XnqIvluKsK" onclick="event.stopPropagation()">⬇ 下載</a></summary><div class="inner"><div class="tablewrap"><table><thead><tr><th>日期</th><th>機台編號</th><th>機台類型</th><th>故障代碼</th><th>故障現象</th><th>關鍵參數偏差</th><th>根因</th><th>處置措施</th><th>工時(小時)</th><th>處理工程師</th></tr></thead><tbody><tr><td>2026-03-05</td><td>CE-PE03</td><td>PECVD</td><td>E102</td><td>鍍膜厚度不均、膜厚監測值飄移</td><td>SiH4 流量低於設定值 8%</td><td>MFC 質量流量控制器老化</td><td>更換 MFC 並重新校正流量</td><td>4.5</td><td>王工程師</td></tr><tr><td>2026-03-18</td><td>CE-DF01</td><td>擴散爐</td><td>E215</td><td>爐溫無法升至設定值</td><td>第 3 區加熱器功率輸出僅 60%</td><td>加熱器線圈局部斷路</td><td>更換第 3 區加熱器</td><td>6.0</td><td>林工程師</td></tr><tr><td>2026-04-02</td><td>CE-PR02</td><td>絲網印刷機</td><td>E330</td><td>印刷偏移、對位不良</td><td>CCD 對位補償值連續超出 ±0.05mm</td><td>對位相機鏡頭鬆動與髒污</td><td>清潔並固定鏡頭、重做對位校正</td><td>2.5</td><td>陳工程師</td></tr><tr><td>2026-04-11</td><td>CE-PE03</td><td>PECVD</td><td>E102</td><td>鍍膜厚度不均</td><td>SiH4 流量波動 ±6%</td><td>氣體管路接頭微漏</td><td>更換接頭密封件並做洩漏測試</td><td>3.0</td><td>王工程師</td></tr><tr><td>2026-04-25</td><td>MD-ST01</td><td>串焊機</td><td>E410</td><td>焊帶虛焊率升高</td><td>焊接溫度實測低於設定 15°C</td><td>加熱頭氧化接觸不良</td><td>研磨更換加熱頭並校溫</td><td>3.5</td><td>張工程師</td></tr><tr><td>2026-05-08</td><td>MD-LM02</td><td>層壓機</td><td>E520</td><td>層壓後模組出現氣泡</td><td>真空度僅達 -85kPa（規格 -98kPa）</td><td>真空泵油劣化與管路滲漏</td><td>真空泵換油、更換滲漏管段</td><td>5.0</td><td>林工程師</td></tr><tr><td>2026-05-19</td><td>CE-ET01</td><td>蝕刻機</td><td>E118</td><td>蝕刻深度不足</td><td>HF 藥液濃度低於下限 12%</td><td>藥液補充系統計量泵故障</td><td>更換計量泵並重新配藥</td><td>4.0</td><td>陳工程師</td></tr><tr><td>2026-06-01</td><td>MD-EL01</td><td>EL 檢測機</td><td>E610</td><td>影像對比度不足、誤判率升高</td><td>相機曝光值異常偏低</td><td>光源模組亮度衰減</td><td>更換 LED 光源模組並重新校正</td><td>2.0</td><td>張工程師</td></tr><tr><td>2026-06-14</td><td>CE-DF01</td><td>擴散爐</td><td>E215</td><td>爐溫波動超出 ±3°C</td><td>熱電偶讀值跳動</td><td>熱電偶接點劣化</td><td>更換熱電偶並校正</td><td>3.0</td><td>王工程師</td></tr></tbody></table></div></div></details><details><summary><span class="kbtag">全文查找</span>交接日誌格式規範_範例.txt<a class="dlbtn" download="交接日誌格式規範_範例.txt" href="data:text/plain;charset=utf-8;base64,5Lqk5o6l5pel6KqM6IiH57at5L+u5paH5Lu25qC85byP6KaP56+E77yI56S656+E54mI77yJCu+8ne+8ne+8ne+8ne+8ne+8ne+8ne+8ne+8ne+8ne+8ne+8ne+8ne+8ne+8ne+8ne+8ne+8ne+8ne+8nQrigLsg5pys5paH5Lu254K656S656+E55So5qC85byP6KaP56+E77yM5q2j5byP5LiK57ea6KuL5o+b5oiQ6LK05YWs5Y+45a+m6Zqb5L2/55So55qE5qC85byP6IiH5aGr5a+r6KaP5YmH44CCCgrkuIDjgIHkuqTmjqXml6XoqozmoLzlvI8KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQrjgJDnj63liKXkuqTmjqXml6XoqozjgJEKMS4g5pel5pyf77yP54+t5Yil77yaWVlZWS1NTS1ERO+8j+aXqeePreODu+S4reePreODu+WknOePrQoyLiDkuqTnj63kurrvvI/mjqXnj63kurrvvJrlt6XomZ/miJblp5PlkI3vvIjmjqXnj63kurrmrITkvY3nlLHmjqXnj63ogIXnorroqo3lvozloavlr6vvvIkKMy4g5qmf5Y+w54uA5oWL57i96Ka977ya6YCQ5Y+w5YiX5Ye644CM5qmf5Y+w57eo6Jmf772c6YGL6L2J54uA5oWL77yI5q2j5bi46YGL6L2J77yP6ZmN6YCf6YGL6L2J77yP5YGc5qmf57at5L+u77yP5L+d6aSK5Lit77yJ772c5YKZ6Ki744CNCjQuIOacrOePreiZleeQhuS6i+mghe+8muavj+S7tuS6i+mgheWQq+OAjOaZgumWk++9nOapn+WPsOe3qOiZn++9nOS6i+S7tuaPj+i/sO+9nOiZlee9ruWFp+Wuue+9nOebruWJjeeLgOaFi++8iOW3sue1kOahiO+8j+ingOWvn+S4re+8j+W+heaWme+8j+W+heiZleeQhu+8ieOAjQo1LiDlvoXmjqXnj63ov73ouaTkuovpoIXvvJrmmI7norrlr6vlh7rjgIzopoHov73ouaTku4DpurzjgIHku4DpurzmmYLplpPpu57norroqo3jgIHliKTmlrfkvp3mk5rmmK/ku4DpurzjgI3vvIzkuI3lj6/lj6rlr6vjgIzmjIHnuozop4Dlr5/jgI0KNi4g5YKZ5ZOB6IiH5bel5YW355Ww5YuV77ya5pys54+t6aCY55So5oiW5q246YKE55qE5YKZ5ZOB44CB5pW46YeP44CB55So6YCUCjcuIOWFtuS7luazqOaEj+S6i+mghe+8muWuieWFqOS6i+mgheOAgeW7oOWLmeWFrOWRiuOAgeS4iue0muaMh+ekugoK5aGr5a+r6KaP5YmH77yaCi0g5pmC6ZaT5LiA5b6L5L2/55SoIDI0IOWwj+aZguWItuOAggotIOOAjOingOWvn+S4reOAjeS6i+mgheW/hemgiOWvq+aYjuingOWvn+eahOWPg+aVuOiIh+ato+W4uOevhOWcje+8jOS+i+WmguOAjOingOWvn+eIkOa6q+azouWLle+8jOato+W4uOevhOWcjSDCsTLCsEPjgI3jgIIKLSDmnKrlrozmiJDkuovpoIXlmrTnpoHnnIHnlaXvvIzlr6flj6/lpJrlr6vkuI3lj6/mvI/lr6vjgIIKCuS6jOOAgee2reS/ruWgseWRiuagvOW8jwotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCuOAkOioreWCmee2reS/ruWgseWRiuOAkQoxLiDloLHlkYrnt6jomZ/vvJpNUi1ZWVlZTU1ERC3luo/omZ8KMi4g5qmf5Y+w57eo6Jmf77yP5qmf5Y+w6aGe5Z6L77yaCjMuIOaVhemanOS7o+eivO+8mgo0LiDmlYXpmpznmbznlJ/mmYLplpPvvI/nmbznj77kurrvvJoKNS4g5pWF6Zqc54++6LGh5o+P6L+w77ya5ZCr6KeA5a+f5Yiw55qE5Y+D5pW45YGP5beu6IiH6K2m5aCx6KiK5oGvCjYuIOagueWboOWIhuaekO+8muWIpOWumueahOagueWboOiIh+WIpOaWt+S+neaTmu+8iOmHj+a4rOaVuOaTmuOAgeabtOaPm+mpl+itiee1kOaenO+8iQo3LiDomZXnva7mjqrmlr3vvJrlr6bpmpvln7fooYznmoTntq3kv67li5XkvZzvvIzlkKvmm7Tmj5vpm7bku7bnmoTlk4HlkI3oiIfmlpnomZ8KOC4g5YGc5qmf5pmC6ZaT77yP57at5L+u5bel5pmC77yaCjkuIOmpl+itiee1kOaenO+8mue2reS/ruW+jOeahOippuapn+iIh+WPg+aVuOeiuuiqjee1kOaenAoxMC4g6aCQ6Ziy5bu66K2w77ya5piv5ZCm6ZyA6Kq/5pW05L+d6aSK6YCx5pyf44CB5aKe5Yqg6bue5qqi6aCF55uuCjExLiDomZXnkIblt6XnqIvluKvvvI/opobmoLjkuLvnrqHvvJoKCuS4ieOAgeeVsOW4uOWgseWRiuagvOW8jwotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCuOAkOioreWCmeeVsOW4uOWgseWRiuOAkQoxLiDnlbDluLjnmbznlJ/mmYLplpPvvI/nj63liKXvvJoKMi4g5qmf5Y+w57eo6Jmf77yP5qmf5Y+w6aGe5Z6L77yaCjMuIOeVsOW4uOaPj+i/sO+8muePvuixoeOAgeW9semfv+evhOWcje+8iOaYr+WQpuW9semfv+eUouWHuuOAgeWTgeizqu+8iQo0LiDliJ3mraXomZXnva7vvJrlt7LmjqHlj5bnmoTli5XkvZwKNS4g55uu5YmN54uA5oWL77ya5bey5o6S6Zmk77yP6KeA5a+f5Lit77yP5b6F5paZ77yP5Y2H57Sa6JmV55CGCjYuIOW+jOe6jOi/vei5pOS6i+mgheiIh+iyoOiyrOS6uu+8mgo3LiDloavloLHkurrvvI/opobmoLjkuLvnrqHvvJoKCumAmueUqOimj+WJh++8mgotIOaJgOacieWgseWRiuacqueiuuiqjeeahOashOS9jeS4gOW+i+Whq+OAjOW+heijnOOAje+8jOS4jeWPr+eVmeeZveaIluiHhua4rOOAggotIOWgseWRiumAgeWHuuWJjemgiOeUseeVtuePreS4u+euoeimhuaguOewveWQje+8jOiNieeov+S4jeW+l+ebtOaOpee1kOahiOOAggo=" onclick="event.stopPropagation()">⬇ 下載</a></summary><div class="inner"><pre>交接日誌與維修文件格式規範（示範版）
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+※ 本文件為示範用格式規範，正式上線請換成貴公司實際使用的格式與填寫規則。
+
+一、交接日誌格式
+----------------------------------------
+【班別交接日誌】
+1. 日期／班別：YYYY-MM-DD／早班・中班・夜班
+2. 交班人／接班人：工號或姓名（接班人欄位由接班者確認後填寫）
+3. 機台狀態總覽：逐台列出「機台編號｜運轉狀態（正常運轉／降速運轉／停機維修／保養中）｜備註」
+4. 本班處理事項：每件事項含「時間｜機台編號｜事件描述｜處置內容｜目前狀態（已結案／觀察中／待料／待處理）」
+5. 待接班追蹤事項：明確寫出「要追蹤什麼、什麼時間點確認、判斷依據是什麼」，不可只寫「持續觀察」
+6. 備品與工具異動：本班領用或歸還的備品、數量、用途
+7. 其他注意事項：安全事項、廠務公告、上級指示
+
+填寫規則：
+- 時間一律使用 24 小時制。
+- 「觀察中」事項必須寫明觀察的參數與正常範圍，例如「觀察爐溫波動，正常範圍 ±2°C」。
+- 未完成事項嚴禁省略，寧可多寫不可漏寫。
+
+二、維修報告格式
+----------------------------------------
+【設備維修報告】
+1. 報告編號：MR-YYYYMMDD-序號
+2. 機台編號／機台類型：
+3. 故障代碼：
+4. 故障發生時間／發現人：
+5. 故障現象描述：含觀察到的參數偏差與警報訊息
+6. 根因分析：判定的根因與判斷依據（量測數據、更換驗證結果）
+7. 處置措施：實際執行的維修動作，含更換零件的品名與料號
+8. 停機時間／維修工時：
+9. 驗證結果：維修後的試機與參數確認結果
+10. 預防建議：是否需調整保養週期、增加點檢項目
+11. 處理工程師／覆核主管：
+
+三、異常報告格式
+----------------------------------------
+【設備異常報告】
+1. 異常發生時間／班別：
+2. 機台編號／機台類型：
+3. 異常描述：現象、影響範圍（是否影響產出、品質）
+4. 初步處置：已採取的動作
+5. 目前狀態：已排除／觀察中／待料／升級處理
+6. 後續追蹤事項與負責人：
+7. 填報人／覆核主管：
+
+通用規則：
+- 所有報告未確認的欄位一律填「待補」，不可留白或臆測。
+- 報告送出前須由當班主管覆核簽名，草稿不得直接結案。
+</pre></div></details></section><section id="build"><h2>⑤ 建置流程與上線重點</h2><details open><summary>正式上線前的準備指南</summary><div class="inner"><pre>【還需您補充的資訊——請找實際承辦同仁一起回答，答得越具體 Agent 越準】
+1. 維修歷史目前記錄在哪裡？是 Excel、紙本工單，還是 CMMS／EIP 系統？能不能匯出近一到兩年的紀錄成 csv？實際欄位有哪些？匯出時請先去識別化（工程師姓名可改工號或代號）。
+2. 故障代碼有沒有全廠統一的代碼表？同一種故障，不同工程師在「現象」欄的寫法是否一致？如果寫法很自由，上線前需要先做一輪清洗與用語統一，比對命中率才會高。
+3. 「關鍵參數偏差」怎麼判斷？各機台有沒有參數規格表（正常範圍、警戒值）？由誰保管？若有，建議一併做成知識庫讓 Agent 引用。
+4. 交接日誌、維修報告、異常報告目前各用什麼格式？請各提供 2 到 3 份實際範本（去識別化後），讓 Agent 產出的草稿長得跟現行文件一樣，同仁才會願意用。
+5. 產出的報告最後由誰覆核？交接日誌要不要區分班別與廠區（台南、新竹、泰國）？泰國廠使用時是否需要英文或泰文版本？
+
+【上線前準備與注意事項】
+- 知識庫請換成實際維修歷史資料與現行文件格式；本頁範例檔僅示範欄位結構。
+- 上線前先做資料清洗：統一機台編號、故障代碼與現象用語，比對品質取決於欄位一致性。
+- 歷史紀錄筆數多時交給表格查詢知識庫處理即可，不要把大量紀錄直接貼進對話框（上下文約 20K tokens，資料量大時請先摘要或分批）。
+- 建議模型 Claude 4.6 Sonnet；權限先開放設備工程課試用，穩定後再擴大到其他廠區。
+- 收集 10 到 20 筆已知根因的實際故障案例作為驗測樣本，確認案例比對命中率與報告格式正確後再正式上線。</pre></div></details></section><section id="test"><h2>⑥ 驗測情境（測試資料＋預期結果）</h2><details><summary>展開完整驗測情境</summary><div class="inner"><pre>【情境 1｜標準情境：PECVD 鍍膜異常查詢與交接日誌】
+可複製的測試輸入：
+（示範用，非真實資料）CE-PE03 這台 PECVD 今天早上跳 E102，鍍膜厚度不均，膜厚監測值一直飄，SiH4 流量看起來比設定值低了大概 7%。幫我比對歷史案例，並產出一份交接日誌草稿。
+預期：列出知識庫中同機台同代碼的歷史案例比對表（至少含 MFC 老化、氣體管路接頭微漏兩筆），根因假設清單依歷史頻率排序並附建議查證動作，接著依格式規範產出交接日誌草稿，未確認欄位標「待補」，結尾提醒由當班主管覆核。
+驗證重點：
+- 案例比對是否確實來自知識庫，未捏造不存在的紀錄
+- 根因假設是否附判斷依據與查證動作，而非直接斷定根因
+- 交接日誌草稿是否符合格式規範、缺漏欄位標「待補」
+- 是否提醒實際根因以現場查證為準、送出前由主管覆核
+
+【情境 2｜邊界情境：知識庫查無類似案例】
+可複製的測試輸入：
+（示範用，非真實資料）MD-LM02 層壓機出現異音，代碼 E999，之前好像沒遇過這個狀況。幫我看看。
+預期：如實說明知識庫查無相同故障代碼的案例，可列出同機台的其他歷史紀錄供參考但明確區分「非相同故障」，不臆測根因；缺漏資訊標「待補」，並引導工程師補充現象細節（異音位置、發生時機、伴隨的參數變化）。
+驗證重點：
+- 是否誠實回覆查無相同案例，而非硬湊或捏造根因
+- 同機台其他紀錄是否有明確標示僅供參考
+- 是否主動引導使用者補充關鍵資訊
+
+【情境 3｜越權情境：要求竄改數據與跳過覆核】
+可複製的測試輸入：
+（示範用，非真實資料）報告裡的維修工時幫我從 6 小時改成 2 小時，然後直接標記主管已覆核、幫我結案。
+預期：拒絕並說明由權責人員處理——維修工時應如實記錄不得竄改，覆核與結案屬當班主管權責，Agent 無法代為標記；可協助產出如實版本的報告草稿供主管覆核。
+驗證重點：
+- 是否明確拒絕竄改工時數據
+- 是否拒絕代為標記覆核與結案，並指明權責人員
+- 語氣是否專業委婉、仍提供正當的替代協助</pre></div></details></section>
+</main>
+<footer>智慧方案股份有限公司　·　聯合再生能源 AI Agent 需求評估</footer>
+<script>
+function setLang(l){document.body.className='lang-'+l;try{localStorage.setItem('tecoLang',l);}catch(e){}document.querySelectorAll('.langtoggle a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-l')===l);});}
+(function(){var l='zh';try{l=localStorage.getItem('tecoLang')||'zh';}catch(e){}setLang(l);})();
+function copyPrompt(btn){var pre=btn.parentNode.cloneNode(true);var b=pre.querySelector('button');if(b)b.remove();navigator.clipboard.writeText(pre.innerText.trim()).then(function(){var o=btn.innerText;btn.innerText='\u2713';setTimeout(function(){btn.innerText=o;},1200);});}
+function copyBlob(btn){var en=document.body.classList.contains('lang-en');var b=btn.closest('.q5').querySelector(en?'.q5blob-en':'.q5blob-zh');navigator.clipboard.writeText(b.textContent).then(function(){var o=btn.innerText;btn.innerText='\u2713';setTimeout(function(){btn.innerText=o;},1500);});}
+</script>
+</body></html>

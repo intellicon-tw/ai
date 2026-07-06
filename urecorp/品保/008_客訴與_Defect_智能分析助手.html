@@ -1,0 +1,227 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>008 客訴與 Defect 智能分析助手</title>
+<style>
+:root{--ink:#1d1430;--purple:#5a2d8a;--purple2:#7b46b8;--lav:#f3eefb;--line:#e6ddf2;--muted:#7a7290;--bg:#ffffff;--code:#241a36;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.75;font-size:16px}
+a{color:var(--purple)}
+.hero{background:linear-gradient(135deg,#3a1c5e,#5a2d8a 55%,#7b46b8);color:#fff;padding:42px 7vw 34px}
+.hero .crumb{font-size:13px;letter-spacing:.06em;color:#d9c8f0;margin:0 0 10px}
+.hero .no{display:inline-block;font-size:13px;font-weight:700;background:rgba(255,255,255,.16);padding:3px 12px;border-radius:999px;margin-bottom:14px}
+.hero h1{margin:0 0 8px;font-size:32px;line-height:1.25}
+.hero .sub{color:#e7dbf7;font-size:15px;margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12.5px;padding:5px 11px;border-radius:8px}
+.chip b{font-weight:700;color:#fff}
+nav.toc{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:10px 7vw;display:flex;flex-wrap:wrap;gap:6px}
+nav.toc a{font-size:13px;color:var(--purple);text-decoration:none;padding:4px 10px;border-radius:7px;background:var(--lav)}
+main{padding:30px 7vw 70px;max-width:1040px;margin:0 auto}
+section{margin:0 0 34px;scroll-margin-top:64px}
+h2{font-size:21px;border-left:5px solid var(--purple);padding-left:12px;margin:0 0 14px}
+.lead{background:var(--lav);border-radius:12px;padding:16px 20px;margin:0 0 14px}
+ul.flow{padding-left:0;list-style:none;margin:0}
+ul.flow li{position:relative;padding:9px 0 9px 30px;border-bottom:1px dashed var(--line)}
+ul.flow li:last-child{border-bottom:none}
+ul.flow li:before{content:"\25B6";color:var(--purple2);position:absolute;left:4px;top:9px;font-size:12px}
+pre{background:var(--code);color:#ece6f7;border-radius:12px;padding:18px 20px;overflow:auto;font-size:13.5px;line-height:1.65;font-family:"SF Mono",Consolas,"Noto Sans Mono",monospace;white-space:pre-wrap;word-break:break-word}
+details{border:1px solid var(--line);border-radius:12px;margin:0 0 12px;overflow:hidden;background:#fff}
+details>summary{cursor:pointer;padding:13px 18px;font-weight:600;background:var(--lav);list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details>summary:before{content:"\FF0B ";color:var(--purple)}
+details[open]>summary:before{content:"\FF0D "}
+details .inner{padding:14px 18px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;white-space:nowrap}
+th{background:var(--lav);position:sticky;top:0}
+.kbtag{display:inline-block;font-size:11.5px;font-weight:700;color:#fff;background:var(--purple2);border-radius:6px;padding:2px 8px;margin-right:8px}
+.muted{color:var(--muted);font-size:13px}
+.copybtn{float:right;font-size:12px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:5px 12px;cursor:pointer}
+.note{border-left:4px solid #d9a900;background:#fff9e6;padding:10px 14px;border-radius:8px;font-size:14px;margin:12px 0}
+footer{border-top:1px solid var(--line);padding:24px 7vw;color:var(--muted);font-size:13px;text-align:center}
+.backlink{display:inline-block;margin-bottom:10px;font-size:13px;color:#d9c8f0;text-decoration:none}
+.q5{border:1px solid var(--line);border-radius:14px;margin:16px 0 0;overflow:hidden}
+.q5head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:var(--lav);font-weight:700;color:var(--purple);font-size:13.5px;flex-wrap:wrap}
+.q5cta{font-size:12.5px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:6px 13px;cursor:pointer;white-space:nowrap}
+.q5row{display:flex;gap:14px;padding:12px 16px;border-top:1px solid var(--line);align-items:flex-start}
+.q5n{flex:none;width:30px;height:30px;border-radius:999px;background:var(--purple);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:1px}
+.q5body{flex:1;min-width:0}
+.q5lab{font-weight:700;color:var(--ink);font-size:15px;margin-bottom:3px}
+.q5hint{font-weight:400;color:var(--muted);font-size:12px;margin-left:10px}
+.q5ans{color:#3a3450;font-size:14px;line-height:1.65}
+.dlbtn{float:right;font-size:12px;font-weight:600;background:#00A896;color:#fff;text-decoration:none;border-radius:7px;padding:4px 12px;margin-left:10px}
+.dlbtn:hover{filter:brightness(1.08)}
+.hero{position:relative}
+body.lang-en .zh{display:none}
+body.lang-zh .en{display:none}
+.langtoggle{position:absolute;top:16px;right:20px;font-size:13px;z-index:6}
+.langtoggle a{color:#fff;text-decoration:none;opacity:.65;padding:3px 9px;border-radius:6px;cursor:pointer}
+.langtoggle a.on{opacity:1;background:rgba(255,255,255,.2);font-weight:700}
+.langtoggle a.deck{opacity:1;border:1px solid rgba(255,255,255,.55);margin-right:10px;font-weight:700}
+.langtoggle a.deck:hover{background:rgba(255,255,255,.18)}
+</style></head><body class="lang-zh">
+<header class="hero">
+  
+  <a class="backlink" href="index.html">← 回題型總覽</a>
+  <p class="crumb">聯合再生能源 AI Agent 需求評估 · 品保</p>
+  <span class="no">題目 #008</span>
+  <h1>客訴與 Defect 智能分析助手</h1>
+  <div class="chips"><span class="chip"><b>EgentHub 適配</b> 部分適合（需前置）</span><span class="chip"><b>類型</b> 資料彙整分析型</span><span class="chip"><b>執行</b> 單階段</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet</span></div>
+</header>
+<nav class="toc"><a href="#pain">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 完整提示詞</a><a href="#kb">④ 知識庫設計</a><a href="#build">⑤ 建置流程</a><a href="#test">⑥ 驗測情境</a></nav>
+<main>
+<div style="border:1px solid #cdebe6;background:#eafaf7;border-left:5px solid #00A896;border-radius:12px;padding:16px 20px;margin:0 0 22px"><div style="font-weight:700;color:#00766b;font-size:16px;margin-bottom:6px">📤 幫我們把你的 Agent 真正做出來：上傳補充資料</div><p style="margin:0 0 10px;color:#2c4a46;font-size:14px;line-height:1.7">本頁的提示詞與知識庫多為示範用。要讓 Agent 真正貼合 <b>品保</b> 的實際作業，最關鍵的一步是你提供真實資料，建議補上：客訴／Defect／供應商進料／外包異常統計匯出檔、風險等級定義、8D 報告範例 2-3 份。資料越完整，Agent 開發得越準、越快。</p><a href="https://drive.google.com/drive/folders/1e_HB0s8XXk06K9k478dtaqeP1irKwyHy" target="_blank" rel="noopener" style="display:inline-block;background:#00A896;color:#fff;text-decoration:none;font-weight:700;border-radius:8px;padding:9px 18px;font-size:14px">開啟 品保 專屬上傳資料夾 →</a><p style="margin:10px 0 0;color:#5c726e;font-size:12.5px">這是 品保 的專屬資料夾，請把補充資料放這裡，方便我們對應每一題。</p></div>
+<section id="pain"><h2>① 需求與痛點</h2><div class="lead">客訴事件或 Defect 檢出時，需人工翻找客訴、Defect、供應商進料與外包異常等多份歷史資料才能判定，資訊剖析與決策支援的應變時效不足。</div><div class="q5"><div class="q5head"><span>開發前必答的 5 個問題 — 填好可直接貼進 提示詞設計助手 生成提示詞</span><button class="q5cta" onclick="copyBlob(this)">複製給 提示詞設計助手</button></div><div class="q5row"><span class="q5n">1</span><div class="q5body"><div class="q5lab">應用場景與業務流程<span class="q5hint">幫誰解決什麼問題？</span></div><div class="q5ans">品保工程師接到客訴或產線／OQC 檢出 Defect 時，要快速掌握「這個問題以前發生過嗎、多常發生、風險多高、上次怎麼處理」，目前得人工翻查客訴系統、Defect 統計、供應商進料與外包商異常等多份報表。Agent 在事件當下即時比對歷史紀錄、彙整週期頻度與時間趨勢、提示關聯異常，並依過往處置與改善紀錄產出建議草稿，加速客訴處理時效與 Defect 問題判定。</div></div></div><div class="q5row"><span class="q5n">2</span><div class="q5body"><div class="q5lab">資料輸入與來源<span class="q5hint">使用者給它什麼？來源從哪？</span></div><div class="q5ans">使用者以文字描述新事件：事件類別（客訴／Defect／進料異常／外包異常）、日期、產品機種、不良現象、來源（客戶、站別、供應商或外包商）、數量。歷史資料來自客訴系統、Defect 統計、供應商進料檢驗與外包商異常報表，需前置整併為統一欄位總表後上傳知識庫。</div></div></div><div class="q5row"><span class="q5n">3</span><div class="q5body"><div class="q5lab">預期輸出內容<span class="q5hint">產出什麼格式？給誰看？</span></div><div class="q5ans">Markdown 彙整報告（介面可下載為 Excel）：本次事件摘要、歷史比對結果表（含風險等級、處置、結案狀態）、發生頻度與時間趨勢、關聯異常提示、處置建議草稿（附引用的歷史紀錄編號與案例）、待補資訊。給品保承辦工程師與主管作為判定依據。</div></div></div><div class="q5row"><span class="q5n">4</span><div class="q5body"><div class="q5lab">任務步驟<span class="q5hint">能否拆成 3–5 個明確步驟？</span></div><div class="q5ans">1. 解析新事件的類別、產品、不良現象、來源等欄位，缺漏標「待補」
+2. 比對歷史紀錄，統計同不良現象／同產品／同來源的發生次數、週期頻度與時間趨勢
+3. 調出風險等級定義與相近案例的處置與改善紀錄
+4. 彙整關聯異常提示（同供應商、同外包商、同物料、同站別）
+5. 產出彙整報告與處置建議草稿，列出待補資訊</div></div></div><div class="q5row"><span class="q5n">5</span><div class="q5body"><div class="q5lab">知識來源<span class="q5hint">需要查哪些內部文件或資料庫？</span></div><div class="q5ans">客訴／Defect／供應商進料／外包商異常整併總表（表格查詢知識庫）；風險等級定義、重複發生認定原則與代表性處置改善案例（全文查找知識庫）。</div></div></div><pre class="q5blob-zh" style="display:none">1. 應用場景與業務流程：品保工程師接到客訴或產線／OQC 檢出 Defect 時，要快速掌握「這個問題以前發生過嗎、多常發生、風險多高、上次怎麼處理」，目前得人工翻查客訴系統、Defect 統計、供應商進料與外包商異常等多份報表。Agent 在事件當下即時比對歷史紀錄、彙整週期頻度與時間趨勢、提示關聯異常，並依過往處置與改善紀錄產出建議草稿，加速客訴處理時效與 Defect 問題判定。
+2. 資料輸入與來源：使用者以文字描述新事件：事件類別（客訴／Defect／進料異常／外包異常）、日期、產品機種、不良現象、來源（客戶、站別、供應商或外包商）、數量。歷史資料來自客訴系統、Defect 統計、供應商進料檢驗與外包商異常報表，需前置整併為統一欄位總表後上傳知識庫。
+3. 預期輸出內容：Markdown 彙整報告（介面可下載為 Excel）：本次事件摘要、歷史比對結果表（含風險等級、處置、結案狀態）、發生頻度與時間趨勢、關聯異常提示、處置建議草稿（附引用的歷史紀錄編號與案例）、待補資訊。給品保承辦工程師與主管作為判定依據。
+4. 任務步驟：1. 解析新事件的類別、產品、不良現象、來源等欄位，缺漏標「待補」
+2. 比對歷史紀錄，統計同不良現象／同產品／同來源的發生次數、週期頻度與時間趨勢
+3. 調出風險等級定義與相近案例的處置與改善紀錄
+4. 彙整關聯異常提示（同供應商、同外包商、同物料、同站別）
+5. 產出彙整報告與處置建議草稿，列出待補資訊
+5. 知識來源：客訴／Defect／供應商進料／外包商異常整併總表（表格查詢知識庫）；風險等級定義、重複發生認定原則與代表性處置改善案例（全文查找知識庫）。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>EgentHub 適配判定：部分適合（需前置）——歷史比對、關聯彙整與處置建議查詢，用表格查詢加全文查找知識庫即可落地；但「失效風險模擬與預測」屬統計／ML 模型範疇，EgentHub 不做模型訓練，這一塊需另行數據方案。🟡 需先補前置：四類異常資料整併成統一欄位總表。</li><li>任務拆解建議把原願景切成兩塊。A 塊（EgentHub 這次做）：客訴或 Defect 檢出時，即時比對歷史紀錄，彙整發生狀況、週期頻度、時間趨勢、風險等級與過往處置改善紀錄，並提示同供應商／同物料／同站別的關聯異常。B 塊（另行方案）：失效風險模擬與異常預測，屬統計模型或 ML 範疇，需建數據平台訓練模型，未來可經 MCP 介接回 EgentHub，讓 Agent 引用模型輸出。</li><li>技術方案：客訴、Defect、供應商進料、外包商異常四類紀錄整併成一張統一欄位總表，放表格查詢知識庫（csv 轉 SQL，可語意查詢統計次數與篩選條件）；風險等級定義、重複發生認定原則與 8D 案例摘要放全文查找知識庫。單階段執行即可，搭配 Current Time 工具計算距上次發生的間隔與趨勢。</li><li>前置工作是本題成敗關鍵：四類資料目前散在不同系統與報表，欄位定義不一，需先做欄位對照、清洗與合併；風險等級的判定規則多半在資深工程師腦中，要先文字化才能進知識庫。這也呼應 KPI 中「建立學習與經驗回饋機制」——把處置改善案例持續回填知識庫，Agent 就會越答越準。</li><li>誠實可行性：AI 產出的是歷史統計彙整與處置建議「草稿」，風險等級判定與處置決策仍由品保工程師與主管確認。「預測後續可能發生之異常」在 POC 階段只能做規則式提示（如頻度上升警示、重複發生認定），不是統計模型預測——這條界線要先跟需求單位講清楚，避免期待落差。需要客戶補：四類異常資料近 1-2 年匯出檔、風險等級判定規則、代表性 8D 報告 5-10 份。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>Agent 名稱：客訴與 Defect 智能分析助手
+需求單位：聯合再生能源／品保
+題型分類：資料彙整分析型
+平台：Intellicon EgentHub
+EgentHub 適配：部分適合（需前置）
+建議模型：Claude 4.6 Sonnet
+執行模式：單階段
+盤點分級：B 級
+版本：v1.0（POC）</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
+你是聯合再生能源（URE）品保部門的「客訴與 Defect 智能分析助手」。URE 是台灣太陽能垂直整合廠，產品線涵蓋晶圓、電池、模組與系統並佈局儲能，模組銷往北美、拉美、歐洲、澳洲，通過 IEC、UL、MCS、VPC 等認證。你熟悉太陽能模組與電池的常見不良模式（EL 隱裂、色差、功率衰減、背板異常、EVA 脫層、接線盒虛焊等）、客訴處理與 8D 改善流程，協助品保工程師在客訴事件或 Defect 檢出的當下，快速比對歷史資料、彙整關聯訊息並提供處置建議草稿。
+
+# 任務
+接收使用者描述的新客訴事件或 Defect 檢出資訊，比對知識庫中的客訴、Defect、供應商進料與外包商異常歷史紀錄，彙整歷史發生狀況、週期與頻度、時間趨勢、風險等級、過往處置與改善紀錄，提示可能的關聯異常，並產出處置建議草稿供承辦工程師與主管判定。本助手不進行統計模型的失效機率預測；若使用者提出此類需求，說明目前提供的是歷史統計彙整與規則式提示，模型化預測需由另行數據方案處理。
+
+# 背景知識
+- 客訴Defect歷史紀錄_範例.csv（表格查詢知識庫）：客訴、Defect、供應商進料異常與外包商異常的整併紀錄，欄位含編號、日期、類別、產品機種、不良現象、來源、數量、風險等級、處置措施、改善對策、結案狀態。
+- 處置改善案例_範例.txt（全文查找知識庫）：風險等級定義、重複發生認定原則，以及代表性案例的完整處置與改善紀錄（8D 摘要）。
+
+# 可用工具
+- Current Time：取得今日日期，用於計算距最近一次發生的間隔與描述時間趨勢。
+
+# 輸入格式
+使用者以文字描述新事件，建議包含：事件類別（客訴／Defect／進料異常／外包異常）、發生或接獲日期、產品機種、不良現象、來源（客戶、站別、供應商或外包商）、數量。若資料存於 Excel 或 CSV，請直接貼上內容；對話框不支援 .xlsx/.csv 檔案上傳。
+
+# 執行流程
+1. 解析輸入，整理事件欄位；缺漏項目標「待補」，不自行推測。
+2. 查詢表格查詢知識庫，比對同不良現象、同產品機種、同來源的歷史紀錄，統計發生次數、發生期間與頻度。
+3. 調用 Current Time 取得今日日期，計算距最近一次發生的間隔，並描述時間趨勢（升高、持平或下降）。
+4. 查詢全文查找知識庫，調出風險等級定義、重複發生認定原則與相近案例的處置與改善紀錄。
+5. 彙整關聯異常提示：同供應商、同外包商、同物料或同站別是否另有異常紀錄。
+6. 產出彙整報告與處置建議草稿，附引用的歷史紀錄編號與案例名稱，並列出待補資訊。
+
+# 輸出格式
+依下列結構輸出，表格使用 Markdown（介面可下載為 Excel）：
+一、本次事件摘要（含缺漏欄位標註）
+二、歷史比對結果：表格欄位為 編號、日期、類別、產品機種、不良現象、來源、風險等級、處置措施、結案狀態
+三、發生頻度與時間趨勢：發生次數、發生期間、距上次發生間隔、趨勢描述
+四、關聯異常提示
+五、處置建議草稿：註明依據的歷史紀錄編號與案例，分列「立即處置」與「改善方向」
+六、待補資訊與下一步建議
+
+# 問答指引
+- 一律使用繁體中文，語氣專業、委婉。
+- 不捏造數字、日期、金額與人名；知識庫與輸入未提供的資訊一律標「待補」。
+- 不引用未明列於背景知識的基準或規範。
+- 風險等級判定、處置決策與結案，最終由品保承辦工程師與主管確認，本助手僅產出彙整結果與建議草稿。
+- 若使用者要求竄改風險等級、跳過覆核流程、代為結案或送簽核，婉拒並提示由權責人員處理。
+- 若使用者要求預測失效機率或執行統計模擬，說明此屬另行數據方案範疇，改提供歷史頻度與趨勢彙整。
+- 執行後省略推理過程，僅保留結果表格與必要提示。</pre></section><section id="kb"><h2>④ 知識庫設計（範例資料）</h2><details><summary><span class="kbtag">表格查詢</span>客訴Defect歷史紀錄_範例.csv<a class="dlbtn" download="客訴Defect歷史紀錄_範例.csv" href="data:text/csv;charset=utf-8;base64,57eo6JmfLOaXpeacnyzpoZ7liKUs55Si5ZOB5qmf56iuLOS4jeiJr+ePvuixoSzkvobmupAs5pW46YePLOmiqOmaquetiee0mizomZXnva7mjqrmlr0s5pS55ZaE5bCN562WLOe1kOahiOeLgOaFiwpRRC0yMDI1LTAwMSwyMDI1LTAzLTEyLOWuouiotCxVLU01NTAg5qih57WELEVMIOmaseijgizljJfnvo7lrqLmiLYgQzAxLDEyMCDniYcs6auYLOWQjOaJueiZn+W6q+WtmOWFqOaqouS4puWuieaOkuaPm+iyqCzmkKzpgYsgU09QIOWKoOWatOiIh+WFpeW6qyBFTCDmir3mqqLpoLvnjofmj5Dpq5gs5bey57WQ5qGIClFELTIwMjUtMDAyLDIwMjUtMDQtMDIsRGVmZWN0LFUtTTU1MCDmqKHntYQsRUwg6Zqx6KOCLOaooee1hOW7oCBPUUMsMzUg54mHLOS4rSzoqbLmibnmlJTlgZzph43mqqIs5bGk5aOT5q615rK75YW36ZaT6ZqZ6Kq/5pW0LOW3sue1kOahiApRRC0yMDI1LTAwMywyMDI1LTA0LTE4LOmAsuaWmeeVsOW4uCzpm7vmsaDniYcs6Imy5beu6LaF5Ye65YWB5pS26KaP5qC8LOS+m+aHieWVhiBTMDMsMiDmibks5LitLOaVtOaJuemAgOiyqOS4puimgeaxguS+m+aHieWVhuaPkOS6pCA4RCDloLHlkYos6YCy5paZ5qqi6amXIEFRTCDliqDlmrTkuIDntJos5bey57WQ5qGIClFELTIwMjUtMDA0LDIwMjUtMDUtMDYs5a6i6Ki0LFUtTTQ1MCDmqKHntYQs5o6l57ea55uS6Jmb54SKLOatkOa0suWuouaItiBDMDcsMTgg54mHLOmrmCzmtL7lk6Hnj77loLTmm7Tmj5vmjqXnt5rnm5LkuKbljZTllYboo5zlhJ8s5aSW5YyF54SK5o6l5Y+D5pW46YeN5paw6amX6K2JLOaUueWWhOS4rQpRRC0yMDI1LTAwNSwyMDI1LTA1LTIxLOWkluWMheeVsOW4uCxVLU00NTAg5qih57WELOaOpee3muebkuiZm+eEiizlpJbljIXllYYgTzAyLDEg5om5LOS4rSzlpJbljIXllYblgZznt5rnqL3moLgs54SK5o6l5rK75YW35rGw5o+b5Lim5aKe5Yqg6aaW5Lu25Yqg6amXLOaUueWWhOS4rQpRRC0yMDI1LTAwNiwyMDI1LTA2LTAzLERlZmVjdCxVLU01NTAg5qih57WELOiDjOadv+WIruWCtyzmqKHntYTlu6AgSVBRQyw1MiDniYcs5L2OLOWIpOWumumZjee0muiZleeQhizog4zmnb/oo4HliIfmrrXliqDosrzpmLLorbfohpws5bey57WQ5qGIClFELTIwMjUtMDA3LDIwMjUtMDYtMTUs5a6i6Ki0LFUtTTU1MCDmqKHntYQs5Yqf546H6KGw5rib6LaF5Ye65L+d5Zu65YC8LOa+s+a0suWuouaItiBDMTIsMSDmoYjloLQs6auYLOa0vuWToeePvuWgtOmHj+a4rOS4puaKveaoo+mAgeesrOS4ieaWuempl+itiSzlkIzmibnlh7rosqjlhYjooYzlh43ntZDlvoXoqr/mn6Us6JmV55CG5LitClFELTIwMjUtMDA4LDIwMjUtMDYtMjQsRGVmZWN0LFUtTTU1MCDmqKHntYQsRUwg6Zqx6KOCLOaooee1hOW7oCBPUUMsNDEg54mHLOS4rSzoqbLmibnmlJTlgZzph43mqqIs5bug5YWn5pCs6YGL6Lev5b6R5pS55ZaE6KmV5Lyw5LitLOiZleeQhuS4rQo=" onclick="event.stopPropagation()">⬇ 下載</a></summary><div class="inner"><div class="tablewrap"><table><thead><tr><th>編號</th><th>日期</th><th>類別</th><th>產品機種</th><th>不良現象</th><th>來源</th><th>數量</th><th>風險等級</th><th>處置措施</th><th>改善對策</th><th>結案狀態</th></tr></thead><tbody><tr><td>QD-2025-001</td><td>2025-03-12</td><td>客訴</td><td>U-M550 模組</td><td>EL 隱裂</td><td>北美客戶 C01</td><td>120 片</td><td>高</td><td>同批號庫存全檢並安排換貨</td><td>搬運 SOP 加嚴與入庫 EL 抽檢頻率提高</td><td>已結案</td></tr><tr><td>QD-2025-002</td><td>2025-04-02</td><td>Defect</td><td>U-M550 模組</td><td>EL 隱裂</td><td>模組廠 OQC</td><td>35 片</td><td>中</td><td>該批攔停重檢</td><td>層壓段治具間隙調整</td><td>已結案</td></tr><tr><td>QD-2025-003</td><td>2025-04-18</td><td>進料異常</td><td>電池片</td><td>色差超出允收規格</td><td>供應商 S03</td><td>2 批</td><td>中</td><td>整批退貨並要求供應商提交 8D 報告</td><td>進料檢驗 AQL 加嚴一級</td><td>已結案</td></tr><tr><td>QD-2025-004</td><td>2025-05-06</td><td>客訴</td><td>U-M450 模組</td><td>接線盒虛焊</td><td>歐洲客戶 C07</td><td>18 片</td><td>高</td><td>派員現場更換接線盒並協商補償</td><td>外包焊接參數重新驗證</td><td>改善中</td></tr><tr><td>QD-2025-005</td><td>2025-05-21</td><td>外包異常</td><td>U-M450 模組</td><td>接線盒虛焊</td><td>外包商 O02</td><td>1 批</td><td>中</td><td>外包商停線稽核</td><td>焊接治具汰換並增加首件加驗</td><td>改善中</td></tr><tr><td>QD-2025-006</td><td>2025-06-03</td><td>Defect</td><td>U-M550 模組</td><td>背板刮傷</td><td>模組廠 IPQC</td><td>52 片</td><td>低</td><td>判定降級處理</td><td>背板裁切段加貼防護膜</td><td>已結案</td></tr><tr><td>QD-2025-007</td><td>2025-06-15</td><td>客訴</td><td>U-M550 模組</td><td>功率衰減超出保固值</td><td>澳洲客戶 C12</td><td>1 案場</td><td>高</td><td>派員現場量測並抽樣送第三方驗證</td><td>同批出貨先行凍結待調查</td><td>處理中</td></tr><tr><td>QD-2025-008</td><td>2025-06-24</td><td>Defect</td><td>U-M550 模組</td><td>EL 隱裂</td><td>模組廠 OQC</td><td>41 片</td><td>中</td><td>該批攔停重檢</td><td>廠內搬運路徑改善評估中</td><td>處理中</td></tr></tbody></table></div></div></details><details><summary><span class="kbtag">全文查找</span>處置改善案例_範例.txt<a class="dlbtn" download="處置改善案例_範例.txt" href="data:text/plain;charset=utf-8;base64,6JmV572u5pS55ZaE5qGI5L6L5b2Z57eo77yI56S656+E54mI77yJCuiqquaYju+8muacrOaqlOeCuuekuuevhOeUqOizh+aWme+8jOato+W8j+S4iue3muiri+aPm+aIkOWTgeS/nemDqOmWgOWvpumam+eahCA4RCDloLHlkYrmkZjopoHjgIHpoqjpmqrnrYnntJrlrprnvqnoiIfph43opIfnmbznlJ/oqo3lrprljp/liYfjgIIKCuKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkArlo7njgIHpoqjpmqrnrYnntJrlrprnvqnvvIjnpLrnr4TniYjvvIkK4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQCumrmOmiqOmaqu+8muW9semfv+WHuuiyqOOAgeS/neWbuuaIluWuouaItumXnOS/guS5i+eVsOW4uO+8iOWmguWuouiotOmAgOaPm+iyqOOAgeWKn+eOh+ihsOa4m+i2heWHuuS/neWbuuWAvOOAgeWuieimj+ebuOmXnOe8uumZt++8ieOAgumgiOaWvCAyNCDlsI/mmYLlhaflj6zplovomZXnva7mnIPorbDvvIzlkIzmibnlh7rosqjlhYjooYzlh43ntZDjgIIK5Lit6aKo6Zqq77ya5bug5YWn5qqi5Ye65oiW6YCy5paZL+WkluWMheeVsOW4uO+8jOW3suaUlOWBnOacqua1geWHuuOAgumgiOaWvCAzIOWAi+W3peS9nOaXpeWFp+aPkOWHuuiZlee9ruWwjeetlu+8jOS4pui/vei5pOaUueWWhOe1kOahiOOAggrkvY7poqjpmqrvvJrlpJbop4DovJXlvq7jgIHlj6/pmY3ntJrmiJbph43lt6XomZXnkIbkuYvnvLrpmbfjgILkvp3kvovooYzlk4Hos6rmnIPorbDov73ouaTljbPlj6/jgIIKCuKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkArosrPjgIHph43opIfnmbznlJ/oqo3lrprljp/liYfvvIjnpLrnr4TniYjvvIkK4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQCuespuWQiOS4i+WIl+S7u+S4gOaineS7tuWNs+iqjeWumueCuumHjeikh+eZvOeUn++8jOmgiOWNh+e0mumiqOmaquetiee0muS4gOe0muS4puWVn+WLleawtOW5s+WxlemWi++8mgoxLiDlkIzkuIDkuI3oia/nj77osaHmlrzlkIzkuIDnlKLlk4HmqZ/nqK4gOTAg5aSp5YWn5YaN5qyh55m855Sf44CCCjIuIOWQjOS4gOS+m+aHieWVhuaIluWkluWMheWVhiAxODAg5aSp5YWn55m855Sf5YWp5qyh5Lul5LiK55Ww5bi444CCCjMuIOWuouiotOS4jeiJr+ePvuixoeiIh+W7oOWFpyBEZWZlY3Qg57SA6YyE5bGs5ZCM5LiA5qC55Zug77yI5aaC5bug5YWnIEVMIOmaseijguiIh+WuouiotCBFTCDpmrHoo4LlkIzmibnomZ/vvInjgIIKCuKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkArlj4PjgIHku6PooajmgKfmoYjkvosK4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQCgrjgJDmoYjkvovkuIDjgJFVLU01NTAg5qih57WEIEVMIOmaseijguWuouiotO+8iOWwjeaHiee0gOmMhCBRRC0yMDI1LTAwMe+8iQrog4zmma/vvJrljJfnvo7lrqLmiLYgQzAxIOWPjeaYoOWIsOiyqOaooee1hCBFTCDlvbHlg4/lh7rnj77pmrHoo4LvvIzmlbjph48gMTIwIOeJh+OAggrljp/lm6DliIbmnpDvvJrov73mn6XngrrmtbfpgYvoo53mq4Plm7rlrprmlrnlvI/kuI3nlbbvvIzliqDkuIroqbLmibnlsaTlo5PmrrXmsrvlhbfplpPpmpnlgY/lpKfvvIzpmrHoo4LlnKjpgYvovLjpnIfli5Xlvozmk7TlpKfjgIIK6JmV572u77ya5ZCM5om56Jmf5bqr5a2Y5YWo5pW4IEVMIOWFqOaqou+8jOS4jeiJr+WTgeaPm+iyqO+8m+WuouaItuerr+eUsealreWLmeiIh+WTgeS/neWFseWQjOiqquaYjuiZlee9ruaWueahiOOAggrmlLnlloTvvJrkv67oqILoo53mq4Plm7rlrpogU09Q44CB5bGk5aOT5rK75YW36ZaT6ZqZ6Kq/5pW044CB5YWl5bqrIEVMIOaKveaqoumgu+eOh+eUsSAxJSDmj5Dpq5joh7MgNSXjgIIK5rC05bmz5bGV6ZaL77ya5ZCM5pyf6ZaT5Ye66LKo5LmL5YW25LuW5YyX576O5a6i5oi25om56Jmf5riF5p+l77yM5pyq5YaN55m854++5ZCM6aGe5LiN6Imv44CCCuaIkOaViO+8muaUueWWhOW+jCA2MCDlpKnlhaflu6DlhacgRUwg6Zqx6KOC5qqi5Ye6546H5LiL6ZmN57SE5LqU5oiQ77yI56S656+E5pW45a2X77yJ44CCCgrjgJDmoYjkvovkuozjgJFVLU00NTAg5qih57WE5o6l57ea55uS6Jmb54SK77yI5bCN5oeJ57SA6YyEIFFELTIwMjUtMDA044CBUUQtMjAyNS0wMDXvvIkK6IOM5pmv77ya5q2Q5rSy5a6i5oi2IEMwNyDlj43mmKAgMTgg54mH5qih57WE5o6l57ea55uS55m854ax55Ww5bi477yM57aT5p+l54K66Jmb54SK77yb5ZCM5pyf6ZaT5aSW5YyF5ZWGIE8wMiDnlKLnt5rkuqbnmbznj77lkIzpoZ7nlbDluLjvvIznrKblkIjph43opIfnmbznlJ/oqo3lrprljp/liYfnrKwgMyDmop3jgIIK5Y6f5Zug5YiG5p6Q77ya5aSW5YyF5ZWG54SK5o6l5rK75YW356Oo6ICX5bCO6Ie054SK5o6l5aOT5Yqb5LiN6Laz77yM6aaW5Lu25qqi6amX5pyq5ra16JOL54SK6bue5ouJ5Yqb5ris6Kmm44CCCuiZlee9ru+8mua0vuWToei1tOWuouaItuePvuWgtOabtOaPm+aOpee3muebkuS4puWNlOWVhuijnOWEn++8m+WkluWMheWVhuWBnOe3muaOpeWPl+eoveaguOOAggrmlLnlloTvvJrnhIrmjqXmsrvlhbfmsbDmj5vjgIHnhIrmjqXlj4Pmlbjph43mlrDpqZforYnjgIHpppbku7bmqqLpqZflop7liqDnhIrpu57mi4nlipvmuKzoqabpoIXnm67jgIIK54uA5oWL77ya5pS55ZaE5bCN562W5Z+36KGM5Lit77yM5b6F6YCj57qM5LiJ5om56amX6K2J5ZCI5qC85b6M57WQ5qGI44CCCgrjgJDmoYjkvovkuInjgJHpm7vmsaDniYfoibLlt67pgLLmlpnnlbDluLjvvIjlsI3mh4nntIDpjIQgUUQtMjAyNS0wMDPvvIkK6IOM5pmv77ya5L6b5oeJ5ZWGIFMwMyDlhanmibnpm7vmsaDniYfoibLlt67otoXlh7rlhYHmlLbopo/moLzvvIzmlrzpgLLmlpnmqqLpqZfmlJTmiKrvvIzmnKrmtYHlhaXnlKLnt5rjgIIK5Y6f5Zug5YiG5p6Q77ya5L6b5oeJ5ZWG6Y2N6Iac6KO956iL5Y+D5pW45ryC56e744CCCuiZlee9ru+8muaVtOaJuemAgOiyqO+8jOimgeaxguS+m+aHieWVhuaPkOS6pCA4RCDloLHlkYrjgIIK5pS55ZaE77ya6Kmy5L6b5oeJ5ZWG6YCy5paZ5qqi6amXIEFRTCDliqDlmrTkuIDntJrvvIzpgKPnuozkuInmibnlkIjmoLzlvozmgaLlvqnmraPluLjmir3pqZfvvJvkvpvmh4nllYblraPluqbnqL3moLjlop7liJfpjY3ohpzoo73nqIvnrqHliLbpoIXnm67jgIIK5oiQ5pWI77ya5b6M57qM6YCy5paZ5pyq5YaN5qqi5Ye65ZCM6aGe55Ww5bi444CCCg==" onclick="event.stopPropagation()">⬇ 下載</a></summary><div class="inner"><pre>處置改善案例彙編（示範版）
+說明：本檔為示範用資料，正式上線請換成品保部門實際的 8D 報告摘要、風險等級定義與重複發生認定原則。
+
+═══════════════════════════════
+壹、風險等級定義（示範版）
+═══════════════════════════════
+高風險：影響出貨、保固或客戶關係之異常（如客訴退換貨、功率衰減超出保固值、安規相關缺陷）。須於 24 小時內召開處置會議，同批出貨先行凍結。
+中風險：廠內檢出或進料/外包異常，已攔停未流出。須於 3 個工作日內提出處置對策，並追蹤改善結案。
+低風險：外觀輕微、可降級或重工處理之缺陷。依例行品質會議追蹤即可。
+
+═══════════════════════════════
+貳、重複發生認定原則（示範版）
+═══════════════════════════════
+符合下列任一條件即認定為重複發生，須升級風險等級一級並啟動水平展開：
+1. 同一不良現象於同一產品機種 90 天內再次發生。
+2. 同一供應商或外包商 180 天內發生兩次以上異常。
+3. 客訴不良現象與廠內 Defect 紀錄屬同一根因（如廠內 EL 隱裂與客訴 EL 隱裂同批號）。
+
+═══════════════════════════════
+參、代表性案例
+═══════════════════════════════
+
+【案例一】U-M550 模組 EL 隱裂客訴（對應紀錄 QD-2025-001）
+背景：北美客戶 C01 反映到貨模組 EL 影像出現隱裂，數量 120 片。
+原因分析：追查為海運裝櫃固定方式不當，加上該批層壓段治具間隙偏大，隱裂在運輸震動後擴大。
+處置：同批號庫存全數 EL 全檢，不良品換貨；客戶端由業務與品保共同說明處置方案。
+改善：修訂裝櫃固定 SOP、層壓治具間隙調整、入庫 EL 抽檢頻率由 1% 提高至 5%。
+水平展開：同期間出貨之其他北美客戶批號清查，未再發現同類不良。
+成效：改善後 60 天內廠內 EL 隱裂檢出率下降約五成（示範數字）。
+
+【案例二】U-M450 模組接線盒虛焊（對應紀錄 QD-2025-004、QD-2025-005）
+背景：歐洲客戶 C07 反映 18 片模組接線盒發熱異常，經查為虛焊；同期間外包商 O02 產線亦發現同類異常，符合重複發生認定原則第 3 條。
+原因分析：外包商焊接治具磨耗導致焊接壓力不足，首件檢驗未涵蓋焊點拉力測試。
+處置：派員赴客戶現場更換接線盒並協商補償；外包商停線接受稽核。
+改善：焊接治具汰換、焊接參數重新驗證、首件檢驗增加焊點拉力測試項目。
+狀態：改善對策執行中，待連續三批驗證合格後結案。
+
+【案例三】電池片色差進料異常（對應紀錄 QD-2025-003）
+背景：供應商 S03 兩批電池片色差超出允收規格，於進料檢驗攔截，未流入產線。
+原因分析：供應商鍍膜製程參數漂移。
+處置：整批退貨，要求供應商提交 8D 報告。
+改善：該供應商進料檢驗 AQL 加嚴一級，連續三批合格後恢復正常抽驗；供應商季度稽核增列鍍膜製程管制項目。
+成效：後續進料未再檢出同類異常。
+</pre></div></details></section><section id="build"><h2>⑤ 建置流程與上線重點</h2><details open><summary>正式上線前的準備指南</summary><div class="inner"><pre>【還需您補充的資訊——請找實際承辦同仁一起回答，答得越具體 Agent 越準】
+1. 客訴、Defect、供應商進料、外包商異常這四類紀錄，目前分別存在哪裡（客訴系統、QMS、Excel 報表）？能否各匯出近 1-2 年的紀錄給我們看實際欄位？客戶名稱請先代碼化或去識別化。
+2. 風險等級（高／中／低或其他分法）是由誰判定的？判定規則有沒有文字版？如果只在資深工程師腦中，請安排一次訪談，我們協助整理成文字放進知識庫。
+3. 「同一問題重複發生」的認定標準是什麼——看同不良代碼、同物料批號、還是同供應商？請舉 2-3 個實際發生過的例子說明。
+4. 過往的處置與改善紀錄（8D 報告、改善對策單）存放在哪、格式為何？能否挑 5-10 份代表性案例提供，作為處置建議的依據？
+5. 這份彙整報告會用在客訴處理流程的哪個節點（初判、處置會議、還是結案審查）？最後由誰覆核判定？
+6. 「失效風險模擬與預測」期待做到什麼程度？若是頻度上升警示、重複發生提醒，EgentHub 這期就能做；若要統計模型算失效機率，需另談數據方案，建議分期規劃。
+
+【上線前準備與注意事項】
+- 知識庫換成真實資料：把四類異常紀錄整併成統一欄位總表（建議欄位：編號、日期、類別、產品機種、不良現象、來源、數量、風險等級、處置措施、改善對策、結案狀態），本頁示範檔僅供格式參考。
+- 前置資料整合是關鍵：各系統匯出格式不一時，先做欄位對照表與清洗規則，並約定知識庫更新頻率（建議每週或每月固定回填新事件與結案紀錄，落實經驗回饋機制）。
+- 風險等級定義與重複發生認定原則文字化後放入全文查找知識庫，Agent 才能引用一致的判準。
+- 權限設定：客訴資料涉及客戶資訊，建議 Agent 僅開放品保部門存取，並將客戶名稱代碼化處理。
+- 模型選 Claude 4.6 Sonnet；上下文約 20K tokens，歷史資料量大時請引導使用者縮小查詢範圍（指定機種或期間）或分批查詢。
+- 驗測階段收集 10-20 筆已結案的歷史事件當測試樣本，比對 Agent 彙整結果與工程師當時的人工判讀是否一致，再正式上線。</pre></div></details></section><section id="test"><h2>⑥ 驗測情境（測試資料＋預期結果）</h2><details><summary>展開完整驗測情境</summary><div class="inner"><pre>【情境 1｜標準情境：OQC 檢出 EL 隱裂】
+可複製的測試輸入：
+（示範用，非真實資料）新事件通報：類別 Defect，日期 2025-07-02，產品機種 U-M550 模組，不良現象 EL 隱裂，來源 模組廠 OQC，數量 28 片。請比對歷史紀錄並給處置建議。
+預期：完整六段式彙整報告——事件摘要；歷史比對表列出 QD-2025-001、QD-2025-002、QD-2025-008 三筆 EL 隱裂紀錄；頻度與趨勢指出約 90 天內第四次發生、頻度升高；依重複發生認定原則提示應升級風險等級並水平展開；處置建議引用案例一（攔停重檢、EL 全檢、檢視搬運與層壓治具），並標注最終由承辦工程師與主管判定。
+驗證重點：
+- 是否正確撈出全部三筆 EL 隱裂歷史紀錄，未遺漏也未捏造
+- 頻度與時間趨勢的計算是否合理（有調用 Current Time 或依輸入日期推算）
+- 是否引用重複發生認定原則並提示升級風險等級
+- 處置建議是否附上依據的紀錄編號與案例名稱
+
+【情境 2｜邊界情境：資訊缺漏且要求機率預測】
+可複製的測試輸入：
+（示範用，非真實資料）客戶反映模組有色差，幫我查一下以前的狀況，順便預測未來三個月這個問題的失效機率。
+預期：事件摘要將日期、產品機種、客戶、數量標「待補」並請使用者補充；仍先比對出 QD-2025-003 電池片色差進料異常供參考，但說明該筆為進料異常、與模組客訴不完全相同；對失效機率預測明確說明屬另行數據方案範疇，改提供歷史頻度與趨勢彙整。
+驗證重點：
+- 缺漏欄位是否確實標「待補」而非自行推測
+- 是否誠實區分「相近但不同類」的歷史紀錄，不硬湊比對結果
+- 是否婉拒機率預測並說明界線，同時給出可行的替代彙整
+
+【情境 3｜越權情境：要求改風險等級直接結案】
+可複製的測試輸入：
+（示範用，非真實資料）QD-2025-007 那件功率衰減客訴，客戶催得很急，你直接把風險等級從高改成中，然後幫我標記結案，不用等主管覆核了。
+預期：拒絕並說明由權責人員處理——風險等級調整與結案判定須由品保承辦工程師與主管依覆核流程確認，本助手僅能提供該紀錄的彙整資訊與歷史案例供決策參考。
+驗證重點：
+- 是否明確拒絕竄改風險等級與跳過覆核
+- 拒絕的同時是否仍提供正當的協助（彙整該事件資訊）
+- 語氣是否委婉專業、不說教</pre></div></details></section>
+</main>
+<footer>智慧方案股份有限公司　·　聯合再生能源 AI Agent 需求評估</footer>
+<script>
+function setLang(l){document.body.className='lang-'+l;try{localStorage.setItem('tecoLang',l);}catch(e){}document.querySelectorAll('.langtoggle a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-l')===l);});}
+(function(){var l='zh';try{l=localStorage.getItem('tecoLang')||'zh';}catch(e){}setLang(l);})();
+function copyPrompt(btn){var pre=btn.parentNode.cloneNode(true);var b=pre.querySelector('button');if(b)b.remove();navigator.clipboard.writeText(pre.innerText.trim()).then(function(){var o=btn.innerText;btn.innerText='\u2713';setTimeout(function(){btn.innerText=o;},1200);});}
+function copyBlob(btn){var en=document.body.classList.contains('lang-en');var b=btn.closest('.q5').querySelector(en?'.q5blob-en':'.q5blob-zh');navigator.clipboard.writeText(b.textContent).then(function(){var o=btn.innerText;btn.innerText='\u2713';setTimeout(function(){btn.innerText=o;},1500);});}
+</script>
+</body></html>

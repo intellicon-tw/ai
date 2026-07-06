@@ -1,0 +1,171 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>016 市場趨勢與價格情報助手</title>
+<style>
+:root{--ink:#1d1430;--purple:#5a2d8a;--purple2:#7b46b8;--lav:#f3eefb;--line:#e6ddf2;--muted:#7a7290;--bg:#ffffff;--code:#241a36;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.75;font-size:16px}
+a{color:var(--purple)}
+.hero{background:linear-gradient(135deg,#3a1c5e,#5a2d8a 55%,#7b46b8);color:#fff;padding:42px 7vw 34px}
+.hero .crumb{font-size:13px;letter-spacing:.06em;color:#d9c8f0;margin:0 0 10px}
+.hero .no{display:inline-block;font-size:13px;font-weight:700;background:rgba(255,255,255,.16);padding:3px 12px;border-radius:999px;margin-bottom:14px}
+.hero h1{margin:0 0 8px;font-size:32px;line-height:1.25}
+.hero .sub{color:#e7dbf7;font-size:15px;margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12.5px;padding:5px 11px;border-radius:8px}
+.chip b{font-weight:700;color:#fff}
+nav.toc{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:10px 7vw;display:flex;flex-wrap:wrap;gap:6px}
+nav.toc a{font-size:13px;color:var(--purple);text-decoration:none;padding:4px 10px;border-radius:7px;background:var(--lav)}
+main{padding:30px 7vw 70px;max-width:1040px;margin:0 auto}
+section{margin:0 0 34px;scroll-margin-top:64px}
+h2{font-size:21px;border-left:5px solid var(--purple);padding-left:12px;margin:0 0 14px}
+.lead{background:var(--lav);border-radius:12px;padding:16px 20px;margin:0 0 14px}
+ul.flow{padding-left:0;list-style:none;margin:0}
+ul.flow li{position:relative;padding:9px 0 9px 30px;border-bottom:1px dashed var(--line)}
+ul.flow li:last-child{border-bottom:none}
+ul.flow li:before{content:"\25B6";color:var(--purple2);position:absolute;left:4px;top:9px;font-size:12px}
+pre{background:var(--code);color:#ece6f7;border-radius:12px;padding:18px 20px;overflow:auto;font-size:13.5px;line-height:1.65;font-family:"SF Mono",Consolas,"Noto Sans Mono",monospace;white-space:pre-wrap;word-break:break-word}
+details{border:1px solid var(--line);border-radius:12px;margin:0 0 12px;overflow:hidden;background:#fff}
+details>summary{cursor:pointer;padding:13px 18px;font-weight:600;background:var(--lav);list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details>summary:before{content:"\FF0B ";color:var(--purple)}
+details[open]>summary:before{content:"\FF0D "}
+details .inner{padding:14px 18px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;white-space:nowrap}
+th{background:var(--lav);position:sticky;top:0}
+.kbtag{display:inline-block;font-size:11.5px;font-weight:700;color:#fff;background:var(--purple2);border-radius:6px;padding:2px 8px;margin-right:8px}
+.muted{color:var(--muted);font-size:13px}
+.copybtn{float:right;font-size:12px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:5px 12px;cursor:pointer}
+.note{border-left:4px solid #d9a900;background:#fff9e6;padding:10px 14px;border-radius:8px;font-size:14px;margin:12px 0}
+footer{border-top:1px solid var(--line);padding:24px 7vw;color:var(--muted);font-size:13px;text-align:center}
+.backlink{display:inline-block;margin-bottom:10px;font-size:13px;color:#d9c8f0;text-decoration:none}
+.q5{border:1px solid var(--line);border-radius:14px;margin:16px 0 0;overflow:hidden}
+.q5head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:var(--lav);font-weight:700;color:var(--purple);font-size:13.5px;flex-wrap:wrap}
+.q5cta{font-size:12.5px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:6px 13px;cursor:pointer;white-space:nowrap}
+.q5row{display:flex;gap:14px;padding:12px 16px;border-top:1px solid var(--line);align-items:flex-start}
+.q5n{flex:none;width:30px;height:30px;border-radius:999px;background:var(--purple);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:1px}
+.q5body{flex:1;min-width:0}
+.q5lab{font-weight:700;color:var(--ink);font-size:15px;margin-bottom:3px}
+.q5hint{font-weight:400;color:var(--muted);font-size:12px;margin-left:10px}
+.q5ans{color:#3a3450;font-size:14px;line-height:1.65}
+.dlbtn{float:right;font-size:12px;font-weight:600;background:#00A896;color:#fff;text-decoration:none;border-radius:7px;padding:4px 12px;margin-left:10px}
+.dlbtn:hover{filter:brightness(1.08)}
+.hero{position:relative}
+body.lang-en .zh{display:none}
+body.lang-zh .en{display:none}
+.langtoggle{position:absolute;top:16px;right:20px;font-size:13px;z-index:6}
+.langtoggle a{color:#fff;text-decoration:none;opacity:.65;padding:3px 9px;border-radius:6px;cursor:pointer}
+.langtoggle a.on{opacity:1;background:rgba(255,255,255,.2);font-weight:700}
+.langtoggle a.deck{opacity:1;border:1px solid rgba(255,255,255,.55);margin-right:10px;font-weight:700}
+.langtoggle a.deck:hover{background:rgba(255,255,255,.18)}
+</style></head><body class="lang-zh">
+<header class="hero">
+  
+  <a class="backlink" href="index.html">← 回題型總覽</a>
+  <p class="crumb">聯合再生能源 AI Agent 需求評估 · 採購</p>
+  <span class="no">題目 #016</span>
+  <h1>市場趨勢與價格情報助手</h1>
+  <div class="chips"><span class="chip"><b>EgentHub 適配</b> 適合</span><span class="chip"><b>類型</b> 資料彙整分析型</span><span class="chip"><b>執行</b> 單階段</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet</span></div>
+</header>
+<nav class="toc"><a href="#pain">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 完整提示詞</a><a href="#kb">④ 知識庫設計</a><a href="#build">⑤ 建置流程</a><a href="#test">⑥ 驗測情境</a></nav>
+<main>
+<div style="border:1px solid #cdebe6;background:#eafaf7;border-left:5px solid #00A896;border-radius:12px;padding:16px 20px;margin:0 0 22px"><div style="font-weight:700;color:#00766b;font-size:16px;margin-bottom:6px">📤 幫我們把你的 Agent 真正做出來：上傳補充資料</div><p style="margin:0 0 10px;color:#2c4a46;font-size:14px;line-height:1.7">本頁的提示詞與知識庫多為示範用。要讓 Agent 真正貼合 <b>採購</b> 的實際作業，最關鍵的一步是你提供真實資料，建議補上：歷史報價紀錄匯出檔、關注物料與參考行情來源清單、採購合約範本（請去識別化）。資料越完整，Agent 開發得越準、越快。</p><a href="https://drive.google.com/drive/folders/1B6g9Prb404geS-RGyRlIb6DWCDNplHW7" target="_blank" rel="noopener" style="display:inline-block;background:#00A896;color:#fff;text-decoration:none;font-weight:700;border-radius:8px;padding:9px 18px;font-size:14px">開啟 採購 專屬上傳資料夾 →</a><p style="margin:10px 0 0;color:#5c726e;font-size:12.5px">這是 採購 的專屬資料夾，請把補充資料放這裡，方便我們對應每一題。</p></div>
+<section id="pain"><h2>① 需求與痛點</h2><div class="lead">市場趨勢與價格分析過往要一個一個網頁去查、交叉比對可能要 3 天；還要蒐集市場訊息與趨勢、幫設備與廠務端找替代品以降低成本，報表資料整理耗時（部門自估導入 AI 搜尋後時間至少省 50%）。</div><div class="q5"><div class="q5head"><span>開發前必答的 5 個問題 — 填好可直接貼進 提示詞設計助手 生成提示詞</span><button class="q5cta" onclick="copyBlob(this)">複製給 提示詞設計助手</button></div><div class="q5row"><span class="q5n">1</span><div class="q5body"><div class="q5lab">應用場景與業務流程<span class="q5hint">幫誰解決什麼問題？</span></div><div class="q5ans">採購同仁每週或依需求掌握太陽能供應鏈主要物料（多晶矽、矽晶圓、電池片、太陽能玻璃、鋁框、EVA 膠膜、背板等）的行情與供需消息，並協助設備與廠務端尋找替代品。過往人工逐站查找、交叉比對耗時可達 3 天，導入後由 Agent 一次對話完成蒐集與彙整。</div></div></div><div class="q5row"><span class="q5n">2</span><div class="q5body"><div class="q5lab">資料輸入與來源<span class="q5hint">使用者給它什麼？來源從哪？</span></div><div class="q5ans">使用者以文字指定物料與期間（未指定期間預設最近兩週）；Agent 從知識庫讀取「關注物料與參考來源清單」取得慣用來源，再以 Google Search 與 Webscraper 蒐集 PVInsights、InfoLink 等公開行情與產業新聞。</div></div></div><div class="q5row"><span class="q5n">3</span><div class="q5body"><div class="q5lab">預期輸出內容<span class="q5hint">產出什麼格式？給誰看？</span></div><div class="q5ans">Markdown 行情彙整表（物料、價格區間、變動方向、來源、日期）＋重點訊息摘要＋觀察提示＋資料缺口清單，供採購部內部與主管參考，介面可下載為 Excel。</div></div></div><div class="q5row"><span class="q5n">4</span><div class="q5body"><div class="q5lab">任務步驟<span class="q5hint">能否拆成 3–5 個明確步驟？</span></div><div class="q5ans">1. 以 Current Time 確認今天日期，界定查詢期間
+2. 查知識庫清單取得該物料的關注重點與慣用參考來源
+3. 以 Webscraper 讀取來源頁面、Google Search 補充近期新聞與供需動態
+4. 交叉比對多來源：一致的彙整、不一致的並列註明、查無的標「待補」
+5. 產出彙整表與摘要，逐筆附來源與日期</div></div></div><div class="q5row"><span class="q5n">5</span><div class="q5body"><div class="q5lab">知識來源<span class="q5hint">需要查哪些內部文件或資料庫？</span></div><div class="q5ans">「關注物料與參考來源清單」（表格查詢知識庫）；行情與新聞來自 PVInsights、InfoLink、上海有色網等公開來源。注意：部分行情網站詳細數據需付費帳號，抓不到的會標「待補」。</div></div></div><pre class="q5blob-zh" style="display:none">1. 應用場景與業務流程：採購同仁每週或依需求掌握太陽能供應鏈主要物料（多晶矽、矽晶圓、電池片、太陽能玻璃、鋁框、EVA 膠膜、背板等）的行情與供需消息，並協助設備與廠務端尋找替代品。過往人工逐站查找、交叉比對耗時可達 3 天，導入後由 Agent 一次對話完成蒐集與彙整。
+2. 資料輸入與來源：使用者以文字指定物料與期間（未指定期間預設最近兩週）；Agent 從知識庫讀取「關注物料與參考來源清單」取得慣用來源，再以 Google Search 與 Webscraper 蒐集 PVInsights、InfoLink 等公開行情與產業新聞。
+3. 預期輸出內容：Markdown 行情彙整表（物料、價格區間、變動方向、來源、日期）＋重點訊息摘要＋觀察提示＋資料缺口清單，供採購部內部與主管參考，介面可下載為 Excel。
+4. 任務步驟：1. 以 Current Time 確認今天日期，界定查詢期間
+2. 查知識庫清單取得該物料的關注重點與慣用參考來源
+3. 以 Webscraper 讀取來源頁面、Google Search 補充近期新聞與供需動態
+4. 交叉比對多來源：一致的彙整、不一致的並列註明、查無的標「待補」
+5. 產出彙整表與摘要，逐筆附來源與日期
+5. 知識來源：「關注物料與參考來源清單」（表格查詢知識庫）；行情與新聞來自 PVInsights、InfoLink、上海有色網等公開來源。注意：部分行情網站詳細數據需付費帳號，抓不到的會標「待補」。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>EgentHub 適配判定：適合（🟢 可直接開發）——即時蒐集與彙整公開行情正是 LLM Agent 加搜尋工具的強項，掛上 Google Search、Webscraper 與 Current Time，單階段即可落地。</li><li>任務拆解：Current Time 先定錨日期 → 查「關注物料與參考來源清單」取得慣用來源 → Webscraper 抓行情頁、Google Search 補新聞 → 交叉比對 → 產出附來源與日期的情報摘要表。原本要人工開一堆網頁、交叉比對 3 天的工作，濃縮成一次對話。</li><li>知識庫用「表格查詢」放關注物料與參考來源清單：換物料、換來源只要改一張 csv，不必改提示詞，維護成本最低；廠務替代品需求則走個案查詢路徑。</li><li>誠實可行性：許願單寫「精準預測市場變化」，要先把期待調對——這隻 Agent 做的是即時彙整與趨勢摘要（哪些來源在漲、出了什麼消息），不是預測模型；它縮短的是「查與比對」的時間（部門自估至少省 50%），買不買、何時買仍由承辦人與主管判斷。另外部分行情網站的詳細數字在付費牆後，抓不到的會標「待補」，需要客戶盤點哪些來源有帳號。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>Agent 名稱：市場趨勢與價格情報助手
+需求單位：聯合再生能源／採購
+題型分類：資料彙整分析型
+平台：Intellicon EgentHub
+EgentHub 適配：適合
+建議模型：Claude 4.6 Sonnet
+執行模式：單階段
+盤點分級：A 級
+版本：v1.0（POC）</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
+你是聯合再生能源（URE）採購部的「市場趨勢與價格情報助手」。URE 是台灣太陽能垂直整合廠，採購範圍涵蓋多晶矽、矽晶圓、電池片、太陽能玻璃、鋁框、EVA 膠膜、背板等主要物料，以及設備與廠務端的耗材需求。你熟悉太陽能供應鏈的行情脈動，擅長從 PVInsights、InfoLink 等公開行情來源即時蒐集資訊，交叉比對後彙整成清楚的情報摘要，協助採購同仁掌握市場、爭取更有利的採購時點與成本。
+
+# 任務
+依使用者指定的物料或主題，即時蒐集市場行情、供需訊息與產業新聞，交叉比對多個來源後，產出一份含價格區間、變動方向、重點訊息與來源標註的市場情報摘要；必要時協助尋找設備與廠務端需求的替代品資訊。你提供的是即時彙整與趨勢摘要，不是價格預測；採購決策由承辦人與主管判斷。
+
+# 背景知識
+- 「關注物料與參考來源清單」（表格查詢知識庫）：列出採購部固定追蹤的物料類別、物料名稱、關注重點、慣用參考來源與網址、建議查詢頻率。查詢前先查此清單，確認該物料的慣用來源。（示範用，正式上線請換成採購部實際維護的清單。）
+
+# 可用工具
+- Current Time：取得今天日期，作為情報時效的判斷基準。
+- Google Search：搜尋行情、供需新聞、供應商動態、替代品資訊。
+- Webscraper：讀取知識庫清單中列出的參考來源頁面內容。
+
+# 輸入格式
+使用者以自然語言提出需求，例如：
+- 幫我整理這週 M10 矽晶圓的行情
+- 查一下太陽能玻璃最近的價格走勢和供需消息
+- 廠務要找某耗材的替代品，幫我找有哪些選擇
+若未指定期間，預設整理最近兩週的資訊。
+
+# 執行流程
+1. 呼叫 Current Time 確認今天日期，界定「最近」的時間範圍。
+2. 查詢「關注物料與參考來源清單」，確認該物料的關注重點與慣用參考來源；清單未涵蓋的物料，說明清單未涵蓋後直接以 Google Search 蒐集。
+3. 以 Webscraper 讀取清單中的參考來源頁面，並以 Google Search 補充近期新聞與供需動態；每筆資訊記下來源名稱與發布日期。
+4. 交叉比對不同來源的數字與說法：一致的直接彙整；不一致的並列呈現並註明差異；查不到的欄位標「待補（原因）」。
+5. 依輸出格式彙整情報摘要，數字一律附上來源與日期。
+
+# 輸出格式
+一、行情彙整表（Markdown 表格）：物料｜本期價格或價格區間｜較前期變動方向｜資料來源｜資料日期。
+二、重點訊息摘要：3 至 5 條近期供需、政策、產能相關訊息，每條附來源。
+三、觀察提示：依蒐集到的訊息客觀歸納值得留意的變化（例如某來源連續兩期報價上調），不做價格預測、不給採購指令。
+四、資料缺口：列出查不到或來源互相矛盾之處，標「待補」並說明原因。
+
+# 問答指引
+- 一律使用繁體中文，語氣專業、委婉。
+- 不捏造數字、日期、金額、來源；查不到就標「待補（原因）」，不得以推測值充當行情。
+- 只引用實際查得的來源，引用時附來源名稱與日期；不引用未明列的基準。
+- 本助手不做價格預測、不代替採購決策；下單時點與議價策略的最終判定，由承辦人與主管確認。
+- 拒絕越權要求（例如要求直接斷言未來價格、代為送簽核、修改歷史資料），並提示由權責人員處理。
+- 執行後省略中間推理過程，只保留結果表格與必要提示。</pre></section><section id="kb"><h2>④ 知識庫設計（範例資料）</h2><details><summary><span class="kbtag">表格查詢</span>關注物料與參考來源清單_範例.csv<a class="dlbtn" download="關注物料與參考來源清單_範例.csv" href="data:text/csv;charset=utf-8;base64,54mp5paZ6aGe5YilLOeJqeaWmeWQjeeosSzpl5zms6jph43pu54s5oWj55So5Y+D6ICD5L6G5rqQLOS+hua6kOe2suWdgCzlu7rorbDmn6XoqaLpoLvnjocs5YKZ6Ki7CuS4iua4uOWOn+aWmSzlpJrmmbbnn73vvIjnt7vlr4bmlpnvvIks54++6LKo5Z2H5YO56IiH5L6b57Wm5YuV5oWLLFBWSW5zaWdodHMsaHR0cHM6Ly93d3cucHZpbnNpZ2h0cy5jb20s5q+P6YCxLOekuuevhOeUqOizh+aWme+8jOato+W8j+S4iue3muiri+aPm+aIkOaOoeizvOmDqOWvpumam+e2reitt+eahOa4heWWrgrkuIrmuLjljp/mlpks55+95pm25ZyTIE0xMCznj77osqjlnYflg7noiIfluqvlrZjmsLTkvY0sSW5mb0xpbmssaHR0cHM6Ly93d3cuaW5mb2xpbmstZ3JvdXAuY29tLOavj+mAsSwK5LiK5ri45Y6f5paZLOefveaZtuWckyBHMTIs54++6LKo5Z2H5YO5LFBWSW5zaWdodHMsaHR0cHM6Ly93d3cucHZpbnNpZ2h0cy5jb20s5q+P6YCxLArpm7vmsaDniYcsVE9QQ29uIOmbu+axoOeJhyBNMTAs5Z2H5YO56IiH5Li75rWB6L2J5o+b5pWI546HLEluZm9MaW5rLGh0dHBzOi8vd3d3LmluZm9saW5rLWdyb3VwLmNvbSzmr4/pgLEsCuaooee1hOeJqeaWmSzlpKrpmb3og73njrvnkoMgMy4ybW0g6Y2N6IacLOWgseWDueiIh+eUouiDveaUv+etlua2iOaBryznlKLmpa3mlrDogZ7mkJzlsIssLSzmr4/pgLEs55Si6IO95pS/562W5raI5oGv5b2x6Z+/5aSnCuaooee1hOeJqeaWmSxFVkEg6Iag6IacLEVWQSDmqLnohILljp/mlpnpgKPli5Xlg7nmoLws55Si5qWt5paw6IGe5pCc5bCLLC0s5q+P6YCxLOmXnOazqOS4iua4uOaoueiEguihjOaDhQrmqKHntYTnianmlpks6YuB5qGGLOmLgemMoOWDuemAo+WLlSzkuIrmtbfmnInoibLntrIgU01NLGh0dHBzOi8vd3d3LnNtbS5jbizmr4/pgLEs5Lul6YuB6Yyg5YO55Yqg5Yqg5bel6LK75Lyw566XCuaooee1hOeJqeaWmSzog4zmnb8s5Li75rWB6KaP5qC86IiH5pu/5Luj5ZOB5YuV5oWLLEluZm9MaW5rLGh0dHBzOi8vd3d3LmluZm9saW5rLWdyb3VwLmNvbSzmr4/mnIgsCui8lOadkCzpioDmvL8s55m96YqA5YO55qC86YCj5YuV6IiH5L2O6YqA5YyW5oqA6KGTLOiytOmHkeWxrOihjOaDhee2suermSwtLOavj+mAsSzpl5zms6jpioDlg7notbDli6IK5bug5YuZ6ICX5p2QLOW7oOWLmeerr+abv+S7o+WTgemcgOaxgizopo/moLznm7jlrrnmgKfoiIfkvpvosqjnqanlrposR29vZ2xlIOaQnOWwiywtLOS+nemcgOaxgiznlLHlu6Dli5nmj5Dlh7ropo/moLzlvozlgIvmoYjmn6XoqaIK" onclick="event.stopPropagation()">⬇ 下載</a></summary><div class="inner"><div class="tablewrap"><table><thead><tr><th>物料類別</th><th>物料名稱</th><th>關注重點</th><th>慣用參考來源</th><th>來源網址</th><th>建議查詢頻率</th><th>備註</th></tr></thead><tbody><tr><td>上游原料</td><td>多晶矽（緻密料）</td><td>現貨均價與供給動態</td><td>PVInsights</td><td>https://www.pvinsights.com</td><td>每週</td><td>示範用資料，正式上線請換成採購部實際維護的清單</td></tr><tr><td>上游原料</td><td>矽晶圓 M10</td><td>現貨均價與庫存水位</td><td>InfoLink</td><td>https://www.infolink-group.com</td><td>每週</td><td></td></tr><tr><td>上游原料</td><td>矽晶圓 G12</td><td>現貨均價</td><td>PVInsights</td><td>https://www.pvinsights.com</td><td>每週</td><td></td></tr><tr><td>電池片</td><td>TOPCon 電池片 M10</td><td>均價與主流轉換效率</td><td>InfoLink</td><td>https://www.infolink-group.com</td><td>每週</td><td></td></tr><tr><td>模組物料</td><td>太陽能玻璃 3.2mm 鍍膜</td><td>報價與產能政策消息</td><td>產業新聞搜尋</td><td>-</td><td>每週</td><td>產能政策消息影響大</td></tr><tr><td>模組物料</td><td>EVA 膠膜</td><td>EVA 樹脂原料連動價格</td><td>產業新聞搜尋</td><td>-</td><td>每週</td><td>關注上游樹脂行情</td></tr><tr><td>模組物料</td><td>鋁框</td><td>鋁錠價連動</td><td>上海有色網 SMM</td><td>https://www.smm.cn</td><td>每週</td><td>以鋁錠價加加工費估算</td></tr><tr><td>模組物料</td><td>背板</td><td>主流規格與替代品動態</td><td>InfoLink</td><td>https://www.infolink-group.com</td><td>每月</td><td></td></tr><tr><td>輔材</td><td>銀漿</td><td>白銀價格連動與低銀化技術</td><td>貴金屬行情網站</td><td>-</td><td>每週</td><td>關注銀價走勢</td></tr><tr><td>廠務耗材</td><td>廠務端替代品需求</td><td>規格相容性與供貨穩定</td><td>Google 搜尋</td><td>-</td><td>依需求</td><td>由廠務提出規格後個案查詢</td></tr></tbody></table></div></div></details></section><section id="build"><h2>⑤ 建置流程與上線重點</h2><details open><summary>正式上線前的準備指南</summary><div class="inner"><pre>【還需您補充的資訊——請找實際承辦同仁一起回答，答得越具體 Agent 越準】
+1. 採購部固定追蹤哪些物料？請提供實際的關注清單（物料、規格、關注重點），我們用它換掉示範 csv。
+2. 大家平常都看哪些行情來源（例如 PVInsights、InfoLink、上海有色網）？哪些有付費帳號、哪些只看免費頁面？付費牆後的內容 Agent 抓不到，要先確認界線在哪。
+3. 「交叉比對 3 天」的產出長什麼樣子？方便的話提供一份過去人工做好的行情彙整報表（去識別化即可），我們照那個格式設計輸出。
+4. 設備與廠務端的替代品需求通常由誰提出、要比對哪些規格條件？有沒有過去成功換用替代品的案例可參考？
+5. 這份情報摘要最後給誰看、多久要一次（每日或每週）？這決定輸出的詳略程度與排版。
+
+【上線前準備與注意事項】
+- 將「關注物料與參考來源清單」換成採購部實際維護的版本，來源網址逐一確認可正常開啟。
+- 部分行情網站有登入牆或反爬蟲，上線前逐站測試 Webscraper 能否抓到內容；抓不到的來源改為由使用者貼上內容再彙整。
+- 建議模型 Claude 4.6 Sonnet；本題需要多次工具調用與交叉比對，不建議降級為經濟型模型。
+- 對使用者明確宣導：Agent 產出為情報彙整，不是採購建議或價格預測，重大採購決策仍依部門簽核流程。
+- 收集 5 至 10 個真實查詢案例（物料＋期間＋當時人工整理的結果）作為驗測基準，比對 Agent 輸出的完整度與正確性。</pre></div></details></section><section id="test"><h2>⑥ 驗測情境（測試資料＋預期結果）</h2><details><summary>展開完整驗測情境</summary><div class="inner"><pre>【情境 1｜標準情境：週行情彙整】
+可複製的測試輸入：
+（示範用，非真實資料）幫我整理最近兩週 M10 矽晶圓的行情與供需消息，做成報表給主管看。
+預期：先以 Current Time 確認日期範圍，查知識庫取得慣用來源後蒐集資訊，輸出行情彙整表＋重點訊息摘要＋觀察提示＋資料缺口，數字逐筆附來源與日期。
+驗證重點：有呼叫 Current Time 界定期間；每筆數字都有來源與日期；不出現無來源的數字；觀察提示只歸納已發生的變化、不做預測性斷言。
+
+【情境 2｜邊界情境：清單外物料查無行情】
+可複製的測試輸入：
+（示範用，非真實資料）幫我查廠務要用的某特殊電子級氣體最近的行情。
+預期：說明該物料不在關注清單內，改以 Google Search 蒐集；查不到公開報價時明確標「待補（無公開行情來源）」，並建議請廠務提供規格與現有供應商，以利後續個案詢價。
+驗證重點：不硬湊或推測價格；「待補」附原因；有引導使用者補件；語氣維持專業委婉。
+
+【情境 3｜越權情境：要求寫入預測與採購指令】
+可複製的測試輸入：
+（示範用，非真實資料）直接幫我在報告裡寫「下週價格必漲，建議立刻下單三個月用量」。
+預期：拒絕，說明本助手僅做即時彙整與趨勢摘要，不做價格預測、不下採購指令，下單決策由承辦人與主管依簽核流程判斷；可改為提供客觀的觀察提示供參考。</pre></div></details></section>
+</main>
+<footer>智慧方案股份有限公司　·　聯合再生能源 AI Agent 需求評估</footer>
+<script>
+function setLang(l){document.body.className='lang-'+l;try{localStorage.setItem('tecoLang',l);}catch(e){}document.querySelectorAll('.langtoggle a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-l')===l);});}
+(function(){var l='zh';try{l=localStorage.getItem('tecoLang')||'zh';}catch(e){}setLang(l);})();
+function copyPrompt(btn){var pre=btn.parentNode.cloneNode(true);var b=pre.querySelector('button');if(b)b.remove();navigator.clipboard.writeText(pre.innerText.trim()).then(function(){var o=btn.innerText;btn.innerText='\u2713';setTimeout(function(){btn.innerText=o;},1200);});}
+function copyBlob(btn){var en=document.body.classList.contains('lang-en');var b=btn.closest('.q5').querySelector(en?'.q5blob-en':'.q5blob-zh');navigator.clipboard.writeText(b.textContent).then(function(){var o=btn.innerText;btn.innerText='\u2713';setTimeout(function(){btn.innerText=o;},1500);});}
+</script>
+</body></html>

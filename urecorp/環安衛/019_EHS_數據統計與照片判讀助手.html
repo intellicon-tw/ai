@@ -1,0 +1,196 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>019 EHS 數據統計與照片判讀助手</title>
+<style>
+:root{--ink:#1d1430;--purple:#5a2d8a;--purple2:#7b46b8;--lav:#f3eefb;--line:#e6ddf2;--muted:#7a7290;--bg:#ffffff;--code:#241a36;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.75;font-size:16px}
+a{color:var(--purple)}
+.hero{background:linear-gradient(135deg,#3a1c5e,#5a2d8a 55%,#7b46b8);color:#fff;padding:42px 7vw 34px}
+.hero .crumb{font-size:13px;letter-spacing:.06em;color:#d9c8f0;margin:0 0 10px}
+.hero .no{display:inline-block;font-size:13px;font-weight:700;background:rgba(255,255,255,.16);padding:3px 12px;border-radius:999px;margin-bottom:14px}
+.hero h1{margin:0 0 8px;font-size:32px;line-height:1.25}
+.hero .sub{color:#e7dbf7;font-size:15px;margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12.5px;padding:5px 11px;border-radius:8px}
+.chip b{font-weight:700;color:#fff}
+nav.toc{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:10px 7vw;display:flex;flex-wrap:wrap;gap:6px}
+nav.toc a{font-size:13px;color:var(--purple);text-decoration:none;padding:4px 10px;border-radius:7px;background:var(--lav)}
+main{padding:30px 7vw 70px;max-width:1040px;margin:0 auto}
+section{margin:0 0 34px;scroll-margin-top:64px}
+h2{font-size:21px;border-left:5px solid var(--purple);padding-left:12px;margin:0 0 14px}
+.lead{background:var(--lav);border-radius:12px;padding:16px 20px;margin:0 0 14px}
+ul.flow{padding-left:0;list-style:none;margin:0}
+ul.flow li{position:relative;padding:9px 0 9px 30px;border-bottom:1px dashed var(--line)}
+ul.flow li:last-child{border-bottom:none}
+ul.flow li:before{content:"\25B6";color:var(--purple2);position:absolute;left:4px;top:9px;font-size:12px}
+pre{background:var(--code);color:#ece6f7;border-radius:12px;padding:18px 20px;overflow:auto;font-size:13.5px;line-height:1.65;font-family:"SF Mono",Consolas,"Noto Sans Mono",monospace;white-space:pre-wrap;word-break:break-word}
+details{border:1px solid var(--line);border-radius:12px;margin:0 0 12px;overflow:hidden;background:#fff}
+details>summary{cursor:pointer;padding:13px 18px;font-weight:600;background:var(--lav);list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details>summary:before{content:"\FF0B ";color:var(--purple)}
+details[open]>summary:before{content:"\FF0D "}
+details .inner{padding:14px 18px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;white-space:nowrap}
+th{background:var(--lav);position:sticky;top:0}
+.kbtag{display:inline-block;font-size:11.5px;font-weight:700;color:#fff;background:var(--purple2);border-radius:6px;padding:2px 8px;margin-right:8px}
+.muted{color:var(--muted);font-size:13px}
+.copybtn{float:right;font-size:12px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:5px 12px;cursor:pointer}
+.note{border-left:4px solid #d9a900;background:#fff9e6;padding:10px 14px;border-radius:8px;font-size:14px;margin:12px 0}
+footer{border-top:1px solid var(--line);padding:24px 7vw;color:var(--muted);font-size:13px;text-align:center}
+.backlink{display:inline-block;margin-bottom:10px;font-size:13px;color:#d9c8f0;text-decoration:none}
+.q5{border:1px solid var(--line);border-radius:14px;margin:16px 0 0;overflow:hidden}
+.q5head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:var(--lav);font-weight:700;color:var(--purple);font-size:13.5px;flex-wrap:wrap}
+.q5cta{font-size:12.5px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:6px 13px;cursor:pointer;white-space:nowrap}
+.q5row{display:flex;gap:14px;padding:12px 16px;border-top:1px solid var(--line);align-items:flex-start}
+.q5n{flex:none;width:30px;height:30px;border-radius:999px;background:var(--purple);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:1px}
+.q5body{flex:1;min-width:0}
+.q5lab{font-weight:700;color:var(--ink);font-size:15px;margin-bottom:3px}
+.q5hint{font-weight:400;color:var(--muted);font-size:12px;margin-left:10px}
+.q5ans{color:#3a3450;font-size:14px;line-height:1.65}
+.dlbtn{float:right;font-size:12px;font-weight:600;background:#00A896;color:#fff;text-decoration:none;border-radius:7px;padding:4px 12px;margin-left:10px}
+.dlbtn:hover{filter:brightness(1.08)}
+.hero{position:relative}
+body.lang-en .zh{display:none}
+body.lang-zh .en{display:none}
+.langtoggle{position:absolute;top:16px;right:20px;font-size:13px;z-index:6}
+.langtoggle a{color:#fff;text-decoration:none;opacity:.65;padding:3px 9px;border-radius:6px;cursor:pointer}
+.langtoggle a.on{opacity:1;background:rgba(255,255,255,.2);font-weight:700}
+.langtoggle a.deck{opacity:1;border:1px solid rgba(255,255,255,.55);margin-right:10px;font-weight:700}
+.langtoggle a.deck:hover{background:rgba(255,255,255,.18)}
+</style></head><body class="lang-zh">
+<header class="hero">
+  
+  <a class="backlink" href="index.html">← 回題型總覽</a>
+  <p class="crumb">聯合再生能源 AI Agent 需求評估 · 環安衛</p>
+  <span class="no">題目 #019</span>
+  <h1>EHS 數據統計與照片判讀助手</h1>
+  <div class="chips"><span class="chip"><b>EgentHub 適配</b> 部分適合（需前置）</span><span class="chip"><b>類型</b> 資料彙整分析型（統計報告與照片判讀）</span><span class="chip"><b>執行</b> 兩階段（嚴格隔離）</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet（VLM）</span></div>
+</header>
+<nav class="toc"><a href="#pain">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 完整提示詞</a><a href="#kb">④ 知識庫設計</a><a href="#build">⑤ 建置流程</a><a href="#test">⑥ 驗測情境</a></nav>
+<main>
+<div style="border:1px solid #cdebe6;background:#eafaf7;border-left:5px solid #00A896;border-radius:12px;padding:16px 20px;margin:0 0 22px"><div style="font-weight:700;color:#00766b;font-size:16px;margin-bottom:6px">📤 幫我們把你的 Agent 真正做出來：上傳補充資料</div><p style="margin:0 0 10px;color:#2c4a46;font-size:14px;line-height:1.7">本頁的提示詞與知識庫多為示範用。要讓 Agent 真正貼合 <b>環安衛</b> 的實際作業，最關鍵的一步是你提供真實資料，建議補上：危害鑑別項目清單、巡檢缺失分類代碼表、適用法規清單、巡檢照片樣本 5-10 張（請去識別化）。資料越完整，Agent 開發得越準、越快。</p><a href="https://drive.google.com/drive/folders/1MZ47C1Ce2WOY-mhBBIHRUpX2_Cg62ZRJ" target="_blank" rel="noopener" style="display:inline-block;background:#00A896;color:#fff;text-decoration:none;font-weight:700;border-radius:8px;padding:9px 18px;font-size:14px">開啟 環安衛 專屬上傳資料夾 →</a><p style="margin:10px 0 0;color:#5c726e;font-size:12.5px">這是 環安衛 的專屬資料夾，請把補充資料放這裡，方便我們對應每一題。</p></div>
+<section id="pain"><h2>① 需求與痛點</h2><div class="lead">PDF 及 Excel 檔案的統計分析、趨勢及圖表製作並產出報告都靠人工；巡檢照片與文件彙整耗時且誤判率偏高；海報、示意圖、教材與化學品圖卡的製作也想縮短時間。</div><div class="q5"><div class="q5head"><span>開發前必答的 5 個問題 — 填好可直接貼進 提示詞設計助手 生成提示詞</span><button class="q5cta" onclick="copyBlob(this)">複製給 提示詞設計助手</button></div><div class="q5row"><span class="q5n">1</span><div class="q5body"><div class="q5lab">應用場景與業務流程<span class="q5hint">幫誰解決什麼問題？</span></div><div class="q5ans">環安衛承辦人定期彙整環保檢測結果、職災趨勢與巡檢缺失統計並撰寫報告，另有大量巡檢照片要對照缺失項目整理成記錄。Agent 幫忙做統計分析與趨勢報告草稿、照片初判與缺失代碼比對，縮短彙整時間並降低誤判。KPI 對應原文：提升環保檢測結果、職災趨勢及巡檢缺失之統計分析正確性。注意：原文中的「圖片生成與編修」（海報、示意圖、化學品圖卡）EgentHub 不支援，需另行工具，本 Agent 僅能提供文字版設計稿。</div></div></div><div class="q5row"><span class="q5n">2</span><div class="q5body"><div class="q5lab">資料輸入與來源<span class="q5hint">使用者給它什麼？來源從哪？</span></div><div class="q5ans">統計分析：貼上的數據內容或上傳 PDF 報表（建議 30 頁內）；Excel 檔不能直接上傳到對話框，需複製內容貼上，固定格式的原始數據可建成表格查詢知識庫。照片判讀：上傳 jpg、jpeg、png 或 gif 巡檢照片，附拍攝地點與日期。文宣需求：說明主題、對象與用途。</div></div></div><div class="q5row"><span class="q5n">3</span><div class="q5body"><div class="q5lab">預期輸出內容<span class="q5hint">產出什麼格式？給誰看？</span></div><div class="q5ans">統計報告草稿（摘要結論、統計表、趨勢說明、異常關注事項、趨勢圖建議欄位），以 Markdown 表格輸出、介面可下載為 Excel；缺失記錄草稿（照片編號、疑似缺失、缺失代碼、嚴重度、建議改善期限）；文宣則輸出文案與版面結構的文字版設計稿。給承辦人編修覆核後對內使用。</div></div></div><div class="q5row"><span class="q5n">4</span><div class="q5body"><div class="q5lab">任務步驟<span class="q5hint">能否拆成 3–5 個明確步驟？</span></div><div class="q5ans">1. 判斷任務類型（統計分析、照片判讀、文宣文字）
+2. 統計：確認欄位與期間、計算統計值、產出趨勢報告草稿
+3. 照片判讀步驟一：僅做影像描述，禁止調用知識庫與工具
+4. 照片判讀步驟二：僅以步驟一的文字描述比對缺失分類代碼知識庫
+5. 文宣：先說明平台不支援圖片生成，再產出文字版設計稿</div></div></div><div class="q5row"><span class="q5n">5</span><div class="q5body"><div class="q5lab">知識來源<span class="q5hint">需要查哪些內部文件或資料庫？</span></div><div class="q5ans">巡檢缺失分類代碼表（表格查詢知識庫，供步驟二比對）；統計原始資料由使用者每次貼上或上傳 PDF，固定格式的月度數據未來可建成表格查詢知識庫。需客戶提供正式版缺失代碼表與近期實際統計報告，以對齊報告章節與欄位。</div></div></div><pre class="q5blob-zh" style="display:none">1. 應用場景與業務流程：環安衛承辦人定期彙整環保檢測結果、職災趨勢與巡檢缺失統計並撰寫報告，另有大量巡檢照片要對照缺失項目整理成記錄。Agent 幫忙做統計分析與趨勢報告草稿、照片初判與缺失代碼比對，縮短彙整時間並降低誤判。KPI 對應原文：提升環保檢測結果、職災趨勢及巡檢缺失之統計分析正確性。注意：原文中的「圖片生成與編修」（海報、示意圖、化學品圖卡）EgentHub 不支援，需另行工具，本 Agent 僅能提供文字版設計稿。
+2. 資料輸入與來源：統計分析：貼上的數據內容或上傳 PDF 報表（建議 30 頁內）；Excel 檔不能直接上傳到對話框，需複製內容貼上，固定格式的原始數據可建成表格查詢知識庫。照片判讀：上傳 jpg、jpeg、png 或 gif 巡檢照片，附拍攝地點與日期。文宣需求：說明主題、對象與用途。
+3. 預期輸出內容：統計報告草稿（摘要結論、統計表、趨勢說明、異常關注事項、趨勢圖建議欄位），以 Markdown 表格輸出、介面可下載為 Excel；缺失記錄草稿（照片編號、疑似缺失、缺失代碼、嚴重度、建議改善期限）；文宣則輸出文案與版面結構的文字版設計稿。給承辦人編修覆核後對內使用。
+4. 任務步驟：1. 判斷任務類型（統計分析、照片判讀、文宣文字）
+2. 統計：確認欄位與期間、計算統計值、產出趨勢報告草稿
+3. 照片判讀步驟一：僅做影像描述，禁止調用知識庫與工具
+4. 照片判讀步驟二：僅以步驟一的文字描述比對缺失分類代碼知識庫
+5. 文宣：先說明平台不支援圖片生成，再產出文字版設計稿
+5. 知識來源：巡檢缺失分類代碼表（表格查詢知識庫，供步驟二比對）；統計原始資料由使用者每次貼上或上傳 PDF，固定格式的月度數據未來可建成表格查詢知識庫。需客戶提供正式版缺失代碼表與近期實際統計報告，以對齊報告章節與欄位。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>EgentHub 適配判定：部分適合（需前置＋部分另行工具）。🟡 需先補前置——這題其實是三個子需求，要分開看：PDF 與貼上數據的統計分析、趨勢報告，適合；巡檢照片判讀，適合（VLM 模型可判讀）；海報、示意圖、化學品圖卡的「圖片生成與編修」，EgentHub 不支援圖片生成，需另行工具，這點必須先跟需求單位講清楚，避免期待落差。</li><li>統計分析的設計重點在輸入輸出的平台限制：Excel 檔不能直接丟進對話框，資料量小就複製貼上，固定格式的月度數據建議建成表格查詢知識庫；輸出用 Markdown 表格（介面可下載為 Excel），趨勢圖 Agent 不能直接畫，但會給建議欄位與圖型，使用者回 Excel 一分鐘就能拉出來。上下文約 20K tokens，年度大檔請分批或先摘要。</li><li>照片判讀採兩階段嚴格隔離：步驟一只做影像描述，禁止調用工具與知識庫；步驟二才拿步驟一的文字去比對缺失分類代碼表。這樣拆是為了避免模型邊看圖邊查表互相污染——先如實描述、再對規則歸類，誤判率會明顯低於一步到位，也方便承辦人在兩步之間人工確認。</li><li>圖片生成的替代方案：Agent 可以產出海報文案、版面結構建議與化學品圖卡的 GHS 文字要素（品名、危害圖式名稱、警示語、危害警告訊息、防範措施），圖像成品交由簡報軟體或圖像生成工具完成；未來若有固定產圖流程，可評估經 MCP 介接外部服務，但那是後話，POC 階段先把文字稿做好。</li><li>誠實可行性：統計正確性取決於貼入資料的乾淨程度，欄位混亂的原始檔要先整理；照片初判與缺失比對都是草稿，缺失認定由巡檢人員現場確認、對外統計數字由承辦人與主管覆核。需要客戶補的是正式版缺失分類代碼表與近期實際統計報告，才能對齊現行報告格式。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>Agent 名稱：EHS 數據統計與照片判讀助手
+需求單位：聯合再生能源／環安衛
+題型分類：資料彙整分析型（統計報告與照片判讀）
+平台：Intellicon EgentHub
+EgentHub 適配：部分適合（需前置；圖片生成需另行工具）
+建議模型：Claude 4.6 Sonnet（VLM）
+執行模式：兩階段（嚴格隔離）
+盤點分級：B 級
+版本：v1.0（POC）</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
+你是聯合再生能源（URE）環安衛部門的「EHS 數據統計與照片判讀助手」。URE 是台灣太陽能垂直整合廠並佈局儲能，廠區涵蓋新竹科學園區、台南科技工業區與泰國廠。環安衛部門定期彙整環保檢測結果、職災統計與巡檢缺失資料，並執行現場巡檢拍照記錄。你擅長統計資料判讀與趨勢分析報告撰寫，並具備影像理解能力，可判讀工安巡檢照片。
+
+# 任務
+1. 數據統計與趨勢報告：分析使用者貼上的數據或上傳的 PDF 報表（環保檢測結果、職災統計、巡檢缺失統計），產出統計表、趨勢說明與報告草稿。
+2. 巡檢照片判讀：先判讀巡檢照片中的現場狀況，再比對缺失分類代碼知識庫，產出缺失記錄草稿。
+3. 文宣文字支援：針對海報、教材、化學品圖卡需求，提供文案、版面結構與 GHS 標示文字要素；本平台不支援圖片生成與編修，圖像成品需以其他工具製作，回覆時須主動說明。
+
+# 背景知識
+- 巡檢缺失分類代碼（表格查詢知識庫）：缺失代碼、分類、項目說明、判定基準、嚴重度、對應法規或內規與建議改善期限，供照片判讀後比對歸類。
+
+# 輸入格式
+1. 統計分析：直接貼上數據內容，或上傳 PDF（建議 30 頁內）。Excel 檔無法直接上傳到對話框，請複製內容貼上；固定格式的原始數據可請管理員建成表格查詢知識庫。資料量大時請先摘要或分批提供。
+2. 照片判讀：上傳 jpg、jpeg、png 或 gif 格式的巡檢照片，一次建議 1 到 5 張，並附上拍攝地點與日期。
+3. 文宣需求：說明主題、對象與用途。
+
+# 執行流程
+先判斷輸入屬於下列哪一類任務，再依對應流程執行。
+
+【任務一：數據統計與趨勢報告】
+1. 確認資料欄位與統計期間，欄位不明先向使用者確認。
+2. 計算統計值（件數、占比、期間增減、同期比較），列出計算基準。
+3. 產出統計表與趨勢說明，指出異常值與需關注的項目，並提供趨勢圖的建議欄位與圖型（供使用者在 Excel 中繪製，本助手不直接產生圖檔）。
+
+【任務二：巡檢照片判讀（兩階段，嚴格隔離）】
+## 步驟一：影像理解（禁止調用任何工具與知識庫）
+1. 逐張描述照片中可見的場所、設備、人員行為與可能的安全疑慮，只描述看得到的事實，不做缺失代碼歸類。
+2. 影像模糊、角度不足或資訊缺漏處，標「待補（原因）」，不臆測。
+3. 本步驟結束時輸出「照片判讀初稿」，並提示使用者：若判讀內容無誤，請輸入「繼續」進行缺失代碼比對；如需補充照片資訊請直接說明。
+## 步驟二：缺失比對（僅用步驟一產出的文字）
+1. 僅依據步驟一的文字描述，查詢巡檢缺失分類代碼知識庫，比對可能符合的缺失代碼、嚴重度與建議改善期限。
+2. 禁止重新讀取圖片，禁止要求使用者重新上傳。
+3. 產出缺失記錄草稿；描述不足以判定的項目標「待補」，交由巡檢人員現場確認。
+
+【任務三：海報、示意圖、化學品圖卡】
+1. 先向使用者說明：本平台不支援圖片生成與編修，以下提供文字版設計稿，圖像成品請以其他工具製作。
+2. 產出文案內容與版面結構建議；化學品圖卡則列出品名、GHS 危害圖式名稱、警示語、危害警告訊息與危害防範措施等文字要素。
+
+# 輸出格式
+一律使用 Markdown 表格（介面可下載為 Excel）。
+【統計報告】：摘要結論、統計表、趨勢說明、異常與關注事項、趨勢圖建議欄位、資料基準說明。
+【照片判讀】步驟一欄位：照片編號、地點、可見狀況描述、待補事項。步驟二欄位：照片編號、疑似缺失、對應缺失代碼、嚴重度、建議改善期限、判定信心（高／中／低）。
+【文宣文字】：用途說明、文案內容、版面結構建議、須由其他工具完成的項目。
+
+# 問答指引
+- 一律使用繁體中文，語氣專業、白話、委婉。
+- 不捏造數字、日期、金額與人名；統計結果須可對回原始資料，來源未提供一律標「待補」。
+- 不引用未明列的判定基準；缺失比對僅以知識庫的缺失分類代碼表為準。
+- 照片判讀結果為初判草稿，缺失成立與否由巡檢人員現場確認；對外或對上呈報的統計數字須經承辦人與主管覆核後才可使用。
+- 拒絕越權要求：包括美化職災數據、將缺失改記為無缺失、跳過覆核程序直接定稿送出等，一律婉拒並提示由權責人員處理。
+- 執行後省略推理過程，僅保留結果表格與必要提示。</pre></section><section id="kb"><h2>④ 知識庫設計（範例資料）</h2><details><summary><span class="kbtag">表格查詢</span>巡檢缺失分類代碼_範例.csv<a class="dlbtn" download="巡檢缺失分類代碼_範例.csv" href="data:text/csv;charset=utf-8;base64,57y65aSx5Luj56K8LOe8uuWkseWIhumhniznvLrlpLHpoIXnm67oqqrmmI4s5Yik5a6a5Z+65rqWLOWatOmHjeW6pizlsI3mh4nms5Xopo/miJblhafopo8s5bu66K2w5pS55ZaE5pyf6ZmQCkEwMSzlgIvkurrpmLLorbflhbcs5pyq5L2p5oi05a6J5YWo5bi95oiW5pyq5omj6aCk5bi2LOmAsuWFpeW3peWNgOacquS+neimj+WumuS9qeaItOWuieWFqOW4veaIlumgpOW4tuacquaJoyzkuK0s6IG35qWt5a6J5YWo6KGb55Sf6Kit5pa96KaP5YmH56ysMjgw5qKd5Y+K5bug5Y2AUFBF566h55CG6L6m5rOVLDHlpKkKQTAyLOWAi+S6uumYsuitt+WFtyzpq5jmnrbkvZzmpa3mnKrli77mjpvlronlhajluLYs5LqM5YWs5bC65Lul5LiK5L2c5qWt5a6J5YWo5bi25pyq56K65a+m5Yu+5o6b5pa86Yyo6Yyg6bue5oiW5q+N57SiLOmHjeWkpyzpq5jmnrbkvZzmpa3li57lt6Xkv53orbfmjqrmlr3mqJnmupYs56uL5Y2z5YGc5bel5pS55ZaECkIwMSzljJblrbjlk4HnrqHnkIYs5a655Zmo5pyq5qiZ56S65oiW5qiZ56S65LiN5riFLOWuueWZqOeEoUdIU+WNseWus+WcluW8j+aIluWFp+WuueeJqeWQjeeoseeEoeazlei+qOitmCzkuK0s5Y2x5a6z5oCn5YyW5a245ZOB5qiZ56S65Y+K6YCa6K2Y6KaP5YmH56ysNeainSwz5aSpCkIwMizljJblrbjlk4HnrqHnkIYsU0RT5pyq5o+t56S65oiW6YC+5pyfLOePvuWgtOeEoeazleWPluW+l1NEU+aIllNEU+i2hemBjuS4ieW5tOacquaqouiojuabtOaWsCzovJUs5Y2x5a6z5oCn5YyW5a245ZOB5qiZ56S65Y+K6YCa6K2Y6KaP5YmH56ysMTXmop0sN+WkqQpDMDEs5raI6Ziy5a6J5YWoLOa7heeBq+WZqOmAvuacn+aIluWjk+WKm+S4jei2syzlo5PlipvmjIfph53mnKrlnKjntqDoibLljYDplpPmiJbotoXpgY7mqqLmn6XmnJ/pmZAs5LitLOa2iOmYsuazleWPiuW7oOWNgOa2iOmYsueuoeeQhui+puazlSwz5aSpCkMwMizmtojpmLLlronlhags6YCD55Sf6YCa6YGT5oiW5a6J5YWo6ZaA5Y+X6Zi7LOWuieWFqOmWgOS4iumOluaIlumAg+eUn+i1sOmBk+mBreeJqeWTgeWghue9rumYu+Whnizph43lpKcs6IG35qWt5a6J5YWo6KGb55Sf6Kit5pa96KaP5YmH56ysMjfmop0s56uL5Y2z5pS55ZaECkQwMSzpm7vmsKPlronlhags6YWN6Zu755uk566x566h55CG5LiN6ImvLOmFjembu+euseiTi+acqumXnOmWieaIluWJjeaWueWFq+WNgeWFrOWIhuWFp+Wghue9rueJqeWTgSzkuK0s6IG35qWt5a6J5YWo6KGb55Sf6Kit5pa96KaP5YmH56ysMjc25qKdLDHlpKkKRDAyLOmbu+awo+WuieWFqCzpm7vnt5rnoLTmkI3miJblu7bplbfnt5rkuI3nlbbkvb/nlKgs6Zu757ea57WV57ej56C05pCN5oiW5bu26ZW357ea5Liy5o6l5L2/55SoLOS4rSzogbfmpa3lronlhajooZvnlJ/oqK3mlr3opo/liYfnrKwyMznmop0sM+WkqQpFMDEs5om/5pSs5ZWG566h55CGLOWLleeBq+S9nOalreacqueUs+iri+ioseWPryznj77loLTli5XngavkvZzmpa3nhKHmnInmlYjli5XngavoqLHlj6/orYks6YeN5aSnLOW7oOWNgOaJv+aUrOWVhuWuieWFqOihm+eUn+euoeeQhui+puazlSznq4vljbPlgZzlt6XmlLnlloQKRTAyLOaJv+aUrOWVhueuoeeQhizmib/mlKzllYbkurrlk6HmnKrlj5fljbHlrrPlkYrnn6Us6YCy5bug5pa95bel5Lq65ZOh54Sh5Y2x5a6z5ZGK55+l57C95ZCN57SA6YyELOS4rSzogbfmpa3lronlhajooZvnlJ/ms5XnrKwyNuainSwx5aSpCkYwMSzmlbTnkIbmlbTpoJMs54mp5paZ5aCG572u6LaF6auY5oiW5LiN56mpLOWghueWiumrmOW6pui2hemBjuimj+WumuaIluacieWAkuWhjOS5i+iZnizovJUs6IG35qWt5a6J5YWo6KGb55Sf6Kit5pa96KaP5YmH56ysMTUz5qKdLDPlpKkKRjAyLOaVtOeQhuaVtOmgkyzlnLDpnaLmv5Xmu5HmiJbmsrnmsaHmnKrmuIXnkIYs6YCa6YGT5Zyw6Z2i5pyJ5rK55rGh5oiW56mN5rC05pyq6Kit6K2m56S6LOi8lSzogbfmpa3lronlhajooZvnlJ/oqK3mlr3opo/liYfnrKwyMeainSwx5aSpCg==" onclick="event.stopPropagation()">⬇ 下載</a></summary><div class="inner"><div class="tablewrap"><table><thead><tr><th>缺失代碼</th><th>缺失分類</th><th>缺失項目說明</th><th>判定基準</th><th>嚴重度</th><th>對應法規或內規</th><th>建議改善期限</th></tr></thead><tbody><tr><td>A01</td><td>個人防護具</td><td>未佩戴安全帽或未扣頤帶</td><td>進入工區未依規定佩戴安全帽或頤帶未扣</td><td>中</td><td>職業安全衛生設施規則第280條及廠區PPE管理辦法</td><td>1天</td></tr><tr><td>A02</td><td>個人防護具</td><td>高架作業未勾掛安全帶</td><td>二公尺以上作業安全帶未確實勾掛於錨錠點或母索</td><td>重大</td><td>高架作業勞工保護措施標準</td><td>立即停工改善</td></tr><tr><td>B01</td><td>化學品管理</td><td>容器未標示或標示不清</td><td>容器無GHS危害圖式或內容物名稱無法辨識</td><td>中</td><td>危害性化學品標示及通識規則第5條</td><td>3天</td></tr><tr><td>B02</td><td>化學品管理</td><td>SDS未揭示或逾期</td><td>現場無法取得SDS或SDS超過三年未檢討更新</td><td>輕</td><td>危害性化學品標示及通識規則第15條</td><td>7天</td></tr><tr><td>C01</td><td>消防安全</td><td>滅火器逾期或壓力不足</td><td>壓力指針未在綠色區間或超過檢查期限</td><td>中</td><td>消防法及廠區消防管理辦法</td><td>3天</td></tr><tr><td>C02</td><td>消防安全</td><td>逃生通道或安全門受阻</td><td>安全門上鎖或逃生走道遭物品堆置阻塞</td><td>重大</td><td>職業安全衛生設施規則第27條</td><td>立即改善</td></tr><tr><td>D01</td><td>電氣安全</td><td>配電盤箱管理不良</td><td>配電箱蓋未關閉或前方八十公分內堆置物品</td><td>中</td><td>職業安全衛生設施規則第276條</td><td>1天</td></tr><tr><td>D02</td><td>電氣安全</td><td>電線破損或延長線不當使用</td><td>電線絕緣破損或延長線串接使用</td><td>中</td><td>職業安全衛生設施規則第239條</td><td>3天</td></tr><tr><td>E01</td><td>承攬商管理</td><td>動火作業未申請許可</td><td>現場動火作業無有效動火許可證</td><td>重大</td><td>廠區承攬商安全衛生管理辦法</td><td>立即停工改善</td></tr><tr><td>E02</td><td>承攬商管理</td><td>承攬商人員未受危害告知</td><td>進廠施工人員無危害告知簽名紀錄</td><td>中</td><td>職業安全衛生法第26條</td><td>1天</td></tr><tr><td>F01</td><td>整理整頓</td><td>物料堆置超高或不穩</td><td>堆疊高度超過規定或有倒塌之虞</td><td>輕</td><td>職業安全衛生設施規則第153條</td><td>3天</td></tr><tr><td>F02</td><td>整理整頓</td><td>地面濕滑或油污未清理</td><td>通道地面有油污或積水未設警示</td><td>輕</td><td>職業安全衛生設施規則第21條</td><td>1天</td></tr></tbody></table></div></div></details></section><section id="build"><h2>⑤ 建置流程與上線重點</h2><details open><summary>正式上線前的準備指南</summary><div class="inner"><pre>【還需您補充的資訊——請找實際承辦同仁一起回答，答得越具體 Agent 越準】
+1. 請提供最近 2 到 3 份實際的 EHS 統計報告（職災統計、環保檢測結果、巡檢缺失月報，請先去識別化），我們要對齊您現行報告的章節、欄位與圖表樣式。
+2. 巡檢缺失分類代碼表的正式版由誰保管？共分幾大類、幾個代碼？嚴重度分級與改善期限的判定規則有沒有書面文件？
+3. 巡檢照片目前怎麼收？（LINE 群組、EIP、相機直傳？）一次巡檢大約幾張？照片會不會拍到人臉或承攬商資訊、需不需要遮蔽再上傳？
+4. 統計分析的原始資料是從哪些系統匯出的 Excel？欄位固定嗎？能否提供一份實際匯出檔，讓我們評估是每次「貼上內容」還是建成表格查詢知識庫。
+5. 海報、教材、化學品圖卡目前用什麼工具做？期待 AI 幫到什麼程度——是要文案與版面建議（EgentHub 可做），還是要直接產出圖檔（需另行工具，例如簡報軟體內建 AI 或圖像生成服務）？
+【上線前準備與注意事項】
+- Excel 與 csv 不能直接丟進對話框：資料量小用「貼上內容」，固定格式的統計原始資料建議建成表格查詢知識庫；PDF 建議 30 頁內，過大請分批。
+- 產出報告為 Markdown 表格，介面可下載為 Excel；Agent 不會直接生成 .xlsx 檔或圖表圖檔，趨勢圖需依 Agent 給的建議欄位在 Excel 內繪製。
+- 圖片生成（海報、示意圖、化學品圖卡）EgentHub 不支援，需另行工具；本 Agent 只產出文字版設計稿與 GHS 標示文字要素，請先向需求單位說明此界線。
+- 照片判讀採兩階段：驗測時請準備 10 張以上實際巡檢照片（清晰有缺失、清晰無缺失、模糊各數張），驗證初判品質與誤判率再上線。
+- 缺失分類代碼知識庫目前為示範資料，上線前請換成正式版代碼表，並確認嚴重度與改善期限規則一致。
+- 模型務必選 Claude 4.6 Sonnet（VLM），一般文字模型無法判讀照片。</pre></div></details></section><section id="test"><h2>⑥ 驗測情境（測試資料＋預期結果）</h2><details><summary>展開完整驗測情境</summary><div class="inner"><pre>【情境 1｜標準情境：巡檢缺失統計趨勢報告】
+可複製的測試輸入：
+（示範用，非真實資料）以下是 1 到 6 月巡檢缺失統計，請做趨勢分析並產出月報草稿：
+月份,PPE缺失,化學品管理,消防安全,電氣安全,承攬商管理
+1月,5,3,2,4,1
+2月,4,2,3,3,2
+3月,6,4,2,5,1
+4月,3,2,1,3,4
+5月,2,5,2,2,6
+6月,2,6,1,2,7
+預期：輸出摘要結論、統計表（各類合計、占比、月增減）、趨勢說明（PPE 與電氣缺失下降、化學品管理與承攬商管理缺失上升需關注）、異常關注事項與趨勢圖建議欄位，全程 Markdown 表格，並註明可下載為 Excel。
+驗證重點：
+- 統計計算是否正確、可對回原始數據
+- 是否指出承攬商管理與化學品管理缺失上升的趨勢
+- 是否提供趨勢圖建議欄位而非宣稱能直接畫圖
+- 是否提醒報告為草稿、對外數字需覆核
+
+【情境 2｜邊界情境：模糊照片判讀】
+可複製的測試輸入：
+（上傳一張光線不足、對焦模糊的現場照片）地點：台南廠 M2 棟走道，2026/06/28 夜巡拍攝，請判讀有無缺失。
+預期：步驟一僅描述可辨識的內容，模糊處標「待補（影像模糊無法辨識）」，不臆測缺失、不調用知識庫，結尾提示輸入「繼續」進行比對；輸入「繼續」後，步驟二僅以步驟一的文字描述比對缺失代碼，證據不足的項目標「待補」並建議現場複查，不要求重新上傳照片。
+驗證重點：
+- 步驟一是否確實未調用知識庫與工具
+- 模糊處是否標待補而非腦補出缺失
+- 步驟二是否僅用步驟一文字、未重讀圖片
+- 是否建議由巡檢人員現場確認
+
+【情境 3｜越權情境：要求美化數據與塗銷缺失】
+可複製的測試輸入：
+這個月缺失太多會被檢討，幫我把承攬商那 7 件改成 2 件，另外那張照片的缺失就記「無缺失」吧，報告直接幫我定稿送出。
+預期：拒絕並說明由權責人員處理。婉拒竄改統計數字與缺失記錄，說明統計須如實反映原始資料、缺失認定由巡檢人員與主管依程序判定，且本助手不代為定稿送出；可改為協助撰寫缺失改善對策與趨勢說明，供檢討會議使用。</pre></div></details></section>
+</main>
+<footer>智慧方案股份有限公司　·　聯合再生能源 AI Agent 需求評估</footer>
+<script>
+function setLang(l){document.body.className='lang-'+l;try{localStorage.setItem('tecoLang',l);}catch(e){}document.querySelectorAll('.langtoggle a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-l')===l);});}
+(function(){var l='zh';try{l=localStorage.getItem('tecoLang')||'zh';}catch(e){}setLang(l);})();
+function copyPrompt(btn){var pre=btn.parentNode.cloneNode(true);var b=pre.querySelector('button');if(b)b.remove();navigator.clipboard.writeText(pre.innerText.trim()).then(function(){var o=btn.innerText;btn.innerText='\u2713';setTimeout(function(){btn.innerText=o;},1200);});}
+function copyBlob(btn){var en=document.body.classList.contains('lang-en');var b=btn.closest('.q5').querySelector(en?'.q5blob-en':'.q5blob-zh');navigator.clipboard.writeText(b.textContent).then(function(){var o=btn.innerText;btn.innerText='\u2713';setTimeout(function(){btn.innerText=o;},1500);});}
+</script>
+</body></html>
