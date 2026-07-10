@@ -70,7 +70,7 @@ body.lang-zh .en{display:none}
   <h1>銷售報價單生成助理</h1>
   <div class="chips"><span class="chip"><b>題型</b> 標準化作業</span><span class="chip"><b>難易度</b> A 級</span><span class="chip"><b>執行</b> 單階段</span><span class="chip"><b>建議模型</b> Claude 4.6 Sonnet / GPT-5.4</span><span class="chip" style="background:#e2f0da;border-color:#9cc995;color:#1e7145;font-weight:700">★ 優先導入</span></div>
 </header>
-<nav class="toc"><a href="#pain">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 完整提示詞</a><a href="#kb">④ 知識庫設計</a><a href="#build">⑤ 建置流程</a><a href="#test">⑥ 驗測情境</a></nav>
+<nav class="toc"><a href="#pain"><div class="agent-live-box"><div style="margin:16px 0;padding:14px 18px;border:2px solid #16a34a;border-radius:12px;background:#f0fdf4;font-size:15px;line-height:1.9"><b style="color:#15803d">✅ 本題 Agent 已於 EgentHub 建置並通過驗測</b><br>邀請您實際體驗與驗測：<a href="https://intellicon.app/wc/c/4d725bdc-9b00-40e0-b56e-65923fbf68e3/w/c1d0e062-eec8-44b5-892b-154a8812dd8a/a/b16ccec4-0434-486b-a106-f59764d0e4ce" target="_blank" style="color:#15803d;font-weight:700">前台開始使用 →</a>&nbsp;&nbsp;<a href="https://intellicon.app/ap/c/4d725bdc-9b00-40e0-b56e-65923fbf68e3/w/c1d0e062-eec8-44b5-892b-154a8812dd8a/ae/b16ccec4-0434-486b-a106-f59764d0e4ce" target="_blank" style="color:#475569">後台設定（管理員）</a></div></div>① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 完整提示詞</a><a href="#kb">④ 知識庫設計</a><a href="#build">⑤ 建置流程</a><a href="#test">⑥ 驗測情境</a></nav>
 <main>
 <section id="pain"><h2>① 需求與痛點</h2><div class="lead">業務每次依客戶需求製作報價單，要查魚種規格、對應貿易條件並套範本逐欄 key-in，每件 15-30 分鐘，一年量達 200-400 件，10-20 位貿易同仁重複勞動。</div><div class="q5"><div class="q5head"><span>開發前必答的 5 個問題 — 填好可直接貼進 提示詞設計助手 生成提示詞</span><button class="q5cta" onclick="copyBlob(this)">複製給 提示詞設計助手</button></div><div class="q5row"><span class="q5n">1</span><div class="q5body"><div class="q5lab">應用場景與業務流程<span class="q5hint">幫誰解決什麼問題？</span></div><div class="q5ans">幫貿易部業務，依魚種、規格、數量、貿易條件快速套用報價單範本，產出格式正確的報價單草稿，減少逐欄 key-in 時間。</div></div></div><div class="q5row"><span class="q5n">2</span><div class="q5body"><div class="q5lab">資料輸入與來源<span class="q5hint">使用者給它什麼？來源從哪？</span></div><div class="q5ans">業務輸入的報價需求：客戶名稱、魚種/規格代號、數量、目的港、貿易條件、付款條件；單價由業務最終填寫。</div></div></div><div class="q5row"><span class="q5n">3</span><div class="q5body"><div class="q5lab">預期輸出內容<span class="q5hint">產出什麼格式？給誰看？</span></div><div class="q5ans">報價單草稿（Markdown 表格），帶入規格、數量、條件等固定欄位，價格欄標示待填，業務覆核後送出客戶。</div></div></div><div class="q5row"><span class="q5n">4</span><div class="q5body"><div class="q5lab">任務步驟<span class="q5hint">能否拆成 3–5 個明確步驟？</span></div><div class="q5ans">① 依規格代號查魚種規格表帶入品名與規格描述 ② 對應 Incoterms 與付款條件帶入欄位 ③ 套用報價單範本產出草稿 ④ 價格欄標【待業務填寫】並列待確認清單 ⑤ 業務覆核補價後送出。</div></div></div><div class="q5row"><span class="q5n">5</span><div class="q5body"><div class="q5lab">知識來源<span class="q5hint">需要查哪些內部文件或資料庫？</span></div><div class="q5ans">表格查詢：魚種規格表（帶入品名規格）、報價單範本說明（欄位定義與格式要求）。</div></div></div><pre class="q5blob-zh" style="display:none">1. 應用場景與業務流程：幫貿易部業務，依魚種、規格、數量、貿易條件快速套用報價單範本，產出格式正確的報價單草稿，減少逐欄 key-in 時間。
 2. 資料輸入與來源：業務輸入的報價需求：客戶名稱、魚種/規格代號、數量、目的港、貿易條件、付款條件；單價由業務最終填寫。
@@ -102,11 +102,11 @@ Agent 名稱：銷售報價單生成助理
 
 # 背景知識
 
-- 魚種英文品名、規格代號、處理方式、等級、包裝見「魚種規格表」（表格查詢知識庫，可 SQL 查詢結構化欄位）。
+- 魚種英文品名、規格代號、處理方式、等級、包裝見「魚種規格表」（表格查詢知識庫，可 SQL 查詢結構化欄位）。常用代號：SJ=Skipjack Tuna（鰹魚）、YF=Yellowfin Tuna（黃鰭鮪）、BE=Bigeye Tuna（大目鮪）、ALB=Albacore Tuna（長鰭鮪）、SQ=Squid（魷魚）；WR=Whole Round、GG=Gilled &amp; Gutted。
 - 報價單固定欄位、欄位定義與格式要求見「報價單範本說明」（表格查詢知識庫，可 SQL 查詢）。
 - 貿易條件依 Incoterms 2020（FOB/CFR/CIF），需搭配目的港。
 - 報價有效期通常為 14 天，可依業務指示調整。
-- 專有名詞、欄位定義、格式規則一律以知識庫內容為準，未提供者標「待補」。
+- 專有名詞、欄位定義、格式規則一律以知識庫內容為準，未提供者標「待補」；不得上網搜尋或自行猜測魚種與行情。
 
 # 輸入格式
 
