@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>盛餘 AI 審單助手｜使用教學與需求收斂指南</title>
+<style>
+  :root{
+    --primary:#6b5ce7; --primary-dark:#5546c8; --bg:#f7f7fb; --card:#ffffff;
+    --text:#2b2b33; --muted:#6e6e7a; --border:#e6e6ef;
+    --ok:#1a9e5c; --warn:#d98a00; --bad:#d64545;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif; background:var(--bg); color:var(--text); line-height:1.75;}
+  header{background:linear-gradient(135deg,var(--primary-dark),var(--primary)); color:#fff; padding:48px 24px; text-align:center;}
+  header h1{font-size:1.9rem; margin-bottom:8px;}
+  header p{opacity:.9; max-width:720px; margin:0 auto;}
+  nav{position:sticky; top:0; background:#fff; border-bottom:1px solid var(--border); z-index:10; overflow-x:auto; white-space:nowrap; text-align:center;}
+  nav a{display:inline-block; padding:12px 16px; color:var(--muted); text-decoration:none; font-size:.92rem;}
+  nav a:hover{color:var(--primary);}
+  main{max-width:960px; margin:0 auto; padding:32px 20px 80px;}
+  section{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:28px 30px; margin-bottom:28px;}
+  h2{font-size:1.35rem; color:var(--primary-dark); margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid var(--border);}
+  h3{font-size:1.05rem; margin:18px 0 8px;}
+  p{margin-bottom:10px;}
+  .step{display:flex; gap:14px; margin:14px 0; align-items:flex-start;}
+  .step .num{flex:0 0 34px; height:34px; border-radius:50%; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;}
+  .chat{background:#f2f1fb; border-radius:10px; padding:14px 16px; font-size:.92rem; margin:10px 0; border-left:4px solid var(--primary);}
+  .chat.ai{background:#eef7f1; border-left-color:var(--ok);}
+  .badge{display:inline-block; padding:2px 10px; border-radius:20px; font-size:.82rem; font-weight:700; margin-right:6px;}
+  .b-ok{background:#e2f5ea; color:var(--ok);} .b-warn{background:#fdf1dc; color:var(--warn);} .b-bad{background:#fbe5e5; color:var(--bad);}
+  table{width:100%; border-collapse:collapse; margin:12px 0; font-size:.9rem;}
+  th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top;}
+  th{background:#f2f1fb; color:var(--primary-dark);}
+  td[contenteditable]{background:#fffdf2; min-width:60px;}
+  td[contenteditable]:focus{outline:2px solid var(--primary); background:#fff;}
+  .btn{display:inline-block; background:var(--primary); color:#fff; border:none; border-radius:8px; padding:10px 18px; font-size:.95rem; cursor:pointer; margin:8px 8px 0 0; font-family:inherit;}
+  .btn:hover{background:var(--primary-dark);}
+  .btn.ghost{background:#fff; color:var(--primary); border:1px solid var(--primary);}
+  .note{background:#fdf6e8; border-left:4px solid var(--warn); border-radius:8px; padding:12px 16px; font-size:.9rem; margin:12px 0;}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media(max-width:700px){.grid2{grid-template-columns:1fr;}}
+  .option{border:1px solid var(--border); border-radius:12px; padding:18px;}
+  .option h4{color:var(--primary-dark); margin-bottom:8px;}
+  details{margin:8px 0; border:1px solid var(--border); border-radius:10px; padding:10px 16px; background:#fafaff;}
+  summary{cursor:pointer; font-weight:700;}
+  details p{margin-top:8px;}
+  ul,ol{margin:8px 0 8px 22px;}
+  li{margin-bottom:6px;}
+  footer{text-align:center; color:var(--muted); font-size:.85rem; padding:24px;}
+  #gate{position:fixed; inset:0; background:linear-gradient(135deg,var(--primary-dark),var(--primary)); z-index:999; display:flex; align-items:center; justify-content:center;}
+  #gate .gate-card{background:#fff; border-radius:16px; padding:40px 44px; max-width:420px; width:90%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.25);}
+  #gate h2{border:none; margin-bottom:6px;}
+  #gate p{color:var(--muted); font-size:.92rem; margin-bottom:18px;}
+  #gate input{width:100%; padding:12px 14px; border:1px solid var(--border); border-radius:8px; font-size:1rem; font-family:inherit; margin-bottom:12px; text-align:center;}
+  #gate input:focus{outline:2px solid var(--primary);}
+  #gate .err{color:var(--bad); font-size:.85rem; min-height:1.2em; margin-bottom:6px;}
+  body.locked > :not(#gate){display:none;}
+</style>
+</head>
+<body class="locked">
+
+<div id="gate">
+  <div class="gate-card">
+    <h2>盛餘 AI 審單助手</h2>
+    <p>本頁為盛餘股份有限公司專屬教學文件<br>請輸入通關密語</p>
+    <input type="password" id="gateInput" placeholder="通關密語" autocomplete="off">
+    <div class="err" id="gateErr"></div>
+    <button class="btn" style="width:100%" onclick="checkGate()">進入</button>
+  </div>
+</div>
+
+<header>
+  <h1>盛餘 AI 審單助手</h1>
+  <p>使用教學與需求收斂指南｜訂單審查助手（DEMO 彙總版）<br>智慧方案股份有限公司 × 盛餘股份有限公司</p>
+</header>
+
+<nav>
+  <a href="#how">操作教學</a>
+  <a href="#read">如何判讀結果</a>
+  <a href="#why">為何需要您定義規則</a>
+  <a href="#spec">欄位比對規格表</a>
+  <a href="#golden">驗測集 Golden Set</a>
+  <a href="#sensitive">敏感資料方案</a>
+  <a href="#faq">FAQ</a>
+</nav>
+
+<main>
+
+<section id="how">
+  <h2>一、操作教學：兩步驟完成審單</h2>
+  <p>本助手僅使用<strong>營業下單階段資料</strong>建置，不含防呆規則與生產備註等製程敏感內容。操作只有兩步：</p>
+  <div class="step"><div class="num">1</div><div>
+    <h3>貼上訂單（或上傳 PDF）</h3>
+    <p>將受訂生產通知單的文字內容貼入對話框，或直接上傳 PDF。AI 會先解析單據，輸出「訂單摘要」與「逐項次明細表」，此階段<strong>不查詢任何資料庫</strong>，您可先確認 AI 讀取的欄位是否正確。</p>
+    <div class="chat">請審查以下新訂單：訂單編號 2605EFE036，產品別 PPGL，交貨客戶 US00246 SCHULTE⋯⋯共 5 項次⋯⋯</div>
+    <div class="chat ai">✅ 新訂單資料解析完成，共 5 個項次。若需比對歷史訂單進行審單，請回覆「開始審單」。</div>
+  </div></div>
+  <div class="step"><div class="num">2</div><div>
+    <h3>回覆「開始審單」</h3>
+    <p>AI 查詢歷史訂單資料庫，逐項次（ITEM）比對，輸出彙總表：同客戶有類似訂單時列出差異欄位；沒有時自動改查其他客戶的類似訂單。全部結果可一鍵匯出 CSV / Excel。</p>
+  </div></div>
+</section>
+
+<section id="read">
+  <h2>二、如何判讀審單結果</h2>
+  <p>ITEM 異常彙總表中，每個項次只會出現三種判定之一：</p>
+  <table>
+    <tr><th style="width:110px">判定</th><th>意義</th><th>建議動作</th></tr>
+    <tr><td><span class="badge b-ok">✅ 正常</span></td><td>與同客戶歷史訂單一致</td><td>可依正常流程放行</td></tr>
+    <tr><td><span class="badge b-warn">⚠️ 有差異</span></td><td>找到類似訂單，但部分欄位與歷史值不同（表中會列出差異欄位、本單值、歷史參考值）</td><td>針對差異欄位人工確認</td></tr>
+    <tr><td><span class="badge b-bad">❌ 查無紀錄</span></td><td>同客戶與跨客戶皆查無類似組合（首見）</td><td>請業務向客戶確認來源依據</td></tr>
+  </table>
+  <div class="note"><strong>重要觀念：</strong>「❌ 查無紀錄」不代表訂單錯誤，代表這是首見組合、AI 沒有歷史依據可比，需要人工確認。AI 的角色是把該注意的項次挑出來，最終判斷權在審單人員。</div>
+  <h3>實測範例（訂單 2605EFE036）</h3>
+  <p>AI 在此單抓出了三類人工容易漏看的問題：正色碼末碼疑漏「3」（本單 1WV3T，歷史皆為 1WV3T3）、分切下限重 4.38T 與歷史 4.5T 不符、包裝碼未填（歷史為 P7）。</p>
+</section>
+
+<section id="why">
+  <h2>三、為什麼需要 SYSCO 協助定義規則</h2>
+  <p>AI 比對的技術已經就緒，但「怎樣算異常」是 SYSCO 的專業知識。目前有幾類規則只有貴公司能回答：</p>
+  <ul>
+    <li><strong>「類似訂單」的容差</strong>：厚度差多少以內算同規格？規格要完全一致，還是同系列（如 GR80 / GR50）也可參考？</li>
+    <li><strong>編碼規則</strong>：色碼末碼（如 1WV3T 與 1WV3T3）差異代表什麼？是可省略的尾碼，還是實質不同的塗料？</li>
+    <li><strong>欄位優先級</strong>：訂單有 80 個以上欄位，哪些必比、哪些可忽略？「分切限重、包裝方式<em>等等</em>」的「等等」需要明確列出。</li>
+    <li><strong>放行標準</strong>：什麼情況 AI 應建議「退回」，什麼情況只需「確認」？</li>
+    <li><strong>備註比對的資料來源</strong>：期望比對「備註」，但營業備註不在本階段提供範圍，需確認做法。</li>
+  </ul>
+  <p>這些規則收斂得越快，AI 的判定就越貼近貴公司實際的審單標準。以下兩個工具就是為此設計。</p>
+</section>
+
+<section id="spec">
+  <h2>四、欄位比對規格表（請協助填寫）</h2>
+  <p>請烤漆技術課針對每個欄位勾選是否比對、容差與風險等級。<strong>黃底儲存格可直接點擊編輯</strong>，填完按「匯出 CSV」回傳給智慧方案即可。也可按「新增欄位」補上表中沒列到的欄位。</p>
+  <table id="specTable">
+    <thead><tr><th>欄位名稱</th><th>是否比對<br>(必比/參考/不比)</th><th>容差／比對方式</th><th>異常時風險等級<br>(高/中/低)</th><th>備註說明</th></tr></thead>
+    <tbody>
+      <tr><td>製造標準</td><td contenteditable>必比</td><td contenteditable>完全一致</td><td contenteditable>高</td><td contenteditable></td></tr>
+      <tr><td>規格</td><td contenteditable>必比</td><td contenteditable>完全一致（同系列是否可參考？請說明）</td><td contenteditable>高</td><td contenteditable></td></tr>
+      <tr><td>鍍層碼</td><td contenteditable>必比</td><td contenteditable>完全一致</td><td contenteditable>高</td><td contenteditable></td></tr>
+      <tr><td>訂單厚度</td><td contenteditable></td><td contenteditable>容差 ±____ mm</td><td contenteditable></td><td contenteditable></td></tr>
+      <tr><td>訂單寬度</td><td contenteditable></td><td contenteditable>容差 ±____ mm</td><td contenteditable></td><td contenteditable></td></tr>
+      <tr><td>正面色碼</td><td contenteditable></td><td contenteditable>末碼規則請說明（例：1WV3T vs 1WV3T3）</td><td contenteditable></td><td contenteditable></td></tr>
+      <tr><td>背面色碼</td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      <tr><td>用途碼</td><td contenteditable></td><td contenteditable>與選配碼對應規則（附件8）是否可提供？</td><td contenteditable></td><td contenteditable></td></tr>
+      <tr><td>選配碼</td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      <tr><td>分切限重（上限/下限）</td><td contenteditable></td><td contenteditable>容差 ±____ T</td><td contenteditable></td><td contenteditable></td></tr>
+      <tr><td>包裝方式／包裝碼</td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      <tr><td>膜厚（正/背）</td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      <tr><td>內徑</td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      <tr><td>底材材質</td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      <tr><td>調質條件</td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      <tr><td>修邊</td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+    </tbody>
+  </table>
+  <button class="btn" onclick="exportCSV()">匯出 CSV</button>
+  <button class="btn ghost" onclick="addRow()">新增欄位</button>
+  <div class="note">填不出來的格子也很有價值——那通常代表內部尚無共識，正是會議上最值得討論的地方。</div>
+</section>
+
+<section id="golden">
+  <h2>五、驗測集（Golden Set）：讓準確度有客觀依據</h2>
+  <p>與其用「感覺準不準」討論，不如建立一組固定的測試資料，每一版 AI 都跑同一組，用數字說話：</p>
+  <ol>
+    <li>請提供 <strong>5~10 筆過去人工實際審出問題的訂單</strong>（附上當時發現的問題點）</li>
+    <li>加上 <strong>3~5 筆確認無誤的正常訂單</strong></li>
+    <li>智慧方案每次更新 AI 後，回報兩個數字：<strong>抓到幾筆（召回）、誤報幾筆（精確）</strong></li>
+  </ol>
+  <table>
+    <tr><th>指標</th><th>意義</th><th>目標方向</th></tr>
+    <tr><td>抓到率</td><td>已知問題訂單中，AI 標出 ⚠️/❌ 的比例</td><td>越高越好（漏抓是審單最大風險）</td></tr>
+    <tr><td>誤報數</td><td>正常訂單被誤標為異常的項次數</td><td>越低越好（誤報多會讓人不想看）</td></tr>
+  </table>
+  <p>這也是貴公司同仁學習「如何驗測 AI」的最佳素材——智慧方案會在過程中把驗測方法完整教給團隊。</p>
+</section>
+
+<section id="sensitive">
+  <h2>六、敏感資料的兩個可行方案</h2>
+  <p>防呆規則與生產備註涉及製程敏感條件，我們完全理解。若希望 AI 具備防呆檢查能力，有兩條路可選：</p>
+  <div class="grid2">
+    <div class="option">
+      <h4>方案 A：規則去識別化</h4>
+      <p>保留規則編號與觸發邏輯（例：OFP00761 厚板 3 呎限重下限 ≥ 8 噸不可），<strong>遮罩敏感參數值</strong>或以區間代替。由 SYSCO 決定遮罩範圍，智慧方案提供遮罩格式範本。</p>
+      <p><strong>優點</strong>：導入快，現行 SaaS 即可使用。<br><strong>適合</strong>：想快速看到防呆效果、規則參數敏感度中等。</p>
+    </div>
+    <div class="option">
+      <h4>方案 B：私有雲／地端部署</h4>
+      <p>EgentHub 支援 AWS 私有雲與地端 Docker 部署，<strong>全量資料留在 SYSCO 環境內</strong>，不出公司。</p>
+      <p><strong>優點</strong>：資料主權完整，防呆規則可全量導入，效果最好。<br><strong>適合</strong>：確定要長期導入、資訊部門可配合建置。</p>
+    </div>
+  </div>
+  <p style="margin-top:12px">建議會議中擇一為主要方向，智慧方案即可提出對應的時程與規劃。</p>
+</section>
+
+<section id="faq">
+  <h2>七、常見問題</h2>
+  <details><summary>訂單筆數很多的時候，結果會不會很長很難看？</summary><p>不會。輸出固定為彙總表：一列一項次、只列有差異的欄位，最後一句話總結加上最多 5 條需人工確認事項。表格可直接匯出 Excel 存檔或轉寄。</p></details>
+  <details><summary>AI 判定 ❌ 是不是代表訂單打錯了？</summary><p>不是。❌ 代表「查無歷史紀錄的首見組合」，需要人工確認來源（例如新色碼首次下單本來就查無紀錄）。AI 不武斷判錯，只負責把需要注意的項次挑出來。</p></details>
+  <details><summary>我們的資料安全嗎？</summary><p>本階段知識庫僅含營業下單階段資料，防呆規則與生產備註完全未上傳。平台採 TLS 1.2+ 傳輸加密與 AES-256 靜態加密，工作室層級權限隔離，Agent 僅限工作室成員使用，資料歸屬企業所有、可隨時匯出或刪除。</p></details>
+  <details><summary>之後可以自己調整 AI 的判定規則嗎？</summary><p>可以，這正是導入的目標。智慧方案會把提示詞設計完整教給 SYSCO 團隊，欄位比對規格表填好後，規則的增修各位同仁都能自己動手，實現自主維運。</p></details>
+  <details><summary>歷史資料只有 2025 年，夠嗎？</summary><p>對下單頻率高的客戶已足夠。若有些客戶一年下不到幾單，建議後續擴充 2023–2024 年資料，涵蓋率會更完整——這也是會議中可以一起確認的事項。</p></details>
+</section>
+
+</main>
+
+<footer>智慧方案股份有限公司 Intellicon Solutions｜EgentHub AI Agent Hub<br>本頁為盛餘股份有限公司 AI 輔助審單專案教學文件</footer>
+
+<script>
+function checkGate(){
+  const v=document.getElementById('gateInput').value.trim().toLowerCase();
+  if(v==='egenthub'){
+    document.body.classList.remove('locked');
+    document.getElementById('gate').style.display='none';
+    try{sessionStorage.setItem('gate_ok','1');}catch(e){}
+  }else{
+    document.getElementById('gateErr').textContent='密語不正確，請洽智慧方案或盛餘技術開發部窗口';
+  }
+}
+document.getElementById('gateInput').addEventListener('keydown',e=>{if(e.key==='Enter')checkGate();});
+try{if(sessionStorage.getItem('gate_ok')==='1'){document.body.classList.remove('locked');document.getElementById('gate').style.display='none';}}catch(e){}
+function exportCSV(){
+  const rows=[...document.querySelectorAll('#specTable tr')];
+  const csv=rows.map(r=>[...r.cells].map(c=>'"'+c.innerText.replace(/"/g,'""').replace(/\n/g,' ')+'"').join(',')).join('\n');
+  const blob=new Blob(["﻿"+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='盛餘_欄位比對規格表.csv';
+  a.click();
+}
+function addRow(){
+  const tb=document.querySelector('#specTable tbody');
+  const tr=document.createElement('tr');
+  tr.innerHTML='<td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td>';
+  tb.appendChild(tr);
+}
+</script>
+</body>
+</html>
