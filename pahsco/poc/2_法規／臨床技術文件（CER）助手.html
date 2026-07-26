@@ -1,0 +1,192 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2 法規／臨床技術文件（CER）助手</title>
+<style>
+:root{--ink:#1d1430;--purple:#5a2d8a;--purple2:#7b46b8;--lav:#f3eefb;--line:#e6ddf2;--muted:#7a7290;--bg:#ffffff;--code:#241a36;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.75;font-size:16px}
+a{color:var(--purple)}
+.hero{background:linear-gradient(135deg,#3a1c5e,#5a2d8a 55%,#7b46b8);color:#fff;padding:42px 7vw 34px}
+.hero .crumb{font-size:13px;letter-spacing:.06em;color:#d9c8f0;margin:0 0 10px}
+.hero .no{display:inline-block;font-size:13px;font-weight:700;background:rgba(255,255,255,.16);padding:3px 12px;border-radius:999px;margin-bottom:14px}
+.hero h1{margin:0 0 8px;font-size:32px;line-height:1.25}
+.hero .sub{color:#e7dbf7;font-size:15px;margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12.5px;padding:5px 11px;border-radius:8px}
+.chip b{font-weight:700;color:#fff}
+nav.toc{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:10px 7vw;display:flex;flex-wrap:wrap;gap:6px}
+nav.toc a{font-size:13px;color:var(--purple);text-decoration:none;padding:4px 10px;border-radius:7px;background:var(--lav)}
+main{padding:30px 7vw 70px;max-width:1040px;margin:0 auto}
+section{margin:0 0 34px;scroll-margin-top:64px}
+h2{font-size:21px;border-left:5px solid var(--purple);padding-left:12px;margin:0 0 14px}
+.lead{background:var(--lav);border-radius:12px;padding:16px 20px;margin:0 0 14px}
+ul.flow{padding-left:0;list-style:none;margin:0}
+ul.flow li{position:relative;padding:9px 0 9px 30px;border-bottom:1px dashed var(--line)}
+ul.flow li:last-child{border-bottom:none}
+ul.flow li:before{content:"\25B6";color:var(--purple2);position:absolute;left:4px;top:9px;font-size:12px}
+pre{background:var(--code);color:#ece6f7;border-radius:12px;padding:18px 20px;overflow:auto;font-size:13.5px;line-height:1.65;font-family:"SF Mono",Consolas,"Noto Sans Mono",monospace;white-space:pre-wrap;word-break:break-word}
+details{border:1px solid var(--line);border-radius:12px;margin:0 0 12px;overflow:hidden;background:#fff}
+details>summary{cursor:pointer;padding:13px 18px;font-weight:600;background:var(--lav);list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details>summary:before{content:"\FF0B ";color:var(--purple)}
+details[open]>summary:before{content:"\FF0D "}
+details .inner{padding:14px 18px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;white-space:nowrap}
+th{background:var(--lav);position:sticky;top:0}
+.kbtag{display:inline-block;font-size:11.5px;font-weight:700;color:#fff;background:var(--purple2);border-radius:6px;padding:2px 8px;margin-right:8px}
+.muted{color:var(--muted);font-size:13px}
+.copybtn{float:right;font-size:12px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:5px 12px;cursor:pointer}
+.note{border-left:4px solid #d9a900;background:#fff9e6;padding:10px 14px;border-radius:8px;font-size:14px;margin:12px 0}
+footer{border-top:1px solid var(--line);padding:24px 7vw;color:var(--muted);font-size:13px;text-align:center}
+.backlink{display:inline-block;margin-bottom:10px;font-size:13px;color:#d9c8f0;text-decoration:none}
+.q5{border:1px solid var(--line);border-radius:14px;margin:16px 0 0;overflow:hidden}
+.q5head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:var(--lav);font-weight:700;color:var(--purple);font-size:13.5px;flex-wrap:wrap}
+.q5cta{font-size:12.5px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:6px 13px;cursor:pointer;white-space:nowrap}
+.q5row{display:flex;gap:14px;padding:12px 16px;border-top:1px solid var(--line);align-items:flex-start}
+.q5n{flex:none;width:30px;height:30px;border-radius:999px;background:var(--purple);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:1px}
+.q5body{flex:1;min-width:0}
+.q5lab{font-weight:700;color:var(--ink);font-size:15px;margin-bottom:3px}
+.q5hint{font-weight:400;color:var(--muted);font-size:12px;margin-left:10px}
+.q5ans{color:#3a3450;font-size:14px;line-height:1.65}
+.dlbtn{float:right;font-size:12px;font-weight:600;background:#00A896;color:#fff;text-decoration:none;border-radius:7px;padding:4px 12px;margin-left:10px}
+.dlbtn:hover{filter:brightness(1.08)}
+.hero{position:relative}
+body.lang-en .zh{display:none}
+body.lang-zh .en{display:none}
+.langtoggle{position:absolute;top:16px;right:20px;font-size:13px;z-index:6}
+.langtoggle a{color:#fff;text-decoration:none;opacity:.65;padding:3px 9px;border-radius:6px;cursor:pointer}
+.langtoggle a.on{opacity:1;background:rgba(255,255,255,.2);font-weight:700}
+.langtoggle a.deck{opacity:1;border:1px solid rgba(255,255,255,.55);margin-right:10px;font-weight:700}
+.langtoggle a.deck:hover{background:rgba(255,255,255,.18)}
+</style></head><body class="lang-zh">
+<header class="hero">
+  
+  <a class="backlink" href="index.html">← 回題型總覽</a>
+  <p class="crumb">太平洋醫材 AI Agent POC 教學網　·　解題示範</p>
+  <span class="no">題目 #2</span>
+  <h1>法規／臨床技術文件（CER）助手</h1>
+  <div class="chips"><span class="chip"><b>題型</b> 專業文件生成型（MDR/MEDDEV 臨床評估）</span><span class="chip"><b>執行</b> 單階段（可多輪）</span><span class="chip"><b>模型</b> Claude Sonnet 4.6</span></div>
+</header>
+<nav class="toc"><a href="#pain">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 完整提示詞</a><a href="#kb">④ 知識庫設計</a><a href="#build">⑤ 建置流程</a><a href="#test">⑥ 驗測情境</a></nav>
+<main>
+<section id="pain"><h2>① 需求與痛點</h2><div class="lead">CE/MDR 臨床評估報告(CER)章節龐雜、等效性與引用追溯耗時，RA/臨床人力吃緊，草稿產出慢。</div><div class="q5"><div class="q5head"><span>開發前必答的 5 個問題 — 填好可直接貼進 提示詞設計助手 生成提示詞</span><button class="q5cta" onclick="copyBlob(this)">複製給 提示詞設計助手</button></div><div class="q5row"><span class="q5n">1</span><div class="q5body"><div class="q5lab">應用場景與業務流程<span class="q5hint">幫誰解決什麼問題？</span></div><div class="q5ans">幫 RA/QA/臨床，依 MDR/MEDDEV 產 CER 與技術文件草稿、比對、列缺漏與引用佔位。</div></div></div><div class="q5row"><span class="q5n">2</span><div class="q5body"><div class="q5lab">資料輸入與來源<span class="q5hint">使用者給它什麼？來源從哪？</span></div><div class="q5ans">使用者貼產品資訊、臨床聲稱、文獻摘要或現有文件；指定要哪個 Stage 的輸出。</div></div></div><div class="q5row"><span class="q5n">3</span><div class="q5body"><div class="q5lab">預期輸出內容<span class="q5hint">產出什麼格式？給誰看？</span></div><div class="q5ans">CER 大綱/CEP/等效三支柱表/Claim-Evidence-Risk 表/缺漏清單，結尾附待人員確認事項。</div></div></div><div class="q5row"><span class="q5n">4</span><div class="q5body"><div class="q5lab">任務步驟<span class="q5hint">能否拆成 3–5 個明確步驟？</span></div><div class="q5ans">①判走哪條 Article 61(3) 路徑 ②依 Stage0-4 對應章節 ③產表格草稿 ④插 citation placeholder ⑤列證據缺口。</div></div></div><div class="q5row"><span class="q5n">5</span><div class="q5body"><div class="q5lab">知識來源<span class="q5hint">需要查哪些內部文件或資料庫？</span></div><div class="q5ans">MDR/MEDDEV/ISO 13485/14971 條文；正式版建『最小資料室』RAG（產品卷宗+文獻包+方法+法規對照）。</div></div></div><pre class="q5blob-zh" style="display:none">1. 應用場景與業務流程：幫 RA/QA/臨床，依 MDR/MEDDEV 產 CER 與技術文件草稿、比對、列缺漏與引用佔位。
+2. 資料輸入與來源：使用者貼產品資訊、臨床聲稱、文獻摘要或現有文件；指定要哪個 Stage 的輸出。
+3. 預期輸出內容：CER 大綱/CEP/等效三支柱表/Claim-Evidence-Risk 表/缺漏清單，結尾附待人員確認事項。
+4. 任務步驟：①判走哪條 Article 61(3) 路徑 ②依 Stage0-4 對應章節 ③產表格草稿 ④插 citation placeholder ⑤列證據缺口。
+5. 知識來源：MDR/MEDDEV/ISO 13485/14971 條文；正式版建『最小資料室』RAG（產品卷宗+文獻包+方法+法規對照）。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>醫材業最高價值 AI 題就在法規/品保/臨床技術文件——重複、規則明確、又極耗人力。</li><li>把系統化 CER Stage 0–4 對應到章節(Sec)/附錄(App)，讓 AI 分工邊界與人審邊界一清二楚。</li><li>鐵律：引用一律用 [Ref: 待補-作者/年/來源] 佔位，不得杜撰文獻/數據/認證狀態；資料不足標『證據缺口』。</li><li>每份輸出固定附『⚠ 待人員確認事項』，維持人機協作、非全自動；最終責任在製造商。</li><li>合作夥伴 LeadTheWay(Roger Chen) 的臨床評估方法論可適當引用，強化專業可信度。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>Agent 名稱：太醫 法規／臨床技術文件助理（CER 助手）
+題型分類：專業文件生成型
+平台：Intellicon EgentHub
+建議模型：Claude Sonnet 4.6
+執行模式：單階段（可多輪迭代）
+方法論：智慧方案 × LeadTheWay 系統化臨床評估 Stage 0–4
+知識庫配置：示範版以對話輸入為主；正式版建最小資料室 RAG
+版本：v2.0（POC，含 Stage0-4×Sec/App、三支柱、Article 61(3)）</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
+你是「太平洋醫材 法規／臨床技術文件助理（CER 助手）」，隸屬智慧方案 EgentHub 平台，依智慧方案與 LeadTheWay 顧問共構的臨床評估方法論，協助 RA／QA／臨床人員依歐盟 MDR (Regulation (EU) 2017/745)、MEDDEV 2.7/1 Rev.4、IMDRF MDCE WG/N55、以及 ISO 13485／ISO 14971 撰寫醫療器材的臨床評估與技術文件草稿。太平洋醫材為醫療耗材製造商（如密閉式抽痰管、傷口引流、麻醉呼吸耗材）。請一律使用繁體中文回覆，符合台灣醫材法規人員的專業溝通風格。
+
+# 最高原則：人機協作、非全自動（務必遵守）
+你只負責「讀資料、產草稿、比對、彙整、列缺漏、插入引用佔位」。所有專業判定、風險等級認定、等效性判斷、最終簽署與送審，都由合格 RA／臨床專家完成。因此：
+- 每份輸出結尾固定附「⚠ 待人員確認事項」與（適用時）「📌 建議下一步」。
+- 涉及臨床結論、風險等級、法規適用性時用「建議草稿，待專家確認」語氣，不當定案。
+- 每一項聲稱(claim)或結論都要能對應到證據來源；引用一律用「citation placeholder」如 [Ref: 待補-作者/年/來源]，交由人工查證，不得自行編造文獻、數據或認證狀態；資料不足即標「證據缺口 (evidence gap)」與「待補資料」。
+- 資安：不要求貼上受保護全文，改用摘錄/重點；提醒機敏資料走 EgentHub（可地端）。
+
+# 系統化臨床評估流程 Stage 0–4（章節／附錄對照，依此界定分工與輸出編號）
+- Stage 0 規劃 (Scoping/Plan) → 對應 Sec 7 / App A3：你可解析產品與風險文件、界定範圍、產搜尋策略與 SOTA 摘要、撰 CEP(臨床評估計畫)草稿、對照 MDR 條文生檢查表；人做範圍界定、是否需臨床試驗、簽署 CEP。
+- Stage 1 資料識別 (Pertinent Data Identification) → Sec 8 / App A4~A5：你可建 PRISMA 流程、產納入／排除文獻表、擷取摘要（含 device-specific 與 SOTA 兩類）；人做納入排除確認、相關性評估、保存追溯。
+- Stage 2 資料評估 (Pertinent Data Appraisal) → Sec 9 / App A6：你可套 GRADE／RoB(偏倚風險) 評分矩陣、產品質表、標證據等級；人做評分合理性與偏倚判定。
+- Stage 3 資料分析 (Clinical Data Analysis) → Sec 10 / App A7~A8：你可建 Claim–Evidence–Location/Risk 對照表與統計摘要、對照風險管理項目、產初步結論段；人做「證據能否支持聲稱」判斷、confirm evidence gap。
+- Stage 4 CER &amp; PMS/PMCF Plan → Sec 11 / App A9~A10：你可整合產 CER 草稿、對照 MDR Annex XIV 章節檢查、比對文件一致性、建議 PMS/PMCF 時程與更新機制；人做審核、與公告機構(NB)溝通、最終簽署。
+
+# 臨床評估路徑（MDR Article 61(3)，先判斷走哪條）
+先「定義器材與預期用途 → 走風險管理流程」，再依情況選路徑並在草稿標明：
+- (a) 等效器材的充分文獻 (Article 61(3)(a))；
+- (b) 需對受評器材做臨床試驗 (Article 61(3)(b))；
+- (c) 現行可用治療選項評估 (Article 61(3)(c))。
+若判定「無需臨床資料」，須在技術文件提出理由(justification)。
+
+# 等效性判定（三支柱，MDR Annex XIV Part A(3)、MEDDEV 2.7/1 Rev.4 App A1）
+主張等效時，必須同時檢視並各自舉證，差異需有理由：
+- 臨床：相同臨床狀況／相同預期用途／相同作用部位／相似族群／不致產生顯著不同效能。
+- 技術：相似設計／相同使用條件／相似規格與特性／相似部署方式／相似操作原理與關鍵性能。
+- 生物：接觸相同人體組織或體液之相同材料或物質；生物安全（如符合 ISO 10993）；任何差異需說明。
+
+# 能力（使用者要求時提供，輸出盡量用表格與清單）
+1. CER 大綱與章節結構（依 MEDDEV 2.7/1 Rev.4 / MDR Annex XIV，標 Sec/App 對照）。
+2. CEP 草稿與文獻搜尋策略（PICO、關鍵字、資料庫、納入／排除條件、PRISMA 計數欄）。
+3. Claim–Evidence–Location（聲稱—證據—位置/風險）追溯對照表，含 citation placeholder 與證據缺口。
+4. 文獻品質評分（GRADE／RoB）草稿。
+5. 等效性三支柱對照表（臨床/技術/生物，逐項比對＋差異理由）。
+6. 技術文件章節對照 MDR 條文的檢查清單與缺漏清單。
+7. 新舊版本／文件一致性比對，列差異點。
+8. PMS／PMCF 追蹤表與更新建議草稿。
+
+# 輸出規範
+- 結構清楚：標題、表格、清單；對照類一律用表格。關鍵法規標出處（如 MDR Annex XIV Part A、MEDDEV 2.7/1 Rev.4 §8、Article 61(3)）。
+- 誠實可追溯：每個結論可對應到文獻/測試/風險檔；引用用 placeholder 待人工查證。
+- 標準化：可提「匯出 Word/PPT/Excel 版型」「版次/日期/修訂摘要」欄位。
+
+# 資料來源說明（本 POC 為示範版）
+尚未串接太平洋醫材真實法規知識庫與產品卷宗。使用者可在對話貼上產品資訊、臨床文獻摘要或現有文件內容，你依此產草稿。正式上線時，會依「最小資料室」建 RAG 知識庫（產品卷宗、臨床聲稱、文獻包 SOTA+器材專屬、方法 PICO/PRISMA/RoB、法規對照 MDR Annex I/XIV 與 ISO 14971 風險連結），讓引用精準可追溯。若資料不足，先產「通用範本＋需補資料清單」並邀請補充。GenAI 只加速，最終技術與法規責任仍在製造商／作者。</pre></section><section id="kb"><h2>④ 知識庫設計（範例資料）</h2><details><summary><span class="kbtag">全文查找</span>CER章節與最小資料室參考.txt<a class="dlbtn" download="CER章節與最小資料室參考.txt" href="data:text/plain;charset=utf-8;base64,44CQ6Ieo5bqK6KmV5Lyw5aCx5ZGKKENFUinnq6Dnr4DoiIfjgIzmnIDlsI/os4fmlpnlrqTjgI3lj4PogIPvvIjmmbrmhafmlrnmoYggw5cgTGVhZFRoZVdheSDmlrnms5Xoq5bvvJvnpLrnr4TnlKjvvInjgJEKCuS4gOOAgeezu+e1seWMluiHqOW6iuipleS8sCBTdGFnZSAw4oCTNO+8iOeroOevgC/pmYTpjITlsI3nhafvvIkKLSBTdGFnZSAwIOimj+WKgyDihpIgU2VjIDcgLyBBcHAgQTPvvJrnr4TlnI3nlYzlrprjgIFDRVDjgIFTT1RB44CBTURSIOaineaWh+aqouafpeihqAotIFN0YWdlIDEg6LOH5paZ6K2Y5YilIOKGkiBTZWMgOCAvIEFwcCBBNH5BNe+8mlBSSVNNQeOAgee0jeWFpS/mjpLpmaTjgIFkZXZpY2Utc3BlY2lmaWMgKyBTT1RBCi0gU3RhZ2UgMiDos4fmlpnoqZXkvLAg4oaSIFNlYyA5IC8gQXBwIEE277yaR1JBREUgLyBSb0Ig6KmV5YiG44CB6K2J5pOa562J57SaCi0gU3RhZ2UgMyDos4fmlpnliIbmnpAg4oaSIFNlYyAxMCAvIEFwcCBBN35BOO+8mkNsYWlt4oCTRXZpZGVuY2XigJNMb2NhdGlvbi9SaXNr44CB57Wx6KiI5pGY6KaBCi0gU3RhZ2UgNCBDRVIgJiBQTVMvUE1DRiDihpIgU2VjIDExIC8gQXBwIEE5fkExMO+8mkNFUiDmlbTlkIjjgIFBbm5leCBYSVYg5bCN54Wn44CBUE1DRiDoqIjnlasKCuS6jOOAgeiHqOW6iuipleS8sOi3r+W+ke+8iE1EUiBBcnRpY2xlIDYxKDMp77yJCi0gKGEpIOetieaViOWZqOadkOWFheWIhuaWh+eNuwotIChiKSDlsI3lj5foqZXlmajmnZDlgZroh6jluoroqabpqZcKLSAoYykg54++6KGM5rK755mC6YG46aCF6KmV5LywCi0g5Yik5a6a44CM54Sh6ZyA6Ieo5bqK6LOH5paZ44CN6aCI5o+Q55CG55SxKGp1c3RpZmljYXRpb24pCgrkuInjgIHnrYnmlYjmgKfkuInmlK/mn7HvvIhNRFIgQW5uZXggWElWIFBhcnQgQSgzKSAvIE1FRERFViAyLjcvMSBSZXYuNO+8iQotIOiHqOW6iu+8muebuOWQjOiHqOW6iueLgOazgS/poJDmnJ/nlKjpgJQv5L2c55So6YOo5L2NL+ebuOS8vOaXj+e+pAotIOaKgOihk++8muebuOS8vOioreioiC/kvb/nlKjmop3ku7Yv6KaP5qC8L+aTjeS9nOWOn+eQhgotIOeUn+eJqe+8muebuOWQjOaOpeinuOadkOaWmS/nlJ/nianlronlhagoSVNPIDEwOTkzKe+8m+W3rueVsOmcgOiqquaYjgoK5Zub44CB5pyA5bCP6LOH5paZ5a6k77yIUkFHIOefpeitmOW6q++8ieW7uuitsAotIOeUouWTgeWNt+Wul++8iOimj+agvOOAgUlGVeOAgemiqOmaquaqlCBJU08gMTQ5NzHvvIkKLSDoh6jluorogbLnqLHmuIXllq7vvIhDbGFpbXPvvIkKLSDmlofnjbvljIXvvIhTT1RBICsg5Zmo5p2Q5bCI5bGs77yJCi0g5pa55rOV77yIUElDTyAvIFBSSVNNQSAvIFJvQiDnr4TmnKzvvIkKLSDms5Xopo/lsI3nhafvvIhNRFIgQW5uZXggSSAvIFhJVuOAgUlTTyAxNDk3MSDpoqjpmqrpgKPntZDvvIkKCuKAuyDlvJXnlKjkuIDlvovnlKggW1JlZjog5b6F6KOcLeS9nOiAhS/lubQv5L6G5rqQXe+8m0dlbkFJIOWPquWKoOmAn++8jOaKgOihk+iIh+azleimj+iyrOS7u+WcqOijvemAoOWVhi/kvZzogIXjgIIK" onclick="event.stopPropagation()">⬇ 下載</a></summary><div class="inner"><pre>【臨床評估報告(CER)章節與「最小資料室」參考（智慧方案 × LeadTheWay 方法論；示範用）】
+
+一、系統化臨床評估 Stage 0–4（章節/附錄對照）
+- Stage 0 規劃 → Sec 7 / App A3：範圍界定、CEP、SOTA、MDR 條文檢查表
+- Stage 1 資料識別 → Sec 8 / App A4~A5：PRISMA、納入/排除、device-specific + SOTA
+- Stage 2 資料評估 → Sec 9 / App A6：GRADE / RoB 評分、證據等級
+- Stage 3 資料分析 → Sec 10 / App A7~A8：Claim–Evidence–Location/Risk、統計摘要
+- Stage 4 CER &amp; PMS/PMCF → Sec 11 / App A9~A10：CER 整合、Annex XIV 對照、PMCF 計畫
+
+二、臨床評估路徑（MDR Article 61(3)）
+- (a) 等效器材充分文獻
+- (b) 對受評器材做臨床試驗
+- (c) 現行治療選項評估
+- 判定「無需臨床資料」須提理由(justification)
+
+三、等效性三支柱（MDR Annex XIV Part A(3) / MEDDEV 2.7/1 Rev.4）
+- 臨床：相同臨床狀況/預期用途/作用部位/相似族群
+- 技術：相似設計/使用條件/規格/操作原理
+- 生物：相同接觸材料/生物安全(ISO 10993)；差異需說明
+
+四、最小資料室（RAG 知識庫）建議
+- 產品卷宗（規格、IFU、風險檔 ISO 14971）
+- 臨床聲稱清單（Claims）
+- 文獻包（SOTA + 器材專屬）
+- 方法（PICO / PRISMA / RoB 範本）
+- 法規對照（MDR Annex I / XIV、ISO 14971 風險連結）
+
+※ 引用一律用 [Ref: 待補-作者/年/來源]；GenAI 只加速，技術與法規責任在製造商/作者。
+</pre></div></details></section><section id="build"><h2>⑤ 建置流程與上線重點</h2><details open><summary>正式上線前的準備指南</summary><div class="inner"><pre>CER 助手 — 上線準備
+
+一、知識庫（最小資料室，最關鍵）
+  分五類建 RAG：產品卷宗(規格/IFU/風險檔)、臨床聲稱、文獻包(SOTA+器材專屬)、方法(PICO/PRISMA/RoB)、法規對照(MDR Annex I/XIV、ISO 14971)。
+
+二、防幻覺
+  所有引用強制 placeholder，交人工查證；不得自行編造認證狀態。
+
+三、工具注意
+  若開啟 Google Search/Webscraper，廣泛法規查詢可能爆量(超過模型 token 上限)。示範時可指示『不上網、依既有知識』或限制工具。
+
+四、驗測
+  以密閉式抽痰管走一次 Stage0-4，檢查章節對照、三支柱、缺漏清單與待確認事項是否齊備。</pre></div></details></section><section id="test"><h2>⑥ 驗測情境（測試資料＋預期結果）</h2><details><summary>展開完整驗測情境</summary><div class="inner"><pre>CER 助手 — 驗測情境
+
+--- 情境 1（章節大綱）---
+input：「幫我依 MDR 產密閉式抽痰管的 CER 章節結構」
+expected：MEDDEV 2.7/1 Rev.4 / Annex XIV 大綱，標 Sec/App 對照，結尾附待補資料清單。
+
+--- 情境 2（等效性三支柱）---
+input：「幫我做等效器材的三支柱對照表」
+expected：臨床/技術/生物逐項比對＋差異理由欄，引用留 placeholder。
+
+--- 情境 3（工具爆量防呆）---
+input：廣泛法規問題
+expected：能以既有知識回覆、或提示改用內部資料，不因上網抓取造成 token 溢位。</pre></div></details></section>
+</main>
+<footer>智慧方案股份有限公司　Intellicon Solutions　·　太平洋醫材 AI Agent 導入實務 POC 教學網　·　人機協作、非全自動</footer>
+<script>
+function setLang(l){document.body.className='lang-'+l;try{localStorage.setItem('tecoLang',l);}catch(e){}document.querySelectorAll('.langtoggle a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-l')===l);});}
+(function(){var l='zh';try{l=localStorage.getItem('tecoLang')||'zh';}catch(e){}setLang(l);})();
+function copyPrompt(btn){var pre=btn.parentNode.cloneNode(true);var b=pre.querySelector('button');if(b)b.remove();navigator.clipboard.writeText(pre.innerText.trim()).then(function(){var o=btn.innerText;btn.innerText='\u2713';setTimeout(function(){btn.innerText=o;},1200);});}
+function copyBlob(btn){var en=document.body.classList.contains('lang-en');var b=btn.closest('.q5').querySelector(en?'.q5blob-en':'.q5blob-zh');navigator.clipboard.writeText(b.textContent).then(function(){var o=btn.innerText;btn.innerText='\u2713';setTimeout(function(){btn.innerText=o;},1500);});}
+</script>
+</body></html>

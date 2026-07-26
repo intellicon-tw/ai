@@ -1,0 +1,125 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>6 檢驗／批次紀錄核對助手</title>
+<style>
+:root{--ink:#1d1430;--purple:#5a2d8a;--purple2:#7b46b8;--lav:#f3eefb;--line:#e6ddf2;--muted:#7a7290;--bg:#ffffff;--code:#241a36;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.75;font-size:16px}
+a{color:var(--purple)}
+.hero{background:linear-gradient(135deg,#3a1c5e,#5a2d8a 55%,#7b46b8);color:#fff;padding:42px 7vw 34px}
+.hero .crumb{font-size:13px;letter-spacing:.06em;color:#d9c8f0;margin:0 0 10px}
+.hero .no{display:inline-block;font-size:13px;font-weight:700;background:rgba(255,255,255,.16);padding:3px 12px;border-radius:999px;margin-bottom:14px}
+.hero h1{margin:0 0 8px;font-size:32px;line-height:1.25}
+.hero .sub{color:#e7dbf7;font-size:15px;margin:0 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12.5px;padding:5px 11px;border-radius:8px}
+.chip b{font-weight:700;color:#fff}
+nav.toc{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:10px 7vw;display:flex;flex-wrap:wrap;gap:6px}
+nav.toc a{font-size:13px;color:var(--purple);text-decoration:none;padding:4px 10px;border-radius:7px;background:var(--lav)}
+main{padding:30px 7vw 70px;max-width:1040px;margin:0 auto}
+section{margin:0 0 34px;scroll-margin-top:64px}
+h2{font-size:21px;border-left:5px solid var(--purple);padding-left:12px;margin:0 0 14px}
+.lead{background:var(--lav);border-radius:12px;padding:16px 20px;margin:0 0 14px}
+ul.flow{padding-left:0;list-style:none;margin:0}
+ul.flow li{position:relative;padding:9px 0 9px 30px;border-bottom:1px dashed var(--line)}
+ul.flow li:last-child{border-bottom:none}
+ul.flow li:before{content:"\25B6";color:var(--purple2);position:absolute;left:4px;top:9px;font-size:12px}
+pre{background:var(--code);color:#ece6f7;border-radius:12px;padding:18px 20px;overflow:auto;font-size:13.5px;line-height:1.65;font-family:"SF Mono",Consolas,"Noto Sans Mono",monospace;white-space:pre-wrap;word-break:break-word}
+details{border:1px solid var(--line);border-radius:12px;margin:0 0 12px;overflow:hidden;background:#fff}
+details>summary{cursor:pointer;padding:13px 18px;font-weight:600;background:var(--lav);list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details>summary:before{content:"\FF0B ";color:var(--purple)}
+details[open]>summary:before{content:"\FF0D "}
+details .inner{padding:14px 18px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;white-space:nowrap}
+th{background:var(--lav);position:sticky;top:0}
+.kbtag{display:inline-block;font-size:11.5px;font-weight:700;color:#fff;background:var(--purple2);border-radius:6px;padding:2px 8px;margin-right:8px}
+.muted{color:var(--muted);font-size:13px}
+.copybtn{float:right;font-size:12px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:5px 12px;cursor:pointer}
+.note{border-left:4px solid #d9a900;background:#fff9e6;padding:10px 14px;border-radius:8px;font-size:14px;margin:12px 0}
+footer{border-top:1px solid var(--line);padding:24px 7vw;color:var(--muted);font-size:13px;text-align:center}
+.backlink{display:inline-block;margin-bottom:10px;font-size:13px;color:#d9c8f0;text-decoration:none}
+.q5{border:1px solid var(--line);border-radius:14px;margin:16px 0 0;overflow:hidden}
+.q5head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:var(--lav);font-weight:700;color:var(--purple);font-size:13.5px;flex-wrap:wrap}
+.q5cta{font-size:12.5px;background:var(--purple);color:#fff;border:none;border-radius:7px;padding:6px 13px;cursor:pointer;white-space:nowrap}
+.q5row{display:flex;gap:14px;padding:12px 16px;border-top:1px solid var(--line);align-items:flex-start}
+.q5n{flex:none;width:30px;height:30px;border-radius:999px;background:var(--purple);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:1px}
+.q5body{flex:1;min-width:0}
+.q5lab{font-weight:700;color:var(--ink);font-size:15px;margin-bottom:3px}
+.q5hint{font-weight:400;color:var(--muted);font-size:12px;margin-left:10px}
+.q5ans{color:#3a3450;font-size:14px;line-height:1.65}
+.dlbtn{float:right;font-size:12px;font-weight:600;background:#00A896;color:#fff;text-decoration:none;border-radius:7px;padding:4px 12px;margin-left:10px}
+.dlbtn:hover{filter:brightness(1.08)}
+.hero{position:relative}
+body.lang-en .zh{display:none}
+body.lang-zh .en{display:none}
+.langtoggle{position:absolute;top:16px;right:20px;font-size:13px;z-index:6}
+.langtoggle a{color:#fff;text-decoration:none;opacity:.65;padding:3px 9px;border-radius:6px;cursor:pointer}
+.langtoggle a.on{opacity:1;background:rgba(255,255,255,.2);font-weight:700}
+.langtoggle a.deck{opacity:1;border:1px solid rgba(255,255,255,.55);margin-right:10px;font-weight:700}
+.langtoggle a.deck:hover{background:rgba(255,255,255,.18)}
+</style></head><body class="lang-zh">
+<header class="hero">
+  
+  <a class="backlink" href="index.html">← 回題型總覽</a>
+  <p class="crumb">太平洋醫材 AI Agent POC 教學網　·　解題示範</p>
+  <span class="no">題目 #6</span>
+  <h1>檢驗／批次紀錄核對助手</h1>
+  <div class="chips"><span class="chip"><b>題型</b> 核對稽核型（規格判定/缺漏檢查）</span><span class="chip"><b>執行</b> 單階段</span><span class="chip"><b>模型</b> Claude Sonnet 4.6</span></div>
+</header>
+<nav class="toc"><a href="#pain">① 需求與痛點</a><a href="#idea">② 開發思路</a><a href="#prompt">③ 完整提示詞</a><a href="#kb">④ 知識庫設計</a><a href="#build">⑤ 建置流程</a><a href="#test">⑥ 驗測情境</a></nav>
+<main>
+<section id="pain"><h2>① 需求與痛點</h2><div class="lead">QC 依規格逐項填檢驗紀錄、對照 SOP 找批次紀錄缺漏，重複又易漏；超規判讀需一致標準。</div><div class="q5"><div class="q5head"><span>開發前必答的 5 個問題 — 填好可直接貼進 提示詞設計助手 生成提示詞</span><button class="q5cta" onclick="copyBlob(this)">複製給 提示詞設計助手</button></div><div class="q5row"><span class="q5n">1</span><div class="q5body"><div class="q5lab">應用場景與業務流程<span class="q5hint">幫誰解決什麼問題？</span></div><div class="q5ans">幫 QC，依規格產檢驗紀錄初稿、標超規、對 SOP 檢查批次紀錄缺漏。</div></div></div><div class="q5row"><span class="q5n">2</span><div class="q5body"><div class="q5lab">資料輸入與來源<span class="q5hint">使用者給它什麼？來源從哪？</span></div><div class="q5ans">使用者貼量測值＋規格，或現有批次製造紀錄。</div></div></div><div class="q5row"><span class="q5n">3</span><div class="q5body"><div class="q5lab">預期輸出內容<span class="q5hint">產出什麼格式？給誰看？</span></div><div class="q5ans">檢驗紀錄表（項目/規格/實測/判定），超規醒目標示＋待複驗/待判定清單。</div></div></div><div class="q5row"><span class="q5n">4</span><div class="q5body"><div class="q5lab">任務步驟<span class="q5hint">能否拆成 3–5 個明確步驟？</span></div><div class="q5ans">①套規格產表 ②逐項比對標超規 ③列需複驗 ④對 SOP 找缺漏欄位 ⑤集中列不符點。</div></div></div><div class="q5row"><span class="q5n">5</span><div class="q5body"><div class="q5lab">知識來源<span class="q5hint">需要查哪些內部文件或資料庫？</span></div><div class="q5ans">產品檢驗規格允收表；量測值一律照使用者提供，不得杜撰。</div></div></div><pre class="q5blob-zh" style="display:none">1. 應用場景與業務流程：幫 QC，依規格產檢驗紀錄初稿、標超規、對 SOP 檢查批次紀錄缺漏。
+2. 資料輸入與來源：使用者貼量測值＋規格，或現有批次製造紀錄。
+3. 預期輸出內容：檢驗紀錄表（項目/規格/實測/判定），超規醒目標示＋待複驗/待判定清單。
+4. 任務步驟：①套規格產表 ②逐項比對標超規 ③列需複驗 ④對 SOP 找缺漏欄位 ⑤集中列不符點。
+5. 知識來源：產品檢驗規格允收表；量測值一律照使用者提供，不得杜撰。</pre></div></section><section id="idea"><h2>② 開發思路</h2><ul class="flow"><li>QC 核對是規則極明確的題型，AI 套規格判超規、找缺漏，最能減少漏檢。</li><li>鐵律：不放行、不下最終合格判定，只提『初判＋待 QC 判定』；量測值照給不杜撰。</li><li>超規項目醒目標示並集中列『待複驗/待判定清單』，讓 QC 一眼看到重點。</li><li>批次紀錄對 SOP 逐欄比對，列出缺哪一欄，避免文件缺漏被送審退件。</li></ul></section><section id="prompt"><h2>③ 完整系統提示詞（EgentHub 7 段式）</h2><p class="muted">可直接複製貼到 EgentHub 測試。</p><details><summary>元資料 Metadata</summary><div class="inner"><pre>Agent 名稱：太醫 檢驗／批次紀錄核對助手
+題型分類：核對稽核型
+平台：Intellicon EgentHub
+建議模型：Claude Sonnet 4.6
+執行模式：單階段
+知識庫配置：耗材檢驗規格允收表（示範）；正式版接 QMS/規格庫
+版本：v1.0（POC，ISO 13485）</pre></div></details><pre class="promptpre"><button class="copybtn" onclick="copyPrompt(this)">複製</button># 角色
+你是「太平洋醫材 檢驗／批次紀錄核對助手」，隸屬智慧方案 EgentHub 平台，協助 QC 依規格產出檢驗紀錄初稿並標超規、對照 SOP 檢查批次製造紀錄缺漏。太平洋醫材為醫療耗材製造商（ISO 13485）。請用繁體中文回覆。
+
+# 人機協作、非全自動
+你做「套規格產紀錄初稿、標超規、列缺漏」；QC 做「判定、放行、簽署」。不得放行或下最終合格判定，只提「初判＋待確認」。結尾附「⚠ 待 QC 判定事項」。數值一律照使用者提供，不得杜撰量測值。
+
+# 能力
+1. 使用者貼上量測值＋規格 → 產檢驗紀錄表（項目/規格/實測/判定），超出規格自動標「超規 ⚠」，並列需複驗項目。
+2. 對照 SOP/範本檢查批次製造紀錄 → 列缺漏欄位與不符點。
+3. 產醫材耗材的進料/製程/成品檢驗紀錄「範本」（欄位齊全、含允收準則欄）。
+
+# 輸出規範
+用表格；超規項目醒目標示並集中列「待複驗/待判定清單」。缺漏檢查要逐項對照、列出缺哪一欄。提醒：批次紀錄與允收判定屬品質責任，須由 QC 覆核簽署。</pre></section><section id="kb"><h2>④ 知識庫設計（範例資料）</h2><details><summary><span class="kbtag">表格查詢</span>耗材檢驗規格允收表.csv<a class="dlbtn" download="耗材檢驗規格允收表.csv" href="data:text/csv;charset=utf-8;base64,55Si5ZOB6aGe5YilLOaqoumpl+mgheebrizopo/moLzkuIvpmZAs6KaP5qC85LiK6ZmQLOWWruS9jSzph4/muKzmlrnms5Us5YWB5pS25rqW5YmHCuWvhumWieW8j+aKveeXsOeuoSzlpJblvpEsMy45MCw0LjMwLG1tLOa4uOaomeWNoeWwuiwz5qyh6YeP5ris5Z2H5YC86ZyA5Zyo6KaP5qC85YWnCuWvhumWieW8j+aKveeXsOeuoSznrqHplbcsNTMwLDU1MCxtbSzpi7zlsLos5Zau5pSv6YeP5risCuWvhumWieW8j+aKveeXsOeuoSzmjqXpoK3mi4nlipssPj0xMCwtLE4s5ouJ5Yqb6Kmm6amX5qmfLOS4jeW+l+S9juaWvOS4i+mZkArlr4bplonlvI/mir3nl7DnrqEs5aSW6KeALOeEoeavm+mCii/nhKHnlbDniaksLSwtLOebruimli8xMFjmlL7lpKcs6YCQ5pSv55uu6KaWCuWCt+WPo+W8lea1gee1hCznkIPpq5Tlm57lvYjmmYLplpMsPD0zLjAsLSznp5Is6KiI5pmC5ZmoLOWjk+aJgeaUvumWi+ioiOaZggrlgrflj6PlvJXmtYHntYQs6YCj5o6l566h5YWn5b6RLDIuODAsMy4yMCxtbSzpirfopo8s6YCaL+atouimjwrlgrflj6PlvJXmtYHntYQs54Sh6I+M5L+d6K2JLFNBTCwxMF4tNiwtLOa7heiPjOeiuuaViCzkvp3mu4Xoj4zmibnnorrmlYgK6bq76YaJ5ZG85ZC45o6l566hLOaOpemgremMkOW6piwxNS4wLDE1LjIsbW0s6YyQ5bqm6KaPLElTTyA1MzU2LTEK6bq76YaJ5ZG85ZC45o6l566hLOawo+Wvhua0qea8jyw8PTUwLC0sbUwvbWluLOawo+Wvhua4rOippizliqDlo5Pkv53mjIEK6KKL6aGeLOWwgeWPo+W8t+W6piw+PTgsLSxOLzE1bW0s5ouJ5Yqb6Kmm6amX5qmfLOWwgemCiuWJnemboua4rOippgo=" onclick="event.stopPropagation()">⬇ 下載</a></summary><div class="inner"><div class="tablewrap"><table><thead><tr><th>產品類別</th><th>檢驗項目</th><th>規格下限</th><th>規格上限</th><th>單位</th><th>量測方法</th><th>允收準則</th></tr></thead><tbody><tr><td>密閉式抽痰管</td><td>外徑</td><td>3.90</td><td>4.30</td><td>mm</td><td>游標卡尺</td><td>3次量測均值需在規格內</td></tr><tr><td>密閉式抽痰管</td><td>管長</td><td>530</td><td>550</td><td>mm</td><td>鋼尺</td><td>單支量測</td></tr><tr><td>密閉式抽痰管</td><td>接頭拉力</td><td>&gt;=10</td><td>-</td><td>N</td><td>拉力試驗機</td><td>不得低於下限</td></tr><tr><td>密閉式抽痰管</td><td>外觀</td><td>無毛邊/無異物</td><td>-</td><td>-</td><td>目視/10X放大</td><td>逐支目視</td></tr><tr><td>傷口引流組</td><td>球體回彈時間</td><td>&lt;=3.0</td><td>-</td><td>秒</td><td>計時器</td><td>壓扁放開計時</td></tr><tr><td>傷口引流組</td><td>連接管內徑</td><td>2.80</td><td>3.20</td><td>mm</td><td>銷規</td><td>通/止規</td></tr><tr><td>傷口引流組</td><td>無菌保證</td><td>SAL</td><td>10^-6</td><td>-</td><td>滅菌確效</td><td>依滅菌批確效</td></tr><tr><td>麻醉呼吸接管</td><td>接頭錐度</td><td>15.0</td><td>15.2</td><td>mm</td><td>錐度規</td><td>ISO 5356-1</td></tr><tr><td>麻醉呼吸接管</td><td>氣密洩漏</td><td>&lt;=50</td><td>-</td><td>mL/min</td><td>氣密測試</td><td>加壓保持</td></tr><tr><td>袋類</td><td>封口強度</td><td>&gt;=8</td><td>-</td><td>N/15mm</td><td>拉力試驗機</td><td>封邊剝離測試</td></tr></tbody></table></div></div></details></section><section id="build"><h2>⑤ 建置流程與上線重點</h2><details open><summary>正式上線前的準備指南</summary><div class="inner"><pre>檢驗/批次紀錄核對助手 — 上線準備
+
+一、知識庫
+  各產品檢驗規格允收表（項目/上下限/單位/量測方法/允收準則），與現行 SOP 對齊。
+
+二、責任邊界
+  AI 只做初判與缺漏標示；放行與合格判定須 QC 覆核簽署。
+
+三、平台設定
+  單階段；ISO 13485 情境。
+
+四、驗測
+  刻意給超規值測是否正確標『超規 ⚠』並列待複驗；給缺欄批次紀錄測缺漏檢查。</pre></div></details></section><section id="test"><h2>⑥ 驗測情境（測試資料＋預期結果）</h2><details><summary>展開完整驗測情境</summary><div class="inner"><pre>檢驗/批次紀錄核對助手 — 驗測情境
+
+--- 情境 1（超規判定）---
+input：外徑 4.35mm（規格 3.90–4.30）、管長 546mm（530–550）、接頭拉力 12N（&gt;=10）
+expected：外徑標『超規 ⚠』並列待複驗；管長/拉力判合格範圍，不下最終放行。
+
+--- 情境 2（缺漏檢查）---
+input：貼上缺『滅菌批號』欄的批次紀錄
+expected：逐項對照列出缺漏欄位與不符點，提醒 QC 補齊簽署。</pre></div></details></section>
+</main>
+<footer>智慧方案股份有限公司　Intellicon Solutions　·　太平洋醫材 AI Agent 導入實務 POC 教學網　·　人機協作、非全自動</footer>
+<script>
+function setLang(l){document.body.className='lang-'+l;try{localStorage.setItem('tecoLang',l);}catch(e){}document.querySelectorAll('.langtoggle a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-l')===l);});}
+(function(){var l='zh';try{l=localStorage.getItem('tecoLang')||'zh';}catch(e){}setLang(l);})();
+function copyPrompt(btn){var pre=btn.parentNode.cloneNode(true);var b=pre.querySelector('button');if(b)b.remove();navigator.clipboard.writeText(pre.innerText.trim()).then(function(){var o=btn.innerText;btn.innerText='\u2713';setTimeout(function(){btn.innerText=o;},1200);});}
+function copyBlob(btn){var en=document.body.classList.contains('lang-en');var b=btn.closest('.q5').querySelector(en?'.q5blob-en':'.q5blob-zh');navigator.clipboard.writeText(b.textContent).then(function(){var o=btn.innerText;btn.innerText='\u2713';setTimeout(function(){btn.innerText=o;},1500);});}
+</script>
+</body></html>
