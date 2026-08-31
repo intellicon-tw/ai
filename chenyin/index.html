@@ -1,561 +1,66 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="誠瀛法律事務所 AI Agent 操作指南：小瀛、Personal Agent、Email、Calendar、Claude 與 ChatGPT。">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="誠瀛律師第一次啟用小瀛的三步驟操作教材。">
   <meta name="theme-color" content="#172033">
-  <title>誠瀛律師 AI Agent 操作指南</title>
+  <title>誠瀛律師｜第一次啟用小瀛</title>
+  <link rel="stylesheet" href="subpage.css">
   <style>
-    :root {
-      --ink: #172033;
-      --muted: #5c6677;
-      --paper: #f7f5f0;
-      --card: #ffffff;
-      --line: #ded9cf;
-      --gold: #c79a2b;
-      --gold-soft: #f7edcf;
-      --wine: #7e293b;
-      --wine-soft: #f7e9ec;
-      --blue-soft: #eaf1f8;
-      --green: #256c52;
-      --green-soft: #e9f5ef;
-      --shadow: 0 16px 45px rgba(23, 32, 51, .09);
-      --radius: 18px;
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      color: var(--ink);
-      background: var(--paper);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", sans-serif;
-      line-height: 1.75;
-    }
-    a { color: inherit; }
-    button, a { -webkit-tap-highlight-color: transparent; }
-
-    .skip {
-      position: fixed;
-      left: 16px;
-      top: -60px;
-      z-index: 100;
-      padding: 10px 14px;
-      color: white;
-      background: var(--wine);
-      border-radius: 10px;
-    }
-    .skip:focus { top: 12px; }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      min-height: 64px;
-      padding: 10px max(20px, calc((100vw - 1160px) / 2));
-      color: white;
-      background: rgba(23, 32, 51, .96);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255,255,255,.12);
-    }
-    .brand { display: flex; align-items: center; gap: 11px; font-weight: 800; }
-    .brand-mark {
-      display: grid;
-      place-items: center;
-      width: 38px;
-      height: 38px;
-      color: var(--ink);
-      background: var(--gold);
-      border-radius: 12px;
-      font-family: Georgia, serif;
-      font-size: 18px;
-    }
-    nav { display: flex; gap: 6px; }
-    nav a {
-      padding: 8px 11px;
-      color: #e8ebf0;
-      text-decoration: none;
-      border-radius: 9px;
-      font-size: 14px;
-    }
-    nav a:hover, nav a:focus-visible { background: rgba(255,255,255,.12); }
-
-    .hero {
-      position: relative;
-      overflow: hidden;
-      color: white;
-      background: var(--ink);
-    }
-    .hero::after {
-      content: "";
-      position: absolute;
-      right: -140px;
-      bottom: -220px;
-      width: 480px;
-      height: 480px;
-      border: 90px solid rgba(126, 41, 59, .72);
-      border-radius: 50%;
-    }
-    .hero-inner {
-      position: relative;
-      z-index: 1;
-      width: min(1160px, calc(100% - 40px));
-      margin: auto;
-      padding: 86px 0 78px;
-    }
-    .eyebrow {
-      display: inline-block;
-      margin-bottom: 18px;
-      padding: 7px 13px;
-      color: var(--ink);
-      background: var(--gold);
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 900;
-      letter-spacing: .08em;
-    }
-    h1 {
-      max-width: 820px;
-      margin: 0;
-      font-size: clamp(38px, 6vw, 68px);
-      line-height: 1.12;
-      letter-spacing: -.035em;
-    }
-    .lead {
-      max-width: 760px;
-      margin: 24px 0 0;
-      color: #d9deea;
-      font-size: clamp(18px, 2.4vw, 23px);
-    }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 46px;
-      padding: 10px 17px;
-      border: 1px solid transparent;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .btn-primary { color: var(--ink); background: var(--gold); }
-    .btn-secondary { color: white; border-color: rgba(255,255,255,.32); background: rgba(255,255,255,.06); }
-    .btn-light { color: var(--ink); border-color: var(--line); background: white; }
-    .btn:hover { transform: translateY(-1px); }
-
-    main { width: min(1160px, calc(100% - 40px)); margin: auto; }
-    section { padding: 78px 0 12px; scroll-margin-top: 72px; }
-    .section-head { max-width: 820px; margin-bottom: 28px; }
-    .kicker { margin: 0 0 7px; color: var(--wine); font-weight: 900; letter-spacing: .06em; }
-    h2 { margin: 0; font-size: clamp(30px, 4.6vw, 46px); line-height: 1.2; letter-spacing: -.025em; }
-    h3 { margin: 0 0 8px; font-size: 22px; line-height: 1.35; }
-    h4 { margin: 0 0 6px; font-size: 17px; }
-    .section-head p, .muted { color: var(--muted); }
-
-    .quick-grid, .cap-grid, .role-grid, .channel-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-    .card {
-      padding: 24px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-    .card p:last-child { margin-bottom: 0; }
-    .step-no {
-      display: inline-grid;
-      place-items: center;
-      width: 34px;
-      height: 34px;
-      margin-bottom: 14px;
-      color: white;
-      background: var(--wine);
-      border-radius: 50%;
-      font-weight: 900;
-    }
-    .icon {
-      display: grid;
-      place-items: center;
-      width: 46px;
-      height: 46px;
-      margin-bottom: 15px;
-      background: var(--gold-soft);
-      border-radius: 14px;
-      font-size: 23px;
-    }
-    .card-link {
-      display: inline-block;
-      margin-top: 10px;
-      color: var(--wine);
-      font-weight: 850;
-      text-decoration-thickness: 1px;
-      text-underline-offset: 4px;
-    }
-
-    .notice {
-      margin: 24px 0;
-      padding: 18px 20px;
-      background: var(--gold-soft);
-      border-left: 5px solid var(--gold);
-      border-radius: 12px;
-    }
-    .notice strong { display: block; margin-bottom: 4px; }
-    .notice.safe { background: var(--green-soft); border-color: var(--green); }
-    .notice.warn { background: var(--wine-soft); border-color: var(--wine); }
-
-    .cap-grid { grid-template-columns: repeat(4, 1fr); }
-    .cap-grid .card { box-shadow: none; }
-    .tag {
-      display: inline-block;
-      margin: 4px 4px 0 0;
-      padding: 4px 9px;
-      color: var(--wine);
-      background: var(--wine-soft);
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 750;
-    }
-
-    .prompt {
-      position: relative;
-      margin: 12px 0;
-      padding: 18px 56px 18px 18px;
-      color: #f1f3f7;
-      background: #232d43;
-      border-radius: 14px;
-      white-space: pre-wrap;
-    }
-    .copy {
-      position: absolute;
-      right: 10px;
-      top: 10px;
-      width: 36px;
-      height: 36px;
-      color: white;
-      background: rgba(255,255,255,.12);
-      border: 0;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    .copy:focus-visible { outline: 3px solid var(--gold); }
-
-    .workflow {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin: 22px 0;
-    }
-    .workflow > div {
-      position: relative;
-      padding: 20px;
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-    }
-    .workflow > div:not(:last-child)::after {
-      content: "→";
-      position: absolute;
-      right: -14px;
-      top: 50%;
-      z-index: 2;
-      display: grid;
-      place-items: center;
-      width: 27px;
-      height: 27px;
-      background: var(--gold);
-      border-radius: 50%;
-      font-weight: 900;
-      transform: translateY(-50%);
-    }
-
-    .role-grid { grid-template-columns: 1fr 1fr; }
-    .role-card { position: relative; overflow: hidden; }
-    .role-card::before { content: ""; position: absolute; inset: 0 0 auto; height: 6px; background: var(--gold); }
-    .role-card.lawyer::before { background: var(--wine); }
-    .role-card ol { padding-left: 22px; }
-    .resource-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 18px; }
-    code {
-      padding: 3px 7px;
-      background: #edf0f4;
-      border-radius: 7px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: .92em;
-    }
-
-    details {
-      margin: 12px 0;
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-    }
-    summary {
-      padding: 17px 20px;
-      font-weight: 850;
-      cursor: pointer;
-    }
-    .details-body { padding: 0 20px 20px; color: var(--muted); }
-
-    .channel-grid { grid-template-columns: 1fr 1fr; }
-    .channel-grid ol { padding-left: 22px; }
-    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: white; }
-    table { width: 100%; border-collapse: collapse; min-width: 660px; }
-    th, td { padding: 14px 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
-    th { background: var(--blue-soft); }
-    tr:last-child td { border-bottom: 0; }
-
-    .footer {
-      margin-top: 76px;
-      padding: 34px 20px;
-      color: #cfd5df;
-      background: var(--ink);
-      text-align: center;
-      font-size: 14px;
-    }
-
-    @media (max-width: 900px) {
-      nav { display: none; }
-      .quick-grid, .cap-grid { grid-template-columns: 1fr 1fr; }
-      .workflow { grid-template-columns: 1fr; }
-      .workflow > div:not(:last-child)::after {
-        content: "↓";
-        left: 50%;
-        right: auto;
-        top: auto;
-        bottom: -20px;
-        transform: translateX(-50%);
-      }
-    }
-    @media (max-width: 640px) {
-      .topbar { padding-inline: 16px; }
-      .brand span:last-child { font-size: 15px; }
-      .hero-inner { width: min(100% - 32px, 1160px); padding: 62px 0 58px; }
-      main { width: min(100% - 28px, 1160px); }
-      section { padding-top: 58px; }
-      .quick-grid, .cap-grid, .role-grid, .channel-grid { grid-template-columns: 1fr; }
-      .card { padding: 21px; }
-      .hero-actions .btn { width: 100%; }
-    }
+    .hero-inner{padding-bottom:64px}.course-map{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:30px 0}.chapter{position:relative;display:flex;flex-direction:column;margin:0;padding-top:30px}.chapter::before{content:"";position:absolute;inset:0 0 auto;height:7px;background:var(--gold);border-radius:18px 18px 0 0}.chapter:nth-child(2)::before{background:#3c678f}.chapter:nth-child(3)::before{background:var(--wine)}.chapter-label{color:var(--wine);font-weight:900;letter-spacing:.04em}.chapter h2{margin:7px 0 10px;font-size:25px;line-height:1.35}.chapter ul{margin:4px 0 18px;padding-left:21px;color:var(--muted)}.chapter .actions{margin-top:auto}.completion{margin-top:auto;padding:11px 13px;color:var(--green);background:var(--green-soft);border-radius:10px;font-weight:800}.next-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.section-head{margin:52px 0 20px}.section-head h2{margin:0;font-size:32px}.section-head p{color:var(--muted)}.map-list{display:grid;gap:10px}.map-link{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 18px;background:#fff;border:1px solid var(--line);border-radius:13px;text-decoration:none;font-weight:800}.map-link span:last-child{color:var(--wine)}
+    @media(max-width:760px){.course-map,.next-grid{grid-template-columns:1fr}.chapter{padding:25px 21px}.section-head{margin-top:42px}}
   </style>
 </head>
 <body>
-  <a class="skip" href="#main">跳到主要內容</a>
-  <header class="topbar">
-    <div class="brand"><span class="brand-mark">瀛</span><span>誠瀛律師 AI Agent 指南</span></div>
-    <nav aria-label="主要導覽">
-      <a href="#start">第一次使用</a>
-      <a href="#personal">Email／Calendar</a>
-      <a href="#channels">Claude／ChatGPT</a>
-      <a href="#help">問題排除</a>
-    </nav>
-  </header>
-
-  <div class="hero">
-    <div class="hero-inner">
-      <span class="eyebrow">誠瀛法律事務所 × 智慧方案</span>
-      <h1>把工作交給 Agent，<br>像交辦給一個團隊。</h1>
-      <p class="lead">從第一次呼叫小瀛，到連接個人 Email、Calendar，以及在 Claude／ChatGPT 使用。本頁只保留律師真正需要操作的步驟。</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#start">第一次使用，從這裡開始</a>
-        <a class="btn btn-secondary" href="#personal">設定個人 Email／Calendar</a>
-      </div>
+  <header class="topbar"><a class="brand" href="./"><span class="mark">瀛</span><span>誠瀛律師 AI Agent 指南</span></a><a class="back" href="#course">三步驟目錄</a></header>
+  <div class="hero"><div class="hero-inner">
+    <span class="eyebrow">第一次啟用｜照順序操作</span>
+    <h1>第一次使用小瀛，<br>只要完成 3 個步驟。</h1>
+    <p class="lead">先讓 Mac mini 上線，再用工作電腦設定 ChatGPT MCP，最後實際呼叫小瀛。請依順序完成，不需要先理解技術名詞。</p>
+  </div></div>
+  <main id="course">
+    <div class="notice"><strong>開始前準備</strong>Mac mini、螢幕、鍵盤滑鼠、Wi‑Fi 資料、工作用電腦、ChatGPT 帳號，以及管理員交付的個人 MCP URL。</div>
+    <div class="course-map">
+      <article class="card chapter">
+        <div class="chapter-label">步驟 1｜主機上線</div>
+        <h2>Mac mini 插電、開機、確認能上網</h2>
+        <ul><li>接上電源與螢幕</li><li>按下電源鍵開機</li><li>確認 Wi‑Fi 已連線</li><li>用瀏覽器實際開啟網站</li></ul>
+        <div class="completion">完成：Mac mini 可以正常上網。</div>
+        <div class="actions"><a class="btn primary" href="power/">打開步驟 1 教學</a></div>
+      </article>
+      <article class="card chapter">
+        <div class="chapter-label">步驟 2｜工作電腦設定</div>
+        <h2>開啟 ChatGPT，加入個人 MCP</h2>
+        <ul><li>登入 ChatGPT 網頁版</li><li>進入 Apps／Developer mode</li><li>建立私人 MCP App</li><li>確認看得到 ask_chenyin</li></ul>
+        <div class="completion">完成：ChatGPT 顯示小瀛工具。</div>
+        <div class="actions"><a class="btn primary" href="chatgpt/">打開步驟 2 教學</a></div>
+      </article>
+      <article class="card chapter">
+        <div class="chapter-label">步驟 3｜第一次測試</div>
+        <h2>在 ChatGPT 實際呼叫小瀛</h2>
+        <ul><li>開啟新對話</li><li>選取小瀛 App</li><li>送出安全測試指令</li><li>確認有呼叫工具並收到回答</li></ul>
+        <div class="completion">完成：小瀛成功回覆測試問題。</div>
+        <div class="actions"><a class="btn primary" href="test/">打開步驟 3 教學</a></div>
+      </article>
     </div>
-  </div>
 
-  <main id="main">
-    <section aria-labelledby="quick-title">
-      <div class="section-head">
-        <p class="kicker">快速入口</p>
-        <h2 id="quick-title">我現在想做哪件事？</h2>
-      </div>
-      <div class="quick-grid">
-        <article class="card">
-          <span class="step-no">1</span>
-          <h3>第一次使用小瀛</h3>
-          <p class="muted">先了解能交辦什麼、怎麼說，以及哪些結果必須由律師覆核。</p>
-          <a class="card-link" href="#start">開始閱讀 →</a>
-        </article>
-        <article class="card">
-          <span class="step-no">2</span>
-          <h3>連接 Email／Calendar</h3>
-          <p class="muted">公司代表先完成環境，律師再透過 Telegram 授權個人 Google 工作帳號。</p>
-          <a class="card-link" href="#personal">查看五分鐘步驟 →</a>
-        </article>
-        <article class="card">
-          <span class="step-no">3</span>
-          <h3>在 Claude／ChatGPT 使用</h3>
-          <p class="muted">已取得個人 MCP URL 時，再進行進階連線。</p>
-          <a class="card-link" href="#channels">查看連線方式 →</a>
-        </article>
-      </div>
-    </section>
+    <div class="notice safe"><strong>三步都完成了</strong>代表主機、ChatGPT 與小瀛已連通。接下來可先用不含真實案件資料的問題練習，再逐步交辦工作。</div>
 
-    <section id="start" aria-labelledby="start-title">
-      <div class="section-head">
-        <p class="kicker">01｜第一次使用小瀛</p>
-        <h2 id="start-title">您說需求，小瀛負責分工。</h2>
-        <p>小瀛是事務所的內部 AI 法務團隊主管。它會判斷需求、分派專職助理，再彙整成一份可供您覆核的草稿。</p>
-      </div>
-      <div class="notice warn">
-        <strong>先記住這件事</strong>
-        所有產出都是內部協作草稿，並非正式法律意見。法源、事實、期限與對外文件仍須由承辦律師查核及放行。
-      </div>
-      <div class="cap-grid">
-        <article class="card"><span class="icon">查</span><h3>研究與檢索</h3><p class="muted">法條、函釋、學說、裁判與爭點比較，並要求附上可查核來源。</p></article>
-        <article class="card"><span class="icon">寫</span><h3>草擬文件</h3><p class="muted">書狀、契約、律師函、存證信函與客戶說明稿的第一版。</p></article>
-        <article class="card"><span class="icon">理</span><h3>整理案件</h3><p class="muted">會談紀錄、時間軸、證據缺口、待辦事項與文件清單。</p></article>
-        <article class="card"><span class="icon">檢</span><h3>風險檢核</h3><p class="muted">利益衝突初查、契約風險、案件要件與計費工時草擬。</p></article>
-      </div>
+    <div class="section-head"><h2>完成首次啟用後，再設定 Personal Agent</h2><p>需要讓 Agent 閱讀個人 Gmail 或 Google Calendar 時，公司代表必須先完成環境，律師才能授權。</p></div>
+    <div class="next-grid">
+      <article class="card"><div class="chapter-label">先做</div><h2>公司代表建立 Composio</h2><p class="muted">建立公司 Project、唯讀權限與測試入口，再通知律師。</p><div class="actions"><a class="btn primary" href="company/">公司設定子頁</a><a class="btn secondary" href="https://dashboard.composio.dev/" target="_blank" rel="noopener">Composio Dashboard</a></div></article>
+      <article class="card"><div class="chapter-label">後做</div><h2>律師授權 Email／Calendar</h2><p class="muted">收到公司通知後，在一對一 Telegram 私訊完成個人授權。</p><div class="actions"><a class="btn primary" href="lawyer/">律師授權子頁</a></div></article>
+    </div>
 
-      <h3 style="margin-top:34px">下指令不必學術語，說清楚四件事</h3>
-      <div class="workflow">
-        <div><h4>1. 背景與目的</h4><span class="muted">案件類型、目前階段、這次要解決什麼。</span></div>
-        <div><h4>2. 已知資料</h4><span class="muted">提供必要且已脫敏的事實、附件或限制。</span></div>
-        <div><h4>3. 希望的成果</h4><span class="muted">指定表格、清單、初稿、比較或客戶版說明。</span></div>
-      </div>
-      <div class="prompt" data-copy>依下列脫敏資料整理案件時間軸、主要爭點、證據缺口與待確認事項。請分開標示「已知事實」「目前假設」「仍待確認」，法條與裁判附上來源。<button class="copy" aria-label="複製提示詞">⧉</button></div>
-      <div class="prompt" data-copy>請檢查這份契約，整理成四欄：條款、風險原因、建議修訂、需要向客戶確認的事項。不要自行補造未提供的商業條件。<button class="copy" aria-label="複製提示詞">⧉</button></div>
-
-      <details>
-        <summary>小瀛的團隊有哪些專長？</summary>
-        <div class="details-body">
-          <p>小瀛會依任務分派給受理、研究、書狀、記錄、行政，以及爭端解決、公司／併購、智財、不動產、家事、勞動／職場調查、外資／海事保險、資產傳承、法官分析與計費工時等專職助理。</p>
-          <span class="tag">法律研究</span><span class="tag">書狀</span><span class="tag">契約</span><span class="tag">爭端</span><span class="tag">公司併購</span><span class="tag">智財</span><span class="tag">家事</span><span class="tag">勞動</span><span class="tag">資產傳承</span>
-        </div>
-      </details>
-      <div class="notice safe">
-        <strong>開通方式</strong>
-        請使用事務所管理員提供的 LINE／Telegram 入口與開通資料。本公開頁不刊登開通碼、個人金鑰或個人 MCP URL。
-      </div>
-    </section>
-
-    <section id="personal" aria-labelledby="personal-title">
-      <div class="section-head">
-        <p class="kicker">02｜Personal Agent</p>
-        <h2 id="personal-title">讓 Agent 讀取自己的 Email 與行事曆。</h2>
-        <p>採個人綁定、唯讀優先。每位律師只授權自己的 Google 工作帳號，並在一對一 Telegram 私訊完成。</p>
-      </div>
-      <div class="workflow">
-        <div><h4>公司先準備</h4><span class="muted">建立 Composio 環境與個人 Agent 身分。</span></div>
-        <div><h4>律師完成授權</h4><span class="muted">連接自己的 Gmail 與 Google Calendar。</span></div>
-        <div><h4>核對後測試</h4><span class="muted">確認沒有讀到他人資料，也沒有寫入或寄送。</span></div>
-      </div>
-
-      <div class="role-grid">
-        <article class="card role-card">
-          <p class="kicker">步驟 1｜公司代表先設定</p>
-          <h3>先建立 Composio 與 Agent 環境</h3>
-          <p class="muted">完成公司帳號、Project、唯讀權限、Telegram 入口與第一批測試名單，確認可以產生授權連結後，再通知律師操作。</p>
-          <div class="resource-links">
-            <a class="btn btn-primary" href="company/">開啟公司設定子頁</a>
-            <a class="btn btn-light" href="https://dashboard.composio.dev/" target="_blank" rel="noopener">Composio Dashboard</a>
-          </div>
-          <div class="notice"><strong>完成條件</strong>公司代表確認環境就緒並通知測試律師後，才能進入步驟 2。</div>
-        </article>
-
-        <article class="card role-card lawyer">
-          <p class="kicker">步驟 2｜律師再授權</p>
-          <h3>完成 Gmail／Calendar 個人授權</h3>
-          <p class="muted">收到公司代表通知後，律師才在一對一 Telegram 私訊連接自己的 Google 工作帳號，完成狀態確認與實際測試。</p>
-          <div class="resource-links">
-            <a class="btn btn-primary" href="lawyer/">開啟律師授權子頁</a>
-          </div>
-          <div class="notice warn"><strong>不要提早操作</strong>尚未收到公司代表通知前，不必建立 Composio 帳號，也不要在群組傳送授權資料。</div>
-        </article>
-      </div>
-
-      <h3 style="margin-top:34px">綁定完成後，這樣測試</h3>
-      <div class="prompt" data-copy>請列出我今天未讀信中需要處理的事項，不要寄出任何信件。<button class="copy" aria-label="複製提示詞">⧉</button></div>
-      <div class="prompt" data-copy>請告訴我明天下午的忙碌時段與一小時空檔，不要修改任何行程。<button class="copy" aria-label="複製提示詞">⧉</button></div>
-      <div class="notice safe"><strong>完成標準</strong>兩項結果正確、沒有看到其他人的資料，而且 Agent 沒有寄信或修改行程。</div>
-    </section>
-
-    <section id="channels" aria-labelledby="channels-title">
-      <div class="section-head">
-        <p class="kicker">03｜進階連線</p>
-        <h2 id="channels-title">也可以在 Claude 或 ChatGPT 呼叫小瀛。</h2>
-        <p>這一步需要管理員交付「屬於您自己的完整 MCP URL」。它等同個人密碼，不得分享、截圖或貼進普通聊天。</p>
-      </div>
-      <div class="channel-grid">
-        <article class="card">
-          <h3>Claude</h3>
-          <ol>
-            <li>開啟 Settings → Connectors。</li>
-            <li>選擇 Add custom connector。</li>
-            <li>名稱填「誠瀛法務小幫手（小瀛）」。</li>
-            <li>貼上完整個人 MCP URL，不另外填 OAuth 或 API key。</li>
-            <li>在新對話啟用 Connector，確認工具清單有 <code>ask_chenyin</code>。</li>
-          </ol>
-        </article>
-        <article class="card">
-          <h3>ChatGPT</h3>
-          <ol>
-            <li>使用網頁版，進入 Settings → Apps → Advanced settings。</li>
-            <li>啟用 Developer mode，建立 Custom MCP App。</li>
-            <li>貼上完整個人 MCP URL，驗證選 No authentication。</li>
-            <li>Scan tools，確認有 <code>ask_chenyin</code> 後建立。</li>
-            <li>保持私人 Draft，不發布到整個工作區。</li>
-          </ol>
-        </article>
-      </div>
-      <div class="prompt" data-copy>請使用誠瀛法務小幫手的 ask_chenyin，列出你能協助我的法律工作類型，以及我交辦時應提供哪些資料。這次不要處理真實案件。<button class="copy" aria-label="複製提示詞">⧉</button></div>
-    </section>
-
-    <section id="help" aria-labelledby="help-title">
-      <div class="section-head">
-        <p class="kicker">04｜問題排除</p>
-        <h2 id="help-title">看到錯誤時，先判斷是哪一層。</h2>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>畫面或症狀</th><th>代表什麼</th><th>怎麼處理</th></tr></thead>
-          <tbody>
-            <tr><td>看不到 Connector／Developer mode</td><td>帳號方案或工作區權限尚未開放</td><td>請工作區管理員確認；暫時改用 LINE 或 Telegram。</td></tr>
-            <tr><td>找不到 <code>ask_chenyin</code></td><td>工具尚未啟用、URL 不完整或掃描未刷新</td><td>在新對話重新啟用或 Scan tools；不要公開貼出 URL。</td></tr>
-            <tr><td>401／Unauthorized</td><td>個人 URL 貼錯、失效或已停用</td><td>停止重試，請管理員檢查或換發。</td></tr>
-            <tr><td>530／1033／Unable to connect</td><td>服務端或 Tunnel 暫時離線</td><td>保留設定，回報發生時間與遮蔽金鑰的畫面。</td></tr>
-            <tr><td>選錯 Google 帳號</td><td>授權身分不正確</td><td>立刻停止測試、撤銷第三方存取權，再用正確帳號重做。</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="notice warn"><strong>回報問題時</strong>只提供發生時間與症狀。截圖前遮住個人 MCP URL、<code>key=</code> 後方內容、OAuth 連結與任何驗證資訊。</div>
-    </section>
+    <div class="section-head"><h2>全部教材</h2><p>需要時再打開對應章節，不必一次讀完。</p></div>
+    <div class="map-list">
+      <a class="map-link" href="power/"><span>1｜Mac mini 插電、開機與網路確認</span><span>開始 →</span></a>
+      <a class="map-link" href="chatgpt/"><span>2｜ChatGPT MCP 設定</span><span>開始 →</span></a>
+      <a class="map-link" href="test/"><span>3｜第一次呼叫小瀛</span><span>開始 →</span></a>
+      <a class="map-link" href="company/"><span>4｜公司代表 Composio 設定</span><span>開啟 →</span></a>
+      <a class="map-link" href="lawyer/"><span>5｜律師 Email／Calendar 授權</span><span>開啟 →</span></a>
+    </div>
   </main>
-
-  <footer class="footer">
-    <div>誠瀛法律事務所 × 智慧方案｜律師 AI Agent 操作指南</div>
-    <div>公開閱讀版 v1.2｜2026-08-30｜不包含開通碼、個人金鑰或 secrets</div>
-  </footer>
-
-  <script>
-    document.querySelectorAll('[data-copy]').forEach((block) => {
-      const button = block.querySelector('.copy');
-      button.addEventListener('click', async () => {
-        const text = [...block.childNodes]
-          .filter((node) => node !== button)
-          .map((node) => node.textContent)
-          .join('')
-          .trim();
-        try {
-          await navigator.clipboard.writeText(text);
-          const previous = button.textContent;
-          button.textContent = '✓';
-          setTimeout(() => { button.textContent = previous; }, 1200);
-        } catch {
-          window.prompt('複製以下文字：', text);
-        }
-      });
-    });
-  </script>
+  <footer>教科書版 v1.3｜誠瀛法律事務所 × 智慧方案｜2026-08-31</footer>
 </body>
 </html>
